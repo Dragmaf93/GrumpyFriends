@@ -5,17 +5,15 @@ import element.Position;
 
 public abstract class AbstractWorldComponent implements Element
 {
-	private Position position;
-	private int height;
-	private int width;
+	protected Position position;
+	protected int height;
+	protected int width;
 	
 	//
-	public AbstractWorldComponent(int x, int y, int height, int width) {
+	public AbstractWorldComponent(int x, int y) {
 		
 		super();
 		position = new Position(x,y);
-		this.height = height;
-		this.width = width;
 	}
 
 	@Override

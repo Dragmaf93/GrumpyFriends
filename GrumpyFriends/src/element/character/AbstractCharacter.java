@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import element.Position;
 import element.Weapon;
+import world.AbstractWorld;
 import world.World;
 
 public abstract class AbstractCharacter implements Character
@@ -11,6 +12,7 @@ public abstract class AbstractCharacter implements Character
 	protected Position currentPosition;
 	protected int height;
 	protected int width;
+	protected int powerJump;
 	protected int lifePoints;
 	protected World world;
 	protected Team team;
@@ -19,13 +21,11 @@ public abstract class AbstractCharacter implements Character
 	
 	
 
-	public AbstractCharacter(int x, int y, int height, World world,
+	public AbstractCharacter(int x, int y,
 			Team team, ArrayList<Weapon> weaponList) {
-		super();
+		
 		this.currentPosition= new Position(x,y);
-		this.height = height;
-		this.width = 1;
-		this.world = world;
+		this.world = AbstractWorld.getInstance();
 		this.team = team;
 		this.weaponList = weaponList;
 		equippedWeapon = null;
@@ -33,14 +33,12 @@ public abstract class AbstractCharacter implements Character
 	}
 	
 	
-	public AbstractCharacter(int x, int y, int height,
-			int lifePoints, World world, Team team, ArrayList<Weapon> weaponList) {
-		super();
+	public AbstractCharacter(int x, int y,
+			int lifePoints, Team team, ArrayList<Weapon> weaponList) {
+		
 		this.currentPosition= new Position(x,y);
-		this.height = height;
-		this.width = 1;
+		this.world = AbstractWorld.getInstance();
 		this.lifePoints = lifePoints;
-		this.world = world;
 		this.team = team;
 		this.weaponList = weaponList;
 		equippedWeapon = null;
