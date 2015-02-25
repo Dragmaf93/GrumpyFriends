@@ -9,7 +9,7 @@ public abstract class AbstractWorldComponent implements Element
 	private int height;
 	private int width;
 	
-	
+	//
 	public AbstractWorldComponent(int x, int y, int height, int width) {
 		
 		super();
