@@ -1,4 +1,4 @@
-package object.character;
+package element.character;
 
 import java.util.ArrayList;
 

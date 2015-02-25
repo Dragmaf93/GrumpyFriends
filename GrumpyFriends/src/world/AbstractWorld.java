@@ -3,9 +3,9 @@ package world;
 
 import java.util.HashMap;
 
-import object.Element;
-import object.Position;
-import object.character.AbstractCharacter;
+import element.Element;
+import element.Position;
+import element.character.AbstractCharacter;
 
 
 public abstract class AbstractWorld implements World 

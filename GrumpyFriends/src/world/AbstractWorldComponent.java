@@ -1,9 +1,9 @@
 package world;
 
-import object.Element;
-import object.Position;
+import element.Element;
+import element.Position;
 
-public class AbstractWorldComponent implements Element
+public abstract class AbstractWorldComponent implements Element
 {
 	private Position position;
 	private int height;

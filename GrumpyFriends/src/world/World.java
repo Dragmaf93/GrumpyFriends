@@ -1,7 +1,7 @@
 package world;
 
-import object.Element;
-import object.character.AbstractCharacter;
+import element.Element;
+import element.character.AbstractCharacter;
 
 public interface World 
 {

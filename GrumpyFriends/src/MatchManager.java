@@ -1,4 +1,4 @@
-import object.character.Team;
+import element.character.Team;
 import world.World;
 
 

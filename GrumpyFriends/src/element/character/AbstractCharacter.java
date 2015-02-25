@@ -1,9 +1,9 @@
-package object.character;
+package element.character;
 
 import java.util.ArrayList;
 
-import object.Position;
-import object.Weapon;
+import element.Position;
+import element.Weapon;
 import world.World;
 
 public abstract class AbstractCharacter implements Character

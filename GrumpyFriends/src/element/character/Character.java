@@ -1,7 +1,7 @@
-package object.character;
+package element.character;
 
-import object.Element;
-import object.Weapon;
+import element.Element;
+import element.Weapon;
 
 public interface Character extends Element
 {

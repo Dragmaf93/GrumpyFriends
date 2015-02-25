@@ -1,4 +1,4 @@
-package object;
+package element;
 
 public abstract class AbstractFireWeapon implements FireWeapon {
 	

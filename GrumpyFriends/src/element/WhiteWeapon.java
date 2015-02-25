@@ -1,4 +1,4 @@
-package object;
+package element;
 
 public interface WhiteWeapon extends Weapon 
 {
