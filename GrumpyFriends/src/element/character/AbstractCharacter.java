@@ -12,6 +12,7 @@ public abstract class AbstractCharacter implements Character
 {
 	public final static int RIGHT = 0;
 	public final static int LEFT = 1;
+
 	
 	protected Position currentPosition;
 	protected int height;
@@ -22,8 +23,8 @@ public abstract class AbstractCharacter implements Character
 	protected Team team;
 	protected ArrayList<Weapon> weaponList;
 	protected Weapon equippedWeapon;
-	
 
+	
 	public AbstractCharacter(int x, int y,
 			Team team, ArrayList<Weapon> weaponList) {
 		
@@ -47,11 +48,41 @@ public abstract class AbstractCharacter implements Character
 		equippedWeapon = null;
 	}
 
-	public int isAshore() 
+	public int fall() 
 	{
-		return-1;
+		int depth = 0;
+		int xFirst = currentPosition.getX(), yFirst = currentPosition.getY();
+		int heightElement=0;
+		
+		for (int i=1; (heightElement= isThereSomething())==0; i++){
+			currentPosition.setY(currentPosition.getY()+1);
+			depth++;
+		}
+		System.out.println(heightElement);
+		if(heightElement ==-1){
+			depth+=MAX_HEIGHT-1;
+			currentPosition.setY(currentPosition.getY()+MAX_HEIGHT-1);
+		}
+		world.update(this, xFirst, yFirst);
+		return depth;
 	}
-
+	
+	public int isThereSomething(){
+		for(int i= 1; i <= MAX_HEIGHT;i++ ){
+			if((world.getElement(currentPosition.getX(), currentPosition.getY()+i) != null &&
+					!(world.getElement(currentPosition.getX(), currentPosition.getY()+i) instanceof Ground))||
+					(world.getElement(currentPosition.getX()+1, currentPosition.getY()+i) !=null &&
+					!(world.getElement(currentPosition.getX()+1, currentPosition.getY()+i) instanceof Ground))){
+				return i;
+			}
+			else if((world.getElement(currentPosition.getX(), currentPosition.getY()+i) instanceof Ground)||
+					(world.getElement(currentPosition.getX()+1, currentPosition.getY()+i) instanceof Ground)){
+						return i;
+					}
+		}
+		return 0;
+	}
+	
 	@Override
 	public int getX() {
 	
@@ -96,13 +127,16 @@ public abstract class AbstractCharacter implements Character
 		if (canSimplyMove(direction))
 		{
 			world.update(this, xFirst, yFirst);
+			fall();
 			return;
 		}
 		if (canClimbMove(direction))
 		{
 			world.update(this, xFirst, yFirst);
+			fall();
 			return;
 		}
+
 	}
 
 	private boolean canSimplyMove(int direction)
@@ -169,6 +203,7 @@ public abstract class AbstractCharacter implements Character
 			world.update(this, xFirst, yFirst);
 			yFirst = currentPosition.getY();
 		}
+		fall();
 	}
 
 	@Override
