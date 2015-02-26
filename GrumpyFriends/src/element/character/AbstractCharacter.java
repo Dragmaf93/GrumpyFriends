@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import element.Position;
 import element.Weapon;
 import world.AbstractWorld;
+import world.Ground;
 import world.World;
 
 public abstract class AbstractCharacter implements Character
 {
+	public final static int RIGHT = 0;
+	public final static int LEFT = 1;
+	
 	protected Position currentPosition;
 	protected int height;
 	protected int width;
@@ -18,7 +22,6 @@ public abstract class AbstractCharacter implements Character
 	protected Team team;
 	protected ArrayList<Weapon> weaponList;
 	protected Weapon equippedWeapon;
-	
 	
 
 	public AbstractCharacter(int x, int y,
@@ -46,7 +49,6 @@ public abstract class AbstractCharacter implements Character
 
 	public int isAshore() 
 	{
-		//TODO 
 		return-1;
 	}
 
@@ -87,27 +89,88 @@ public abstract class AbstractCharacter implements Character
 	}
 
 	@Override
-	public void moveLeft()
+	public void move(int direction)
 	{
+		int xFirst = currentPosition.getX(), yFirst = currentPosition.getY();
+		
+		if (canSimplyMove(direction))
+		{
+			world.update(this, xFirst, yFirst);
+			return;
+		}
+		if (canClimbMove(direction))
+		{
+			world.update(this, xFirst, yFirst);
+			return;
+		}
+	}
+
+	private boolean canSimplyMove(int direction)
+	{
+		if(direction == RIGHT)
+		{
+			for (int i = 0; i < height; i++) 
+			{
+				if (world.getElement(currentPosition.getX()+width, currentPosition.getY()-i) != null)
+					return false;
+			}
+			currentPosition.setX(currentPosition.getX()+1);
+			return true;
+		}
+		for (int i = 0; i < height; i++) 
+		{
+			if (world.getElement(currentPosition.getX()-1, currentPosition.getY()-i) != null)
+				return false;
+		}
+		currentPosition.setX(currentPosition.getX()-1);
+		return true;
+	}
 	
+	private boolean canClimbMove(int direction)
+	{
+		if(direction == RIGHT)
+		{
+			for (int i = 1; i <= height; i++) 
+			{
+				if (world.getElement(currentPosition.getX()+width, currentPosition.getY()) instanceof Ground &&
+						world.getElement(currentPosition.getX()+width, currentPosition.getY()-i) != null)
+					return false;
+			}
+			currentPosition.setX(currentPosition.getX()+1);
+			currentPosition.setY(currentPosition.getY()-1);
+			return true;
+		}
+		
+		for (int i = 1; i <= height; i++) 
+		{
+			if (world.getElement(currentPosition.getX()-width, currentPosition.getY()) instanceof Ground &&
+					world.getElement(currentPosition.getX()-1, currentPosition.getY()-i) != null)
+				return false;
+		}
+		currentPosition.setX(currentPosition.getX()-1);
+		currentPosition.setY(currentPosition.getY()-1);
+		return true;
+	}
+	
+	@Override
+	public void jump()
+	{
+		int xFirst = currentPosition.getX(), yFirst = currentPosition.getY();
+		for (int i = 1; i <= powerJump; i++) 
+		{
+			for(int j = 1; j < height+i; j++)
+			{
+				if ((world.getElement(currentPosition.getX(), currentPosition.getY()-j) != null) ||
+						(world.getElement(currentPosition.getX()+1, currentPosition.getY()-j) != null))
+					return;
+			}
+			
+			currentPosition.setY(currentPosition.getY()-1);
+			world.update(this, xFirst, yFirst);
+			yFirst = currentPosition.getY();
+		}
 	}
 
-	@Override
-	public void moveRight()
-	{
-		
-	}
-
-	@Override
-	public void highJump(boolean right, boolean left)
-	{
-		
-	}
-	@Override
-	public void longJump(boolean along)
-	{
-		
-	}
 	@Override
 	public int getLifePoints() 
 	{

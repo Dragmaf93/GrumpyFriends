@@ -2,6 +2,7 @@ package element.character;
 
 import java.util.ArrayList;
 
+import world.AbstractWorld;
 import world.World;
 import element.Position;
 import element.Weapon;
@@ -26,4 +27,15 @@ public class Chewbacca extends AbstractCharacter {
 		return null;
 	}
 
+	@Override
+	public String toString() 
+	{
+		return "CHEW";
+	}
+
+	public void setWorld() 
+	{
+		world = AbstractWorld.getInstance();
+	}
+	
 }

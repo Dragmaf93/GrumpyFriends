@@ -7,13 +7,9 @@ public interface Character extends Element
 {
 	public abstract boolean isDead();
 	
-	public abstract void moveLeft();
+	public abstract void move(int direction);
 	
-	public abstract void moveRight();
-	
-	public abstract void highJump(boolean right, boolean left);
-	
-	public abstract void longJump(boolean along);
+	public abstract void jump();
 	
 	public abstract int getLifePoints();
 	
