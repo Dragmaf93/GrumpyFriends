@@ -2,6 +2,7 @@ package element.character;
 
 import java.util.ArrayList;
 
+import element.Element;
 import element.Position;
 import element.Weapon;
 import world.AbstractWorld;
@@ -23,7 +24,7 @@ public abstract class AbstractCharacter implements Character
 	protected Team team;
 	protected ArrayList<Weapon> weaponList;
 	protected Weapon equippedWeapon;
-
+	
 	
 	public AbstractCharacter(int x, int y,
 			Team team, ArrayList<Weapon> weaponList) {
@@ -50,37 +51,71 @@ public abstract class AbstractCharacter implements Character
 
 	public int fall() 
 	{
-		int depth = 0;
-		int xFirst = currentPosition.getX(), yFirst = currentPosition.getY();
-		int heightElement=0;
-		
-		for (int i=1; (heightElement= isThereSomething())==0; i++){
-			currentPosition.setY(currentPosition.getY()+1);
-			depth++;
+		int depth=0;
+		int gravity = world.getGravity();
+		int xLast,yLast,xFirst = xLast =currentPosition.getX(), yFirst =yLast= currentPosition.getY();
+		Element something;
+		if((something=isThereSomething())==null){
+			currentPosition.setY(yFirst+gravity);
+			depth=gravity;
 		}
-		System.out.println(heightElement);
-		if(heightElement ==-1){
+		else if(something instanceof Ground){
+			for(int i = 1; i<=gravity;i++,depth++){
+				if(world.getElement(currentPosition.getX(), currentPosition.getY()+i) != null ){
+					break;
+				}
+				if(world.getElement(currentPosition.getX()+1, currentPosition.getY()+i) != null )
+					break;
+			}
+		}
+		else if(something instanceof AbstractCharacter){
+			
 			depth+=MAX_HEIGHT-1;
-			currentPosition.setY(currentPosition.getY()+MAX_HEIGHT-1);
+			
 		}
+		currentPosition.setY(currentPosition.getY()+depth);
 		world.update(this, xFirst, yFirst);
 		return depth;
 	}
 	
-	public int isThereSomething(){
-		for(int i= 1; i <= MAX_HEIGHT;i++ ){
-			if((world.getElement(currentPosition.getX(), currentPosition.getY()+i) != null &&
-					!(world.getElement(currentPosition.getX(), currentPosition.getY()+i) instanceof Ground))||
-					(world.getElement(currentPosition.getX()+1, currentPosition.getY()+i) !=null &&
-					!(world.getElement(currentPosition.getX()+1, currentPosition.getY()+i) instanceof Ground))){
-				return i;
-			}
-			else if((world.getElement(currentPosition.getX(), currentPosition.getY()+i) instanceof Ground)||
-					(world.getElement(currentPosition.getX()+1, currentPosition.getY()+i) instanceof Ground)){
-						return i;
-					}
+	private Position positionAfterFall(Element something){
+		int direction=-1;
+		
+		if(world.getElement(currentPosition.getX()+1, currentPosition.getY()+something.getHeight()) != null ){
+				direction=RIGHT;
 		}
-		return 0;
+		else if(world.getElement(currentPosition.getX()-1, currentPosition.getY()+something.getHeight()) != null){
+				direction=LEFT;
+			}
+		else if(world.getElement(currentPosition.getX(), currentPosition.getY()+something.getHeight()) !=null){
+				direction=-1;				
+		}
+		
+		if(direction==-1){
+			if(canSimplyMove(LEFT))
+				move(LEFT);
+			else if(canSimplyMove(RIGHT))
+				move(RIGHT);
+		}
+		else{
+			if(canSimplyMove(direction))
+				move(direction);
+		}
+		return null;
+	}
+	
+	public Element isThereSomething(){
+		for(int i= 1; i <= MAX_HEIGHT ;i++ ){
+			if(world.getElement(currentPosition.getX(), currentPosition.getY()+i) != null ){
+				return world.getElement(currentPosition.getX(), currentPosition.getY()+i);
+			}
+			if(world.getElement(currentPosition.getX()+1, currentPosition.getY()+i) !=null){
+				return world.getElement(currentPosition.getX()+1, currentPosition.getY()+i);
+			}
+			if(world.getElement(currentPosition.getX()-1, currentPosition.getY()+i) instanceof AbstractCharacter)
+				return world.getElement(currentPosition.getX()-1, currentPosition.getY()+i);
+		}
+		return null;
 	}
 	
 	@Override
@@ -127,13 +162,11 @@ public abstract class AbstractCharacter implements Character
 		if (canSimplyMove(direction))
 		{
 			world.update(this, xFirst, yFirst);
-			fall();
 			return;
 		}
 		if (canClimbMove(direction))
 		{
 			world.update(this, xFirst, yFirst);
-			fall();
 			return;
 		}
 

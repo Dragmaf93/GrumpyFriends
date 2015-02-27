@@ -59,7 +59,7 @@ public abstract class AbstractWorld implements World
 //		System.out.println(worldMatrix[xFirst][yFirst]+" "+xFirst+" "+yFirst);
 //		System.out.println(worldMatrix[character.getX()][character.getY()]+" "+character.getX()+" "+character.getY());
 	}
-
+	
 	public void readMatrix(String pathFile)
 	{
 		int xPrincipale = 0, yPrincipale = 0;

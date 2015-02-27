@@ -15,4 +15,9 @@ public class Planet extends AbstractWorld {
 	private Planet(String path) {
 		super(path);
 	}
+
+	@Override
+	public int getGravity() {
+		return gravityForce;
+	}
 }

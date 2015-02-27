@@ -12,5 +12,7 @@ public interface World
 	public abstract int getHeight();
 
 	public abstract int getWidth();
+
+	public abstract int getGravity();
 			
 }
