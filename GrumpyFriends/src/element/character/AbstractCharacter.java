@@ -53,14 +53,16 @@ public abstract class AbstractCharacter implements Character
 	{
 		int depth=0;
 		int gravity = world.getGravity();
-		int xLast,yLast,xFirst = xLast =currentPosition.getX(), yFirst =yLast= currentPosition.getY();
-		Element something;
-		if((something=isThereSomething())==null){
-			currentPosition.setY(yFirst+gravity);
-			depth=gravity;
+		int xFirst = currentPosition.getX(), yFirst = currentPosition.getY();
+		
+		Element something = isThereSomething();
+		
+		if(something == null){
+//			currentPosition.setY(yFirst+gravity);
+			depth = gravity;
 		}
 		else if(something instanceof Ground){
-			for(int i = 1; i<=gravity;i++,depth++){
+			for(int i = 1; i <= gravity; i++, depth++){
 				if(world.getElement(currentPosition.getX(), currentPosition.getY()+i) != null ){
 					break;
 				}
@@ -74,6 +76,8 @@ public abstract class AbstractCharacter implements Character
 			
 		}
 		currentPosition.setY(currentPosition.getY()+depth);
+		
+		System.out.println(yFirst+" "+currentPosition.getY());
 		world.update(this, xFirst, yFirst);
 		return depth;
 	}
@@ -162,11 +166,13 @@ public abstract class AbstractCharacter implements Character
 		if (canSimplyMove(direction))
 		{
 			world.update(this, xFirst, yFirst);
+			fall();
 			return;
 		}
 		if (canClimbMove(direction))
 		{
 			world.update(this, xFirst, yFirst);
+			fall();
 			return;
 		}
 

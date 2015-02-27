@@ -2,7 +2,7 @@ package world;
 
 public class Planet extends AbstractWorld {
 	
-	private static int gravityForce;
+	private static int gravityForce = 3;
 	
 	public static int getGravityForce() {
 		return gravityForce;
