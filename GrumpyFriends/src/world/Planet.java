@@ -2,13 +2,10 @@ package world;
 
 public class Planet extends AbstractWorld {
 	
-	private static int gravityForce = 3;
+	private static Vector gravityForce = new Vector(0, 3);
+//	TODO impostare la GRAVITAAAA
 	
-	public static int getGravityForce() {
-		return gravityForce;
-	}
-
-	public static void setGravityForce(int gravityForce) {
+	public static void setGravityForce(Vector gravityForce) {
 		Planet.gravityForce = gravityForce;
 	}
 
@@ -17,7 +14,7 @@ public class Planet extends AbstractWorld {
 	}
 
 	@Override
-	public int getGravity() {
+	public Vector getGravity() {
 		return gravityForce;
 	}
 }

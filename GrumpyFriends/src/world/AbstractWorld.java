@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 import element.Element;
@@ -16,12 +18,15 @@ public abstract class AbstractWorld implements World
 {
 	protected int height,width;
 	protected Element[][] worldMatrix;
+	protected int numberRow = 0, numberColumn = 0;
+	protected HashMap<Vector, AbstractCharacter> characterContainer;
 	
 	protected static World instanceSon;
 	
 	public AbstractWorld(String path) 
 	{	
 		readMatrix("src/world/matrix");
+		characterContainer = new HashMap<>();
 	}
 	
 	public static void initializes(String typeWorld){
@@ -54,15 +59,12 @@ public abstract class AbstractWorld implements World
 	@Override
 	public void update(AbstractCharacter character, int xFirst, int yFirst) 
 	{
-		worldMatrix[yFirst][xFirst]=null;
-		worldMatrix[character.getY()][character.getX()]=character;
-//		System.out.println(worldMatrix[xFirst][yFirst]+" "+xFirst+" "+yFirst);
-//		System.out.println(worldMatrix[character.getX()][character.getY()]+" "+character.getX()+" "+character.getY());
+		characterContainer.remove(new Vector(xFirst, yFirst));
+		characterContainer.put(new Vector(character.getX(), character.getY()), character);
 	}
 	
 	public void readMatrix(String pathFile)
 	{
-		int xPrincipale = 0, yPrincipale = 0;
 		try 
 		{
 			FileReader filein = new FileReader(pathFile);
@@ -70,8 +72,11 @@ public abstract class AbstractWorld implements World
 			int currentRow = 0, currentColumn = 0;
 			BufferedReader b=new BufferedReader(filein);
 			height=Integer.parseInt(b.readLine());
+			numberRow = height / SIZE_CELL;
 			width=Integer.parseInt(b.readLine());
-			worldMatrix = new Element[height][width];
+			numberColumn = width / SIZE_CELL;
+			
+			worldMatrix = new Element[numberRow][numberColumn];
 
 			do
 			{
@@ -87,13 +92,13 @@ public abstract class AbstractWorld implements World
 					case '1':
 						worldMatrix[currentRow][currentColumn] = new Ground(currentColumn,currentRow);
 						break;
-					case '2':
-						worldMatrix[currentRow][currentColumn] = new Chewbacca(currentColumn, currentRow, 100, null, null);
-						break;
+//					case '2':
+//						worldMatrix[currentRow][currentColumn] = new Chewbacca(currentColumn, currentRow, 100, null, null);
+//						break;
 					//TODO implementare il resto
 					}
 					
-					if (currentColumn == width)
+					if (currentColumn == numberColumn)
 					{
 						currentRow ++;
 						currentColumn = 0;
@@ -115,17 +120,19 @@ public abstract class AbstractWorld implements World
 	
 	public void print ()
 	{
-		for (int i = 0; i < height; i++)
+		for (int i = 0; i < numberRow; i++)
 		{
 			String row="";
-			for (int j = 0; j < width; j++)
+			for (int j = 0; j < numberColumn; j++)
 			{
-				row += worldMatrix[i][j];
+				if (j == pointToCellX(getPrincipale().getX()) && i == pointToCellY(getPrincipale().getY()))
+					row += "CHEW";
+				else
+					row += worldMatrix[i][j];
 				row += " ";
 //				System.out.print(worldMatrix[i][j]);
 			}
 			System.out.println(row);
-			//System.out.println();
 		}
 //		Chewbacca b = (Chewbacca) getPrincipale();
 //		World w = b.getWorld();
@@ -134,15 +141,31 @@ public abstract class AbstractWorld implements World
 	
 	public Element getPrincipale()
 	{
-		for (int i=0; i< height; i++)
-		{
-			for (int j=0; j<width; j++)
-			{
-				if (worldMatrix[i][j] instanceof Chewbacca)
-					return worldMatrix[i][j];
-			}
+		for(Entry<Vector, AbstractCharacter> entry : characterContainer.entrySet()) {
+		    return entry.getValue();
+
 		}
 		return null;
+	}
+	
+	public int getNumberRow()
+	{
+		return numberRow;
+	}
+
+	public int getNumberColumn()
+	{
+		return numberColumn;
+	}
+			
+	public int pointToCellX(int x)
+	{
+		return (int) (Math.ceil(((float)x * (float)numberColumn) / (float)width) -1);
+	}
+	
+	public int pointToCellY(int y)
+	{
+		return (int) (Math.ceil(((float)y * (float)numberRow) / (float)height) -1);
 	}
 	
 	@Override
@@ -160,11 +183,12 @@ public abstract class AbstractWorld implements World
 	public static void main(String[] args) {
 		AbstractWorld.initializes("world.Planet");
 		AbstractWorld world = (AbstractWorld) AbstractWorld.getInstance();
-		world.print();
 		
-		Chewbacca chewbacca = (Chewbacca) world.getPrincipale();
+		Chewbacca chewbacca = new Chewbacca(400, 500, 100, null, null);
+		world.characterContainer.put(new Vector(chewbacca.getX(), chewbacca.getY()),chewbacca);
 		chewbacca.setWorld();
 
+		world.print();
 		System.out.println("MUOVI");
 		final Scanner scanner = new Scanner(System.in);
 		System.out.println("inserisci direzione");
