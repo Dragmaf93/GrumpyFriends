@@ -45,6 +45,7 @@ public abstract class AbstractCharacter implements Character
 		inFall = false;
 		inMovement = false;
 		inJump = false;
+		fall();
 	}
 	
 	public AbstractCharacter(int x, int y,
@@ -61,65 +62,36 @@ public abstract class AbstractCharacter implements Character
 		inFall = false;
 		inMovement = false;
 		inJump = false;
+		fall();
 	}
 
-//	public int fall() 
-//	{
-//		int depth=0;
-//		int gravity = world.getGravity();
-//		int xFirst = currentPosition.getX(), yFirst = currentPosition.getY();
-//		
-//		Element something = isThereSomething();
-//		
-//		if(something == null){
-////			currentPosition.setY(yFirst+gravity);
-//			depth = gravity;
-//		}
-//		else if(something instanceof Ground){
-//			for(int i = 1; i <= gravity; i++, depth++){
-//				if(world.getElement(currentPosition.getX(), currentPosition.getY()+i) != null ){
-//					break;
-//				}
-//				if(world.getElement(currentPosition.getX()+1, currentPosition.getY()+i) != null )
-//					break;
-//			}
-//		}
-//		else if(something instanceof AbstractCharacter){
-//			
-//			depth+=MAX_HEIGHT-1;
-//			
-//		}
-//		currentPosition.setY(currentPosition.getY()+depth);
-//		
-//		System.out.println(yFirst+" "+currentPosition.getY());
-//		world.update(this, xFirst, yFirst);
-//		return depth;
-//	}
-//	
-	private Position positionAfterFall(Element something){
-		int direction=-1;
+	public int fall() 
+	{
+		int depth = 0;
+		Vector gravity = world.getGravity();
+		int xFirst = currentPosition.getX(), yFirst = currentPosition.getY();
 		
-		if(world.getElement(currentPosition.getX()+1, currentPosition.getY()+something.getHeight()) != null ){
-				direction=RIGHT;
-		}
-		else if(world.getElement(currentPosition.getX()-1, currentPosition.getY()+something.getHeight()) != null){
-				direction=LEFT;
-			}
-		else if(world.getElement(currentPosition.getX(), currentPosition.getY()+something.getHeight()) !=null){
-				direction=-1;				
+		for (int t = 1; isFall(xFirst, yFirst, t, gravity); t++) 
+		{
+			currentPosition.setX(xFirst + (currentSpeed.getX() * t));
+			currentPosition.setY((int) (yFirst + (currentSpeed.getX() * t) + (0.5 * gravity.getY() * t)));
+			currentSpeed.setY(gravity.getY() * t);
 		}
 		
-		if(direction==-1){
-			if(canSimplyMove(LEFT))
-				move(LEFT);
-			else if(canSimplyMove(RIGHT))
-				move(RIGHT);
-		}
-		else{
-			if(canSimplyMove(direction))
-				move(direction);
-		}
-		return null;
+		System.out.println(yFirst+" "+currentPosition.getY());
+		world.update(this, xFirst, yFirst);
+		return depth;
+	}
+	
+	public boolean isFall(int x, int y, int time, Vector gravity)
+	{
+		int coordinateX = x + (currentSpeed.getX() * time);
+		int coordinateY = (int) (y + (currentSpeed.getX() * time) + (0.5 * gravity.getY() * time));
+		
+		if (world.getElement(world.pointToCellX(coordinateX), world.pointToCellY(coordinateY)) != null ||
+				world.getElement(world.pointToCellX(coordinateX+width), world.pointToCellY(coordinateY)) != null)
+			return false;
+		return true;
 	}
 	
 	public Element isThereSomething(){
@@ -182,13 +154,13 @@ public abstract class AbstractCharacter implements Character
 			if (canSimplyMove(direction))
 			{
 				world.update(this, xFirst, yFirst);
-	//			fall();
+				fall();
 				return;
 			}
 			if (canClimbMove(direction))
 			{
 				world.update(this, xFirst, yFirst);
-	//			fall();
+				fall();
 				return;
 			}
 		}
@@ -202,20 +174,20 @@ public abstract class AbstractCharacter implements Character
 			currentSpeed.setX(step);
 			for (int i = 0; i < height; i+=world.SIZE_CELL) 
 			{
-				System.out.println("X "+currentPosition.getX()+" "+world.pointToCellX(currentPosition.getX()+width)+ " Y " +currentPosition.getY()+" "+(world.pointToCellY(currentPosition.getY()-i)));
-				if (world.getElement(world.pointToCellX(currentPosition.getX()+width), world.pointToCellY(currentPosition.getY()-i)) != null)
+				if (world.getElement(world.pointToCellX(currentPosition.getX()+width+step), world.pointToCellY(currentPosition.getY()-i)) != null)
 					return false;
 			}
-			currentPosition.setX(currentPosition.getX()+currentSpeed.getX());
-			currentSpeed.setX(0);
-			return true;
 		}
-		currentSpeed.setX(-width/2);
-		for (int i = 0; i < height; i+=world.SIZE_CELL) 
+		else
 		{
-			if (world.getElement(world.pointToCellX(currentPosition.getX())-1, world.pointToCellY(currentPosition.getY()-i)) != null)
-				return false;
+			currentSpeed.setX(-step);
+			for (int i = 0; i < height; i+=world.SIZE_CELL) 
+			{
+				if (world.getElement(world.pointToCellX(currentPosition.getX())-1, world.pointToCellY(currentPosition.getY()-i)) != null)
+					return false;
+			}
 		}
+		
 		currentPosition.setX(currentPosition.getX()+currentSpeed.getX());
 		currentSpeed.setX(0);
 		return true;
@@ -226,28 +198,31 @@ public abstract class AbstractCharacter implements Character
 		if(direction == RIGHT)
 		{			
 			currentSpeed.setX(step);
-			currentSpeed.setY(step);
+			currentSpeed.setY(-step);
 			for (int i = world.SIZE_CELL; i < height; i+=world.SIZE_CELL) 
 			{
-				if (world.getElement(world.pointToCellX(currentPosition.getX()+width), world.pointToCellY(currentPosition.getY())) instanceof Ground &&
-						world.getElement(world.pointToCellX(currentPosition.getX()+width), world.pointToCellY(currentPosition.getY()-i)) != null)
+				if ((world.getElement(world.pointToCellX(currentPosition.getX()+width), world.pointToCellY(currentPosition.getY())) instanceof Ground ||
+						world.getElement(world.pointToCellX(currentPosition.getX()+width), world.pointToCellY(currentPosition.getY())) == null) &&
+						world.getElement(world.pointToCellX(currentPosition.getX()+width+step), world.pointToCellY(currentPosition.getY()-i)) != null)
 					return false;
 			}
-			currentPosition.setX(currentPosition.getX()+currentSpeed.getX());
-			currentPosition.setY(currentPosition.getY()-currentSpeed.getY());
-			currentSpeed.setX(0);
-			currentSpeed.setY(0);
-			return true;
 		}
-		
-		for (int i = 1; i <= height; i++) 
+		else
 		{
-			if (world.getElement(currentPosition.getX()-width, currentPosition.getY()) instanceof Ground &&
-					world.getElement(currentPosition.getX()-1, currentPosition.getY()-i) != null)
-				return false;
+			for (int i = world.SIZE_CELL; i < height; i+=world.SIZE_CELL) 
+			{
+				currentSpeed.setX(-step);
+				currentSpeed.setY(-step);
+				if ((world.getElement(world.pointToCellX(currentPosition.getX())-1, world.pointToCellY(currentPosition.getY())) instanceof Ground ||
+						world.getElement(world.pointToCellX(currentPosition.getX())-1, world.pointToCellY(currentPosition.getY())) == null) &&
+						world.getElement(world.pointToCellX(currentPosition.getX())-1, world.pointToCellY(currentPosition.getY()-i)) != null)
+					return false;
+			}
 		}
 		currentPosition.setX(currentPosition.getX()+currentSpeed.getX());
 		currentPosition.setY(currentPosition.getY()+currentSpeed.getY());
+		currentSpeed.setX(0);
+		currentSpeed.setY(0);
 		return true;
 	}
 	

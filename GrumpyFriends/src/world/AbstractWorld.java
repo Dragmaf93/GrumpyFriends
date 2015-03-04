@@ -1,6 +1,7 @@
 package world;
 
 import java.io.BufferedReader;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -9,7 +10,6 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 import element.Element;
-import element.Position;
 import element.character.AbstractCharacter;
 import element.character.Chewbacca;
 
@@ -184,7 +184,7 @@ public abstract class AbstractWorld implements World
 		AbstractWorld.initializes("world.Planet");
 		AbstractWorld world = (AbstractWorld) AbstractWorld.getInstance();
 		
-		Chewbacca chewbacca = new Chewbacca(400, 500, 100, null, null);
+		Chewbacca chewbacca = new Chewbacca(30, 30, 100, null, null);
 		world.characterContainer.put(new Vector(chewbacca.getX(), chewbacca.getY()),chewbacca);
 		chewbacca.setWorld();
 
@@ -201,6 +201,10 @@ public abstract class AbstractWorld implements World
 			else
 				chewbacca.move(direction);
 			world.print();
+//			if (chewbacca.isFall())
+//				System.out.println("NOOOOOOOOOOOOOOOOOOOOO CADOOOOOOOOOOOOOOOOOOOoo");
+//			else
+//				System.out.println("SONO TROPPO FORTE");
 			System.out.println("inserisci direzione");
 			direction = scanner.nextInt();
 		}
