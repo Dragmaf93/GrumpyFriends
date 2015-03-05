@@ -31,4 +31,11 @@ public class Vector
 		this.y = y;
 	}
 	
+	@Override
+	public Vector clone() 
+	{
+		Vector temp = new Vector(x, y);
+		return temp;
+	}
+	
 }

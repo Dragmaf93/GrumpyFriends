@@ -25,7 +25,7 @@ public abstract class AbstractCharacter implements Character
 	protected Team team;
 	protected ArrayList<Weapon> weaponList;
 	protected Weapon equippedWeapon;
-	protected Vector jump;
+	protected Vector vectorJump;
 	protected Vector currentSpeed;
 	
 	protected boolean inFall;
@@ -70,27 +70,33 @@ public abstract class AbstractCharacter implements Character
 		int depth = 0;
 		Vector gravity = world.getGravity();
 		int xFirst = currentPosition.getX(), yFirst = currentPosition.getY();
-		
-		for (int t = 1; isFall(xFirst, yFirst, t, gravity); t++) 
+		Vector speedFirst = currentSpeed.clone();
+		for (int time = 1; isFall(xFirst, yFirst, time, gravity, speedFirst); time++) 
 		{
-			currentPosition.setX(xFirst + (currentSpeed.getX() * t));
-			currentPosition.setY((int) (yFirst + (currentSpeed.getX() * t) + (0.5 * gravity.getY() * t)));
-			currentSpeed.setY(gravity.getY() * t);
+			currentPosition.setX(xFirst + (speedFirst.getX() * time));
+			currentPosition.setY((int) (yFirst + (speedFirst.getY() * time) + (0.5 * gravity.getY() * time)));
+			currentSpeed.setY(gravity.getY() * time);
 		}
-		
-		System.out.println(yFirst+" "+currentPosition.getY());
+		System.out.println("SETTA CADUTA: "+currentPosition.getX()+" "+currentPosition.getY());
 		world.update(this, xFirst, yFirst);
+		currentSpeed.setX(0);
+		currentSpeed.setY(0);
+		inJump = false;
 		return depth;
 	}
 	
-	public boolean isFall(int x, int y, int time, Vector gravity)
+	public boolean isFall(int x, int y, int time, Vector gravity, Vector speedFirst)
 	{
-		int coordinateX = x + (currentSpeed.getX() * time);
-		int coordinateY = (int) (y + (currentSpeed.getX() * time) + (0.5 * gravity.getY() * time));
-		
-		if (world.getElement(world.pointToCellX(coordinateX), world.pointToCellY(coordinateY)) != null ||
+		int coordinateX = x + (speedFirst.getX() * time);
+		int coordinateY = (int) (y + (speedFirst.getX() * time) + (0.5 * gravity.getY() * time));
+		System.out.println(coordinateX + " "+ coordinateY);
+//		if (!inJump)
+			if (world.getElement(world.pointToCellX(coordinateX), world.pointToCellY(coordinateY)) != null ||
 				world.getElement(world.pointToCellX(coordinateX+width), world.pointToCellY(coordinateY)) != null)
-			return false;
+				return false;
+//		if(inJump)
+//			if (world.getElement(world.pointToCellX(coordinateX), world.pointToCellY(coordinateY)) != null)
+//				return false;
 		return true;
 	}
 	
@@ -164,7 +170,6 @@ public abstract class AbstractCharacter implements Character
 				return;
 			}
 		}
-		
 	}
 
 	private boolean canSimplyMove(int direction)
@@ -229,23 +234,54 @@ public abstract class AbstractCharacter implements Character
 	@Override
 	public void jump()
 	{
+		inJump = true;
 		int xFirst = currentPosition.getX(), yFirst = currentPosition.getY();
-		for (int i = 1; i <= powerJump; i++) 
+		Vector gravity = world.getGravity();
+		currentSpeed.setY(currentSpeed.getY()+vectorJump.getY());
+		currentSpeed.setX(20);
+		Vector speedFirst = currentSpeed.clone();
+//		System.out.println("VELOCITA_FIRST: "+speedFirst.getX()+" "+speedFirst.getY());
+		for (int time = 1; !isInMaxHeight(xFirst, yFirst, gravity, speedFirst, time); time++) 
 		{
-			for(int j = 1; j < height+i; j++)
-			{
-				if ((world.getElement(currentPosition.getX(), currentPosition.getY()-j) != null) ||
-						(world.getElement(currentPosition.getX()+1, currentPosition.getY()-j) != null))
-					return;
-			}
-			
-			currentPosition.setY(currentPosition.getY()-1);
-			world.update(this, xFirst, yFirst);
-			yFirst = currentPosition.getY();
+//			System.out.println("VELOCITA_Current: "+currentSpeed.getX()+" "+currentSpeed.getY());
+//			System.out.println("FIRST_POSITION: "+currentPosition.getX()+" "+currentPosition.getY());
+
+			currentPosition.setX(xFirst + (speedFirst.getX() * time));
+			currentPosition.setY((int) (yFirst + (speedFirst.getY() * time) + (0.5 * gravity.getY() * Math.pow(time, 2))));
+			currentSpeed.setY(speedFirst.getY() + (gravity.getY() * time));
+//			System.out.println("POSITION: "+currentPosition.getX()+" "+currentPosition.getY());
 		}
-//		fall();
+		currentSpeed.setY(0);
+		currentSpeed.setX(0);
+		world.update(this, xFirst, yFirst);
+		
+		System.out.println("FIRST_POSITION_LOL: "+currentPosition.getX()+" "+currentPosition.getY());
+		fall();
+		System.out.println("POSITION: "+currentPosition.getX()+" "+currentPosition.getY());
 	}
 
+	public boolean isInMaxHeight(int xFirst, int yFirst, Vector gravity, Vector speedFirst, int time)
+	{
+		int timeForMaxHeight = -(speedFirst.getY() / gravity.getY());
+		System.out.println("TIME: "+time+"      TIME_HEIGHT: "+timeForMaxHeight);
+		System.out.println("VELOCITA: "+speedFirst.getX()+" "+speedFirst.getY());
+		System.out.println("CALCOLO: "+(yFirst - 0.5 * Math.pow((speedFirst.getY()), 2) / gravity.getY()));
+		if (time == timeForMaxHeight + 1)
+			return true;
+		
+//		for (int i = 0; i < height; i+=world.SIZE_CELL) 
+//		{
+//			if (speedFirst.getX() > 0)
+//				if (world.getElement(world.pointToCellX(currentPosition.getX()+width+speedFirst.getX()), world.pointToCellY(currentPosition.getY()-i-speedFirst.getY())) != null)
+//					return true;
+//			else
+//				if(world.getElement(world.pointToCellX(currentPosition.getX())-1, world.pointToCellY(currentPosition.getY()-i - speedFirst.getY())) != null)
+//					return true;
+//		}
+		
+		return false;
+	}
+	
 	@Override
 	public int getLifePoints() 
 	{
