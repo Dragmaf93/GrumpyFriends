@@ -11,6 +11,10 @@ public class Vector
 		this.y = y;
 	}
 	
+	public void set(Vector vector){
+		this.x=vector.x;
+		this.y=vector.y;
+	}
 	public int getX() 
 	{
 		return x;
@@ -37,5 +41,8 @@ public class Vector
 		Vector temp = new Vector(x, y);
 		return temp;
 	}
-	
+	@Override
+	public String toString() {
+		return "X : "+ x +" Y "+y;
+	}
 }

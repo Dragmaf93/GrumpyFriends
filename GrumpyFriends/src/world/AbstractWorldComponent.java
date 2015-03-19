@@ -1,11 +1,10 @@
 package world;
 
 import element.Element;
-import element.Position;
 
 public abstract class AbstractWorldComponent implements Element
 {
-	protected Position position;
+	protected Vector position;
 	protected int height;
 	protected int width;
 	
@@ -13,7 +12,7 @@ public abstract class AbstractWorldComponent implements Element
 	public AbstractWorldComponent(int x, int y) {
 		
 		super();
-		position = new Position(x,y);
+		position = new Vector(x,y);
 	}
 
 	@Override
@@ -43,9 +42,9 @@ public abstract class AbstractWorldComponent implements Element
 	public void setY(int y) {
 		position.setY(y);
 	}
-
+	
 	@Override
-	public Position getPosition() {
+	public Vector getPosition() {
 		return position;
 	}
 

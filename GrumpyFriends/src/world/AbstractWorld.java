@@ -63,6 +63,11 @@ public abstract class AbstractWorld implements World
 		characterContainer.put(new Vector(character.getX(), character.getY()), character);
 	}
 	
+	@Override
+	public Element getElementByPoint(int x, int y) {
+		return worldMatrix[pointToCellY(y)][pointToCellX(x)];
+	}
+	
 	public void readMatrix(String pathFile)
 	{
 		try 
@@ -75,7 +80,8 @@ public abstract class AbstractWorld implements World
 			numberRow = height / SIZE_CELL;
 			width=Integer.parseInt(b.readLine());
 			numberColumn = width / SIZE_CELL;
-			
+			System.out.println(height+ " "+ width);
+			System.out.println(numberRow+" "+numberColumn+"\n\n\n");
 			worldMatrix = new Element[numberRow][numberColumn];
 
 			do
@@ -160,12 +166,12 @@ public abstract class AbstractWorld implements World
 			
 	public int pointToCellX(int x)
 	{
-		return (int) (Math.ceil(((float)x * (float)numberColumn) / (float)width) -1);
+		return (int) (((float)x * (float)numberColumn) / (float)width);
 	}
 	
 	public int pointToCellY(int y)
 	{
-		return (int) (Math.ceil(((float)y * (float)numberRow) / (float)height) -1);
+		return (int) (((float)y * (float)numberRow) / (float)height);
 	}
 	
 	@Override
@@ -198,8 +204,10 @@ public abstract class AbstractWorld implements World
 		{
 			if (direction == 2)
 				chewbacca.jump();
-			else
+			else{
 				chewbacca.move(direction);
+				chewbacca.stopToMove();
+			}
 			world.print();
 //			if (chewbacca.isFall())
 //				System.out.println("NOOOOOOOOOOOOOOOOOOOOO CADOOOOOOOOOOOOOOOOOOOoo");

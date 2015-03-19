@@ -7,7 +7,6 @@ import com.sun.javafx.scene.traversal.WeightedClosestCorner;
 import world.AbstractWorld;
 import world.Vector;
 import world.World;
-import element.Position;
 import element.Weapon;
 
 public class Chewbacca extends AbstractCharacter {
@@ -27,12 +26,6 @@ public class Chewbacca extends AbstractCharacter {
 	}
 
 	@Override
-	public Position getPosition() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String toString() 
 	{
 		return "CHEW";
@@ -42,5 +35,7 @@ public class Chewbacca extends AbstractCharacter {
 	{
 		world = AbstractWorld.getInstance();
 	}
+
+	
 	
 }

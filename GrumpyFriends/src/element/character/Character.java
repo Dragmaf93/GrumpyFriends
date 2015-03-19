@@ -10,10 +10,12 @@ public interface Character extends Element
 	public abstract boolean isDead();
 	
 	public abstract void move(int direction);
-	
+	public abstract void stopToMove();
 	public abstract void jump();
 	
 	public abstract int getLifePoints();
-	
 	public abstract boolean equipWeapon(Weapon weapon);
+	
+	public abstract boolean isFluttering();
+	public abstract boolean isMoving();
 }
