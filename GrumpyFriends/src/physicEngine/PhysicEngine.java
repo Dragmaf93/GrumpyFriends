@@ -1,8 +1,12 @@
 package physicEngine;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import world.AbstractWorld;
 import world.Vector;
 import world.World;
 import element.Element;
+import element.character.AbstractCharacter;
 
 
 public class PhysicEngine {
@@ -12,11 +16,14 @@ public class PhysicEngine {
 	private World world;
 	private CollisionManager collisionManager;
 	private long time0,time;
+	private HashMap<Vector, Element> elementsToMove;
 	
 	private PhysicEngine(){
 		world = AbstractWorld.getInstance();
 		collisionManager = new CollisionManager();
 		time0=System.currentTimeMillis();
+		
+		elementsToMove = new HashMap<Vector, Element>();
 	}
 	
 	public static PhysicEngine getInstace(){
@@ -30,8 +37,10 @@ public class PhysicEngine {
 		
 		time = System.currentTimeMillis()-time0;
 		
+		int xFirst = elementToMove.getX(), yFirst = elementToMove.getY();
+		
 		if(speed0.getX()==0 && speed0.getY()>0){
-			if(!collisionManager.collidesBotton(elementToMove,speed0,position0,time)){
+			if(!collisionManager.collidesBotton(elementToMove,time)){
 				elementToMove.setPosition(makePositionParabolicMotion(speed0, position0, time));
 				elementToMove.setCurrentSpeed(makeSpeedParabolicMotion(speed0, time));		
 			}
@@ -64,6 +73,10 @@ public class PhysicEngine {
 				
 			}
 		}
+		
+		if (elementToMove instanceof AbstractCharacter)
+			world.update((AbstractCharacter) elementToMove, xFirst, yFirst);
+		
 	}
 	
 	public Vector makePositionParabolicMotion(Vector speed0, Vector position0, long time){
@@ -81,6 +94,8 @@ public class PhysicEngine {
 	{
 		Vector speed0 = elementToMove.getCurrentSpeed();
 		Vector move = new Vector(speed0.getX(),0);
+		int xFirst = elementToMove.getX(), yFirst = elementToMove.getY();
+		
 		if(speed0.getX() > 0){
 			if(!collisionManager.collidesRight(elementToMove,move)){
 				speed0.set(move);
@@ -94,9 +109,17 @@ public class PhysicEngine {
 				elementToMove.setPosition(new Vector(elementToMove.getX()+speed0.getX(), elementToMove.getY()+speed0.getY()));
 			}
 		}
+		
+		if (elementToMove instanceof AbstractCharacter)
+			world.update((AbstractCharacter) elementToMove, xFirst, yFirst);
 	}
 	
 	public void sweep(Element elementSweeper,Element elementToSweep){
 		
+	}
+	
+	public void movesElement(Element element)
+	{
+		elementsToMove.put(element.getPosition(), element);
 	}
 }

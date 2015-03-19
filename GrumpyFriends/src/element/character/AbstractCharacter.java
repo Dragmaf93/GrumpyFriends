@@ -178,9 +178,7 @@ public abstract class AbstractCharacter implements Character
 	@Override
 	public void move(int direction)
 	{
-		int xFirst = currentPosition.getX(), yFirst = currentPosition.getY();
-
-		if (!inFluttering)
+		if (!inFall || !inJump)
 		{
 			if(direction == RIGHT)
 				currentSpeed.setX(step);
@@ -188,8 +186,8 @@ public abstract class AbstractCharacter implements Character
 				currentSpeed.setX(-step);
 		}
 		inMovement=true;
-		physicEngine.moveOnGround(this);
-		world.update(this, xFirst, yFirst);
+		physicEngine.movesElement(this);
+		
 		System.out.println("FIRST_POSITION_LOL: "+currentPosition.getX()+" "+currentPosition.getY());
 	}
 	
@@ -211,33 +209,19 @@ public abstract class AbstractCharacter implements Character
 	public void jump()
 	{
 		inJump = true;
-		int xFirst = currentPosition.getX(), yFirst = currentPosition.getY();
-		Vector gravity = world.getGravity();
-		currentSpeed.setY(currentSpeed.getY()+vectorJump.getY());
-		Vector speedFirst = currentSpeed.clone();
-//		System.out.println("VELOCITA_FIRST: "+speedFirst.getX()+" "+speedFirst.getY());
-		for (int time = 1; !isInMaxHeight(xFirst, yFirst, gravity, speedFirst, time); time++) 
+		if (!inFall)
 		{
-//			System.out.println("VELOCITA_Current: "+currentSpeed.getX()+" "+currentSpeed.getY());
-//			System.out.println("FIRST_POSITION: "+currentPosition.getX()+" "+currentPosition.getY());
-
-			currentPosition.setX(xFirst + (speedFirst.getX() * time));
-			currentPosition.setY((int) (yFirst + (speedFirst.getY() * time) + (0.5 * gravity.getY() * Math.pow(time, 2))));
-			currentSpeed.setY(speedFirst.getY() + (gravity.getY() * time));
-//			System.out.println("POSITION: "+currentPosition.getX()+" "+currentPosition.getY());
+			currentSpeed.setY(powerJump);
+			physicEngine.movesElement(this);
 		}
-		currentSpeed.setY(0);
-
-		world.update(this, xFirst, yFirst);
 		
-		System.out.println("FIRST_POSITION_LOL: "+currentPosition.getX()+" "+currentPosition.getY());
-		fall();
-		System.out.println("POSITION: "+currentPosition.getX()+" "+currentPosition.getY());
 	}
+	
 	@Override
 	public void setCurrentSpeed(Vector speed) {
 		currentSpeed.set(speed);
 	}
+	
 	public boolean isInMaxHeight(int xFirst, int yFirst, Vector gravity, Vector speedFirst, int time)
 	{
 		int timeForMaxHeight = -(speedFirst.getY() / gravity.getY());

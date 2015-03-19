@@ -76,7 +76,7 @@ public class CollisionManager {
 		return !(simpleMove || climbeMove);
 	}
 	
-	public boolean collidesTop(Element element,long time){
+	public boolean collidesTop(Element element,long time) {
 
 		if(world.getElementByPoint(element.getX(),element.getY()+element.getCurrentSpeed().getY()-element.getHeight())!=null ||
 			world.getElementByPoint(element.getX()+element.getWidth(),element.getY()+element.getCurrentSpeed().getY()-element.getHeight())!=null){
@@ -85,9 +85,10 @@ public class CollisionManager {
 		return false;
 	}
 	
-	public boolean collidesBotton(Element element, Vector speed0, Vector position0,long time){
-		int coordinateX = position0.getX();
-		int coordinateY = (int) (position0.getY() + (speed0.getY() * time) + (0.5 * world.getGravity().getY() * time));
+	public boolean collidesBotton(Element element, long time) {
+		
+		int coordinateX = element.getX();
+		int coordinateY = (int) (element.getY() + element.getCurrentSpeed().getY());
 		
 		if (world.getElementByPoint(coordinateX, coordinateY) != null ||
 				world.getElementByPoint(coordinateX+element.getWidth(),coordinateY) != null){
@@ -97,18 +98,81 @@ public class CollisionManager {
 	}
 	
 	public boolean collidesTopRight(Element element, long time){
+		
+		if (world.getElementByPoint(element.getX()+element.getCurrentSpeed().getX(),
+				element.getY()+element.getCurrentSpeed().getY()-element.getHeight())!=null ||
+			 world.getElementByPoint(element.getX()+element.getWidth()+element.getCurrentSpeed().getX(),
+					 element.getY()+element.getCurrentSpeed().getY()-element.getHeight())!=null){
+				return true;
+		}
+		
+		for (int i = 0; i < element.getHeight(); i+=world.SIZE_CELL) 
+		{
+			if (world.getElementByPoint(element.getX()+element.getWidth()+element.getCurrentSpeed().getX(), 
+					element.getY()+element.getCurrentSpeed().getY()-i) != null){
+				return true;
+			}
+		}
+		
 		return false;
 	}
 	
 	public boolean collidesTopLeft(Element element, long time){
+		
+		if (world.getElementByPoint(element.getX()+element.getCurrentSpeed().getX(),
+				element.getY()+element.getCurrentSpeed().getY()-element.getHeight())!=null ||
+			 world.getElementByPoint(element.getX()+ element.getWidth() +element.getCurrentSpeed().getX(),
+					 element.getY()+element.getCurrentSpeed().getY()-element.getHeight())!=null){
+			
+				return true;
+		}
+		
+		for (int i = 0; i < element.getHeight(); i+=world.SIZE_CELL) 
+		{
+			if (world.getElementByPoint(element.getX()+element.getCurrentSpeed().getX(), 
+					element.getY()+element.getCurrentSpeed().getY()-i) != null){
+				
+				return true;
+			}
+		}
 		return false;
 	}
 	
 	public boolean collidesBottonRight(Element element,long time){
+		
+		if (world.getElementByPoint(element.getX()+element.getCurrentSpeed().getX(), element.getY()+element.getCurrentSpeed().getY()) != null ||
+				world.getElementByPoint(element.getX()+element.getCurrentSpeed().getX()+element.getWidth(),
+						element.getY()+element.getCurrentSpeed().getY()) != null){
+				return true;
+		}
+		
+		for (int i = 0; i < element.getHeight(); i+=world.SIZE_CELL) 
+		{
+			if (world.getElementByPoint(element.getX()+element.getCurrentSpeed().getX()+element.getWidth(), 
+					element.getY()+element.getCurrentSpeed().getY()-i) != null){
+				return true;
+			}
+		}
+		
 		return false;
 	}
 	
 	public boolean collidesBottonLeft(Element element, long time){
+		
+		if (world.getElementByPoint(element.getX()+element.getCurrentSpeed().getX(), element.getY()+element.getCurrentSpeed().getY()) != null ||
+				world.getElementByPoint(element.getX()+element.getCurrentSpeed().getX()+element.getWidth(),
+						element.getY()+element.getCurrentSpeed().getY()) != null){
+				return true;
+		}
+		
+		for (int i = 0; i < element.getHeight(); i+=world.SIZE_CELL) 
+		{
+			if (world.getElementByPoint(element.getX()+element.getCurrentSpeed().getX(), 
+					element.getY()+element.getCurrentSpeed().getY()-i) != null){
+				return true;
+			}
+		}
+		
 		return false;
 	}
 }

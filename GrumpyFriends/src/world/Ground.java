@@ -37,6 +37,18 @@ public class Ground extends AbstractWorldComponent {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public boolean isFluttering() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isMoving() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 
 }
