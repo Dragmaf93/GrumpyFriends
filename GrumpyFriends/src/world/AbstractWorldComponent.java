@@ -14,7 +14,10 @@ public abstract class AbstractWorldComponent implements Element
 		super();
 		position = new Vector(x,y);
 	}
-
+	@Override
+	public void setPosition(Vector position) {
+		position.set(position);
+	}
 	@Override
 	public int getHeight() {
 		return height;

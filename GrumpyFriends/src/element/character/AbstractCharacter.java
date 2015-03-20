@@ -3,6 +3,7 @@ package element.character;
 import java.util.ArrayList;
 
 import physicEngine.PhysicEngine;
+import physicEngine.Time;
 import element.Element;
 import element.Weapon;
 import world.AbstractWorld;
@@ -34,6 +35,9 @@ public abstract class AbstractCharacter implements Character
 	protected boolean inFluttering;
 	protected boolean inJump;
 	protected int step;
+	private Vector position0;
+	private Vector speed0;
+	private long time0;
 	
 	public AbstractCharacter(int x, int y,
 			Team team, ArrayList<Weapon> weaponList) {
@@ -48,7 +52,6 @@ public abstract class AbstractCharacter implements Character
 		inFall = false;
 		inMovement = false;
 		inJump = false;
-		fall();
 	}
 	
 	public AbstractCharacter(int x, int y,
@@ -144,8 +147,9 @@ public abstract class AbstractCharacter implements Character
  
 		return lifePoints == 0;
 	}
+	
 	@Override
-	public Vector getCurrentSpeed() {
+	public Vector getSpeed(){
 
 		return currentSpeed;
 	}
@@ -186,7 +190,7 @@ public abstract class AbstractCharacter implements Character
 				currentSpeed.setX(-step);
 		}
 		inMovement=true;
-		physicEngine.movesElement(this);
+		physicEngine.addElementToMove(this);
 		
 		System.out.println("FIRST_POSITION_LOL: "+currentPosition.getX()+" "+currentPosition.getY());
 	}
@@ -212,13 +216,13 @@ public abstract class AbstractCharacter implements Character
 		if (!inFall)
 		{
 			currentSpeed.setY(powerJump);
-			physicEngine.movesElement(this);
+			physicEngine.addElementToMove(this);
 		}
 		
 	}
 	
 	@Override
-	public void setCurrentSpeed(Vector speed) {
+	public void setSpeed(Vector speed) {
 		currentSpeed.set(speed);
 	}
 	
@@ -286,6 +290,38 @@ public abstract class AbstractCharacter implements Character
 
 	public void setWeaponList(ArrayList<Weapon> weaponList) {
 		this.weaponList = weaponList;
+	}
+
+	@Override
+	public long getTime0() {
+		return time0;
+	}
+
+	@Override
+	public void resetTime0() {
+		time0 = System.currentTimeMillis();
+	}
+
+	@Override
+	public void setSpeed0(Vector speed) {
+		if(speed0==null) speed0 = new Vector();
+		speed0.set(speed);
+	}
+
+	@Override
+	public Vector getSpeed0() {
+		return speed0;
+	}
+
+	@Override
+	public void setPosition0(Vector vector) {
+		if(position0==null) position0 = new Vector();
+		position0.set(vector);
+	}
+
+	@Override
+	public Vector getPosition0() {
+		return position0;
 	}
 
 	

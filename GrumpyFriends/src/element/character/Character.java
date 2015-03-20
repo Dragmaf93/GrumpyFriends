@@ -1,9 +1,9 @@
 package element.character;
 
-import element.Element;
+import physicEngine.MovableElement;
 import element.Weapon;
 
-public interface Character extends Element
+public interface Character extends MovableElement
 {
 	public final static int MAX_HEIGHT=5;
 	

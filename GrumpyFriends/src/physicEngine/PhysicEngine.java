@@ -15,15 +15,15 @@ public class PhysicEngine {
 	
 	private World world;
 	private CollisionManager collisionManager;
-	private long time0,time;
-	private HashMap<Vector, Element> elementsToMove;
+	private long time0;
+	private ArrayList<Element> elementsToMove;
 	
 	private PhysicEngine(){
 		world = AbstractWorld.getInstance();
 		collisionManager = new CollisionManager();
 		time0=System.currentTimeMillis();
 		
-		elementsToMove = new HashMap<Vector, Element>();
+		elementsToMove = new ArrayList<>();
 	}
 	
 	public static PhysicEngine getInstace(){
@@ -33,22 +33,22 @@ public class PhysicEngine {
 		return instance;
 	}
 	
-	public void moveOnAir(Element elementToMove,Vector speed0, Vector position0, long time0){
+	public void moveOnAir(MovableElement elementToMove,Vector speed0, Vector position0, long time0){
 		
-		time = System.currentTimeMillis()-time0;
+		long time = System.currentTimeMillis()-time0;
 		
 		int xFirst = elementToMove.getX(), yFirst = elementToMove.getY();
 		
 		if(speed0.getX()==0 && speed0.getY()>0){
 			if(!collisionManager.collidesBotton(elementToMove,time)){
 				elementToMove.setPosition(makePositionParabolicMotion(speed0, position0, time));
-				elementToMove.setCurrentSpeed(makeSpeedParabolicMotion(speed0, time));		
+				elementToMove.setSpeed(makeSpeedParabolicMotion(speed0, time));		
 			}
 		}
 		else if(speed0.getX()==0 && speed0.getY()<0){
 			if(!collisionManager.collidesTop(elementToMove, time)){
 				elementToMove.setPosition(makePositionParabolicMotion(speed0, position0, time));
-				elementToMove.setCurrentSpeed(makeSpeedParabolicMotion(speed0, time));	
+				elementToMove.setSpeed(makeSpeedParabolicMotion(speed0, time));	
 			}
 		}
 		else if(speed0.getX()>0 && speed0.getY()>0){
@@ -90,9 +90,9 @@ public class PhysicEngine {
 		return new Vector(speed0.getX(),Sy);
 	}
 	
-	public void moveOnGround(Element elementToMove)
+	public void moveOnGround(MovableElement elementToMove)
 	{
-		Vector speed0 = elementToMove.getCurrentSpeed();
+		Vector speed0 = elementToMove.getSpeed();
 		Vector move = new Vector(speed0.getX(),0);
 		int xFirst = elementToMove.getX(), yFirst = elementToMove.getY();
 		
@@ -114,12 +114,18 @@ public class PhysicEngine {
 			world.update((AbstractCharacter) elementToMove, xFirst, yFirst);
 	}
 	
+	
 	public void sweep(Element elementSweeper,Element elementToSweep){
 		
 	}
-	
-	public void movesElement(Element element)
+	void movesElement(int i){
+		Element elementToMove = elementsToMove.get(i);
+		
+	}
+	public void addElementToMove(Element element)
 	{
-		elementsToMove.put(element.getPosition(), element);
+		if(!elementsToMove.contains(element)){
+			elementsToMove.add(element);
+		}
 	}
 }
