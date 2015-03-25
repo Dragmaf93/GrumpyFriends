@@ -85,7 +85,7 @@ public class CollisionManager {
 		return false;
 	}
 	
-	public boolean collidesBotton(MovableElement element, long time) {
+	public boolean collidesBottom(MovableElement element, long time) {
 		
 		int coordinateX = element.getX();
 		int coordinateY = (int) (element.getY() + element.getSpeed().getY());
@@ -138,7 +138,7 @@ public class CollisionManager {
 		return false;
 	}
 	
-	public boolean collidesBottonRight(MovableElement element,long time){
+	public boolean collidesBottomRight(MovableElement element,long time){
 		
 		if (world.getElementByPoint(element.getX()+element.getSpeed().getX(), element.getY()+element.getSpeed().getY()) != null ||
 				world.getElementByPoint(element.getX()+element.getSpeed().getX()+element.getWidth(),
@@ -157,7 +157,7 @@ public class CollisionManager {
 		return false;
 	}
 	
-	public boolean collidesBottonLeft(MovableElement element, long time){
+	public boolean collidesBottomLeft(MovableElement element, long time){
 		
 		if (world.getElementByPoint(element.getX()+element.getSpeed().getX(), element.getY()+element.getSpeed().getY()) != null ||
 				world.getElementByPoint(element.getX()+element.getSpeed().getX()+element.getWidth(),
