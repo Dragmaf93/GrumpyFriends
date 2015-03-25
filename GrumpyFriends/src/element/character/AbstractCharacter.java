@@ -16,7 +16,7 @@ public abstract class AbstractCharacter implements Character
 	public final static int RIGHT = 0;
 	public final static int LEFT = 1;
 	
-	protected Vector currentPosition;
+	protected Vector position;
 	
 	protected int height;
 	protected int width;
@@ -28,7 +28,7 @@ public abstract class AbstractCharacter implements Character
 	protected ArrayList<Weapon> weaponList;
 	protected Weapon equippedWeapon;
 	protected Vector vectorJump;
-	protected Vector currentSpeed;
+	protected Vector speed;
 	
 	protected boolean inFall;
 	protected boolean inMovement;
@@ -42,7 +42,7 @@ public abstract class AbstractCharacter implements Character
 	public AbstractCharacter(int x, int y,
 			Team team, ArrayList<Weapon> weaponList) {
 		System.out.println("X : "+x+"Y : "+y);
-		this.currentPosition= new Vector(x,y);
+		this.position= new Vector(x,y);
 		this.world = AbstractWorld.getInstance();
 		this.physicEngine = PhysicEngine.getInstace();
 		this.team = team;
@@ -58,8 +58,8 @@ public abstract class AbstractCharacter implements Character
 			int lifePoints, Team team, ArrayList<Weapon> weaponList) {
 		System.out.println("X : "+x+" Y : "+y);
 
-		this.currentPosition= new Vector(x,y);
-		this.currentSpeed = new Vector(0, 0);
+		this.position= new Vector(x,y);
+		this.speed = new Vector(0, 0);
 		this.world = AbstractWorld.getInstance();
 		this.physicEngine = PhysicEngine.getInstace();
 		this.lifePoints = lifePoints;
@@ -76,19 +76,19 @@ public abstract class AbstractCharacter implements Character
 	{
 		int depth = 0;
 		Vector gravity = world.getGravity();
-		int xFirst = currentPosition.getX(), yFirst = currentPosition.getY();
-		Vector speedFirst = currentSpeed.clone();
-		Vector nextPosition = currentPosition.clone();
+		int xFirst = position.getX(), yFirst = position.getY();
+		Vector speedFirst = speed.clone();
+		Vector nextPosition = position.clone();
 		for (int time = 1; isFall(xFirst, yFirst, time, gravity, speedFirst); time++) 
 		{
-			currentPosition.setX(xFirst + (speedFirst.getX() * time));
-			currentPosition.setY((int) (yFirst + (speedFirst.getY() * time) + (0.5 * gravity.getY() * time)));
-			currentSpeed.setY(gravity.getY() * time);
+			position.setX(xFirst + (speedFirst.getX() * time));
+			position.setY((int) (yFirst + (speedFirst.getY() * time) + (0.5 * gravity.getY() * time)));
+			speed.setY(gravity.getY() * time);
 		}
-		System.out.println("SETTA CADUTA: "+currentPosition.getX()+" "+currentPosition.getY());
+		System.out.println("SETTA CADUTA: "+position.getX()+" "+position.getY());
 		world.update(this, xFirst, yFirst);
-		currentSpeed.setX(0);
-		currentSpeed.setY(0);
+		speed.setX(0);
+		speed.setY(0);
 		inJump = false;
 		return depth;
 	}
@@ -112,14 +112,14 @@ public abstract class AbstractCharacter implements Character
 	
 	public Element isThereSomething(){
 		for(int i= 1; i <= MAX_HEIGHT ;i++ ){
-			if(world.getElement(currentPosition.getX(), currentPosition.getY()+i) != null ){
-				return world.getElement(currentPosition.getX(), currentPosition.getY()+i);
+			if(world.getElement(position.getX(), position.getY()+i) != null ){
+				return world.getElement(position.getX(), position.getY()+i);
 			}
-			if(world.getElement(currentPosition.getX()+1, currentPosition.getY()+i) !=null){
-				return world.getElement(currentPosition.getX()+1, currentPosition.getY()+i);
+			if(world.getElement(position.getX()+1, position.getY()+i) !=null){
+				return world.getElement(position.getX()+1, position.getY()+i);
 			}
-			if(world.getElement(currentPosition.getX()-1, currentPosition.getY()+i) instanceof AbstractCharacter)
-				return world.getElement(currentPosition.getX()-1, currentPosition.getY()+i);
+			if(world.getElement(position.getX()-1, position.getY()+i) instanceof AbstractCharacter)
+				return world.getElement(position.getX()-1, position.getY()+i);
 		}
 		return null;
 	}
@@ -127,7 +127,7 @@ public abstract class AbstractCharacter implements Character
 	@Override
 	public int getX() {
 	
-		return currentPosition.getX();
+		return position.getX();
 	}
 
 	@Override
@@ -151,7 +151,7 @@ public abstract class AbstractCharacter implements Character
 	@Override
 	public Vector getSpeed(){
 
-		return currentSpeed;
+		return speed;
 	}
 	@Override
 	public boolean equipWeapon(Weapon weapon) 
@@ -167,14 +167,14 @@ public abstract class AbstractCharacter implements Character
 	
 	@Override
 	public Vector getPosition() {
-		return currentPosition;
+		return position;
 	}
 	
 	@Override
 	public boolean isFluttering() {
 		return inFluttering;
 	}
-	
+
 	@Override
 	public boolean isMoving() {
 		return inMovement;
@@ -185,37 +185,45 @@ public abstract class AbstractCharacter implements Character
 		if (!inFall || !inJump)
 		{
 			if(direction == RIGHT)
-				currentSpeed.setX(step);
+				speed.setX(step);
 			else
-				currentSpeed.setX(-step);
+				speed.setX(-step);
 		}
 		inMovement=true;
 		physicEngine.addElementToMove(this);
 		
-		System.out.println("FIRST_POSITION_LOL: "+currentPosition.getX()+" "+currentPosition.getY());
+		System.out.println("FIRST_POSITION_LOL: "+position.getX()+" "+position.getY());
 	}
 	
 	@Override
 	public void stopToMove() {
 		inMovement=false;
-		currentSpeed.setX(0);
-		currentSpeed.setY(0);
+		speed.setX(0);
+		speed.setY(0);
 	}
 	
 	@Override
 	public void setPosition(Vector position) 
 	{
-		currentPosition = position;
+		position = position;
 	}
 	
-	
+	@Override
+	public void doSingleMove() {
+		if((!inJump || !inFall) && inMovement){
+			physicEngine.moveOnGround(this);
+		}
+		else if(inJump || inFall){
+			physicEngine.moveOnAir(this);
+		}
+	}
 	@Override
 	public void jump()
 	{
 		inJump = true;
 		if (!inFall)
 		{
-			currentSpeed.setY(powerJump);
+			speed.setY(powerJump);
 			physicEngine.addElementToMove(this);
 		}
 		
@@ -223,7 +231,7 @@ public abstract class AbstractCharacter implements Character
 	
 	@Override
 	public void setSpeed(Vector speed) {
-		currentSpeed.set(speed);
+		speed.set(speed);
 	}
 	
 	public boolean isInMaxHeight(int xFirst, int yFirst, Vector gravity, Vector speedFirst, int time)
@@ -238,10 +246,10 @@ public abstract class AbstractCharacter implements Character
 		for (int i = 0; i < height; i+=world.SIZE_CELL) 
 		{
 			if (speedFirst.getX() > 0)
-				if (world.getElement(world.pointToCellX(currentPosition.getX()+width+speedFirst.getX()), world.pointToCellY(currentPosition.getY()-i-speedFirst.getY())) != null)
+				if (world.getElement(world.pointToCellX(position.getX()+width+speedFirst.getX()), world.pointToCellY(position.getY()-i-speedFirst.getY())) != null)
 					return true;
 			else
-				if(world.getElement(world.pointToCellX(currentPosition.getX())-1, world.pointToCellY(currentPosition.getY()-i - speedFirst.getY())) != null)
+				if(world.getElement(world.pointToCellX(position.getX())-1, world.pointToCellY(position.getY()-i - speedFirst.getY())) != null)
 					return true;
 		}
 		
@@ -274,20 +282,24 @@ public abstract class AbstractCharacter implements Character
 	}
 	
 	public int getY() {
-		return currentPosition.getY();
+		return position.getY();
 	}
 	public void setX(int x){
-		this.currentPosition.setX(x);
+		this.position.setX(x);
 	}
 	public void setY(int y) {
-		this.currentPosition.setY(y);
+		this.position.setY(y);
 	}
 
 	public ArrayList<Weapon> getWeaponList() {
 
 		return weaponList;
 	}
-
+	@Override
+	public void afterCollision() {
+		// TODO Auto-generated method stub
+		
+	}
 	public void setWeaponList(ArrayList<Weapon> weaponList) {
 		this.weaponList = weaponList;
 	}

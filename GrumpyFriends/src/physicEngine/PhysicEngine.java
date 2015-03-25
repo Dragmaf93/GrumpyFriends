@@ -1,6 +1,8 @@
 package physicEngine;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import world.AbstractWorld;
 import world.Vector;
@@ -15,14 +17,15 @@ public class PhysicEngine {
 	
 	private World world;
 	private CollisionManager collisionManager;
-	private long time0;
-	private ArrayList<Element> elementsToMove;
+	private ArrayList<MovableElement> elementsToMove;
+	
+	private Lock lock = new ReentrantLock();
+	private Condition condition = lock.newCondition();
+	private MovesThread movesThread;
 	
 	private PhysicEngine(){
 		world = AbstractWorld.getInstance();
 		collisionManager = new CollisionManager();
-		time0=System.currentTimeMillis();
-		
 		elementsToMove = new ArrayList<>();
 	}
 	
@@ -33,11 +36,14 @@ public class PhysicEngine {
 		return instance;
 	}
 	
-	public void moveOnAir(MovableElement elementToMove,Vector speed0, Vector position0, long time0){
+	public void moveOnAir(MovableElement elementToMove){
 		
-		long time = System.currentTimeMillis()-time0;
+		Vector speed0 = elementToMove.getSpeed0();
+		Vector position0 = elementToMove.getPosition0();
+		long time = System.currentTimeMillis()-elementToMove.getTime0();
 		
 		int xFirst = elementToMove.getX(), yFirst = elementToMove.getY();
+		
 		
 		if(speed0.getX()==0 && speed0.getY()>0){
 			if(!collisionManager.collidesBotton(elementToMove,time)){
@@ -118,14 +124,39 @@ public class PhysicEngine {
 	public void sweep(Element elementSweeper,Element elementToSweep){
 		
 	}
-	void movesElement(int i){
-		Element elementToMove = elementsToMove.get(i);
-		
+	
+	public ArrayList<MovableElement> getElementsToMove() {
+		return elementsToMove;
 	}
-	public void addElementToMove(Element element)
-	{
+
+	void movesElement(int i){
+		MovableElement elementToMove = elementsToMove.get(i);
+		elementToMove.doSingleMove();
+	}
+	void stopElementsMove(){
+		try {
+			condition.await();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void removeElement(MovableElement element){
+		elementsToMove.remove(element);
+	}
+	
+	public void addElementToMove(MovableElement element)
+	{	
 		if(!elementsToMove.contains(element)){
 			elementsToMove.add(element);
+			element.setPosition0(element.getPosition());
+			element.setSpeed0(element.getSpeed0());
+			element.resetTime0();
+		}
+		
+		if(movesThread == null){
+			movesThread = new MovesThread();
+			movesThread.start();
 		}
 	}
 }

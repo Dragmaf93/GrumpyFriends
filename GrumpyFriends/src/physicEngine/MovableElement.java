@@ -20,5 +20,9 @@ public interface MovableElement extends Element{
 	public abstract void setPosition0(Vector speed);
 	public abstract Vector getPosition0();
 	
+
+	public abstract void afterCollision();
+	public abstract void doSingleMove();
+	
 	
 }
