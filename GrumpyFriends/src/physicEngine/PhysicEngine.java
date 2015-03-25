@@ -45,20 +45,45 @@ public class PhysicEngine {
 		int xFirst = elementToMove.getX(), yFirst = elementToMove.getY();
 		
 		
-		if(speed0.getX()==0 && speed0.getY()>0){
-			if(!collisionManager.collidesBotton(elementToMove,time)){
+		if(speed0.getX()==0 && speed0.getY()>0)
+		{
+			if(!collisionManager.collidesBotton(elementToMove,time))
+			{
+				elementToMove.setFall(true);
 				elementToMove.setPosition(makePositionParabolicMotion(speed0, position0, time));
 				elementToMove.setSpeed(makeSpeedParabolicMotion(speed0, time));		
 			}
+			else
+			{
+				elementToMove.setFall(false);
+				elementToMove.afterCollision();
+			}
 		}
-		else if(speed0.getX()==0 && speed0.getY()<0){
-			if(!collisionManager.collidesTop(elementToMove, time)){
+		else if(speed0.getX()==0 && speed0.getY()<0)
+		{
+			if(!collisionManager.collidesTop(elementToMove, time) || !isTimeOfMaxHeight(elementToMove, time))
+			{
 				elementToMove.setPosition(makePositionParabolicMotion(speed0, position0, time));
 				elementToMove.setSpeed(makeSpeedParabolicMotion(speed0, time));	
 			}
+			else if (isTimeOfMaxHeight(elementToMove, time) && !collisionManager.collidesTop(elementToMove, time))
+			{
+				elementToMove.setJump(false);
+				elementToMove.setPosition(makePositionParabolicMotion(speed0, position0, time));
+				elementToMove.setSpeed(new Vector(elementToMove.getSpeed().getX(), 0));
+				
+				
+			}
+			else if (collisionManager.collidesTop(elementToMove, time))
+			{
+				elementToMove.setJump(false);
+				elementToMove.afterCollision();
+			}
 		}
-		else if(speed0.getX()>0 && speed0.getY()>0){
-			if(!collisionManager.collidesBottonRight(elementToMove, time)){
+		else if(speed0.getX()>0 && speed0.getY()>0)
+		{
+			if(!collisionManager.collidesBottonRight(elementToMove, time))
+			{
 				
 			}
 			
@@ -84,6 +109,36 @@ public class PhysicEngine {
 			world.update((AbstractCharacter) elementToMove, xFirst, yFirst);
 		
 	}
+	
+	public boolean isTimeOfMaxHeight(MovableElement element, long time)
+	{
+		int timeForMaxHeight = -(element.getSpeed0().getY() / world.getGravity().getY());
+		
+		if (time >= timeForMaxHeight)
+			return true;
+		
+		
+		
+//		for (int i = 0; i < element.getHeight(); i+=world.SIZE_CELL) 
+//		{
+//			if (element.getSpeed0().getX() > 0)
+//				if (world.getElement(world.pointToCellX(element.getPosition().getX()+element.getWidth()+element.getSpeed0().getX()), 
+//						world.pointToCellY(element.getPosition().getY()-i-element.getSpeed0().getY())) != null)
+//					return true;
+//			else
+//				if(world.getElement(world.pointToCellX(element.getPosition().getX())-1, world.pointToCellY(element.getPosition().getY()-i 
+//						- element.getSpeed0().getY())) != null)
+//					return true;
+//		}
+		
+		return false;
+	}
+	
+	private void movementAfter(MovableElement element)
+	{
+//		element
+	}
+	
 	
 	public Vector makePositionParabolicMotion(Vector speed0, Vector position0, long time){
 		int x = (int) (position0.getX() + (speed0.getX() * time));
@@ -129,18 +184,24 @@ public class PhysicEngine {
 		return elementsToMove;
 	}
 
-	void movesElement(int i){
+	void movesElement(int i)
+	{
 		MovableElement elementToMove = elementsToMove.get(i);
 		elementToMove.doSingleMove();
 	}
-	void stopElementsMove(){
+	
+	void stopElementsMove()
+	{
 		try {
-			condition.await();
+			while (elementsToMove.isEmpty())
+				condition.await();
+			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
 	public void removeElement(MovableElement element){
 		elementsToMove.remove(element);
 	}
@@ -158,5 +219,8 @@ public class PhysicEngine {
 			movesThread = new MovesThread();
 			movesThread.start();
 		}
+		
+		if (!elementsToMove.isEmpty())
+			condition.signalAll();
 	}
 }

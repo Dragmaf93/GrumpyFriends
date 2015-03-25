@@ -169,11 +169,6 @@ public abstract class AbstractCharacter implements Character
 	public Vector getPosition() {
 		return position;
 	}
-	
-	@Override
-	public boolean isFluttering() {
-		return inFluttering;
-	}
 
 	@Override
 	public boolean isMoving() {
@@ -189,6 +184,7 @@ public abstract class AbstractCharacter implements Character
 			else
 				speed.setX(-step);
 		}
+		
 		inMovement=true;
 		physicEngine.addElementToMove(this);
 		
@@ -196,10 +192,15 @@ public abstract class AbstractCharacter implements Character
 	}
 	
 	@Override
-	public void stopToMove() {
-		inMovement=false;
-		speed.setX(0);
-		speed.setY(0);
+	public void stopToMove()
+	{
+		if (!inJump || ! inFall)
+		{
+			inMovement=false;
+			speed.setX(0);
+			speed.setY(0);
+			physicEngine.removeElement(this);
+		}
 	}
 	
 	@Override
@@ -209,7 +210,8 @@ public abstract class AbstractCharacter implements Character
 	}
 	
 	@Override
-	public void doSingleMove() {
+	public void doSingleMove() 
+	{
 		if((!inJump || !inFall) && inMovement){
 			physicEngine.moveOnGround(this);
 		}
@@ -220,40 +222,17 @@ public abstract class AbstractCharacter implements Character
 	@Override
 	public void jump()
 	{
-		inJump = true;
 		if (!inFall)
 		{
+			inJump = true;
 			speed.setY(powerJump);
 			physicEngine.addElementToMove(this);
 		}
-		
 	}
 	
 	@Override
 	public void setSpeed(Vector speed) {
 		speed.set(speed);
-	}
-	
-	public boolean isInMaxHeight(int xFirst, int yFirst, Vector gravity, Vector speedFirst, int time)
-	{
-		int timeForMaxHeight = -(speedFirst.getY() / gravity.getY());
-		System.out.println("TIME: "+time+"      TIME_HEIGHT: "+timeForMaxHeight);
-		System.out.println("VELOCITA: "+speedFirst.getX()+" "+speedFirst.getY());
-		System.out.println("CALCOLO: "+(yFirst - 0.5 * Math.pow((speedFirst.getY()), 2) / gravity.getY()));
-		if (time == timeForMaxHeight + 1)
-			return true;
-		
-		for (int i = 0; i < height; i+=world.SIZE_CELL) 
-		{
-			if (speedFirst.getX() > 0)
-				if (world.getElement(world.pointToCellX(position.getX()+width+speedFirst.getX()), world.pointToCellY(position.getY()-i-speedFirst.getY())) != null)
-					return true;
-			else
-				if(world.getElement(world.pointToCellX(position.getX())-1, world.pointToCellY(position.getY()-i - speedFirst.getY())) != null)
-					return true;
-		}
-		
-		return false;
 	}
 	
 	@Override
@@ -271,7 +250,6 @@ public abstract class AbstractCharacter implements Character
 		//TODO riguardare 
 		lifePoints=100;
 	}
-
 
 	public Team getTeam() {
 		return team;
@@ -296,10 +274,11 @@ public abstract class AbstractCharacter implements Character
 		return weaponList;
 	}
 	@Override
-	public void afterCollision() {
+	public void afterCollision() 
+	{
 		// TODO Auto-generated method stub
-		
 	}
+	
 	public void setWeaponList(ArrayList<Weapon> weaponList) {
 		this.weaponList = weaponList;
 	}
@@ -336,7 +315,23 @@ public abstract class AbstractCharacter implements Character
 		return position0;
 	}
 
+	@Override
+	public void setFall(boolean fall) 
+	{
+		this.inFall = fall;
+	}
 	
+	@Override
+	public void setJump(boolean jump) 
+	{
+		this.inJump = jump;
+	}
+	
+	@Override
+	public void setMovement(boolean movement) 
+	{
+		this.inMovement = movement;
+	}
 }
 
 

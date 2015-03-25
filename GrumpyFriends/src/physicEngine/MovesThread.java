@@ -14,7 +14,7 @@ public class MovesThread extends Thread {
 	public void run() {
 		
 		while(true){
-			for (int i = 0; i <physicEngine.getElementsToMove().size();i++) {
+			for (int i = 0; i < physicEngine.getElementsToMove().size();i++) {
 				physicEngine.movesElement(i);
 			}
 			physicEngine.stopElementsMove();
