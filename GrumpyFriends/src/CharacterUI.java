@@ -25,7 +25,7 @@ public class CharacterUI
 		world = (AbstractWorld) AbstractWorld.getInstance();
 		
 		BufferedImage imageChewbacca;
-			imageChewbacca = ImageIO.read(new File("images.jpeg"));
+			imageChewbacca = ImageIO.read(new File("images.png"));
 		chewbacca = new Chewbacca(30, 30, 100, null, null);
 		this.world.getCharacters().put(new Vector(chewbacca.getX(), chewbacca.getY()),chewbacca);
 		chewbacca.setWorld();
