@@ -186,6 +186,18 @@ public abstract class AbstractWorld implements World
 		return width;
 	}
 	
+	@Override
+	public int cellXToPoint(int x)
+	{
+		return (int) (((float)x * (float)width) / (float)numberColumn);
+	}
+	
+	@Override
+	public int cellYToPoint(int y)
+	{
+		return (int) (((float)y * (float)height) / (float)numberRow);
+	}
+	
 	public static void main(String[] args) {
 		AbstractWorld.initializes("world.Planet");
 		AbstractWorld world = (AbstractWorld) AbstractWorld.getInstance();
@@ -217,5 +229,9 @@ public abstract class AbstractWorld implements World
 			direction = scanner.nextInt();
 		}
 		
+	}
+
+	public HashMap<Vector, AbstractCharacter> getCharacters() {
+		return characterContainer;
 	}
 }

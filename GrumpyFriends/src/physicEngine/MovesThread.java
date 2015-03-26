@@ -18,6 +18,7 @@ public class MovesThread extends Thread {
 				physicEngine.movesElement(i);
 			}
 			physicEngine.stopElementsMove();
+	
 		}
 	}
 }

@@ -14,7 +14,7 @@ import element.Weapon;
 public class Chewbacca extends AbstractCharacter {
 	
 	private static final int HEIGHT= 100;
-	private static final int WIDTH = 20;
+	private static final int WIDTH = 40;
 	private static final int POWER_JUMP = 40;
 	
 	public Chewbacca(int x, int y, int lifePoints, Team team,
@@ -24,7 +24,7 @@ public class Chewbacca extends AbstractCharacter {
 		width= WIDTH;
 		powerJump = POWER_JUMP;
 		vectorJump = new Vector(0, -POWER_JUMP);
-		step = width;
+		step = 1;
 	}
 
 	@Override

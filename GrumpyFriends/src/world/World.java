@@ -25,6 +25,10 @@ public interface World
 	
 	public abstract int pointToCellY(int y);
 	
+	public int cellXToPoint(int x);
+	
+	public int cellYToPoint(int y);
+	
 	public abstract Element getElementByPoint(int x,int y);
 	
 }

@@ -59,7 +59,9 @@ public abstract class AbstractCharacter implements Character
 		System.out.println("X : "+x+" Y : "+y);
 
 		this.position= new Vector(x,y);
+		this.position0= new Vector(x,y);
 		this.speed = new Vector(0, 0);
+		this.speed0 = new Vector(0, 0);
 		this.world = AbstractWorld.getInstance();
 		this.physicEngine = PhysicEngine.getInstace();
 		this.lifePoints = lifePoints;
@@ -69,6 +71,9 @@ public abstract class AbstractCharacter implements Character
 		inFall = false;
 		inMovement = false;
 		inJump = false;
+		
+		
+		
 		fall();
 	}
 
@@ -85,6 +90,12 @@ public abstract class AbstractCharacter implements Character
 			position.setY((int) (yFirst + (speedFirst.getY() * time) + (0.5 * gravity.getY() * time)));
 			speed.setY(gravity.getY() * time);
 		}
+		
+		int cellY = world.pointToCellY(position.getY());
+		position.setY(world.cellYToPoint(cellY+1)-1);
+//		System.out.println("POINT: "+world.pointToCellX(position.getX())+" "+world.pointToCellY(position.getY()));
+//		System.out.println("CELL: "+world.cellXToPoint(world.pointToCellX(position.getX()))+" "+world.cellYToPoint(world.pointToCellY(position.getY())));
+
 		System.out.println("SETTA CADUTA: "+position.getX()+" "+position.getY());
 		world.update(this, xFirst, yFirst);
 		speed.setX(0);
@@ -98,7 +109,8 @@ public abstract class AbstractCharacter implements Character
 		int coordinateX = x + (speedFirst.getX() * time);
 		int coordinateY = (int) (y + (speedFirst.getY() * time) + (0.5 * gravity.getY() * time));
 		
-	
+//		System.out.println("POINT: "+world.pointToCellX(coordinateX)+" "+world.pointToCellY(coordinateY));
+//		System.out.println("CELL: "+world.cellXToPoint(world.pointToCellX(coordinateX))+" "+world.cellYToPoint(world.pointToCellY(coordinateY)));
 		if (world.getElement(world.pointToCellX(coordinateX), world.pointToCellY(coordinateY)) != null ||
 				world.getElement(world.pointToCellX(coordinateX+width), world.pointToCellY(coordinateY)) != null){
 				System.out.println("ELEMENT POS "+coordinateX + " "+ coordinateY+" "+world.getElement(world.pointToCellX(coordinateX), world.pointToCellY(coordinateY)));
@@ -183,12 +195,12 @@ public abstract class AbstractCharacter implements Character
 				speed.setX(step);
 			else
 				speed.setX(-step);
+			
+			inMovement=true;
+			physicEngine.addElementToMove(this);
 		}
 		
-		inMovement=true;
-		physicEngine.addElementToMove(this);
-		
-		System.out.println("FIRST_POSITION_LOL: "+position.getX()+" "+position.getY());
+		System.out.println("Pos0: "+position.getX()+" "+position.getY());
 	}
 	
 	@Override
@@ -201,12 +213,13 @@ public abstract class AbstractCharacter implements Character
 			speed.setY(0);
 			physicEngine.removeElement(this);
 		}
+		System.out.println("Pos_Stap: "+position.getX()+" "+position.getY());
 	}
 	
 	@Override
 	public void setPosition(Vector position) 
 	{
-		position = position;
+		this.position = position;
 	}
 	
 	@Override

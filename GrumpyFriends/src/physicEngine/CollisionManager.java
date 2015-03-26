@@ -17,7 +17,7 @@ public class CollisionManager {
 	public boolean collidesRight(MovableElement element,Vector move){
 		
 		boolean simpleMove=true;
-		boolean climbeMove=false;
+		boolean climbMove=false;
 		
 		for (int i = 0; i < element.getHeight(); i+=world.SIZE_CELL) 
 		{
@@ -28,21 +28,21 @@ public class CollisionManager {
 		}
 		
 		if(!simpleMove){
-			climbeMove = true;
+			climbMove = true;
 			for (int i = world.SIZE_CELL; i < element.getHeight(); i+=world.SIZE_CELL) 
 			{
 				if (((world.getElementByPoint(element.getX()+element.getWidth(),element.getY())) instanceof Ground ||
 						world.getElementByPoint(element.getX()+element.getWidth(), element.getY()) == null) && (
 						world.getElementByPoint(element.getX()+element.getWidth()+move.getX(),element.getY()-i)) != null){
-					climbeMove = false;
+					climbMove = false;
 					break;
 				}
 			}
-			if(climbeMove)
+			if(climbMove)
 				move.setY(-world.SIZE_CELL);
 		}
-		System.out.println(simpleMove || climbeMove);
-		return !(simpleMove || climbeMove);
+//		System.out.println(simpleMove || climbMove);
+		return !(simpleMove || climbMove);
 	}
 	
 	public boolean collidesLeft(Element element, Vector move){

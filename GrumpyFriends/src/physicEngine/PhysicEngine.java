@@ -180,6 +180,7 @@ public class PhysicEngine {
 		return new Vector(speed0.getX(),Sy);
 	}
 	
+	
 	public void moveOnGround(MovableElement elementToMove)
 	{
 		Vector speed0 = elementToMove.getSpeed();
@@ -187,12 +188,12 @@ public class PhysicEngine {
 		int xFirst = elementToMove.getX(), yFirst = elementToMove.getY();
 		
 //		TODO gestire caduta in assenza di terreno
-		
 		if(speed0.getX() > 0){
 			if(!collisionManager.collidesRight(elementToMove,move)){
 				speed0.set(move);
+//				System.out.println(new Vector(elementToMove.getX()+speed0.getX(), elementToMove.getY()+speed0.getY()));
 				elementToMove.setPosition(new Vector(elementToMove.getX()+speed0.getX(), elementToMove.getY()+speed0.getY()));
-				System.out.println(speed0);
+//				System.out.println(speed0);
 			}
 		}
 		else if(speed0.getX() < 0){
@@ -201,7 +202,7 @@ public class PhysicEngine {
 				elementToMove.setPosition(new Vector(elementToMove.getX()+speed0.getX(), elementToMove.getY()+speed0.getY()));
 			}
 		}
-		
+	
 		if (elementToMove instanceof AbstractCharacter)
 			world.update((AbstractCharacter) elementToMove, xFirst, yFirst);
 	}
@@ -224,6 +225,8 @@ public class PhysicEngine {
 	void stopElementsMove()
 	{
 		try {
+			lock.lock();
+			
 			while (elementsToMove.isEmpty())
 				condition.await();
 			
@@ -231,14 +234,22 @@ public class PhysicEngine {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		finally
+		{
+			lock.unlock();
+		}
 	}
 	
-	public void removeElement(MovableElement element){
+	public void removeElement(MovableElement element)
+	{
+		lock.lock();
 		elementsToMove.remove(element);
+		lock.unlock();
 	}
 	
 	public void addElementToMove(MovableElement element)
 	{	
+		lock.lock();
 		if(!elementsToMove.contains(element)){
 			elementsToMove.add(element);
 			element.setPosition0(element.getPosition());
@@ -253,5 +264,7 @@ public class PhysicEngine {
 		
 		if (!elementsToMove.isEmpty())
 			condition.signalAll();
+		
+		lock.unlock();
 	}
 }
