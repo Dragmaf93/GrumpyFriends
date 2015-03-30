@@ -27,7 +27,6 @@ public abstract class AbstractCharacter implements Character
 	protected Team team;
 	protected ArrayList<Weapon> weaponList;
 	protected Weapon equippedWeapon;
-	protected Vector vectorJump;
 	protected Vector speed;
 	
 	protected boolean inFall;
@@ -37,14 +36,14 @@ public abstract class AbstractCharacter implements Character
 	protected int step;
 	private Vector position0;
 	private Vector speed0;
-	private long time0;
+	private double time0;
 	
 	public AbstractCharacter(int x, int y,
 			Team team, ArrayList<Weapon> weaponList) {
 		System.out.println("X : "+x+"Y : "+y);
 		this.position= new Vector(x,y);
 		this.world = AbstractWorld.getInstance();
-		this.physicEngine = PhysicEngine.getInstace();
+		this.physicEngine = PhysicEngine.getInstance();
 		this.team = team;
 		this.weaponList = weaponList;
 		equippedWeapon = null;
@@ -63,7 +62,7 @@ public abstract class AbstractCharacter implements Character
 		this.speed = new Vector(0, 0);
 		this.speed0 = new Vector(0, 0);
 		this.world = AbstractWorld.getInstance();
-		this.physicEngine = PhysicEngine.getInstace();
+		this.physicEngine = PhysicEngine.getInstance();
 		this.lifePoints = lifePoints;
 		this.team = team;
 		this.weaponList = weaponList;
@@ -71,8 +70,6 @@ public abstract class AbstractCharacter implements Character
 		inFall = false;
 		inMovement = false;
 		inJump = false;
-		
-		
 		
 		fall();
 	}
@@ -189,31 +186,34 @@ public abstract class AbstractCharacter implements Character
 	@Override
 	public void move(int direction)
 	{
-		if (!inFall || !inJump)
+
+
+		if (!inFall && !inJump)
 		{
 			if(direction == RIGHT)
 				speed.setX(step);
 			else
 				speed.setX(-step);
-			
+			resetTime0();
 			inMovement=true;
-			physicEngine.addElementToMove(this);
+			physicEngine.moveOnGround(this);
+			
 		}
 		
-		System.out.println("Pos0: "+position.getX()+" "+position.getY());
+//		System.out.println("Pos0: "+position.getX()+" "+position.getY());
 	}
 	
 	@Override
 	public void stopToMove()
 	{
-		if (!inJump || ! inFall)
+		if (!inJump || !inFall)
 		{
 			inMovement=false;
 			speed.setX(0);
 			speed.setY(0);
-			physicEngine.removeElement(this);
+//			physicEngine.removeElement(this);
 		}
-		System.out.println("Pos_Stap: "+position.getX()+" "+position.getY());
+//		System.out.println("Pos_Stap: "+position.getX()+" "+position.getY());
 	}
 	
 	@Override
@@ -235,10 +235,10 @@ public abstract class AbstractCharacter implements Character
 	@Override
 	public void jump()
 	{
-		if (!inFall)
+		if (!inFall && !inJump)
 		{
 			inJump = true;
-			speed.setY(powerJump);
+			speed0.setY(powerJump);
 			physicEngine.addElementToMove(this);
 		}
 	}
@@ -297,13 +297,13 @@ public abstract class AbstractCharacter implements Character
 	}
 
 	@Override
-	public long getTime0() {
+	public double getTime0() {
 		return time0;
 	}
 
 	@Override
 	public void resetTime0() {
-		time0 = System.currentTimeMillis();
+		time0 = (double)System.currentTimeMillis()/2000.0;
 	}
 
 	@Override

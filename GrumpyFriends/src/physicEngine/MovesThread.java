@@ -4,8 +4,7 @@ package physicEngine;
 
 public class MovesThread extends Thread {
 	
-	private PhysicEngine physicEngine = PhysicEngine.getInstace();
-	
+	private PhysicEngine physicEngine = PhysicEngine.getInstance();
 	public MovesThread() {
 		
 	}
@@ -18,7 +17,8 @@ public class MovesThread extends Thread {
 				physicEngine.movesElement(i);
 			}
 			physicEngine.stopElementsMove();
-	
+			
+		
 		}
 	}
 }

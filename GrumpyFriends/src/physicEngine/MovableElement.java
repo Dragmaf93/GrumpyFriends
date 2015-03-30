@@ -10,7 +10,7 @@ public interface MovableElement extends Element{
 	public abstract void setJump(boolean jump);
 	public abstract void setMovement(boolean movement);
 	
-	public abstract long getTime0();
+	public abstract double getTime0();
 	public abstract void resetTime0();
 	
 	public abstract Vector getSpeed();

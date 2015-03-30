@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import physicEngine.PhysicEngine;
 import element.character.AbstractCharacter;
 import element.character.Chewbacca;
 import world.AbstractWorld;
@@ -50,12 +51,16 @@ public class MyPanel extends JPanel
 				if (e.getKeyCode() == KeyEvent.VK_RIGHT) 
 				{
 					character.getChewbacca().move(AbstractCharacter.RIGHT);
+//					PhysicEngine.getInstance().removeElement(character.getChewbacca());
 		        }
 		        if (e.getKeyCode() == KeyEvent.VK_LEFT)
 		        {
 		        	character.getChewbacca().move(AbstractCharacter.LEFT);
 		        }
-		        MyPanel.this.repaint();
+		        if (e.getKeyCode() == KeyEvent.VK_UP)
+		        {
+		        	character.getChewbacca().jump();
+		        }
 			}
 			
 			@Override
@@ -69,17 +74,16 @@ public class MyPanel extends JPanel
 		        {
 		        	character.getChewbacca().stopToMove();
 		        }
-		        MyPanel.this.repaint();
 			}
-			
 		});
+		
+		start();
 	}
 	
 	@Override
 	protected void paintComponent(Graphics g) 
 	{
 		super.paintComponent(g);
-		
 		for (int y = 0; y < world.getNumberRow(); y++)
 		{
 			for (int x = 0; x < world.getNumberColumn(); x++) 
@@ -93,31 +97,15 @@ public class MyPanel extends JPanel
 		g.drawImage(character.getImage(), character.getChewbacca().getX() , 
 				character.getChewbacca().getY()-character.getChewbacca().getHeight(), this);
 	}
-//	
-//	@Override
-//	public void keyTyped(KeyEvent e) 
-//	{
-//		 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-//	            System.out.println("Right key typed");
-//	        }
-//	        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-//	            System.out.println("Left key typed");
-//	        }
-//	}
-//
-//	@Override
-//	public void keyPressed(KeyEvent e) {
-//		
-//	}
-//
-//	@Override
-//	public void keyReleased(KeyEvent e) {
-//		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-//            System.out.println("Right key typed");
-//        }
-//        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-//            System.out.println("Left key typed");
-//        }
-//	}
+	
+	public void start() {
+		new Thread() {
+			@Override
+			public void run() {
+				while(true)
+					repaint();
+			}
+		}.start();
+	}
 	
 }

@@ -76,7 +76,7 @@ public class CollisionManager {
 		return !(simpleMove || climbeMove);
 	}
 	
-	public boolean collidesTop(MovableElement element,long time) {
+	public boolean collidesTop(MovableElement element,double time) {
 
 		if(world.getElementByPoint(element.getX(),element.getY()+element.getSpeed().getY()-element.getHeight())!=null ||
 			world.getElementByPoint(element.getX()+element.getWidth(),element.getY()+element.getSpeed().getY()-element.getHeight())!=null){
@@ -85,11 +85,11 @@ public class CollisionManager {
 		return false;
 	}
 	
-	public boolean collidesBottom(MovableElement element, long time) {
+	public boolean collidesBottom(MovableElement element, double time) {
 		
 		int coordinateX = element.getX();
 		int coordinateY = (int) (element.getY() + element.getSpeed().getY());
-		
+		System.out.println( coordinateY + " ++++ "+ coordinateX);
 		if (world.getElementByPoint(coordinateX, coordinateY) != null ||
 				world.getElementByPoint(coordinateX+element.getWidth(),coordinateY) != null){
 				return true;
@@ -97,7 +97,7 @@ public class CollisionManager {
 		return false;
 	}
 	
-	public boolean collidesTopRight(MovableElement element, long time){
+	public boolean collidesTopRight(MovableElement element, double time){
 		
 		if (world.getElementByPoint(element.getX()+element.getSpeed().getX(),
 				element.getY()+element.getSpeed().getY()-element.getHeight())!=null ||
@@ -117,7 +117,7 @@ public class CollisionManager {
 		return false;
 	}
 	
-	public boolean collidesTopLeft(MovableElement element, long time){
+	public boolean collidesTopLeft(MovableElement element, double time){
 		
 		if (world.getElementByPoint(element.getX()+element.getSpeed().getX(),
 				element.getY()+element.getSpeed().getY()-element.getHeight())!=null ||
@@ -138,7 +138,7 @@ public class CollisionManager {
 		return false;
 	}
 	
-	public boolean collidesBottomRight(MovableElement element,long time){
+	public boolean collidesBottomRight(MovableElement element,double time){
 		
 		if (world.getElementByPoint(element.getX()+element.getSpeed().getX(), element.getY()+element.getSpeed().getY()) != null ||
 				world.getElementByPoint(element.getX()+element.getSpeed().getX()+element.getWidth(),
@@ -157,7 +157,7 @@ public class CollisionManager {
 		return false;
 	}
 	
-	public boolean collidesBottomLeft(MovableElement element, long time){
+	public boolean collidesBottomLeft(MovableElement element, double time){
 		
 		if (world.getElementByPoint(element.getX()+element.getSpeed().getX(), element.getY()+element.getSpeed().getY()) != null ||
 				world.getElementByPoint(element.getX()+element.getSpeed().getX()+element.getWidth(),
