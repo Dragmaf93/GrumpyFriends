@@ -1,25 +1,23 @@
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 
+import java.awt.Toolkit;
+
+import element.character.AbstractCharacter;
 import world.AbstractWorld;
 import world.Ground;
-import element.character.AbstractCharacter;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 
 
 public class FXApplication extends Application
@@ -30,6 +28,8 @@ public class FXApplication extends Application
 	
 	Image chewbaccaImage;
 	CharacterUI character;
+	
+	ImageView view;
 	
     @Override
     public void start(Stage primaryStage) {
@@ -57,41 +57,6 @@ public class FXApplication extends Application
 		 Pane pane = new Pane();
         //pane.setStyle("-fx-background-color: black;");
         pane.setPrefSize(500, 400);
-		
-		
-//		this.addKeyListener(new KeyAdapter() 
-//		{
-//			public void keyPressed (KeyEvent e)
-//			{
-//				if (e.getKeyCode() == KeyEvent.VK_RIGHT) 
-//				{
-//					character.getChewbacca().move(AbstractCharacter.RIGHT);
-////					PhysicEngine.getInstance().removeElement(character.getChewbacca());
-//		        }
-//		        if (e.getKeyCode() == KeyEvent.VK_LEFT)
-//		        {
-//		        	character.getChewbacca().move(AbstractCharacter.LEFT);
-//		        }
-//		        if (e.getKeyCode() == KeyEvent.VK_UP)
-//		        {
-//		        	character.getChewbacca().jump();
-//		        }
-//			}
-//			
-//			@Override
-//			public void keyReleased(KeyEvent e) 
-//			{
-//				if (e.getKeyCode() == KeyEvent.VK_RIGHT) 
-//				{
-//					character.getChewbacca().stopToMove();
-//		        }
-//		        if (e.getKeyCode() == KeyEvent.VK_LEFT)
-//		        {
-//		        	character.getChewbacca().stopToMove();
-//		        }
-//			}
-//		});
-//        
         
 		for (int y = 0; y < world.getNumberRow(); y++)
 		{
@@ -110,26 +75,87 @@ public class FXApplication extends Application
 			}
 		}
         
-        
-       
-        
         Image image = new Image("/images.png",0, character.getChewbacca().getHeight(),true,true);
 
-        ImageView view = new ImageView();
+        view = new ImageView();
         view.setImage(image);
         view.relocate(character.getChewbacca().getX() , 
-				character.getChewbacca().getY()-character.getChewbacca().getHeight());
+        		character.getChewbacca().getY()-character.getChewbacca().getHeight());
         pane.getChildren().add(view);
-
-        
         
         grid.add(pane,0,0);
         
         Scene scene = new Scene(grid, larghezza, altezza);
-//        scene.addEventHandler("CheckBox Action (selected: " + checkBox.isSelected() + ")\n");
+        
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
+        
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent ke) {
+            	if (ke.getCode() == KeyCode.RIGHT) 
+				{
+					character.getChewbacca().move(AbstractCharacter.RIGHT);
+//					System.out.println("Key Pressed.... va a destra"+ke.getText());
+//					PhysicEngine.getInstance().removeElement(character.getChewbacca());
+//					view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY());
+		        }
+		        if (ke.getCode() == KeyCode.LEFT)
+		        {
+		        	character.getChewbacca().move(AbstractCharacter.LEFT);
+//		        	System.out.println("Key Pressed.... va a sinistra"+ke.getText());
+//		        	view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY());
+		        }
+		        if (ke.getCode() == KeyCode.UP)
+		        {
+		        	character.getChewbacca().jump();
+//		        	System.out.println("Key Pressed.... salta"+ke.getText());
+//		        	view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY());
+		        }
+            }
+        });
+        
+        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent ke)
+            {
+            	if (ke.getCode() == KeyCode.RIGHT) 
+				{
+					character.getChewbacca().stopToMove();
+//					System.out.println("Key Released.... "+ke.getText());
+					
+//					view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY());
+		        }
+		        if (ke.getCode() == KeyCode.LEFT)
+		        {
+		        	character.getChewbacca().stopToMove();
+//		        	System.out.println("Key Released.... "+ke.getText());
+//		        	view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY());
+		        }
+            }
+        });
+        
+//       	scene.setOnKeyTyped(new EventHandler<KeyEvent>() {
+//            public void handle(KeyEvent ke) {
+//                String text = "Key Typed: " + ke.getCharacter();
+//                if (ke.isAltDown()) {
+//                    text += " , alt down";
+//                }
+//                if (ke.isControlDown()) {
+//                    text += " , ctrl down";
+//                }
+//                if (ke.isMetaDown()) {
+//                    text += " , meta down";
+//                }
+//                if (ke.isShiftDown()) {
+//                    text += " , shift down";
+//                }
+//                System.out.println(text);
+//            }
+//        });
+        
         primaryStage.show();
+ 
+        start();
+        
     }
 
     /**
@@ -139,5 +165,17 @@ public class FXApplication extends Application
         launch(args);
     }
 
-    
+	public void start() {
+		new Thread() {
+			@Override
+			public void run() 
+			{
+				while(true)
+				{
+					System.out.println("MUOVIII "+view.getX()+" "+view.getY());
+					view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY());
+				}	
+			}
+		}.start();
+	}
 }
