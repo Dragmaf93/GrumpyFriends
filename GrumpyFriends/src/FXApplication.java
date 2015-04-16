@@ -1,4 +1,7 @@
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.event.EventHandler;
@@ -7,14 +10,20 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 
 import java.awt.Toolkit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import element.character.AbstractCharacter;
 import world.AbstractWorld;
 import world.Ground;
 import javafx.event.ActionEvent;
+import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -26,10 +35,15 @@ public class FXApplication extends Application
 	int larghezza = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	int altezza = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 	
-	Image chewbaccaImage;
 	CharacterUI character;
 	
 	ImageView view;
+	Pane pane;
+	final ScrollPane scrollPane = new ScrollPane();
+	
+	Lock lock = new ReentrantLock();
+	Condition condition = lock.newCondition();
+	boolean move = false;
 	
     @Override
     public void start(Stage primaryStage) {
@@ -39,24 +53,14 @@ public class FXApplication extends Application
         grid.setVgap(10);
         grid.setStyle("-fx-background-color: cyan;");
         
-        Button btn = new Button();
-        btn.setText("Say 0");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
-        
         AbstractWorld.initializes("world.Planet");
 		world = (AbstractWorld) AbstractWorld.getInstance();
-		grid.setPrefSize(world.getWidth(), altezza);
+		grid.setPrefSize(world.getNumberColumn(), world.getNumberRow());
 		character = new CharacterUI();
 		
-		 Pane pane = new Pane();
-        //pane.setStyle("-fx-background-color: black;");
-        pane.setPrefSize(500, 400);
+		pane = new Pane();
+//		pane.setPrefSize(larghezza,altezza);
+        pane.setStyle(grid.getStyle());
         
 		for (int y = 0; y < world.getNumberRow(); y++)
 		{
@@ -83,7 +87,11 @@ public class FXApplication extends Application
         		character.getChewbacca().getY()-character.getChewbacca().getHeight());
         pane.getChildren().add(view);
         
-        grid.add(pane,0,0);
+        scrollPane.setContent(pane);
+        scrollPane.setPrefSize(larghezza, altezza);
+        grid.add(scrollPane,0,0);
+        
+        scrollPane.setOnKeyPressed(null);
         
         Scene scene = new Scene(grid, larghezza, altezza);
         
@@ -95,22 +103,20 @@ public class FXApplication extends Application
             	if (ke.getCode() == KeyCode.RIGHT) 
 				{
 					character.getChewbacca().move(AbstractCharacter.RIGHT);
-//					System.out.println("Key Pressed.... va a destra"+ke.getText());
 //					PhysicEngine.getInstance().removeElement(character.getChewbacca());
-//					view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY());
-		        }
+//					view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY()-character.getChewbacca().getHeight());
+				}
 		        if (ke.getCode() == KeyCode.LEFT)
 		        {
 		        	character.getChewbacca().move(AbstractCharacter.LEFT);
-//		        	System.out.println("Key Pressed.... va a sinistra"+ke.getText());
-//		        	view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY());
+//		        	view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY()-character.getChewbacca().getHeight());
 		        }
 		        if (ke.getCode() == KeyCode.UP)
 		        {
 		        	character.getChewbacca().jump();
-//		        	System.out.println("Key Pressed.... salta"+ke.getText());
-//		        	view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY());
+//		        	view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY()-character.getChewbacca().getHeight());
 		        }
+		        view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY()-character.getChewbacca().getHeight());
             }
         });
         
@@ -120,15 +126,10 @@ public class FXApplication extends Application
             	if (ke.getCode() == KeyCode.RIGHT) 
 				{
 					character.getChewbacca().stopToMove();
-//					System.out.println("Key Released.... "+ke.getText());
-					
-//					view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY());
-		        }
+				}
 		        if (ke.getCode() == KeyCode.LEFT)
 		        {
 		        	character.getChewbacca().stopToMove();
-//		        	System.out.println("Key Released.... "+ke.getText());
-//		        	view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY());
 		        }
             }
         });
@@ -154,7 +155,7 @@ public class FXApplication extends Application
         
         primaryStage.show();
  
-        start();
+//        start();
         
     }
 
@@ -172,8 +173,7 @@ public class FXApplication extends Application
 			{
 				while(true)
 				{
-					System.out.println("MUOVIII "+view.getX()+" "+view.getY());
-					view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY());
+					view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY()-character.getChewbacca().getHeight());
 				}	
 			}
 		}.start();
