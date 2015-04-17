@@ -1,3 +1,4 @@
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -104,19 +105,15 @@ public class FXApplication extends Application
 				{
 					character.getChewbacca().move(AbstractCharacter.RIGHT);
 //					PhysicEngine.getInstance().removeElement(character.getChewbacca());
-//					view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY()-character.getChewbacca().getHeight());
 				}
 		        if (ke.getCode() == KeyCode.LEFT)
 		        {
 		        	character.getChewbacca().move(AbstractCharacter.LEFT);
-//		        	view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY()-character.getChewbacca().getHeight());
 		        }
 		        if (ke.getCode() == KeyCode.UP)
 		        {
 		        	character.getChewbacca().jump();
-//		        	view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY()-character.getChewbacca().getHeight());
 		        }
-		        view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY()-character.getChewbacca().getHeight());
             }
         });
         
@@ -134,29 +131,17 @@ public class FXApplication extends Application
             }
         });
         
-//       	scene.setOnKeyTyped(new EventHandler<KeyEvent>() {
-//            public void handle(KeyEvent ke) {
-//                String text = "Key Typed: " + ke.getCharacter();
-//                if (ke.isAltDown()) {
-//                    text += " , alt down";
-//                }
-//                if (ke.isControlDown()) {
-//                    text += " , ctrl down";
-//                }
-//                if (ke.isMetaDown()) {
-//                    text += " , meta down";
-//                }
-//                if (ke.isShiftDown()) {
-//                    text += " , shift down";
-//                }
-//                System.out.println(text);
-//            }
-//        });
+        new AnimationTimer()
+        {
+            @Override
+            public void handle(long now) 
+            {
+            	view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY()-character.getChewbacca().getHeight());
+            }
+        }.start();
         
         primaryStage.show();
  
-//        start();
-        
     }
 
     /**
@@ -165,17 +150,4 @@ public class FXApplication extends Application
     public static void main(String[] args) {
         launch(args);
     }
-
-	public void start() {
-		new Thread() {
-			@Override
-			public void run() 
-			{
-				while(true)
-				{
-					view.relocate(character.getChewbacca().getX(), character.getChewbacca().getY()-character.getChewbacca().getHeight());
-				}	
-			}
-		}.start();
-	}
 }
