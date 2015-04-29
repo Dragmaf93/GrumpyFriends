@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<world>
+  <type>Planet</type>
+  
+  <dimension height="700" width="1350" />
+  
+  <wall>
+    <from posX="0" posY="700" /> 
+    <to posX="1350" posY="700" /> 
+  </wall>
+
+  
+  
+</world>

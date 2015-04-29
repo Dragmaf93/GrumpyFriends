@@ -1,20 +1,32 @@
 package world;
 
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.World;
+
 public class Planet extends AbstractWorld {
 	
-	private static Vector gravityForce = new Vector(0, 5);
-//	TODO impostare la GRAVITAAAA
+	public final static Vec2 GRAVITY = new Vec2(0,-5f);
 	
-	public static void setGravityForce(Vector gravityForce) {
-		Planet.gravityForce = gravityForce;
+	public Planet() {
+		super(GRAVITY, true);
+		
 	}
-
-	private Planet(String path) {
-		super(path);
+	
+	public void esempio(){
+		int x = 0; 
+	
+		Ground[] g = new Ground[10];
+		for(int i =0;i<10;i++){
+			x+=10;
+			g[i]=new Ground(x, 100);
+		}
+		
+		
 	}
-
-	@Override
-	public Vector getGravity() {
-		return gravityForce;
+	public static void main(String[] args) {
+		AbstractWorld.initializes("world.Planet");
+		World world = AbstractWorld.getInstance();
+		((Planet) world).esempio();
+		
 	}
 }

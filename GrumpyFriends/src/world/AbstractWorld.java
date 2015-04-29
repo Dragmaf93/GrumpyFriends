@@ -1,43 +1,44 @@
 package world;
 
-import java.io.BufferedReader;
 
-import java.io.FileReader;
-import java.io.IOException;
+
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Scanner;
+
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.World;
 
 import element.Element;
 import element.character.AbstractCharacter;
-import element.character.Chewbacca;
+import element.character.Character;
 
 
-public abstract class AbstractWorld implements World 
+public abstract class AbstractWorld extends org.jbox2d.dynamics.World
 {
+
 	protected int height,width;
-	protected Element[][] worldMatrix;
 	protected int numberRow = 0, numberColumn = 0;
-	protected HashMap<Vector, AbstractCharacter> characterContainer;
+
+	protected HashMap<String, Character> characterContainer;
+	
+	protected Ground[][] worldMatrix;
 	
 	protected static World instanceSon;
 	
-	public AbstractWorld(String path) 
-	{	
-		readMatrix("src/world/matrix");
-		characterContainer = new HashMap<>();
+	public AbstractWorld(Vec2 gravity, boolean doSleep) {
+		super(gravity, doSleep);
 	}
+
 	
 	public static void initializes(String typeWorld){
 		if(instanceSon == null)
 			try {
-			Class<?> factoryClass = Class.forName(typeWorld);
+			Class<?> factoryClass = Class.forName("world."+typeWorld);
 			
-			Constructor<AbstractWorld> constructorSon = (Constructor<AbstractWorld>) factoryClass.getDeclaredConstructor(String.class);
+			Constructor<AbstractWorld> constructorSon = (Constructor<AbstractWorld>) factoryClass.getDeclaredConstructor();
 			constructorSon.setAccessible(true);
-			AbstractWorld son = constructorSon.newInstance(typeWorld);
-			instanceSon = son;
+			AbstractWorld son = constructorSon.newInstance();
+			instanceSon = (World) son;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}	
@@ -50,108 +51,39 @@ public abstract class AbstractWorld implements World
 	public static void setInstanceNull(){
 		instanceSon = null;
 	}
-	@Override
-	public Element getElement(int x, int y) 
+
+
+	public Character getCharacter(String name) 
 	{
-		return worldMatrix[y][x];
+		return characterContainer.get(name);
 	}
 
-	@Override
+	
 	public void update(AbstractCharacter character, int xFirst, int yFirst) 
 	{
-		characterContainer.remove(new Vector(xFirst, yFirst));
-		characterContainer.put(new Vector(character.getX(), character.getY()), character);
+		
 	}
 	
-	@Override
+	public Ground getGround(int x , int y){
+		return worldMatrix[y][x];
+	}
 	public Element getElementByPoint(int x, int y) {
 		return worldMatrix[pointToCellY(y)][pointToCellX(x)];
 	}
 	
-	public void readMatrix(String pathFile)
-	{
-		try 
-		{
-			FileReader filein = new FileReader(pathFile);
-			int next;
-			int currentRow = 0, currentColumn = 0;
-			BufferedReader b=new BufferedReader(filein);
-			height=Integer.parseInt(b.readLine());
-			numberRow = height / SIZE_CELL;
-			width=Integer.parseInt(b.readLine());
-			numberColumn = width / SIZE_CELL;
-			System.out.println(height+ " "+ width);
-			System.out.println(numberRow+" "+numberColumn+"\n\n\n");
-			worldMatrix = new Element[numberRow][numberColumn];
-
-			do
-			{
-				next = b.read();
-				if (next != -1 )
-				{
-					char nextc = (char) next;
-					switch(nextc)
-					{
-					case '0':
-						worldMatrix[currentRow][currentColumn] = null;
-						break;
-					case '1':
-						worldMatrix[currentRow][currentColumn] = new Ground(currentColumn,currentRow);
-						break;
-//					case '2':
-//						worldMatrix[currentRow][currentColumn] = new Chewbacca(currentColumn, currentRow, 100, null, null);
-//						break;
-					//TODO implementare il resto
-					}
-					
-					if (currentColumn == numberColumn)
-					{
-						currentRow ++;
-						currentColumn = 0;
-					}
-					else
-						currentColumn ++;
-				}
-			}
-			while (next != -1);
-			
-			filein.close();
-			b.close();
-		} catch (IOException e) 
-		{
-			System.out.println(e);
-			System.out.println("File non esistente");
-		}
+	public void setDimension(int height, int width){
+		this.height = height;
+		this.width = width;
+				
+		this.numberColumn = (int) Math.ceil((double) (width/Ground.WIDTH));
+		this.numberRow = (int) Math.ceil((double) (height/Ground.HEIGHT));
+		System.out.println("Righe "+numberRow);
+		System.out.println("Colonne " +numberColumn);
+		this.worldMatrix= new Ground[numberRow][numberColumn];
 	}
 	
-	public void print ()
-	{
-		for (int i = 0; i < numberRow; i++)
-		{
-			String row="";
-			for (int j = 0; j < numberColumn; j++)
-			{
-				if (j == pointToCellX(getPrincipale().getX()) && i == pointToCellY(getPrincipale().getY()))
-					row += "CHEW";
-				else
-					row += worldMatrix[i][j];
-				row += " ";
-//				System.out.print(worldMatrix[i][j]);
-			}
-			System.out.println(row);
-		}
-//		Chewbacca b = (Chewbacca) getPrincipale();
-//		World w = b.getWorld();
-//		System.out.println(b.getX()+" "+b.getY()+" "+ w.getElement(b.getX(), b.getY()));
-	}
-	
-	public Element getPrincipale()
-	{
-		for(Entry<Vector, AbstractCharacter> entry : characterContainer.entrySet()) {
-		    return entry.getValue();
-
-		}
-		return null;
+	public void addCharacter(Character character){
+		characterContainer.put(character.getName(), character);
 	}
 	
 	public int getNumberRow()
@@ -164,74 +96,50 @@ public abstract class AbstractWorld implements World
 		return numberColumn;
 	}
 			
-	public int pointToCellX(int x)
+	public int pointToCellX(float x)
 	{
-		return (int) (((float)x * (float)numberColumn) / (float)width);
+		int n= (int)(((float)x * (float)numberColumn) / (float)width);
+		if(n == numberColumn) return n -1;
+		return n;
 	}
 	
-	public int pointToCellY(int y)
+	public int pointToCellY(float y)
 	{
-		return (int) (((float)y * (float)numberRow) / (float)height);
+		int n = (int)(((float)y * (float)numberRow) / (float)height);
+		if(n == numberRow) return n -1;
+		return n;
 	}
-	
-	@Override
-	public int getHeight() 
-	{
+
+
+	public int getWidth() {
+		return width;
+	}
+
+
+	public int getHeight() {
 		return height;
 	}
 
-	@Override
-	public int getWidth() 
-	{
-		return width;
-	}
-	
-	@Override
-	public int cellXToPoint(int x)
-	{
-		return (int) (((float)x * (float)width) / (float)numberColumn);
-	}
-	
-	@Override
-	public int cellYToPoint(int y)
-	{
-		return (int) (((float)y * (float)height) / (float)numberRow);
-	}
-	
-	public static void main(String[] args) {
-		AbstractWorld.initializes("world.Planet");
-		AbstractWorld world = (AbstractWorld) AbstractWorld.getInstance();
-		
-		Chewbacca chewbacca = new Chewbacca(30, 30, 100, null, null);
-		world.characterContainer.put(new Vector(chewbacca.getX(), chewbacca.getY()),chewbacca);
-		chewbacca.setWorld();
 
-		world.print();
-		System.out.println("MUOVI");
-		final Scanner scanner = new Scanner(System.in);
-		System.out.println("inserisci direzione");
-		int direction = scanner.nextInt();
+	public void addGround(float x, float y)
+	{
 		
-		while (direction != 9)
-		{
-			if (direction == 2)
-				chewbacca.jump();
-			else{
-				chewbacca.move(direction);
-				chewbacca.stopToMove();
+		int j = pointToCellX(x);
+		int i = pointToCellY(y);
+		if(worldMatrix[i][j] != null) return;
+				
+		worldMatrix[i][j] = new Ground(x, y);
+	}
+	
+	public void print(){
+		for(int i = 0; i < numberRow;i++){
+			for(int j = 0; j < numberColumn;j++){
+				System.out.print(worldMatrix[i][j]+" ");
+				
 			}
-			world.print();
-//			if (chewbacca.isFall())
-//				System.out.println("NOOOOOOOOOOOOOOOOOOOOO CADOOOOOOOOOOOOOOOOOOOoo");
-//			else
-//				System.out.println("SONO TROPPO FORTE");
-			System.out.println("inserisci direzione");
-			direction = scanner.nextInt();
-		}
-		
-	}
-
-	public HashMap<Vector, AbstractCharacter> getCharacters() {
-		return characterContainer;
+			System.out.println();
+			}
+	
+		System.out.println("FINITO");
 	}
 }

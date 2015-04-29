@@ -2,44 +2,19 @@ package element.character;
 
 import java.util.ArrayList;
 
-import physicEngine.Time;
-
-import com.sun.javafx.scene.traversal.WeightedClosestCorner;
-
-import world.AbstractWorld;
-import world.Vector;
-import world.World;
 import element.Weapon;
 
-public class Chewbacca extends AbstractCharacter {
+public class Chewbacca extends AbstractCharacter{
 	
-	private static final int HEIGHT= 100;
-	private static final int WIDTH = 40;
-	private static final int POWER_JUMP = 20;
-	
-	public Chewbacca(int x, int y, int lifePoints, Team team,
+	private final static float HEIGHT = 10f;
+	private final static float WIDTH = 5f;
+
+	public Chewbacca(String name,float x, float y, Team team,
 			ArrayList<Weapon> weaponList) {
-		super(x, y, lifePoints, team, weaponList);
-		height=HEIGHT;
-		width= WIDTH;
-		powerJump = -POWER_JUMP;
-		step = 2;
+		super(name,x, y, HEIGHT, WIDTH, team, weaponList);
+
 	}
-
-	@Override
-	public String toString() 
-	{
-		return "CHEW";
-	}
-
-	public void setWorld() 
-	{
-		world = AbstractWorld.getInstance();
-	}
-
-
+	
 	
 
-
-	
 }

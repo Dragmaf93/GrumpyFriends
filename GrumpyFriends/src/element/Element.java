@@ -1,15 +1,15 @@
 package element;
 
-import world.Vector;
+import org.jbox2d.dynamics.Body;
+
 
 public interface Element 
 {
-	public abstract Vector getPosition();
-	public abstract void setPosition(Vector position);
+	public abstract float getX();
+	public abstract float getY();
 	
-	public abstract int getX();
-	public abstract int getY();
+	public abstract float getHeight();
+	public abstract float getWidth();
 	
-	public abstract int getHeight();
-	public abstract int getWidth();
+	public abstract Body getBody();
 }
