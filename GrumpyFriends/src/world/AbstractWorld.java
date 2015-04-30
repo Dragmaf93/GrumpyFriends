@@ -124,9 +124,9 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World
 	public void addGround(float x, float y)
 	{
 		
-		int j = pointToCellX(x);
-		int i = pointToCellY(y);
-		if(worldMatrix[i][j] != null) return;
+		int j = pointToCellX(Utils.toPixelPosX(x));
+		int i = pointToCellY(Utils.toPixelPosX(y));
+		if(worldMatrix[i][j] != null) {return;}
 				
 		worldMatrix[i][j] = new Ground(x, y);
 	}
@@ -135,7 +135,6 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World
 		for(int i = 0; i < numberRow;i++){
 			for(int j = 0; j < numberColumn;j++){
 				System.out.print(worldMatrix[i][j]+" ");
-				
 			}
 			System.out.println();
 			}

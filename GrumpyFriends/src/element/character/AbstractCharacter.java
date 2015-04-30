@@ -14,12 +14,10 @@ import world.Utils;
 import world.Vector;
 
 
-public abstract class AbstractCharacter extends AbstractDynamicElement implements Character
+public abstract class AbstractCharacter extends AbstractDynamicElement implements Character,Runnable
 {
 	public final static int RIGHT = 1;
 	public final static int LEFT = -1;
-	
-	
 	
 	protected String name;
 	protected float height;
@@ -58,14 +56,18 @@ public abstract class AbstractCharacter extends AbstractDynamicElement implement
 		PolygonShape polygonShape = new PolygonShape();
 		polygonShape.setAsBox(width,height);
 		
-		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef = new FixtureDef();
 		fixtureDef.shape = polygonShape;
 		
 		body.createFixture(fixtureDef);
 		
 		
 	}
-	
+	@Override
+	public void run() {
+		while(!isDead()){
+		}
+	}
 	@Override
 	public boolean isDead() {
  
@@ -86,7 +88,7 @@ public abstract class AbstractCharacter extends AbstractDynamicElement implement
 	
 	public void setBoolean(){
 		Vec2 vec = body.getLinearVelocity();
-		
+		printState();
 		if(vec.x==0f) inMovement = false;
 		else
 			inMovement=true;
@@ -101,13 +103,18 @@ public abstract class AbstractCharacter extends AbstractDynamicElement implement
 	{
 		setBoolean();
 		if((!inMovement && !inJump) 
-				|| (inMovement && currentDirection!=direction)){
+				|| (!inJump &&inMovement && currentDirection!=direction)){
 			currentDirection = direction;
 			inMovement=true;
-			body.setLinearVelocity(new Vec2(10f*currentDirection,0f));
+			body.setLinearVelocity(new Vec2(7f*currentDirection,0f));
 		}
 	}
-	
+	public void printState(){
+		System.out.println("JUMPING : "+inJump);
+		System.out.println("MOVING : "+inMovement);
+		System.out.println("SPEED : "+body.getLinearVelocity());
+		System.out.println();
+	}
 	@Override
 	public void stopToMove()
 	{
@@ -115,7 +122,7 @@ public abstract class AbstractCharacter extends AbstractDynamicElement implement
 		if(inMovement && !inJump){
 			currentDirection=0;
 			inMovement=false;
-			body.setLinearVelocity(new Vec2(0f,0f));
+			body.getLinearVelocity().x=0f;
 		}
 	}
 	
@@ -127,10 +134,9 @@ public abstract class AbstractCharacter extends AbstractDynamicElement implement
 		
 		if(!inJump){
 			inJump=true;
-			body.setLinearVelocity(new Vec2(body.getPosition().x*currentDirection,5f));
+			body.getLinearVelocity().y=15f;
 		}
 	}
-	
 	@Override
 	public int getLifePoints() 
 	{
@@ -155,12 +161,12 @@ public abstract class AbstractCharacter extends AbstractDynamicElement implement
 	}
 	@Override
 	public float getHeight() {
-		return Utils.toPixelHeight(height);
+		return Utils.toPixelHeight(height)*2;
 	}
 
 	@Override
 	public float getWidth() {
-		return Utils.toPixelWidth(width);
+		return Utils.toPixelWidth(width)*2;
 	}
 
 	public ArrayList<Weapon> getWeaponList() {

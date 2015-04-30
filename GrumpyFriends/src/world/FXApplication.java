@@ -64,7 +64,7 @@ public class FXApplication extends Application
 		world = (AbstractWorld) builder.getWorld();
 		grid.setPrefSize(world.getNumberColumn(), world.getNumberRow());
 //		character = new CharacterUI();
-		character = new Chewbacca("Eliana", 300,300, null, null);
+		character = new Chewbacca("Eliana", 40,50, null, null);
 
 
 		
@@ -82,12 +82,10 @@ public class FXApplication extends Application
 					Ground g = world.getGround(j, i);
 		
 					Rectangle rectangle = new Rectangle(g.getHeight(),g.getWidth());
-					
+					System.out.println(g.getX());
 					rectangle.setLayoutX(g.getX());
 					rectangle.setLayoutY(g.getY());
-					
-					System.out.println(g);
-					
+										
 					rectangle.setFill(null);
 					rectangle.setStroke(Color.BLACK);
 					pane.getChildren().add(rectangle);

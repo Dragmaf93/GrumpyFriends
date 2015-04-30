@@ -20,22 +20,24 @@ public class WorldBuilder {
 		worldToCreate.setDimension(height, width);
 	}
 
-	public void addWalls(float fromX, float fromY, float toX, float toY) {
-		if(fromX % Ground.WIDTH != 0) fromX-=fromX %Ground.WIDTH;
-		if(fromY % Ground.HEIGHT != 0) fromY-=fromY %Ground.HEIGHT;
-		if(toX % Ground.WIDTH != 0) toX-=toX %Ground.WIDTH;
-		if(toY % Ground.HEIGHT != 0) toY-=toY %Ground.HEIGHT;
+	public void addWalls(float fX, float fY, float tX, float tY) {
+		float fromX=Utils.toPosX(fX),fromY=Utils.toPosY(fY),toX=Utils.toPosX(tX),toY=Utils.toPosY(tY);
+		
+		if(fromX % Ground.WIDTH_JD2BOX != 0) fromX-=fromX %Ground.WIDTH_JD2BOX;
+		if(fromY % Ground.HEIGHT_JD2BOX != 0) fromY-=fromY %Ground.HEIGHT_JD2BOX;
+		if(toX % Ground.WIDTH_JD2BOX != 0) toX-=toX %Ground.WIDTH_JD2BOX;
+		if(toY % Ground.HEIGHT_JD2BOX != 0) toY-=toY %Ground.HEIGHT_JD2BOX;
 		
 		if (fromX == toX) {
 			if(fromY > toY){float tmp = fromY; fromY=toY; toY = tmp;}
 			
-			for (int i = (int) fromY; i <= toY; i += Ground.HEIGHT){
+			for (int i = (int) fromY; i <= toY; i += Ground.HEIGHT_JD2BOX*2){
 				worldToCreate.addGround(fromX, i);
 			}
 		} else if (fromY == toY){
 			if(fromX > toX){float tmp = fromX;fromX=toX;toX = tmp;}
 
-			for (int i = (int) fromX; i <= toX; i += Ground.WIDTH){
+			for (int i = (int) fromX; i <= toX; i += Ground.WIDTH_JD2BOX*2){
 				worldToCreate.addGround(i,fromY);
 			}
 		}

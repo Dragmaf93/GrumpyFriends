@@ -7,26 +7,27 @@ import com.sun.corba.se.impl.javax.rmi.CORBA.Util;
 
 public class Ground extends AbstractStaticElement {
 
-	private final static float WIDTH_JD2BOX = 3f;
-	public final static float WIDTH = Utils.toPixelHeight(WIDTH_JD2BOX);
-	private static final float HEIGHT_JD2BOX = 3f;
-	public final static float HEIGHT = Utils.toPixelHeight(HEIGHT_JD2BOX);
+	public final static float WIDTH_JD2BOX = 3f;
+	public final static float WIDTH = (Utils.toPixelHeight(WIDTH_JD2BOX))*2;
+	public static final float HEIGHT_JD2BOX = 3f;
+	public final static float HEIGHT = (Utils.toPixelHeight(HEIGHT_JD2BOX))*2;
 
 	public Ground(float x, float y) {
-		super(x, y);
+		super(x, y,HEIGHT_JD2BOX,WIDTH_JD2BOX);
 		
 		PolygonShape polygonShape = new PolygonShape();
 		polygonShape.setAsBox(WIDTH_JD2BOX, HEIGHT_JD2BOX);
-
-		FixtureDef fixtureDef = new FixtureDef();
+		
+		fixtureDef = new FixtureDef();
 		fixtureDef.shape = polygonShape;
+		System.out.println(bodyDef.position);
 		
 		body.createFixture(fixtureDef);
 	}
 
 	@Override
 	public String toString() {
-		return ""+body.getPosition();
+		return ""+Utils.toPixelPosX(body.getPosition().x);
 	}
 
 	@Override

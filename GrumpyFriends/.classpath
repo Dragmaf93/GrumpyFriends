@@ -5,5 +5,6 @@
 	<classpathentry kind="lib" path="jbox2d-library-2.1.2.jar"/>
 	<classpathentry kind="lib" path="slf4j-api-1.7.12.jar"/>
 	<classpathentry kind="lib" path="slf4j-simple-1.7.12.jar"/>
+	<classpathentry kind="lib" path="/home/dragmaf/Sviluppo/JBox2D-Support-master/jbox2d/release/modules/ext/jbox2d-testbed-2.1.2.2-jar-with-dependencies.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
