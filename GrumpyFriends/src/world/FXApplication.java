@@ -103,12 +103,11 @@ public class FXApplication extends Application
 //		pane.getChildren().add(rectangle);
 //        System.out.println(g.getX());
 //        System.out.println(g.getY());
-        Image image = new Image("/images.png",0, character.getHeight(),true,true);
+        Image image = new Image("file:images.png",0, character.getHeight(),true,true);
 
         view = new ImageView();
         view.setImage(image);
-        view.relocate(character.getX() , 
-        		character.getY());
+        view.relocate(character.getX() , character.getY());
         pane.getChildren().add(view);
         
 //        scrollPane.setContent(pane);
