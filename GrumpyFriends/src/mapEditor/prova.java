@@ -46,6 +46,14 @@ public class prova extends Application {
             }
         });
 
+//        source.setOnMouseDragged(new EventHandler<MouseEvent>() {
+//
+//            @Override
+//            public void handle(MouseEvent event) {
+//                source.relocate(event.getSceneX(), event.getSceneY());
+//            }
+//        });
+        
         target.setOnDragOver(new EventHandler <DragEvent>() {
             public void handle(DragEvent event) {
                 /* data is dragged over the target */
