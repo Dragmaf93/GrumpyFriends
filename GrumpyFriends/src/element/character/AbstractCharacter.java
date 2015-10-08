@@ -2,6 +2,7 @@ package element.character;
 
 import java.util.ArrayList;
 
+import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.FixtureDef;
@@ -53,12 +54,10 @@ public abstract class AbstractCharacter extends AbstractDynamicElement implement
 		inMovement = false;
 		inJump = false;
 		
-		PolygonShape polygonShape = new PolygonShape();
-		polygonShape.setAsBox(width,height);
-		
+		CircleShape circleShape = new CircleShape();
+		circleShape.m_radius=width;
 		fixtureDef = new FixtureDef();
-		fixtureDef.shape = polygonShape;
-		
+		fixtureDef.shape = circleShape;
 		body.createFixture(fixtureDef);
 		
 		
@@ -92,7 +91,7 @@ public abstract class AbstractCharacter extends AbstractDynamicElement implement
 		if(vec.x==0f) inMovement = false;
 		else
 			inMovement=true;
-		
+
 		if(vec.y==0f) inJump =false;
 		else
 			inJump=true;
@@ -102,16 +101,17 @@ public abstract class AbstractCharacter extends AbstractDynamicElement implement
 	public void move(int direction)
 	{
 		setBoolean();
-		if((!inMovement && !inJump) 
+		if((!inJump) 
 				|| (!inJump &&inMovement && currentDirection!=direction)){
 			currentDirection = direction;
 			inMovement=true;
-			body.setLinearVelocity(new Vec2(7f*currentDirection,0f));
+			body.setLinearVelocity(new Vec2(7f*currentDirection,body.getLinearVelocity().y));
 		}
 	}
 	public void printState(){
 		System.out.println("JUMPING : "+inJump);
 		System.out.println("MOVING : "+inMovement);
+		System.out.println("Is Sleeping : "+body.isActive());
 		System.out.println("SPEED : "+body.getLinearVelocity());
 		System.out.println();
 	}
@@ -130,12 +130,15 @@ public abstract class AbstractCharacter extends AbstractDynamicElement implement
 	@Override
 	public void jump()
 	{
+		System.out.println("INIZIO JUMP");
 		setBoolean();
 		
 		if(!inJump){
 			inJump=true;
-			body.getLinearVelocity().y=15f;
+			body.setLinearVelocity(new Vec2(body.getLinearVelocity().x,15f));
 		}
+		printState();
+		System.out.println("FINE JUMP");
 	}
 	@Override
 	public int getLifePoints() 
