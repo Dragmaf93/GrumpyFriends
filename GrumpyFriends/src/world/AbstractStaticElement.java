@@ -14,11 +14,14 @@ public abstract class AbstractStaticElement implements Element {
 	protected FixtureDef fixtureDef;
 	protected BodyDef bodyDef;
 	
-	public AbstractStaticElement(float x, float y,float height, float width) {
+	protected float height;
+	protected float width;
+	
+	public AbstractStaticElement(float x, float y,float width, float height) {
 		bodyDef = new BodyDef();
-		bodyDef.position.x=x+width;
+		bodyDef.position.x=x;
 		bodyDef.position.y=y;
-		System.out.println(bodyDef.position.x+ "   "+bodyDef.position.y);
+//		System.out.println(bodyDef.position.x+ "   "+bodyDef.position.y);
 		bodyDef.type = BodyType.STATIC;
 		body = ((World)AbstractWorld.getInstance()).createBody(bodyDef);
 	}
@@ -37,17 +40,24 @@ public abstract class AbstractStaticElement implements Element {
 	}
 	@Override
 	public float getX() {
-		return Utils.toPixelPosX(body.getPosition().x)-getWidth()/2;
+		return bodyDef.position.x;
 	}
 	@Override
 	public float getY() {
-		return Utils.toPixelPosY(body.getPosition().y)-getHeight()/2;
+		return bodyDef.position.y;
 	}
 	
 	@Override
 	public Body getBody() {
 		return body;
 	}
-	
+	@Override
+	public float getHeight() {
+		return height;
+	}
+	@Override
+	public float getWidth() {
+		return width;
+	}
 	
 }

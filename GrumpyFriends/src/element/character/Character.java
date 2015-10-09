@@ -14,5 +14,8 @@ public interface Character
 	public abstract String getName();
 	public abstract int getLifePoints();
 	public abstract boolean equipWeapon(Weapon weapon);
+
+	public abstract void setGrounded(boolean b);
+	public abstract boolean isGrounded();
 	
 }

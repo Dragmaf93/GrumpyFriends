@@ -3,7 +3,11 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/jbox2d-testbed-2.1.2.2-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="lib/jbox2d-testbed-2.1.2.2-jar-with-dependencies.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/home/mfdrago/git/GrumpyFriends/GrumpyFriends/apidocs/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.12.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-simple-1.7.12.jar"/>
 	<classpathentry kind="output" path="bin"/>

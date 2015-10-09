@@ -1,144 +1,98 @@
 package world;
 
-
-
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
-import element.Element;
-import element.character.AbstractCharacter;
+
 import element.character.Character;
 
+public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements world.World {
 
-public abstract class AbstractWorld extends org.jbox2d.dynamics.World
-{
-
-	protected int height,width;
-	protected int numberRow = 0, numberColumn = 0;
+	protected float height, width;
 
 	protected HashMap<String, Character> characterContainer;
-	
-	protected Ground[][] worldMatrix;
-	
+	protected List<Ground> grounds;
+
 	protected static World instanceSon;
-	
+
 	public AbstractWorld(Vec2 gravity, boolean doSleep) {
 		super(gravity, doSleep);
+		characterContainer = new HashMap<>();
+		grounds = new ArrayList<Ground>();
 	}
 
-	
-	public static void initializes(String typeWorld){
-		if(instanceSon == null)
+	public static void initializes(String typeWorld) {
+		if (instanceSon == null)
 			try {
-			Class<?> factoryClass = Class.forName("world."+typeWorld);
-			
-			Constructor<AbstractWorld> constructorSon = (Constructor<AbstractWorld>) factoryClass.getDeclaredConstructor();
-			constructorSon.setAccessible(true);
-			AbstractWorld son = constructorSon.newInstance();
-			instanceSon = (World) son;
+				Class<?> factoryClass = Class.forName("world." + typeWorld);
+
+				Constructor<AbstractWorld> constructorSon = (Constructor<AbstractWorld>) factoryClass
+						.getDeclaredConstructor();
+				constructorSon.setAccessible(true);
+				AbstractWorld son = constructorSon.newInstance();
+				instanceSon = (World) son;
 			} catch (Exception e) {
 				e.printStackTrace();
-			}	
+			}
 	}
-	
-	public static World getInstance(){
+
+	public static World getInstance() {
 		return instanceSon;
 	}
-	
-	public static void setInstanceNull(){
+
+	public static void setInstanceNull() {
 		instanceSon = null;
 	}
 
+	public String[] getCharacterName() {
+		return (String[]) characterContainer.keySet().toArray();
+	}
 
-	public Character getCharacter(String name) 
-	{
+	public Character getCharacter(String name) {
 		return characterContainer.get(name);
 	}
 
-	
-	public void update(AbstractCharacter character, int xFirst, int yFirst) 
-	{
-		
+	public Ground getGround(int x, int y) {
+		for (Ground ground : grounds) {
+			if(ground.getX()==x && ground.getY()==y)
+				return ground;
+		}
+		return null;
 	}
 	
-	public Ground getGround(int x , int y){
-		return worldMatrix[y][x];
-	}
-	public Element getElementByPoint(int x, int y) {
-		return worldMatrix[pointToCellY(y)][pointToCellX(x)];
-	}
-	
-	public void setDimension(int height, int width){
-		this.height = height;
-		this.width = width;
-				
-		this.numberColumn = (int) Math.ceil((double) (width/Ground.WIDTH));
-		this.numberRow = (int) Math.ceil((double) (height/Ground.HEIGHT));
-		System.out.println("Righe "+numberRow);
-		System.out.println("Colonne " +numberColumn);
-		this.worldMatrix= new Ground[numberRow][numberColumn];
-	}
-	
-	public void addCharacter(Character character){
+	@Override
+	public void addCharacter(Character character) {
 		characterContainer.put(character.getName(), character);
 	}
-	
-	public int getNumberRow()
-	{
-		return numberRow;
-	}
 
-	public int getNumberColumn()
-	{
-		return numberColumn;
-	}
-			
-	public int pointToCellX(float x)
-	{
-		int n= (int)(((float)x * (float)numberColumn) / (float)width);
-		if(n == numberColumn) return n -1;
-		return n;
-	}
-	
-	public int pointToCellY(float y)
-	{
-		int n = (int)(((float)y * (float)numberRow) / (float)height);
-		if(n == numberRow) return n -1;
-		return n;
-	}
-
-
-	public int getWidth() {
+	@Override
+	public float getWidth() {
 		return width;
 	}
-
-
-	public int getHeight() {
+	
+	@Override
+	public float getHeight() {
 		return height;
 	}
 
-
-	public void addGround(float x, float y)
-	{
-		
-		int j = pointToCellX(Utils.toPixelPosX(x));
-		int i = pointToCellY(Utils.toPixelPosX(y));
-		if(worldMatrix[i][j] != null) {return;}
-				
-		worldMatrix[i][j] = new Ground(x, y);
+	@Override
+	public void addInclinedGround(float x, float y, float width, float height, int angleRotation) {
+		grounds.add(new InclinedGround(x, y, width, height,angleRotation));
 	}
 	
-	public void print(){
-		for(int i = 0; i < numberRow;i++){
-			for(int j = 0; j < numberColumn;j++){
-				System.out.print(worldMatrix[i][j]+" ");
-			}
-			System.out.println();
-			}
+	@Override
+	public void addLinearGround(float x, float y, float width, float height) {
+		grounds.add(new LinearGround(x, y, width, height));
+	}
 	
-		System.out.println("FINITO");
+	@Override
+	public void setDimension(float width, float height) {
+		this.width=width;
+		this.width=width;
 	}
 }

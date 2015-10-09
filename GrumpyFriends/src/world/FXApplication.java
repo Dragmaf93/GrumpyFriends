@@ -53,118 +53,118 @@ public class FXApplication extends Application
     @Override
     public void start(Stage primaryStage) {
         
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setStyle("-fx-background-color: cyan;");
-        
-        WorldBuilder builder = new WorldBuilder();
-		WorldDirector director = new WorldDirector(builder);
-		director.createWorld("worldXML/world.xml");
-		world = (AbstractWorld) builder.getWorld();
-		grid.setPrefSize(world.getNumberColumn(), world.getNumberRow());
-//		character = new CharacterUI();
-		character = new Chewbacca("Eliana", 40,50, null, null);
-
-
-		
-		pane = new Pane();
-//		pane.setPrefSize(larghezza,altezza);
-        pane.setStyle(grid.getStyle());
-      
-    
-		for (int i = 0; i < world.getNumberRow(); i++)
-		{
-			for (int j = 0; j < world.getNumberColumn(); j++) 
-			{
-				if (world.getGround(j, i) instanceof Ground)
-				{
-					Ground g = world.getGround(j, i);
-		
-					Rectangle rectangle = new Rectangle(g.getHeight(),g.getWidth());
-					System.out.println(g.getX());
-					rectangle.setLayoutX(g.getX());
-					rectangle.setLayoutY(g.getY());
-										
-					rectangle.setFill(null);
-					rectangle.setStroke(Color.BLACK);
-					pane.getChildren().add(rectangle);
-				}
-				
-			}
-		}
-//        Ground g =world.getGround(0,13);
-//        Rectangle rectangle = new Rectangle(g.getHeight(),g.getWidth());
-//		
-//		rectangle.relocate(g.getX(),g.getY());
-//		rectangle.setFill(null);
-//		rectangle.setStroke(Color.BLACK);
-//		
-//		pane.getChildren().add(rectangle);
-//        System.out.println(g.getX());
-//        System.out.println(g.getY());
-        Image image = new Image("file:images.png",0, character.getHeight(),true,true);
-
-        view = new ImageView();
-        view.setImage(image);
-        view.relocate(character.getX() , character.getY());
-        pane.getChildren().add(view);
-        
-//        scrollPane.setContent(pane);
-//        scrollPane.setPrefSize(larghezza, altezza);
-//        grid.add(scrollPane,0,0);
+//        GridPane grid = new GridPane();
+//        grid.setHgap(10);
+//        grid.setVgap(10);
+//        grid.setStyle("-fx-background-color: cyan;");
 //        
-//        scrollPane.setOnKeyPressed(null);    
-        grid.add(pane,0,0);
-        Scene scene = new Scene(grid, larghezza, altezza);
-        
-        primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(scene);
-        
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent ke) {
-            	if (ke.getCode() == KeyCode.RIGHT) 
-				{
-					character.move(AbstractCharacter.RIGHT);
-//					PhysicEngine.getInstance().removeElement(character.getChewbacca());
-				}
-		        if (ke.getCode() == KeyCode.LEFT)
-		        {
-		        	character.move(AbstractCharacter.LEFT);
-		        }
-		        if (ke.getCode() == KeyCode.UP)
-		        {
-		        	character.jump();
-		        }
-            }
-        });
-        
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent ke)
-            {
-            	if (ke.getCode() == KeyCode.RIGHT) 
-				{
-					character.stopToMove();
-				}
-		        if (ke.getCode() == KeyCode.LEFT)
-		        {
-		        	character.stopToMove();
-		        }
-            }
-        });
-        
-        
-        new AnimationTimer()
-        {
-            @Override
-            public void handle(long now) 
-            {
-           	    view.relocate(character.getX(), character.getY());
-            	world.step(1.0f/60, 6, 3);            }
-        }.start();
-       
-        primaryStage.show();
- 
+//        GameWorldBuilder builder = new GameWorldBuilder();
+//		WorldDirector director = new WorldDirector(builder);
+//		director.createWorld("worldXML/world.xml");
+//		world = (AbstractWorld) builder.getWorld();
+//		grid.setPrefSize(world.getNumberColumn(), world.getNumberRow());
+////		character = new CharacterUI();
+//		character = new Chewbacca("Eliana", 40,50, null, null);
+//
+//
+//		
+//		pane = new Pane();
+////		pane.setPrefSize(larghezza,altezza);
+//        pane.setStyle(grid.getStyle());
+//      
+//    
+//		for (int i = 0; i < world.getNumberRow(); i++)
+//		{
+//			for (int j = 0; j < world.getNumberColumn(); j++) 
+//			{
+//				if (world.getGround(j, i) instanceof LinearGround)
+//				{
+//					LinearGround g = world.getGround(j, i);
+//		
+//					Rectangle rectangle = new Rectangle(g.getHeight(),g.getWidth());
+//					System.out.println(g.getX());
+//					rectangle.setLayoutX(g.getX());
+//					rectangle.setLayoutY(g.getY());
+//										
+//					rectangle.setFill(null);
+//					rectangle.setStroke(Color.BLACK);
+//					pane.getChildren().add(rectangle);
+//				}
+//				
+//			}
+//		}
+////        Ground g =world.getGround(0,13);
+////        Rectangle rectangle = new Rectangle(g.getHeight(),g.getWidth());
+////		
+////		rectangle.relocate(g.getX(),g.getY());
+////		rectangle.setFill(null);
+////		rectangle.setStroke(Color.BLACK);
+////		
+////		pane.getChildren().add(rectangle);
+////        System.out.println(g.getX());
+////        System.out.println(g.getY());
+//        Image image = new Image("file:images.png",0, character.getHeight(),true,true);
+//
+//        view = new ImageView();
+//        view.setImage(image);
+//        view.relocate(character.getX() , character.getY());
+//        pane.getChildren().add(view);
+//        
+////        scrollPane.setContent(pane);
+////        scrollPane.setPrefSize(larghezza, altezza);
+////        grid.add(scrollPane,0,0);
+////        
+////        scrollPane.setOnKeyPressed(null);    
+//        grid.add(pane,0,0);
+//        Scene scene = new Scene(grid, larghezza, altezza);
+//        
+//        primaryStage.setTitle("Hello World!");
+//        primaryStage.setScene(scene);
+//        
+//        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+//            public void handle(KeyEvent ke) {
+//            	if (ke.getCode() == KeyCode.RIGHT) 
+//				{
+//					character.move(AbstractCharacter.RIGHT);
+////					PhysicEngine.getInstance().removeElement(character.getChewbacca());
+//				}
+//		        if (ke.getCode() == KeyCode.LEFT)
+//		        {
+//		        	character.move(AbstractCharacter.LEFT);
+//		        }
+//		        if (ke.getCode() == KeyCode.UP)
+//		        {
+//		        	character.jump();
+//		        }
+//            }
+//        });
+//        
+//        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+//            public void handle(KeyEvent ke)
+//            {
+//            	if (ke.getCode() == KeyCode.RIGHT) 
+//				{
+//					character.stopToMove();
+//				}
+//		        if (ke.getCode() == KeyCode.LEFT)
+//		        {
+//		        	character.stopToMove();
+//		        }
+//            }
+//        });
+//        
+//        
+//        new AnimationTimer()
+//        {
+//            @Override
+//            public void handle(long now) 
+//            {
+//           	    view.relocate(character.getX(), character.getY());
+//            	world.step(1.0f/60, 6, 3);            }
+//        }.start();
+//       
+//        primaryStage.show();
+// 
     }
 
     /**
