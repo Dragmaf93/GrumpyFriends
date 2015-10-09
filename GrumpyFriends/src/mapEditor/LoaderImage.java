@@ -24,7 +24,7 @@ public class LoaderImage
 	
 	public void load(String path)
 	{
-		images.put("prova",new ImageForObject(path,mapEditor, index++));
+		images.put("prova",new ImageForObject(path,mapEditor));
 	}
 	
 	public ImageForObject copyImage(String name)
@@ -34,7 +34,6 @@ public class LoaderImage
 			imageCopy = (ImageForObject) images.get(name).clone();
 		
 		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
