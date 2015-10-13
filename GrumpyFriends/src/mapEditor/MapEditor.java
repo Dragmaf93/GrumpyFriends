@@ -89,7 +89,7 @@ public class MapEditor extends Application{
 	
 	public void moveObjectFromPanelObjectInMap(MouseEvent event)
 	{
-		if (dragged != null)
+		if (dragged != null && checkLimitForFocusPanelObject(event))
     	{
         	dragged.setX(event.getX()-deltaX);
         	if (((PanelForObject) panelForObject).scrolledUsed())
@@ -102,7 +102,7 @@ public class MapEditor extends Application{
         	if (!(panelForObject.getChildren().contains(dragged)))
         		panelForObject.getChildren().add(dragged);
         	
-        	if (dragged.getX() >= panelForObject.getWidth() && checkLimit(event))
+        	if (dragged.getX() > panelForObject.getWidth() && checkLimitForFocusPanelObject(event))
         	{
         		dragged.setX(event.getX()-panelForObject.getPrefWidth()-deltaX);
         		if (((PanelForObject) panelForObject).scrolledUsed())
@@ -117,7 +117,7 @@ public class MapEditor extends Application{
         	}
     	}
 	}
-	
+
 	public void setUpper(MouseEvent event)
 	{
 		for (ImageForObject image : objectInMap) {
@@ -294,6 +294,13 @@ public class MapEditor extends Application{
 				actionForUndoRedo(point, imageTmp, objectMoveInMapForRedo, objectMoveInMapForUndo);
 			
 		}
+		else if (objectMoveInMapForRedo.size() == 1)
+		{
+			Point2D point = null;
+			ImageForObject imageTmp = null;
+			actionForUndoRedo(point, imageTmp, objectMoveInMapForRedo, objectMoveInMapForUndo);
+		}
+			
 		checkStatusButtonUndo();
 		checkStatusButtonRedo();
 	}
@@ -377,10 +384,19 @@ public class MapEditor extends Application{
 	}
 	private boolean checkLimit(MouseEvent event)
 	{
-		return (event.getX()+ image.getImage().getWidth()) < ((PanelForMap) panelForMap).getRealPane().getPrefWidth()
+		return (event.getX()+image.getImage().getWidth()) < ((PanelForMap) panelForMap).getRealPane().getPrefWidth()
     			&& (event.getY()+image.getImage().getHeight()) < ((PanelForMap) panelForMap).getRealPane().getPrefHeight()
-    			&& (event.getY()) >= 0
-    			&& (event.getX()) >= 0;
+    			&& (event.getY()-image.getImage().getHeight()/3) >= 0
+    			&& (event.getX()-image.getImage().getWidth()/2) >= 0;
+	}
+	
+	
+	private boolean checkLimitForFocusPanelObject(MouseEvent event) {
+		System.out.println(((PanelForObject) panelForObject).getPanelForSubmit().getHeight());
+		return (event.getX()-panelForObject.getPrefWidth()+ image.getImage().getWidth()) < ((PanelForMap) panelForMap).getRealPane().getPrefWidth()
+    			&& (event.getY()-((PanelForObject) panelForObject).getPanelForSubmit().getPrefHeight()-image.getImage().getHeight()) < ((PanelForMap) panelForMap).getRealPane().getPrefHeight()/2
+    			&& (event.getY()+((PanelForObject) panelForObject).getPanelForDimension().getPrefHeight()-image.getImage().getHeight()/3) >= 0
+    			&& (event.getX()-panelForObject.getPrefWidth()-image.getImage().getWidth()) >= 0;
 	}
 	
 	private void drawAll()

@@ -239,6 +239,10 @@ public class PanelForObject extends Pane {
 		return panelForRealObject;
 	}
 	
+	public Pane getPanelForSubmit() {
+		return panelForSubmit;
+	}
+	
 	public void setHeightPanelForRealObject(double height) {
 		panelForRealObject.setPrefHeight(height);
 	}

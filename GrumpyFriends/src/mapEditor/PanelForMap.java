@@ -26,7 +26,6 @@ public class PanelForMap extends ScrollPane {
 		
 		realPane.setPrefSize(width, mapEditor.getAltezza()-14);
 		this.setPrefSize(width, mapEditor.getAltezza()-54);
-		this.setStyle("-fx-background-color: #6b5d5d;");
 		
 	    this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 	    this.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
