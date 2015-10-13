@@ -2,8 +2,6 @@ package mapEditor;
 
 import java.util.HashMap;
 
-import javafx.scene.image.ImageView;
-
 public class LoaderImage 
 {
 	HashMap<String, ImageForObject> images;
@@ -24,7 +22,13 @@ public class LoaderImage
 	
 	public void load(String path)
 	{
-		images.put("prova",new ImageForObject(path,mapEditor));
+//		images.put("prova",new ImageForObject(path+"images.png",mapEditor));
+		images.put("grass",new ImageForObject(path+"grass.png",mapEditor));
+		images.put("box",new ImageForObject(path+"box.png",mapEditor));
+		images.put("box1",new ImageForObject(path+"box1.png",mapEditor));
+		images.put("ground",new ImageForObject(path+"ground.png",mapEditor));
+		images.put("wall",new ImageForObject(path+"wall.png",mapEditor));
+		images.put("wall2",new ImageForObject(path+"wall2.png",mapEditor));
 	}
 	
 	public ImageForObject copyImage(String name)
