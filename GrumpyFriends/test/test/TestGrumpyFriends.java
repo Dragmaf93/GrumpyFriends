@@ -11,7 +11,8 @@ public class TestGrumpyFriends extends TestbedTest {
 
 	private static TestbedTest instance;
 	private TestCharacter character;
-	
+	private float speed=10f;
+	private float angle=3.14f;
 	public static TestbedTest getInstance(){
 		if(instance==null)
 			instance = new TestGrumpyFriends();
@@ -50,16 +51,36 @@ public class TestGrumpyFriends extends TestbedTest {
 		case 'd':
 			character.move(AbstractCharacter.RIGHT);
 			break;
+		case 't':
+			character.takeBomb();
+			break;
+		case 's':
+			character.throwBomb(speed,angle);
+			break;
+		case '8':
+			speed*=2.0f;
+			break;
+		case '2':
+			speed/=2f;
+			break;
+		case '6':
+			angle-=0.05;
+			break;
+		case '4':
+			angle+=0.05;
+			break;
 		default:
 			break;
 		}
 	}
+	
 	@Override
 	public void step(TestbedSettings settings) {
 		super.step(settings);
-		addTextLine("Speed "+ character.feet.getAngularVelocity());
+		addTextLine("Speed Bomb "+ speed);
+		addTextLine("Angle Bomb "+ angle);
 		addTextLine("On Ground "+ character.isGrounded());
-		getCamera().setCamera(((TestCharacter) character).getPosition());
+//		getCamera().setCamera(((TestCharacter) character).getPosition());
 
 	}
 	@Override

@@ -22,6 +22,7 @@ import org.jbox2d.dynamics.joints.WheelJointDef;
 
 import element.Weapon;
 import element.character.Character;
+import world.InclinedGround;
 
 public class TestCharacter implements Character {
 	public final static int RIGHT = 1;
@@ -51,6 +52,12 @@ public class TestCharacter implements Character {
 	private float force;
 	private boolean grounded=true;
 	private int currentDirection;
+	
+	private BodyDef bombDef;
+	private FixtureDef bombFixtureDef;
+	
+	private Body bomb;
+	
 	
 	private WheelJoint joint;
 	
@@ -107,9 +114,36 @@ public class TestCharacter implements Character {
 		
 		
 		
+		//bomb
+		
+		bombDef = new BodyDef();
+		bombDef.setType(BodyType.DYNAMIC);
+		bombDef.setPosition(new Vec2(x, y+5));
+		CircleShape bombShape = new CircleShape();
+		bombShape.setRadius(0.5f);
+		bombFixtureDef = new FixtureDef();
+		bombFixtureDef.setShape(bombShape);
+		bombFixtureDef.setDensity(1.0f);
+		
+	}
+
+	public void takeBomb(){
+		if(bomb==null){
+			bomb=world.createBody(bombDef);
+			bomb.createFixture(bombFixtureDef);
+		}
+		bomb.getPosition().set(body.getPosition().x, body.getPosition().y+5);
+		bomb.setAwake(false);
 		
 	}
 	
+	public void throwBomb(float speed,float angle){
+		 bomb.setAwake(true);
+//         bomb.setGravityScale(1);
+         bomb.setAngularVelocity(0);
+         bomb.setTransform( body.getWorldPoint( new Vec2(3,0) ),angle);
+		bomb.setLinearVelocity(body.getWorldVector(new Vec2(speed,0) ) );
+	}
 	@Override
 	public boolean isDead() {
 		// TODO Auto-generated method stub
