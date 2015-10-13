@@ -1,6 +1,10 @@
 package test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
@@ -8,59 +12,58 @@ import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
 import element.character.Character;
+import world.CharacterContactListener;
 import world.InclinedGround;
 
 public class TestWorld implements world.World{
 
+	public final static Vec2 GRAVITY = new Vec2(0,-9.8f);
+
 	private World world;
+	private List<Character> characters;
 	
 	public TestWorld() {
 		world = TestGrumpyFriends.getInstance().getWorld();
+		world.setGravity(GRAVITY);
 	}
-	
 	@Override
 	public void addCharacter(Character character) {
-		Body b= world.createBody(character.getBodyDef());
-//		FixtureDef f1 = new FixtureDef();
-//		f1.shape = character.getBody().getFixtureList().getShape();
-//
-//		setCachedCameraPos(b.getPosition());
-//
-//		Fixture f = character.getBody().getFixtureList().getNext();
-//
-//		FixtureDef f2 = new FixtureDef();
-//		f2.shape = f.getShape();
-//		b.createFixture(f1).setUserData("Eliana");
-//		;
-//		b.createFixture(f2);
-//
-//		character.setBody(b);
-//		String[] names = new String[1];
-//		names[0] = "Eliana";
-//		world.addCharacter(character);
-//		getWorld().setContactListener(new CharacterContactListener(character));
+		if(characters==null)
+			characters= new ArrayList<Character>(8);
+	
+		this.characters.add(character);
 	}
 	
+	public void complete(){
+		world.setContactListener(new CharacterContactListener(characters));
+	}
 	@Override
 	public void addLinearGround(float x, float y, float width, float height) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.position.x=x;
 		bodyDef.position.y=y;
 		bodyDef.type = BodyType.STATIC;
-
+		System.out.println(world);
 		Body body = world.createBody(bodyDef);
 		
 		PolygonShape polygonShape = new PolygonShape();
-//		polygonShape.setAsBox(width,height);
-		polygonShape.m_vertexCount=4;
-		polygonShape.m_vertices[0].set(0,0);
-		polygonShape.m_vertices[1].set(width,0);
-		polygonShape.m_vertices[2].set(width,height);
-		polygonShape.m_vertices[3].set(0,height);
+
+		int count = 4;
+		Vec2[] vertices = new Vec2[count];
+		vertices[0]=new Vec2(0,0);
+		vertices[1]=new Vec2(width,0);
+		vertices[2]=new Vec2(width,height);
+		vertices[3]=new Vec2(0,height);
+		polygonShape.set(vertices, count);
+
+		
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = polygonShape;
+		fixtureDef.density = 1.0f;
+		fixtureDef.friction = 0.3f;
+		fixtureDef.restitution = 0.1f;
+	
 		body.createFixture(fixtureDef);
-		System.out.println("Rectangle"+body.getPosition());
 	}
 
 	@Override
@@ -74,37 +77,48 @@ public class TestWorld implements world.World{
 		Body body = world.createBody(bodyDef);
 		
 		PolygonShape polygonShape = new PolygonShape();
-		polygonShape.m_vertexCount = 3;
-		polygonShape.m_vertices[0].set(0, 0);
-		polygonShape.m_vertices[1].set(width, 0);
-		polygonShape.m_vertices[2].set(0, height);
+		int count = 3;
+		Vec2[] vertices = new Vec2[count];
+		vertices[0]=new Vec2(0,0);
+		vertices[1]=new Vec2(width,0);
+		vertices[2]=new Vec2(0,height);
+		polygonShape.set(vertices, count);
 		
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = polygonShape;
+		fixtureDef.density = 1.0f;
+		fixtureDef.friction = 0.3f;
+		fixtureDef.restitution = 0.1f;
 		
+	
 		body.createFixture(fixtureDef);
 		body.setTransform(body.getPosition(), 
 		InclinedGround.getRadiantAngleRotation(angleRotation));
-		System.out.println("Triangle"+body.getPosition());
+		System.out.println("Triangle"+body.getAngularVelocity());
 
 	}
 
 	@Override
 	public void setDimension(float width, float height) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public float getWidth() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public float getHeight() {
-		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	public List<Character> getCharacters(){
+		return characters;
+	}
+	@Override
+	public Character getCharacter() {
+		return characters.get(0);
 	}
 
 }

@@ -19,7 +19,7 @@ public class InclinedGround extends AbstractStaticElement implements Ground {
 
 		setAngleRotation(angleRotationDegree);
 		PolygonShape polygonShape = new PolygonShape();
-		polygonShape.m_vertexCount = 3;
+		polygonShape.m_count=3;
 		polygonShape.m_vertices[0].set(0, 0);
 		polygonShape.m_vertices[1].set(width, 0);
 		polygonShape.m_vertices[2].set(0, height);
@@ -39,7 +39,7 @@ public class InclinedGround extends AbstractStaticElement implements Ground {
 
 		setAngleRototation(angleRotationRadiant);
 		PolygonShape polygonShape = new PolygonShape();
-		polygonShape.m_vertexCount = 3;
+		polygonShape.m_count = 3;
 		polygonShape.m_vertices[0].set(0, 0);
 		polygonShape.m_vertices[1].set(width, 0);
 		polygonShape.m_vertices[2].set(0, height);

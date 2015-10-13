@@ -8,7 +8,6 @@ import java.util.List;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
-
 import element.character.Character;
 
 public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements world.World {
@@ -21,7 +20,7 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	protected static World instanceSon;
 
 	public AbstractWorld(Vec2 gravity, boolean doSleep) {
-		super(gravity, doSleep);
+		super(gravity);
 		characterContainer = new HashMap<>();
 		grounds = new ArrayList<Ground>();
 	}
@@ -39,6 +38,14 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+	}
+
+	
+	
+	@Override
+	public Character getCharacter() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public static World getInstance() {
@@ -59,12 +66,12 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 
 	public Ground getGround(int x, int y) {
 		for (Ground ground : grounds) {
-			if(ground.getX()==x && ground.getY()==y)
+			if (ground.getX() == x && ground.getY() == y)
 				return ground;
 		}
 		return null;
 	}
-	
+
 	@Override
 	public void addCharacter(Character character) {
 		characterContainer.put(character.getName(), character);
@@ -74,7 +81,7 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	public float getWidth() {
 		return width;
 	}
-	
+
 	@Override
 	public float getHeight() {
 		return height;
@@ -82,17 +89,17 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 
 	@Override
 	public void addInclinedGround(float x, float y, float width, float height, int angleRotation) {
-		grounds.add(new InclinedGround(x, y, width, height,angleRotation));
+		grounds.add(new InclinedGround(x, y, width, height, angleRotation));
 	}
-	
+
 	@Override
 	public void addLinearGround(float x, float y, float width, float height) {
 		grounds.add(new LinearGround(x, y, width, height));
 	}
-	
+
 	@Override
 	public void setDimension(float width, float height) {
-		this.width=width;
-		this.width=width;
+		this.width = width;
+		this.width = width;
 	}
 }

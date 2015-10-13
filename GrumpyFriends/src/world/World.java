@@ -11,4 +11,5 @@ public interface World {
 	
 	abstract public float getWidth();
 	abstract public float getHeight();
+	public abstract Character getCharacter();
 }

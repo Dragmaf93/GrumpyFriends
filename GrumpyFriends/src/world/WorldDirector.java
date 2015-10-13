@@ -94,8 +94,8 @@ public class WorldDirector {
 								x = Integer.parseInt(positon.getNamedItem("x").getNodeValue());
 								y = Integer.parseInt(positon.getNamedItem("y").getNodeValue());
 
-							} else if (child.item(j).getNodeName().equals("name")) {
-								name = child.item(j).getNodeValue();
+							} else if (child.item(j).getTextContent().equals("name")) {
+								name = child.item(j).getTextContent();
 							}
 						builder.addCharacter(name, x, y);
 						break;

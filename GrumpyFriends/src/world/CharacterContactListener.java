@@ -1,5 +1,9 @@
 package world;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
@@ -8,58 +12,73 @@ import org.jbox2d.dynamics.contacts.Contact;
 
 import element.character.Character;
 
+public class CharacterContactListener implements ContactListener {
 
-public class CharacterContactListener implements ContactListener{
+	private HashMap<Character, Integer> characterContact;
 
-	private Character character;
-	private int nFinctureContact;
-	public CharacterContactListener(Character character){
-		this.character = character;
-		nFinctureContact=0;
+	public CharacterContactListener(List<Character> characters) {
+
+		characterContact = new HashMap<>();
+
+		for (Character character : characters) {
+			characterContact.put(character, new Integer(0));
+		}
+
 	}
-	
-	private Fixture getFeetFixture(Fixture f1, Fixture f2) {
-//		System.out.println(f2.m_userData+"ASDDDDDDDDDDDDDDDDDDDDDDDDD     "+f1.m_userData);
-        if (f1.getUserData() != null &&  f1.getUserData().equals(character.getName())) {
-            return f1;
-        } else if (f2.getUserData() != null && f2.getUserData().equals(character.getName())) {
-            return f2;
-        }
-        return null;
-    }
-	
+
+	private Fixture getFeetFixture(Fixture f1, Fixture f2, String characterName) {
+//		System.out.println(characterName);
+		if (f1.getUserData() != null && f1.getUserData().equals(characterName)) {
+			return f1;
+		} else if (f2.getUserData() != null && f2.getUserData().equals(characterName)) {
+			return f2;
+		}
+		return null;
+	}
+
 	@Override
 	public void beginContact(Contact contact) {
-//        System.out.println("BEGIN CONTACT");
-        if (getFeetFixture(contact.getFixtureA(),
-                contact.getFixtureB()) != null)
-        		nFinctureContact++;
-        if(nFinctureContact>0)
-        			character.setGrounded(true);
-			
-				
+
+		Set<Character> characters = characterContact.keySet();
+		for (Character character : characters) {
+//			System.out.println("CONTACT" +character.getName());
+			if (getFeetFixture(contact.getFixtureA(), contact.getFixtureB(), character.getName()) != null) {
+				Integer tmp = characterContact.get(character) + 1;
+				characterContact.put(character, tmp);
+			}
+
+			if (characterContact.get(character) > 0)
+				character.setGrounded(true);
+		}
+
 	}
 
 	@Override
 	public void endContact(Contact contact) {
-//		System.out.println("END CONTACT");
-		if (getFeetFixture(contact.getFixtureA(),
-                contact.getFixtureB()) != null)
-			nFinctureContact--;
-		if(nFinctureContact<=0)
-					character.setGrounded(false);	
+		
+		Set<Character> characters = characterContact.keySet();
+
+		for (Character character : characters) {
+			if (getFeetFixture(contact.getFixtureA(), contact.getFixtureB(),character.getName()) != null){
+				Integer tmp = characterContact.get(character) - 1;
+				characterContact.put(character, tmp);			
+			}
+			
+			if (characterContact.get(character)<= 0)
+				character.setGrounded(false);
+		}
 	}
 
 	@Override
 	public void postSolve(Contact arg0, ContactImpulse arg1) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void preSolve(Contact arg0, Manifold arg1) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

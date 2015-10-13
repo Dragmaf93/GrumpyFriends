@@ -47,7 +47,6 @@ public abstract class AbstractCharacter extends AbstractDynamicElement implement
 		this.weaponList = weaponList;
 		this.height = height;
 		this.width = width;
-		this.world = AbstractWorld.getInstance();
 		
 		equippedWeapon = null;
 		lifePoints = 100;
@@ -86,10 +85,12 @@ public abstract class AbstractCharacter extends AbstractDynamicElement implement
 	public boolean isGrounded() {
 		return grounded;
 	}
+	
 	@Override
 	public void setGrounded(boolean b) {
 		this.grounded=b;
 	}
+	
 	@Override
 	public boolean equipWeapon(Weapon weapon) {
 		for (Weapon wea : weaponList)

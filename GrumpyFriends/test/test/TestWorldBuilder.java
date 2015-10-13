@@ -1,7 +1,6 @@
 package test;
 
 
-import element.character.Chewbacca;
 import world.World;
 import world.WorldBuilder;
 
@@ -32,11 +31,13 @@ public class TestWorldBuilder implements WorldBuilder {
 
 	@Override
 	public void addCharacter(String name, float x, float y) {
-		world.addCharacter(new Chewbacca(name, x, y, null, null));
+		
+		world.addCharacter(new TestCharacter(name, x, y));
 	}
 
 	@Override
-	public World getWorld() {
+	public World getWorld(){
+		((TestWorld) world).complete();
 		return world;
 	}
 

@@ -1,5 +1,6 @@
 package element.character;
 
+
 import element.Weapon;
 
 public interface Character 
@@ -7,6 +8,7 @@ public interface Character
 	public final static int MAX_HEIGHT=5;
 	
 	public abstract boolean isDead();
+	
 	
 	public abstract void move(int direction);
 	public abstract void stopToMove();
@@ -17,5 +19,11 @@ public interface Character
 
 	public abstract void setGrounded(boolean b);
 	public abstract boolean isGrounded();
+
+	
+	
+
+	
+
 	
 }
