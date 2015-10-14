@@ -5,7 +5,7 @@ package world;
 public class GameWorldBuilder implements WorldBuilder{
 
 	private AbstractWorld worldToCreate;
-
+	
 	@Override
 	public void initializes(String typeWorld) {
 
@@ -39,6 +39,15 @@ public class GameWorldBuilder implements WorldBuilder{
 	@Override
 	public void addInclinedGround(float x, float y, float width, float height, int angleRotation) {
 		worldToCreate.addInclinedGround(x, y, width, height, angleRotation);
+	}
+	@Override
+	public org.jbox2d.dynamics.World getPhysicWorld() {
+		return worldToCreate.getPhysicWorld();
+	}
+	@Override
+	public void lastSettings() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

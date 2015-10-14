@@ -14,6 +14,9 @@ public interface WorldBuilder {
 	
 	abstract public void addCharacter(String name,float x, float y);
 	
+	abstract public void lastSettings();
+	
 	abstract public World getWorld();
+	abstract public org.jbox2d.dynamics.World getPhysicWorld();
 	
 }

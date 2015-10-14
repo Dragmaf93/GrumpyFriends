@@ -1,5 +1,6 @@
 package world;
 
+
 import element.character.Character;
 
 public interface World {
@@ -11,5 +12,8 @@ public interface World {
 	
 	abstract public float getWidth();
 	abstract public float getHeight();
-	public abstract Character getCharacter();
+	abstract public Character getCharacter();
+	
+	abstract public  org.jbox2d.dynamics.World getPhysicWorld();
+	
 }

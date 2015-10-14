@@ -13,12 +13,15 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import physic.PhysicalObjectCreator;
+
 public class WorldDirector {
 
 	private WorldBuilder builder;
-
+	
 	public WorldDirector(WorldBuilder builder) {
 		this.builder = builder;
+		PhysicalObjectCreator.getInstance();
 	}
 
 	public void createWorld(String pathXMLFile) {
@@ -105,7 +108,7 @@ public class WorldDirector {
 					}
 				}
 			}
-
+			builder.lastSettings();
 		} catch (SAXException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -1,4 +1,4 @@
-package world;
+package physic;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +27,7 @@ public class CharacterContactListener implements ContactListener {
 	}
 
 	private Fixture getFeetFixture(Fixture f1, Fixture f2, String characterName) {
-//		System.out.println(characterName);
+		System.out.println(characterName);
 		if (f1.getUserData() != null && f1.getUserData().equals(characterName)) {
 			return f1;
 		} else if (f2.getUserData() != null && f2.getUserData().equals(characterName)) {

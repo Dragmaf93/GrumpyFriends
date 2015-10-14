@@ -10,19 +10,12 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
-import org.jbox2d.dynamics.joints.Joint;
-import org.jbox2d.dynamics.joints.JointDef;
-import org.jbox2d.dynamics.joints.JointType;
-import org.jbox2d.dynamics.joints.MotorJoint;
-import org.jbox2d.dynamics.joints.MotorJointDef;
-import org.jbox2d.dynamics.joints.RevoluteJoint;
-import org.jbox2d.dynamics.joints.RevoluteJointDef;
+
 import org.jbox2d.dynamics.joints.WheelJoint;
 import org.jbox2d.dynamics.joints.WheelJointDef;
 
 import element.Weapon;
 import element.character.Character;
-import world.InclinedGround;
 
 public class TestCharacter implements Character {
 	public final static int RIGHT = 1;
@@ -146,7 +139,6 @@ public class TestCharacter implements Character {
 	}
 	@Override
 	public boolean isDead() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

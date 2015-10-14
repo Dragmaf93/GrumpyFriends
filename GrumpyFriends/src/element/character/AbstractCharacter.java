@@ -2,20 +2,26 @@ package element.character;
 
 import java.util.ArrayList;
 
-import org.jbox2d.collision.shapes.CircleShape;
-import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Fixture;
+import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.World;
 
-import element.Weapon;
-import world.AbstractDynamicElement;
-import world.AbstractWorld;
-import world.Utils;
 
-public abstract class AbstractCharacter extends AbstractDynamicElement implements Character, Runnable {
+import element.Element;
+import element.Weapon;
+import physic.PhysicalCharacter;
+import physic.PhysicalObject;
+import physic.PhysicalObjectCreator;
+
+public abstract class AbstractCharacter implements Character, Element {
 	public final static int RIGHT = 1;
 	public final static int LEFT = -1;
+	public final static int STOP = 0;
+
+	private final static float MAX_SPEED=10f;
+	private final static float _FORCE = 500f; 
+	private final static float JUMP =15f;
+
 
 	protected String name;
 	protected float height;
@@ -23,56 +29,34 @@ public abstract class AbstractCharacter extends AbstractDynamicElement implement
 
 	protected float powerJump;
 	protected int lifePoints;
+	protected float force;
 	protected World world;
 	protected Team team;
 	protected ArrayList<Weapon> weaponList;
 	protected Weapon equippedWeapon;
 
-	protected boolean inFall;
-	protected boolean inMovement;
-	protected boolean inFluttering;
-	protected boolean inJump;
 	protected boolean grounded;
 	protected int currentDirection;
+	
 
-	protected Fixture bodyFixture;
-	protected Fixture footFixture;
+	
+	protected PhysicalObject physicBody;
 
 	public AbstractCharacter(String name, float x, float y, float height, float width, Team team,
 			ArrayList<Weapon> weaponList) {
-		super(x, y);
 
 		this.name = name;
 		this.team = team;
 		this.weaponList = weaponList;
 		this.height = height;
 		this.width = width;
-		
+
 		equippedWeapon = null;
+		grounded = true;
 		lifePoints = 100;
-		inFall = false;
-		inMovement = false;
-		inJump = false;
-
-		PolygonShape polygonShape = new PolygonShape();
-		polygonShape.setAsBox(width, height);
-		bodyFixture = body.createFixture(polygonShape, 0);
-
-		CircleShape circleShape = new CircleShape();
-		circleShape.m_radius = width;
-		circleShape.m_p.x = 0;
-		circleShape.m_p.y = -height;
-		footFixture = body.createFixture(circleShape, 1);
-		footFixture.setUserData(name);
-
-		body.setBullet(true);
 		
-	}
-
-	@Override
-	public void run() {
-		while (!isDead()) {
-		}
+		physicBody = new PhysicalCharacter(x, y, width, height, name);
+		PhysicalObjectCreator.getInstance().buildPhysicObject(physicBody);
 	}
 
 	@Override
@@ -85,12 +69,12 @@ public abstract class AbstractCharacter extends AbstractDynamicElement implement
 	public boolean isGrounded() {
 		return grounded;
 	}
-	
+
 	@Override
 	public void setGrounded(boolean b) {
-		this.grounded=b;
+		this.grounded = b;
 	}
-	
+
 	@Override
 	public boolean equipWeapon(Weapon weapon) {
 		for (Weapon wea : weaponList)
@@ -101,81 +85,47 @@ public abstract class AbstractCharacter extends AbstractDynamicElement implement
 		return false;
 	}
 
-	public void setBoolean() {
-		Vec2 vec = body.getLinearVelocity();
-		printState();
-		if (vec.x == 0f)
-			inMovement = false;
-		else
-			inMovement = true;
-
-		if (vec.y == 0f)
-			inJump = false;
-		else
-			inJump = true;
-	}
-
-//	private boolean isGrounded() {
-//		Contact contact = world.getContactList();
-//
-//		while (contact != null) {
-//
-//			if (contact.isTouching()
-//					&& (contact.getFixtureA() == footFixture || contact.getFixtureB() == footFixture)) {
-//				Vec2 position = body.getPosition();
-//				Manifold manifold = contact.getManifold();
-//				boolean below = true;
-//				for (int i = 0; i < manifold.pointCount; i++)
-//					below &= (manifold.points[i].localPoint.y < position.y - 1.5f);
-//
-//				return below;
-//
-//			}
-//			contact = contact.getNext();
-//		}
-//		return false;
-//		return ground
-//	}
-
 	@Override
 	public void move(int direction) {
-//		setBoolean();
-//		if ((!inJump) || (!inJump && inMovement && currentDirection != direction)) {
-			currentDirection = direction;
-			inMovement = true;
-			body.setLinearVelocity(new Vec2(7f * currentDirection, body.getLinearVelocity().y));
-		
-	}
-
-	public void printState() {
-		System.out.println("Grounded : " + grounded);
-		System.out.println("MOVING : " + inMovement);
-		System.out.println("Is Sleeping : " + body.isActive());
-		System.out.println("SPEED : " + body.getLinearVelocity());
-		System.out.println();
+		Body body=physicBody.getBody();
+		Vec2 speed = body.getLinearVelocity();
+		force=0;
+		switch (direction) {
+		case RIGHT:
+			if(speed.x < MAX_SPEED) 
+				force = _FORCE;
+			break;
+		case LEFT:
+			if(speed.x > -MAX_SPEED) 
+				force = -_FORCE;
+			break;
+		case STOP:
+			force = speed.x * -10;
+			break;
+		}
+		if(force!=0)
+			((PhysicalCharacter)physicBody).unblockWheelJoint();
+		body.applyForce( new Vec2(force,0), body.getWorldCenter());
+	    
 	}
 
 	@Override
 	public void stopToMove() {
-		setBoolean();
-//		if (inMovement && !inJump) {
-			currentDirection = 0;
-			inMovement = false;
-			body.getLinearVelocity().x = 0f;
-//		}
+		Body body=physicBody.getBody();
+		
+		((PhysicalCharacter)physicBody).blockWheelJoint();
+		currentDirection = 0;
+		body.getLinearVelocity().x = 0f;
+
 	}
 
 	@Override
 	public void jump() {
-		System.out.println("INIZIO JUMP");
-		setBoolean();
-
-		if (grounded) {
-//			inJump = true;
-			body.setLinearVelocity(new Vec2(body.getLinearVelocity().x, 15f));
+		Body body=physicBody.getBody();
+		if(grounded){
+			float impulse = body.getMass()*JUMP;
+		    body.applyLinearImpulse(new Vec2(0,impulse), body.getWorldCenter(), true);
 		}
-//		printState();
-		System.out.println("FINE JUMP");
 	}
 
 	@Override
@@ -203,12 +153,12 @@ public abstract class AbstractCharacter extends AbstractDynamicElement implement
 
 	@Override
 	public float getHeight() {
-		return Utils.toPixelHeight(height) * 2;
+		return 0f;
 	}
 
 	@Override
 	public float getWidth() {
-		return Utils.toPixelWidth(width) * 2;
+		return 0f;
 	}
 
 	public ArrayList<Weapon> getWeaponList() {
@@ -218,6 +168,20 @@ public abstract class AbstractCharacter extends AbstractDynamicElement implement
 
 	public void setWeaponList(ArrayList<Weapon> weaponList) {
 		this.weaponList = weaponList;
+	}
+	@Override
+	public float getY() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getX() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public PhysicalObject getPhysicObject() {
+		return physicBody;
 	}
 
 }

@@ -15,17 +15,16 @@
 		<position posX="0" posY="50"/>
 		<size width="30" height="1"/>
 	</linearGround>
-  	
+	<linearGround>
+		<position posX="15" posY="0"/>
+		<size width="500" height="1"/>
+	</linearGround>
   	<inclinedGround>
   		<position posX="30" posY="1"/>
 		<size width="50" height="30"/>
   		<angleRotation degree="0"/>
   	</inclinedGround>
   
-	<linearGround>
-		<position posX="15" posY="0"/>
-		<size width="500" height="1"/>
-	</linearGround>
   
   
 </world>

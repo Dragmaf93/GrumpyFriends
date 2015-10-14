@@ -40,8 +40,10 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 			}
 	}
 
-	
-	
+	@Override
+	public World getPhysicWorld() {
+		return this;
+	}
 	@Override
 	public Character getCharacter() {
 		// TODO Auto-generated method stub

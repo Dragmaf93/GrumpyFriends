@@ -3,6 +3,7 @@ package element.character;
 import java.util.ArrayList;
 
 import element.Weapon;
+import physic.PhysicalObject;
 
 public class Chewbacca extends AbstractCharacter{
 	
@@ -15,6 +16,6 @@ public class Chewbacca extends AbstractCharacter{
 
 	}
 	
-	
+
 
 }

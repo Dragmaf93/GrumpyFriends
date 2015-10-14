@@ -1,19 +1,21 @@
 package world;
 
+import org.jbox2d.common.Vec2;
+
 public class Vector 
 {
-	private int x;
-	private int y;
+	public float x;
+	public float y;
 	
-	public Vector(int x, int y) 
-	{
-		this.x = x;
-		this.y = y;
+	
+	public Vector(Vec2 vector){
+		this.x=vector.x;
+		this.y=vector.y;
 	}
 	
-	public Vector(Vector vector) {
-		this.x=vector.x;
-		this.y=vector.y;	
+	public Vector(float x, float y) {
+		this.x = x;
+		this.y = y;
 	}
 
 	public Vector() {
@@ -21,37 +23,16 @@ public class Vector
 		this.y=0;
 	}
 
-	public void set(Vector vector){
-		this.x=vector.x;
-		this.y=vector.y;
-	}
-	public int getX() 
-	{
-		return x;
-	}
-	
-	public int getY()
-	{
-		return y;
-	}
-	
-	public void setX(int x) 
-	{
+	public void set(float x, float y){
 		this.x = x;
-	}
-	
-	public void setY(int y) 
-	{
 		this.y = y;
 	}
 	
-	@Override
-	public Vector clone() 
-	{
-		Vector temp = new Vector(x, y);
-		return temp;
+	public void set(Vec2 vector){
+		this.x=vector.x;
+		this.y=vector.y;
 	}
-	@Override
+
 	public String toString() {
 		return "X : "+ x +" Y "+y;
 	}
