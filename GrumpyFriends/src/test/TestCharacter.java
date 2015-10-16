@@ -10,12 +10,15 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
-
+import org.jbox2d.dynamics.joints.RevoluteJoint;
+import org.jbox2d.dynamics.joints.RevoluteJointDef;
 import org.jbox2d.dynamics.joints.WheelJoint;
 import org.jbox2d.dynamics.joints.WheelJointDef;
 
-import element.Weapon;
+import com.sun.org.apache.bcel.internal.generic.LUSHR;
+
 import element.character.Character;
+import physic.PhysicalObject;
 
 public class TestCharacter implements Character {
 	public final static int RIGHT = 1;
@@ -32,6 +35,11 @@ public class TestCharacter implements Character {
 	private BodyDef bodyDef;
 	private Fixture bodyFixture;
 	private Fixture feetFixture;
+	private Fixture bombFixture;
+	
+	public RevoluteJoint launcherJoint;
+	
+	Body launcher;
 	
 	Body feet;
 	private BodyDef feetDef;
@@ -105,38 +113,87 @@ public class TestCharacter implements Character {
 		wheelJointDef.frequencyHz=20f;
 		joint = (WheelJoint) world.createJoint(wheelJointDef);		
 		
+		BodyDef launcherDef = new BodyDef();
+		launcherDef.setPosition(new Vec2(x,y+height/2));
+		launcherDef.setType(BodyType.DYNAMIC);
+		launcher=world.createBody(launcherDef);
 		
+		PolygonShape launcherShape = new PolygonShape();
+		launcherShape.setAsBox(1.5f, 0.2f);
+//		CircleShape launcherShape = new CircleShape();
+//		launcherShape.setRadius(width+0.5f);
+		FixtureDef launcherFixuterDef = new FixtureDef();
+		launcherFixuterDef.shape=launcherShape;
+		launcherFixuterDef.density=1.0f;
+		launcher.createFixture(launcherFixuterDef);	
+//		
+//		Body bodyLauncher=world.createBody(launcherDef);
+//		CircleShape circleLauncher = new CircleShape();
+//		circleLauncher.setRadius(0.2f);
+//		launcherFixuterDef.shape=circleLauncher;
+//		bodyLauncher.createFixture(launcherFixuterDef);
 		
+		RevoluteJointDef revoluteJointDef = new RevoluteJointDef();
+		revoluteJointDef.bodyA=body;
+		revoluteJointDef.bodyB=launcher;
+		revoluteJointDef.localAnchorA.set(0,height/2);
+		revoluteJointDef.localAnchorB.set(-1.5f,0);
+		revoluteJointDef.collideConnected=false;
+
+		revoluteJointDef.enableMotor=true;
+		revoluteJointDef.maxMotorTorque=50000000000f;
+	
+		revoluteJointDef.referenceAngle=(float) Math.toRadians(0);
+		revoluteJointDef.enableLimit = true;
+		revoluteJointDef.lowerAngle = (float) Math.toRadians(-70);
+		revoluteJointDef.upperAngle =  (float) Math.toRadians(250);
+		launcherJoint=(RevoluteJoint) world.createJoint(revoluteJointDef);
+		
+//		RevoluteJointDef launcherJointDef=new RevoluteJointDef();
+//		launcherJointDef.bodyA=body;
+//		launcherJointDef.bodyB=bodyLauncher;
+//		launcherJointDef.localAnchorA.set(0,height/2);
+//		launcherJointDef.localAnchorB.set(0,0);
+//		launcherJointDef.collideConnected=false;
+//		
+//		world.createJoint(launcherJointDef);
 		//bomb
 		
 		bombDef = new BodyDef();
+		bombDef.fixedRotation=true;
 		bombDef.setType(BodyType.DYNAMIC);
-		bombDef.setPosition(new Vec2(x, y+5));
+		bombDef.setPosition(new Vec2(x, y));
 		CircleShape bombShape = new CircleShape();
 		bombShape.setRadius(0.5f);
 		bombFixtureDef = new FixtureDef();
 		bombFixtureDef.setShape(bombShape);
 		bombFixtureDef.setDensity(1.0f);
+		bomb=world.createBody(bombDef);
 		
 	}
 
 	public void takeBomb(){
-		if(bomb==null){
-			bomb=world.createBody(bombDef);
-			bomb.createFixture(bombFixtureDef);
-		}
-		bomb.getPosition().set(body.getPosition().x, body.getPosition().y+5);
-		bomb.setAwake(false);
+
+		
+	}
+	public void changeAngleLauncher(float s){
+		launcherJoint.setMotorSpeed(s);
+	}
+	
+	public void throwBomb(float speed){
+		if(bombFixture!=null)
+			bomb.destroyFixture(bombFixture);
+		
+		bombFixture = bomb.createFixture(bombFixtureDef);
+		System.out.println(bomb.getMass()+" "+bombFixture.getDensity());
+		 bomb.setActive(true);
+//         bomb.setGravityScale(1);
+         bomb.setAngularVelocity(0);
+         bomb.setTransform(launcher.getWorldPoint(new Vec2(2,0)),launcher.getAngle());
+		bomb.setLinearVelocity(launcher.getWorldVector(new Vec2(speed,0) ) );
 		
 	}
 	
-	public void throwBomb(float speed,float angle){
-		 bomb.setAwake(true);
-//         bomb.setGravityScale(1);
-         bomb.setAngularVelocity(0);
-         bomb.setTransform( body.getWorldPoint( new Vec2(3,0) ),angle);
-		bomb.setLinearVelocity(body.getWorldVector(new Vec2(speed,0) ) );
-	}
 	@Override
 	public boolean isDead() {
 		return false;
@@ -192,9 +249,8 @@ public class TestCharacter implements Character {
 	}
 
 	@Override
-	public boolean equipWeapon(Weapon weapon) {
+	public void equipWeapon(String weaponName) {
 		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
@@ -209,5 +265,34 @@ public class TestCharacter implements Character {
 	
 	public Vec2 getPosition(){
 		return body.getPosition();
+	}
+
+	@Override
+	public PhysicalObject getPhysicalObject() {
+		return null;
+	}
+
+	@Override
+	public void unequipWeapon() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void attack(float power) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void changeAngle(float direction) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Vec2 getPositionTest() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

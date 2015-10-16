@@ -1,27 +1,22 @@
 package element.character;
 
-import java.util.ArrayList;
-
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.World;
 
-
 import element.Element;
-import element.Weapon;
+import element.weaponsManager.Launcher;
+import element.weaponsManager.Weapon;
+import element.weaponsManager.WeaponsManager;
 import physic.PhysicalCharacter;
 import physic.PhysicalObject;
 import physic.PhysicalObjectCreator;
 
 public abstract class AbstractCharacter implements Character, Element {
-	public final static int RIGHT = 1;
-	public final static int LEFT = -1;
-	public final static int STOP = 0;
 
-	private final static float MAX_SPEED=10f;
-	private final static float _FORCE = 500f; 
-	private final static float JUMP =15f;
-
+	private final static float MAX_SPEED = 10f;
+	private final static float _FORCE = 500f;
+	private final static float JUMP = 15f;
 
 	protected String name;
 	protected float height;
@@ -32,29 +27,30 @@ public abstract class AbstractCharacter implements Character, Element {
 	protected float force;
 	protected World world;
 	protected Team team;
-	protected ArrayList<Weapon> weaponList;
 	protected Weapon equippedWeapon;
+	
+	protected WeaponsManager weaponsManager;
 
 	protected boolean grounded;
 	protected int currentDirection;
-	
 
-	
 	protected PhysicalObject physicBody;
+	
+	protected Launcher launcher;
 
-	public AbstractCharacter(String name, float x, float y, float height, float width, Team team,
-			ArrayList<Weapon> weaponList) {
+	public AbstractCharacter(String name, float x, float y, float height, float width, Team team) {
 
 		this.name = name;
 		this.team = team;
-		this.weaponList = weaponList;
 		this.height = height;
 		this.width = width;
+		
+		weaponsManager = new WeaponsManager();
 
 		equippedWeapon = null;
 		grounded = true;
 		lifePoints = 100;
-		
+
 		physicBody = new PhysicalCharacter(x, y, width, height, name);
 		PhysicalObjectCreator.getInstance().buildPhysicObject(physicBody);
 	}
@@ -63,6 +59,11 @@ public abstract class AbstractCharacter implements Character, Element {
 	public boolean isDead() {
 
 		return lifePoints == 0;
+	}
+
+	@Override
+	public PhysicalObject getPhysicalObject() {
+		return physicBody;
 	}
 
 	@Override
@@ -76,44 +77,68 @@ public abstract class AbstractCharacter implements Character, Element {
 	}
 
 	@Override
-	public boolean equipWeapon(Weapon weapon) {
-		for (Weapon wea : weaponList)
-			if (wea.equals(weapon)) {
-				equippedWeapon = weapon;
-				return true;
-			}
-		return false;
+	public void equipWeapon(String weaponName) {
+		if(launcher==null)
+			launcher = new Launcher(this);
+		
+		if(weaponsManager.isAvailable(weaponName)){
+			
+			equippedWeapon=weaponsManager.getWeapon(weaponName);
+			launcher.loadWeapon(equippedWeapon);
+		}
 	}
-
+	@Override
+	public void attack(float power) {
+		if(launcher==null || equippedWeapon==null) return;
+		
+		launcher.startWeaponAttack(power);
+		weaponsManager.removeOneAmmunition(equippedWeapon.getName());
+	}
+	
+	@Override
+	public void changeAngle(float direction) {
+		if(launcher==null || !launcher.isActivated())
+			return;
+		
+		float angle = 2.0f;
+		launcher.changeAngle(angle*direction);
+	}
+	
+	@Override
+	public void unequipWeapon() {
+		if(launcher==null) return;
+		launcher.disable();
+	}
+	
 	@Override
 	public void move(int direction) {
-		Body body=physicBody.getBody();
+		Body body = physicBody.getBody();
 		Vec2 speed = body.getLinearVelocity();
-		force=0;
+		force = 0;
 		switch (direction) {
 		case RIGHT:
-			if(speed.x < MAX_SPEED) 
+			if (speed.x < MAX_SPEED)
 				force = _FORCE;
 			break;
 		case LEFT:
-			if(speed.x > -MAX_SPEED) 
+			if (speed.x > -MAX_SPEED)
 				force = -_FORCE;
 			break;
 		case STOP:
 			force = speed.x * -10;
 			break;
 		}
-		if(force!=0)
-			((PhysicalCharacter)physicBody).unblockWheelJoint();
-		body.applyForce( new Vec2(force,0), body.getWorldCenter());
-	    
+		if (force != 0)
+			((PhysicalCharacter) physicBody).unblockWheelJoint();
+		body.applyForce(new Vec2(force, 0), body.getWorldCenter());
+
 	}
 
 	@Override
 	public void stopToMove() {
-		Body body=physicBody.getBody();
-		
-		((PhysicalCharacter)physicBody).blockWheelJoint();
+		Body body = physicBody.getBody();
+
+		((PhysicalCharacter) physicBody).blockWheelJoint();
 		currentDirection = 0;
 		body.getLinearVelocity().x = 0f;
 
@@ -121,10 +146,10 @@ public abstract class AbstractCharacter implements Character, Element {
 
 	@Override
 	public void jump() {
-		Body body=physicBody.getBody();
-		if(grounded){
-			float impulse = body.getMass()*JUMP;
-		    body.applyLinearImpulse(new Vec2(0,impulse), body.getWorldCenter(), true);
+		Body body = physicBody.getBody();
+		if (grounded) {
+			float impulse = body.getMass() * JUMP;
+			body.applyLinearImpulse(new Vec2(0, impulse), body.getWorldCenter(), true);
 		}
 	}
 
@@ -161,24 +186,23 @@ public abstract class AbstractCharacter implements Character, Element {
 		return 0f;
 	}
 
-	public ArrayList<Weapon> getWeaponList() {
-
-		return weaponList;
-	}
-
-	public void setWeaponList(ArrayList<Weapon> weaponList) {
-		this.weaponList = weaponList;
+	@Override
+	public Vec2 getPositionTest() {
+		
+		return new Vec2(physicBody.getX(),physicBody.getY());
 	}
 	@Override
 	public float getY() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
 	@Override
 	public float getX() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
 	@Override
 	public PhysicalObject getPhysicObject() {
 		return physicBody;

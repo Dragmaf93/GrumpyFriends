@@ -36,4 +36,8 @@ public class Vector
 	public String toString() {
 		return "X : "+ x +" Y "+y;
 	}
+
+	public Vec2 toVec2() {
+		return new Vec2(x, y);
+	}
 }

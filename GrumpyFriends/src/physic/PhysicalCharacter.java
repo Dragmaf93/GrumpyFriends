@@ -4,6 +4,7 @@ import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.FixtureDef;
@@ -16,7 +17,6 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 	
 	private final static float FEET_FRICTION=5.0f;
 	private final static float MOTOR_TORQUE=20f;
-	private final static float MAX_MOTOR_TORQUE=200f;
 	
 	private Body feet;
 	private Fixture bodyFixture;
@@ -45,12 +45,11 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 		FixtureDef bodyFixtureDef = new FixtureDef();
 		bodyFixtureDef.setShape(polygonShape);
 		bodyFixtureDef.setDensity(1.0f);
-		bodyFixtureDef.density=1.0f;
 
 		bodyFixture=body.createFixture(bodyFixtureDef);
-		
 
 		bodyDef.setPosition(new Vec2(start_x,start_y- start_height));
+		bodyDef.setFixedRotation(false);
 		feet=world.createBody(bodyDef);
 		
 		CircleShape circleShape = new CircleShape();

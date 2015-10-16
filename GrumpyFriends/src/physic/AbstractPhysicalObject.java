@@ -3,9 +3,8 @@ package physic;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 
+public abstract class AbstractPhysicalObject implements PhysicalObject {
 
-public abstract class AbstractPhysicalObject implements PhysicalObject{
-	
 	protected Body body;
 	protected BodyDef bodyDef;
 
@@ -13,18 +12,39 @@ public abstract class AbstractPhysicalObject implements PhysicalObject{
 	protected final float start_y;
 	protected final float start_width;
 	protected final float start_height;
-	
-	public AbstractPhysicalObject(float x, float y, float width, float height){
+
+	public AbstractPhysicalObject(float x, float y, float width, float height) {
 		bodyDef = new BodyDef();
-		this.start_x=bodyDef.position.x=x;
-		this.start_y=bodyDef.position.y=y;
-		
-		this.start_width=width;
-		this.start_height=height;
+		this.start_x = bodyDef.position.x = x;
+		this.start_y = bodyDef.position.y = y;
+
+		this.start_width = width;
+		this.start_height = height;
 	}
-	
+
+	@Override
+	public float getHeight() {
+		return start_height;
+	}
+
+	@Override
+	public float getWidth() {
+		return start_width;
+	}
+
+	@Override
+	public float getX() {
+		return body.getPosition().x;
+	}
+
+	@Override
+	public float getY() {
+		return body.getPosition().y;
+	}
+
 	@Override
 	public Body getBody() {
 		return body;
 	}
+	
 }

@@ -1,4 +1,4 @@
-package element;
+package element.weaponsManager;
 
 public interface WhiteWeapon extends Weapon 
 {

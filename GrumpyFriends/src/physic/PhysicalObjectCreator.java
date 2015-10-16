@@ -5,6 +5,8 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.Joint;
 import org.jbox2d.dynamics.joints.JointDef;
 
+import physic.weapon.PhysicalWeapon;
+
 public class PhysicalObjectCreator {
 	
 	private World world;
@@ -27,6 +29,11 @@ public class PhysicalObjectCreator {
 	}
 
 	public PhysicalObject buildPhysicObject(PhysicalObject objectTobuild){
+		objectTobuild.buildSelf(world);
+		return objectTobuild;
+	}
+	
+	public PhysicalWeapon buildPhysicWeapon(PhysicalWeapon objectTobuild){
 		objectTobuild.buildSelf(world);
 		return objectTobuild;
 	}

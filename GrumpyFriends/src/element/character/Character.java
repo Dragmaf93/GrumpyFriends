@@ -1,10 +1,18 @@
 package element.character;
 
 
-import element.Weapon;
+import org.jbox2d.common.Vec2;
+
+import physic.PhysicalObject;
 
 public interface Character 
 {
+	public final static int RIGHT = 1;
+	public final static int LEFT = -1;
+	
+	public final static int STOP = 0;
+	public final static int INCREASE =1;
+	public final static int DECREASE =-1;
 	public final static int MAX_HEIGHT=5;
 	
 	public abstract boolean isDead();
@@ -15,13 +23,18 @@ public interface Character
 	public abstract void jump();
 	public abstract String getName();
 	public abstract int getLifePoints();
-	public abstract boolean equipWeapon(Weapon weapon);
-
+	
+	public abstract void equipWeapon(String weaponName);
+	public abstract void unequipWeapon();
+	public abstract void attack(float power);
+	public abstract void changeAngle(float direction);
 	public abstract void setGrounded(boolean b);
 	public abstract boolean isGrounded();
 
-	
-	
+	abstract public PhysicalObject getPhysicalObject();
+
+
+	Vec2 getPositionTest();
 
 	
 

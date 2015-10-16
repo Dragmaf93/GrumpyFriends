@@ -44,8 +44,8 @@ public class MainTest {
 	    
 	    
 	    JFrame testbed = new JFrame();
-//	    testbed.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//	    testbed.setUndecorated(true);
+	    testbed.setExtendedState(JFrame.MAXIMIZED_BOTH);
+	    testbed.setUndecorated(true);
 	    testbed.setTitle("JBox2D Testbed");
 	    testbed.setLayout(new BorderLayout());
 	    TestbedSidePanel side = new TestbedSidePanel(model, controller);

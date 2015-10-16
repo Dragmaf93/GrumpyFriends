@@ -5,6 +5,8 @@ import org.jbox2d.testbed.framework.TestbedTest;
 
 import element.character.AbstractCharacter;
 import element.character.Character;
+import element.weaponsManager.Weapon;
+import element.weaponsManager.weapons.SimpleBomb;
 import world.WorldBuilder;
 import world.WorldDirector;
 
@@ -12,8 +14,8 @@ public class TestGrumpyFriends extends TestbedTest {
 
 	private static TestbedTest instance;
 	private Character character;
+	
 	private float speed=10f;
-	private float angle=3.14f;
 	public static TestbedTest getInstance(){
 		if(instance==null)
 			instance = new TestGrumpyFriends();
@@ -37,6 +39,7 @@ public class TestGrumpyFriends extends TestbedTest {
 		director.createWorld("worldXML/world.xml");
 		world.World world = builder.getWorld();
 		character = world.getCharacter();
+		
 
 	}
 
@@ -47,28 +50,31 @@ public class TestGrumpyFriends extends TestbedTest {
 			character.jump();
 			break;
 		case 'a':
-			character.move(AbstractCharacter.LEFT);
+			character.move(Character.LEFT);
 			break;
 		case 'd':
-			character.move(AbstractCharacter.RIGHT);
+			character.move(Character.RIGHT);
 			break;
-		case 't':
-//			character.takeBomb();
+		case 'e':
+			character.equipWeapon("SimpleBomb");
 			break;
-		case 's':
-//			character.throwBomb(speed,angle);
+		case 'u':
+			character.unequipWeapon();
+			break;
+		case '5':
+			character.attack(speed);
 			break;
 		case '8':
-			speed*=2.0f;
+			speed+=0.2f;
 			break;
 		case '2':
-			speed/=2f;
+			speed-=0.2f;
 			break;
 		case '6':
-			angle-=0.05;
+			character.changeAngle(Character.DECREASE);
 			break;
 		case '4':
-			angle+=0.05;
+			character.changeAngle(Character.INCREASE);
 			break;
 		default:
 			break;
@@ -78,10 +84,11 @@ public class TestGrumpyFriends extends TestbedTest {
 	@Override
 	public void step(TestbedSettings settings) {
 		super.step(settings);
-		addTextLine("Speed Bomb "+ speed);
-		addTextLine("Angle Bomb "+ angle);
+//		double a=((TestCharacter)character).launcherJoint.getJointAngle();
+//		addTextLine("Angle Launcher " +(int) Math.toDegrees(a));
+		addTextLine("Speed Launcher " + speed);
 		addTextLine("On Ground "+ character.isGrounded());
-//		getCamera().setCamera(((TestCharacter) character).getPosition());
+		getCamera().setCamera(character.getPositionTest());
 
 	}
 	@Override
@@ -92,6 +99,10 @@ public class TestGrumpyFriends extends TestbedTest {
 			break;
 		case 'd':
 			character.stopToMove();
+			break;
+		case '6':
+		case '4':
+			character.changeAngle(Character.STOP);
 			break;
 		default:
 			break;

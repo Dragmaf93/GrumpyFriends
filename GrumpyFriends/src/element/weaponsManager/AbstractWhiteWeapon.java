@@ -1,4 +1,4 @@
-package element;
+package element.weaponsManager;
 
 public abstract class AbstractWhiteWeapon implements WhiteWeapon {
 	
@@ -21,7 +21,7 @@ public abstract class AbstractWhiteWeapon implements WhiteWeapon {
 	}
 
 	@Override
-	public int getMaxDamage() {
+	public float getMaxDamage() {
 		
 		return maxDamage;
 	}
