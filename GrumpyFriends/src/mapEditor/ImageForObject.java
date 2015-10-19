@@ -1,102 +1,162 @@
 package mapEditor;
 
 import javafx.geometry.Point2D;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 
 public class ImageForObject extends ImageView
 {
-	String path;
-	final MapEditor mapEditor;
-	Point2D upperLeftPosition;
-	Point2D bottomLeftPosition;
-	Point2D upperRightPosition;
+	private String path;
+	private String nameObject;
+	private final MapEditor mapEditor;
+	private Point2D upperLeftPosition;
+	private Point2D upperRightPosition;
+	private Point2D bottomLeftPosition;
+	private Point2D bottomRightPosition;
 	
-	boolean toCancelled = false;
+	private double width;
+	private double height;
+	private double angleRotation;
 	
-	public ImageForObject(String path, MapEditor mapEditor) 
+	private DropShadow borderGlow;
+	
+	public ImageForObject(String path, MapEditor mapEditor, String nameObject, double width, double height) 
 	{
-		super(new Image(path,50, 100,false,false));
+		super(new Image(path,50,70,false,false));
+
+		this.width = width;
+		this.height = height;
+		if (nameObject.equals("inclinedGround"))
+			this.angleRotation = angleRotation;
+//		TODO vedere come si calcola l'angolo avendo gli estremi
+		
 		this.path = path;
 		this.mapEditor = mapEditor;
 		
+		this.nameObject = nameObject;
+		
+		borderGlow = new DropShadow();
+		borderGlow.setOffsetX(0f);
+		borderGlow.setOffsetY(0f);
+		borderGlow.setColor(Color.rgb(0, 0, 0));
+		borderGlow.setWidth(10f);
+		borderGlow.setHeight(10f);
+		this.setEffect(borderGlow);
+//		this.setEffect(new Reflection());
 	}
 	
 	@Override
 	protected ImageForObject clone() throws CloneNotSupportedException {
 		
-		ImageForObject newImage = new ImageForObject(this.path, this.mapEditor);
+		ImageForObject newImage = new ImageForObject(this.path, this.mapEditor, this.nameObject, this.width, this.height);
 		
 		newImage.setX(this.getX());
 		newImage.setY(this.getY());
 		
-		newImage.setStartPosition(this.upperLeftPosition);
-		newImage.setEndPosition(this.bottomLeftPosition);
-		newImage.setStartRightPosition(this.upperRightPosition);
+		newImage.setUpperLeftPosition(this.upperLeftPosition);
+		newImage.setUpperRightPosition(this.upperRightPosition);
+		newImage.setBottomLeftPosition(this.bottomLeftPosition);
+		newImage.setBottomRightPosition(this.bottomRightPosition);
 		
-		newImage.setToCancelled(toCancelled);
-		
+		if (this.nameObject.equals("inclinedGround"))
+			newImage.angleRotation = this.angleRotation;
 		return newImage;
 	}
 	
-	public Point2D getStartPosition() {
+	public String getNameObject() {
+		return nameObject;
+	}
+	
+	public double getWidth() {
+		return width;
+	}
+	
+	public double getHeight() {
+		return height;
+	}
+	
+	public String getAngleRotation() {
+		return Integer.toString((int) angleRotation);
+//		TODO VEdere se è possibile trasformare un double in string e non un int
+	}
+	
+	public Point2D getUpperLeftPosition() {
 		return upperLeftPosition;
 	}
 	
-	public Point2D getEndPosition() {
+	public Point2D getUpperRightPosition() {
+		return upperRightPosition;
+	}
+
+	public Point2D getBottomLeftPosition() {
 		return bottomLeftPosition;
 	}
 	
-	public Point2D getStartRightPosition() {
-		return upperRightPosition;
+	public Point2D getBottomRightPosition() {
+		return bottomRightPosition;
 	}
 	
-	public void setStartPosition(Point2D startPosition) {
+	public void setUpperLeftPosition(Point2D startPosition) {
 		this.upperLeftPosition = startPosition;
 	}
 	
-	public void setEndPosition(Point2D endPosition) {
+	public void setUpperRightPosition(Point2D startRightPosition) {
+		this.upperRightPosition = startRightPosition;
+	}
+
+	public void setBottomLeftPosition(Point2D endPosition) {
 		this.bottomLeftPosition = endPosition;
 	}
 	
-	public void setStartRightPosition(Point2D startRightPosition) {
-		this.upperRightPosition = startRightPosition;
+	public void setBottomRightPosition(Point2D bottomRightPosition) {
+		this.bottomRightPosition = bottomRightPosition;
 	}
 		
-	public void modifyPosition(Point2D point,double width, double height)
-	{
+	public void modifyPosition(Point2D point,double width, double height) {
 		this.upperLeftPosition = new Point2D(point.getX(), point.getY());
 		this.upperRightPosition = new Point2D(point.getX()+width, point.getY());
 		this.bottomLeftPosition = new Point2D(point.getX(), point.getY()+height);
+		this.bottomRightPosition = new Point2D(point.getX()+width, point.getY()+height);
+		
+//		System.out.println(upperLeftPosition+" ------- "+point.getX()+" "+point.getY());
 	}
 	
-	public boolean isInTheArea(MouseEvent event)
-	{
+	public boolean isInTheArea(MouseEvent event) {
 		return (event.getY() > upperLeftPosition.getY() && event.getY() < bottomLeftPosition.getY()) 
 				&& (event.getX() > upperLeftPosition.getX() && event.getX() < upperRightPosition.getX());
-		
-//		return ((event.getX() > startPosition1.getX() && event.getY() > startPosition1.getY())
-//				||(event.getX() < startPosition2.getX() && event.getY() > startPosition2.getY())
-//				|| (event.getX() > endPosition1.getX() && event.getY() < endPosition1.getY())
-//				|| (event.getX() < endPosition2.getX() && event.getY() < endPosition2.getY()));
+	}
+
+	public boolean isInTheLimit(MouseEvent event) {
+		return ((int)event.getX() == (int)upperLeftPosition.getX() ||
+				(int)event.getX() == (int)upperRightPosition.getX() || 
+				(int)event.getY() == (int)upperLeftPosition.getY() ||
+				(int)event.getY() == (int)bottomLeftPosition.getY());
+	}
+	
+	public void setWidth(double width) {
+		this.width = width;
+		this.setImage(new Image(path,width,this.getHeight(),false,false));
+//		System.out.println("YO: "+this.getImage().getWidth());
+	}
+	
+	public void setHeight(double height) {
+		this.height = height;
+		this.setImage(new Image(path,this.getWidth(),height,false,false));
 	}
 
 	@Override
 	public String toString() {
-		return "ImageForObject "+toCancelled;
-//				+ "[path=" + path + ", mapEditor=" + mapEditor
-//				+ ", startPosition=" + upperLeftPosition + ", endPosition="
-//				+ bottomLeftPosition ;
+		return "ImageForObject [nameObject=" + nameObject
+				+ ", upperLeftPosition=" + upperLeftPosition
+				+ "\n, bottomLeftPosition=" + bottomLeftPosition
+				+ "\n, upperRightPosition=" + upperRightPosition + ", width="
+				+ width + ", height=" + height + "]";
 	}
 	
-	public void setToCancelled(boolean bool) {
-		toCancelled = bool;
-	}
 	
-	public boolean getToCancelled() {
-		return toCancelled;
-	}
 	
 }
 

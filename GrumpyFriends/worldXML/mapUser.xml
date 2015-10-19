@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<world>
+    <type>Planet</type>
+    <dimension height="900" width="1200"/>
+    <linearGround>
+        <position posX="347.86666666666673" posY="197.0"/>
+        <size height="326.0" width="397.9333333333333"/>
+    </linearGround>
+    <linearGround>
+        <position posX="178.86666666666667" posY="324.0"/>
+        <size height="70.0" width="50.0"/>
+    </linearGround>
+</world>

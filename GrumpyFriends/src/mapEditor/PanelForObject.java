@@ -1,10 +1,17 @@
 package mapEditor;
 
+import java.util.ArrayList;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
 import javafx.scene.image.ImageView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -20,6 +27,10 @@ public class PanelForObject extends Pane {
 	private Pane panelForSubmit;
 	private Pane panelForRealObject;
 	
+	private Label choiseTypeWorld;
+	private ChoiceBox<String> choiceType;
+	private ArrayList<String> typeWorld;
+	private int typeWorldChoise;
 	private Label choiseWidth;
 	private TextField insertWidth;
 	private Label choiseHeight;
@@ -32,7 +43,9 @@ public class PanelForObject extends Pane {
 	private ScrollPane scrollPane;
 	
 	private MapEditor mapEditor;
-	protected boolean moved = false;
+	private boolean moved = false;
+	private boolean isInsertWidth;
+	private boolean isInsertHeight;
 	
 	public PanelForObject(MapEditor mapEditor) 
 	{
@@ -40,7 +53,8 @@ public class PanelForObject extends Pane {
         this.setStyle("-fx-background-color: #92a498;");
 
         this.mapEditor = mapEditor;
-        this.scrollPane = new ScrollPane();
+        typeWorld = new ArrayList<String>();
+        typeWorld.add("Planet");
         
         addComponent();
         
@@ -49,7 +63,7 @@ public class PanelForObject extends Pane {
 	private void addComponent()
 	{
 	    panelForDimension = new Pane();
-	    panelForDimension.setPrefSize(this.getPrefWidth(), this.getPrefHeight()/6);
+	    panelForDimension.setPrefSize(this.getPrefWidth(), this.getPrefHeight()/4);
 		
 	    buttonForUndo = new Button();
 	    ImageView imageUndo = new ImageView("file:image/imageButtonMapEditor/undo.png");
@@ -78,7 +92,7 @@ public class PanelForObject extends Pane {
 	    image.setFitHeight(20);
 	    image.setFitWidth(20);
 	    buttonForRedo.setGraphic(image);
-	    buttonForRedo.setLayoutX(buttonForUndo.getPrefWidth()+20);
+	    buttonForRedo.setLayoutX(buttonForUndo.getPrefWidth()*3);
 	    buttonForRedo.setLayoutY(5);
 	    buttonForRedo.setPrefSize(10, 10);
 	    buttonForRedo.setBackground(null);
@@ -94,9 +108,28 @@ public class PanelForObject extends Pane {
 	        }
 	    });
 	    
+	    choiseTypeWorld = new Label("Type World");
+	    choiseTypeWorld.setLayoutX(buttonForUndo.getLayoutX());
+	    choiseTypeWorld.setLayoutY(buttonForRedo.getLayoutY()+buttonForRedo.getPrefHeight()+20);
+	    panelForDimension.getChildren().add(choiseTypeWorld);
+	    
+	    choiceType = new ChoiceBox<String>(FXCollections.observableArrayList(typeWorld));
+	    choiceType.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number oldValue, Number newValue) {
+				typeWorldChoise = newValue.intValue();
+			}
+		});
+	    
+	    choiceType.setLayoutX(buttonForUndo.getLayoutX());
+	    choiceType.setLayoutY(choiseTypeWorld.getLayoutY()+choiseTypeWorld.getPrefHeight()+20);
+	    choiceType.setOpacity(0.7);
+	    panelForDimension.getChildren().add(choiceType);
+	    
 		choiseWidth = new Label("Width");
 	    choiseWidth.setLayoutX(buttonForUndo.getLayoutX());
-	    choiseWidth.setLayoutY(buttonForRedo.getLayoutY()+buttonForRedo.getPrefHeight()+20);
+	    choiseWidth.setLayoutY(choiceType.getLayoutY()+choiceType.getPrefHeight()+30);
 	    panelForDimension.getChildren().add(choiseWidth);
 	    
 	    insertWidth = new TextField();
@@ -108,11 +141,20 @@ public class PanelForObject extends Pane {
 
 			@Override
 			public void handle(KeyEvent event) {
-				if (event.getCode().equals(KeyCode.ENTER)) {
-					double newWidth = Integer.parseInt(insertWidth.getText());
-					if (newWidth != PanelForObject.this.mapEditor.getWidthPanelForMap())
-						PanelForObject.this.mapEditor.setWidthPanelForMap(newWidth);
+				if (event.getCode().equals(KeyCode.ENTER) || event.getCode().equals(KeyCode.TAB)) {
+					if (insertWidth.getText().length() > 0)
+					{
+						double newWidth = Integer.parseInt(insertWidth.getText());
+						if (newWidth != PanelForObject.this.mapEditor.getWidthPanelForMap())
+							PanelForObject.this.mapEditor.setWidthPanelForMap(newWidth);
+						
+						isInsertWidth = true;
+					}
+					else
+						setDimensionStandard(true);
 				}
+				if (event.getCode().equals(KeyCode.BACK_SPACE)) 
+					setDimensionStandard(true);
 			}
 		});
 	    
@@ -130,11 +172,20 @@ public class PanelForObject extends Pane {
 
 			@Override
 			public void handle(KeyEvent event) {
-				if (event.getCode().equals(KeyCode.ENTER)) {
-					double newWidth = Integer.parseInt(insertHeight.getText());
-					if (newWidth != PanelForObject.this.mapEditor.getHeightPanelForMap())
-						PanelForObject.this.mapEditor.setHeightPanelForMap(newWidth);
+				if (event.getCode().equals(KeyCode.ENTER) || event.getCode().equals(KeyCode.TAB)) {
+					if (insertHeight.getText().length() > 0)
+					{
+						double newWidth = Integer.parseInt(insertHeight.getText());
+						if (newWidth != PanelForObject.this.mapEditor.getHeightPanelForMap())
+							PanelForObject.this.mapEditor.setHeightPanelForMap(newWidth);
+						
+						isInsertHeight = true;
+					}
+					else
+						setDimensionStandard(false);
 				}
+				if (event.getCode().equals(KeyCode.BACK_SPACE))
+					setDimensionStandard(false);
 			}
 		});
 	    
@@ -165,7 +216,13 @@ public class PanelForObject extends Pane {
 	    	
 	        @Override
 	        public void handle(MouseEvent event) { 
-	        	PanelForObject.this.mapEditor.saveMap();
+	        	try {
+					PanelForObject.this.mapEditor.saveMap();
+				} catch (ParserConfigurationException e) {
+					e.printStackTrace();
+				} catch (TransformerException e) {
+					e.printStackTrace();
+				}
 	        }
 	    });
 	    
@@ -177,15 +234,14 @@ public class PanelForObject extends Pane {
 	    panelForRealObject.setPrefSize(this.getPrefWidth(), this.getPrefHeight()-panelForDimension.getPrefHeight()-panelForSubmit.getPrefHeight()-50);
 	    panelForRealObject.setLayoutY(panelForDimension.getPrefHeight());
 	    
-	    scrollPane.setContent(panelForRealObject);
+	    scrollPane = new ScrollPane(panelForRealObject);
 	    scrollPane.setLayoutY(panelForRealObject.getLayoutY());
 	    scrollPane.setPrefSize(panelForRealObject.getPrefWidth(), panelForRealObject.getPrefHeight());
         scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-        scrollPane.setStyle("-fx-background: #92a498; -fx-background-color: null; ");
 
-//        scrollPane.setStyle("file:styles/customScrollBar.css");
-        
+        scrollPane.getStylesheets().add("file:styles/customScrollBarForPanelObject.css");
+//        scrollPane.setStyle("-fx-background: #92a498; -fx-background-color: null; ");
         scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
 
 			@Override
@@ -197,7 +253,7 @@ public class PanelForObject extends Pane {
 					moved = false;
 			}
 		});
-        
+
         addListenerPanelForRealObject();
 	    
 	    this.getChildren().add(panelForSubmit);
@@ -230,7 +286,7 @@ public class PanelForObject extends Pane {
 	        }
 	    });
 	}
-	
+
 	public Pane getPanelForDimension() {
 		return panelForDimension;
 	}
@@ -261,5 +317,39 @@ public class PanelForObject extends Pane {
 	public void cancTextInTextField() {
 		insertWidth.clear();
 		insertHeight.clear();
+		
+		isInsertHeight = false;
+		isInsertWidth = false;
+	}
+	
+	public String getTypeWorld() {
+		return typeWorld.get(typeWorldChoise);
+	}
+
+	public String getHeightToInsert() {
+		if (!isInsertHeight)
+			return Double.toString(mapEditor.getHeightPanelForMap());
+		return insertHeight.getText();
+	}
+	
+	public String getWidthToInsert() {
+		if (!isInsertWidth)
+			return Double.toString(mapEditor.getWidthPanelForMap());
+		return insertWidth.getText();
+	}
+	
+	private void setDimensionStandard(boolean widthOrHeight) {
+		if (widthOrHeight)
+		{
+			isInsertWidth = false;
+			insertWidth.clear();
+			mapEditor.setDimensionStandardPanelMap(widthOrHeight);
+		}
+		else
+		{
+			isInsertHeight = false;
+			insertHeight.clear();
+			mapEditor.setDimensionStandardPanelMap(widthOrHeight);
+		}
 	}
 }
