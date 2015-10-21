@@ -11,8 +11,10 @@ import element.weaponsManager.WeaponsManager;
 import physic.PhysicalCharacter;
 import physic.PhysicalObject;
 import physic.PhysicalObjectManager;
+import utils.ObjectWithTimer;
+import utils.Timer;
 
-public abstract class AbstractCharacter implements Character, Element {
+public abstract class AbstractCharacter implements Character, Element, ObjectWithTimer {
 
 	private final static float MAX_SPEED = 10f;
 	private final static float _FORCE = 500f;
@@ -28,14 +30,14 @@ public abstract class AbstractCharacter implements Character, Element {
 	protected World world;
 	protected Team team;
 	protected Weapon equippedWeapon;
-	
+
 	protected WeaponsManager weaponsManager;
 
 	protected boolean grounded;
 	protected int currentDirection;
 
 	protected PhysicalObject physicBody;
-	
+
 	protected Launcher launcher;
 
 	public AbstractCharacter(String name, float x, float y, float height, float width, Team team) {
@@ -44,7 +46,7 @@ public abstract class AbstractCharacter implements Character, Element {
 		this.team = team;
 		this.height = height;
 		this.width = width;
-		
+
 		weaponsManager = new WeaponsManager();
 
 		equippedWeapon = null;
@@ -78,44 +80,54 @@ public abstract class AbstractCharacter implements Character, Element {
 
 	@Override
 	public void equipWeapon(String weaponName) {
-		if(launcher==null)
+		if (launcher == null)
 			launcher = new Launcher(this);
-		
-		if(weaponsManager.isAvailable(weaponName)){
-			
-			equippedWeapon=weaponsManager.getWeapon(weaponName);
+
+		if (weaponsManager.isAvailable(weaponName)) {
+
+			equippedWeapon = weaponsManager.getWeapon(weaponName);
 			launcher.loadWeapon(equippedWeapon);
 		}
 	}
+
 	@Override
 	public void attack(float power) {
-		if(launcher==null || equippedWeapon==null) return;
-		
+		if (launcher == null || equippedWeapon == null)
+			return;
+
 		launcher.startWeaponAttack(power);
-		weaponsManager.removeOneAmmunition(equippedWeapon.getName());
-		equippedWeapon=null;
+
+		if (equippedWeapon.finishHit()) {
+
+			weaponsManager.removeOneAmmunition(equippedWeapon.getName());
+			equippedWeapon = null;
+			team.getMatchManager().stopTurnTimer();
+			
+			new Timer(this).start();
+		}
 	}
-	
+
 	@Override
 	public Weapon getEquipWeapon() {
 		return equippedWeapon;
 	}
-	
+
 	@Override
 	public void changeAngle(float direction) {
-		if(launcher==null || !launcher.isActivated())
+		if (launcher == null || !launcher.isActivated())
 			return;
-		
+
 		float angle = 2.0f;
-		launcher.changeAngle(angle*direction);
+		launcher.changeAngle(angle * direction);
 	}
-	
+
 	@Override
 	public void unequipWeapon() {
-		if(launcher==null) return;
+		if (launcher == null)
+			return;
 		launcher.disable();
 	}
-	
+
 	@Override
 	public void move(int direction) {
 		Body body = physicBody.getBody();
@@ -160,6 +172,21 @@ public abstract class AbstractCharacter implements Character, Element {
 	}
 
 	@Override
+	public void endTurn() {
+		team.getMatchManager().nextTurn();
+	}
+
+	@Override
+	public void afterCountDown() {
+		endTurn();
+	}
+
+	@Override
+	public long getSecondToStopTimer() {
+		return 10;
+	}
+
+	@Override
 	public int getLifePoints() {
 		return lifePoints;
 	}
@@ -194,9 +221,10 @@ public abstract class AbstractCharacter implements Character, Element {
 
 	@Override
 	public Vec2 getPositionTest() {
-		
-		return new Vec2(physicBody.getX(),physicBody.getY());
+
+		return new Vec2(physicBody.getX(), physicBody.getY());
 	}
+
 	@Override
 	public float getY() {
 		// TODO Auto-generated method stub

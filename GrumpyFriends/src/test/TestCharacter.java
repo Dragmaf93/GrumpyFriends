@@ -62,7 +62,11 @@ public class TestCharacter implements Character {
 	
 	
 	private WheelJoint joint;
-	
+	@Override
+	public void endTurn() {
+		// TODO Auto-generated method stub
+		
+	}
 	public TestCharacter(String name,float x, float y) {
 		this.name = name;
 		this.world = TestGrumpyFriends.getInstance().getWorld();

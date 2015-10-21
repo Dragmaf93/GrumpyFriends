@@ -2,10 +2,10 @@ package element.weaponsManager.weapons;
 
 import element.weaponsManager.AbstractWeapon;
 import element.weaponsManager.ExplosiveObject;
-import element.weaponsManager.ObjectWithTimer;
-import element.weaponsManager.Timer;
 import physic.PhysicalObjectManager;
 import physic.weapon.PhysicalBomb;
+import utils.ObjectWithTimer;
+import utils.Timer;
 import world.Vector;
 
 public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
@@ -30,6 +30,7 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 		physicalWeapon.setTransform(position.toVec2(), angle);
 		physicalWeapon.setLinearVelocity(speed.toVec2());
 		(new Timer(this)).start();
+		hit--;
 
 	}
 

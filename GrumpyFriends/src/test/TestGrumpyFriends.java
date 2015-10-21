@@ -3,10 +3,10 @@ package test;
 import org.jbox2d.testbed.framework.TestbedSettings;
 import org.jbox2d.testbed.framework.TestbedTest;
 
-import element.character.AbstractCharacter;
 import element.character.Character;
-import element.weaponsManager.Weapon;
-import element.weaponsManager.weapons.SimpleBomb;
+import element.character.Chewbacca;
+import element.character.Team;
+import game.MatchManager;
 import physic.PhysicalObjectManager;
 import world.WorldBuilder;
 import world.WorldDirector;
@@ -14,7 +14,8 @@ import world.WorldDirector;
 public class TestGrumpyFriends extends TestbedTest {
 
 	private static TestbedTest instance;
-	private Character character;
+	private MatchManager matchManager;
+//	private Character currentPlayer;
 	
 	private float speed=10f;
 	public static TestbedTest getInstance(){
@@ -39,46 +40,65 @@ public class TestGrumpyFriends extends TestbedTest {
 		WorldDirector director = new WorldDirector(builder);
 		director.createWorld("worldXML/world.xml");
 		world.World world = builder.getWorld();
-		character = world.getCharacter();
 		
-
+		
+		matchManager = new MatchManager(world);
+		
+		Team teamA = new Team("TeamA", 1, matchManager);
+		Team teamB = new Team("TeamB", 1, matchManager);
+		
+		matchManager.setTeamA(teamA);
+		matchManager.setTeamB(teamB);
+		
+		Character playerA = new Chewbacca("PlayerA", 5, 20, teamA);
+		Character playerB = new Chewbacca("PlayerB", 50, 20, teamB);
+		
+		world.addCharacter(playerA);
+		world.addCharacter(playerB);
+		
+		teamA.addCharcter(playerA);
+		teamB.addCharcter(playerB);
+		
+		matchManager.startMatch();
+		
 	}
 
 	@Override
 	public void keyPressed(char argKeyChar, int argKeyCode) {
 		switch (argKeyChar) {
 		case 'w':
-			character.jump();
+			matchManager.getCurrentPlayer().jump();
 			break;
 		case 'a':
-			character.move(Character.LEFT);
+			matchManager.getCurrentPlayer().move(Character.LEFT);
 			break;
 		case 'd':
-			character.move(Character.RIGHT);
+			matchManager.getCurrentPlayer().move(Character.RIGHT);
 			break;
-		case 'e':
-			character.equipWeapon("SimpleMissile");
-			break;
-		case 'u':
-			character.unequipWeapon();
+		case 'm':
+			matchManager.getCurrentPlayer().equipWeapon("SimpleMissile");
 			break;
 		case 'b':
-			character.getEquipWeapon().finishHit();
+			matchManager.getCurrentPlayer().equipWeapon("SimpleBomb");
+			break;
+		case 'u':
+			matchManager.getCurrentPlayer().unequipWeapon();
 			break;
 		case '5':
-			character.attack(speed);
+			matchManager.getCurrentPlayer().attack(speed);
+
 			break;
 		case '8':
-			speed+=0.2f;
+			speed+=0.5f;
 			break;
 		case '2':
-			speed-=0.2f;
+			speed-=0.5f;
 			break;
 		case '6':
-			character.changeAngle(Character.DECREASE);
+			matchManager.getCurrentPlayer().changeAngle(Character.DECREASE);
 			break;
 		case '4':
-			character.changeAngle(Character.INCREASE);
+			matchManager.getCurrentPlayer().changeAngle(Character.INCREASE);
 			break;
 		default:
 			break;
@@ -88,11 +108,10 @@ public class TestGrumpyFriends extends TestbedTest {
 	@Override
 	public void step(TestbedSettings settings) {
 		super.step(settings);
-//		double a=((TestCharacter)character).launcherJoint.getJointAngle();
-//		addTextLine("Angle Launcher " +(int) Math.toDegrees(a));
-		addTextLine("Speed Launcher " + speed);
-		addTextLine("On Ground "+ character.isGrounded());
-		getCamera().setCamera(character.getPositionTest());
+		addTextLine("Turn " + matchManager.getTurn());
+		addTextLine("Current Player "+ matchManager.getCurrentPlayer().getName()+" of "+matchManager.getCurrentTeam().getName());
+		addTextLine("Time "+ matchManager.getTimer());
+		getCamera().setCamera(matchManager.getCurrentPlayer().getPositionTest());
 		
 		PhysicalObjectManager.getInstance().destroyBodies();
 	}
@@ -100,14 +119,14 @@ public class TestGrumpyFriends extends TestbedTest {
 	public void keyReleased(char argKeyChar, int argKeyCode) {
 		switch (argKeyChar) {
 		case 'a':
-			character.stopToMove();
+			matchManager.getCurrentPlayer().stopToMove();
 			break;
 		case 'd':
-			character.stopToMove();
+			matchManager.getCurrentPlayer().stopToMove();
 			break;
 		case '6':
 		case '4':
-			character.changeAngle(Character.STOP);
+			matchManager.getCurrentPlayer().changeAngle(Character.STOP);
 			break;
 		default:
 			break;

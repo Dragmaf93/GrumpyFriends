@@ -1,4 +1,4 @@
-package element.weaponsManager;
+package utils;
 
 public interface ObjectWithTimer {
 

@@ -29,9 +29,12 @@ public interface Character
 	public abstract void unequipWeapon();
 	public abstract void attack(float power);
 	public abstract void changeAngle(float direction);
+	
+	
 	public abstract void setGrounded(boolean b);
 	public abstract boolean isGrounded();
 
+	public abstract void endTurn();
 	abstract public PhysicalObject getPhysicalObject();
 
 

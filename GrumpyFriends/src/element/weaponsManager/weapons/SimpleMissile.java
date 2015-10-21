@@ -42,6 +42,7 @@ public class SimpleMissile extends AbstractWeapon{
 		physicalWeapon.setTransform(position.toVec2(), angle);
 		physicalWeapon.setLinearVelocity(speed.toVec2());	
 		new DragForceThread(this).start();
+		hit--;
 	}
 	
 	@Override
