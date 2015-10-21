@@ -7,6 +7,7 @@ import element.character.AbstractCharacter;
 import element.character.Character;
 import element.weaponsManager.Weapon;
 import element.weaponsManager.weapons.SimpleBomb;
+import physic.PhysicalObjectManager;
 import world.WorldBuilder;
 import world.WorldDirector;
 
@@ -56,10 +57,13 @@ public class TestGrumpyFriends extends TestbedTest {
 			character.move(Character.RIGHT);
 			break;
 		case 'e':
-			character.equipWeapon("SimpleBomb");
+			character.equipWeapon("SimpleMissile");
 			break;
 		case 'u':
 			character.unequipWeapon();
+			break;
+		case 'b':
+			character.getEquipWeapon().finishHit();
 			break;
 		case '5':
 			character.attack(speed);
@@ -89,7 +93,8 @@ public class TestGrumpyFriends extends TestbedTest {
 		addTextLine("Speed Launcher " + speed);
 		addTextLine("On Ground "+ character.isGrounded());
 		getCamera().setCamera(character.getPositionTest());
-
+		
+		PhysicalObjectManager.getInstance().destroyBodies();
 	}
 	@Override
 	public void keyReleased(char argKeyChar, int argKeyCode) {

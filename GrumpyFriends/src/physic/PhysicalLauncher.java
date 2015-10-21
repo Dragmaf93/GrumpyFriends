@@ -1,4 +1,4 @@
-package element.weaponsManager;
+package physic;
 
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
@@ -10,8 +10,6 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
-import physic.PhysicalCharacter;
-import physic.PhysicalDinamicObject;
 import physic.weapon.PhysicalWeapon;
 import sun.font.CreatedFontTracker;
 import world.Vector;
@@ -19,8 +17,8 @@ import world.Vector;
 public class PhysicalLauncher extends PhysicalDinamicObject {
 
 	private final static float HEIGHT=0.2f;
-	private final static float WIDTH=1.5f;
-	private static final Vec2 DISTANCE_TO_LAUNCHER = new Vec2(2,0);
+	private final static float WIDTH=1.0f;
+	private static final Vec2 DISTANCE_TO_LAUNCHER = new Vec2(1.2f,0);
 	
 	
 	private RevoluteJoint joint;
@@ -51,8 +49,8 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 		revoluteJointDef = new RevoluteJointDef();
 		revoluteJointDef.bodyA=physicalCharacter.getBody();
 		revoluteJointDef.bodyB=body;
-		revoluteJointDef.localAnchorA.set(0,physicalCharacter.getHeight()/2);
-		revoluteJointDef.localAnchorB.set(-1.5f,0);
+		revoluteJointDef.localAnchorA.set(0,physicalCharacter.getHeight()-WIDTH*0.8f);
+		revoluteJointDef.localAnchorB.set(-WIDTH,0);
 		revoluteJointDef.collideConnected=false;
 
 		revoluteJointDef.enableMotor=true;

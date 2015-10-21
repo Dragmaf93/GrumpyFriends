@@ -9,6 +9,7 @@ public interface Weapon
 	public abstract float getMaxPower();
 	public abstract PhysicalWeapon getPhysicalWeapon();
 	public abstract void attack(Vector position, Vector speed, float angle);
+	public abstract void afterAttack();
 	public abstract String getName();
 	public abstract boolean finishHit();
 }

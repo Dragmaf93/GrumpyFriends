@@ -3,6 +3,7 @@ package element.character;
 
 import org.jbox2d.common.Vec2;
 
+import element.weaponsManager.Weapon;
 import physic.PhysicalObject;
 
 public interface Character 
@@ -35,6 +36,9 @@ public interface Character
 
 
 	Vec2 getPositionTest();
+
+
+	public abstract Weapon getEquipWeapon();
 
 	
 

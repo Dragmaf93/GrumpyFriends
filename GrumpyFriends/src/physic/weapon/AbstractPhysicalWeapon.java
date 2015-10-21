@@ -15,21 +15,25 @@ public abstract class AbstractPhysicalWeapon implements PhysicalWeapon{
 	
 	@Override
 	public void setActive(boolean flag) {
+		if(body==null) return;
 		body.setActive(flag);
 	}
 	
 	@Override
 	public void setAngularVelocity(float speed) {
+		if(body==null) return;
 		body.setAngularVelocity(speed);
 	}
 	
 	@Override
 	public void setTransform(Vec2 v1, float angle) {
+		if(body==null) return;
 		body.setTransform(v1, angle);
 	}
 	
 	@Override
 	public void setLinearVelocity(Vec2 speed) {
+		if(body==null) return;
 		body.setLinearVelocity(speed);
 	}
 	@Override
@@ -38,17 +42,20 @@ public abstract class AbstractPhysicalWeapon implements PhysicalWeapon{
 	}
 	@Override
 	public void addToPhisicalWorld() {
+		if(body==null) return;
 		fixture = body.createFixture(fixtureDef);
 	}
 	
 	@Override
 	public void removeToPhisicalWorld() {
+		if(body==null) return;
 		if(fixture!=null)
 			body.destroyFixture(fixture);
 	}
 	
 	@Override
 	public void setSize(float width, float height) {
+		if(body==null) return;
 	}
 	
 }

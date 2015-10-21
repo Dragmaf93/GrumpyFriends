@@ -2,7 +2,7 @@ package world;
 
 import physic.PhysicalTriangularObject;
 import physic.PhysicalObject;
-import physic.PhysicalObjectCreator;
+import physic.PhysicalObjectManager;
 
 public class InclinedGround  implements Ground {
 
@@ -15,7 +15,7 @@ public class InclinedGround  implements Ground {
 		this.angleRotation=(float) Math.toRadians(angleRotationDegree);
 		
 		this.physicObject = new PhysicalTriangularObject(x, y, width, height, angleRotation);
-		PhysicalObjectCreator.getInstance().buildPhysicObject(physicObject);
+		PhysicalObjectManager.getInstance().buildPhysicObject(physicObject);
 	
 	}
 

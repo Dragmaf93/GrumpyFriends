@@ -10,7 +10,7 @@ import element.weaponsManager.Weapon;
 import element.weaponsManager.WeaponsManager;
 import physic.PhysicalCharacter;
 import physic.PhysicalObject;
-import physic.PhysicalObjectCreator;
+import physic.PhysicalObjectManager;
 
 public abstract class AbstractCharacter implements Character, Element {
 
@@ -52,7 +52,7 @@ public abstract class AbstractCharacter implements Character, Element {
 		lifePoints = 100;
 
 		physicBody = new PhysicalCharacter(x, y, width, height, name);
-		PhysicalObjectCreator.getInstance().buildPhysicObject(physicBody);
+		PhysicalObjectManager.getInstance().buildPhysicObject(physicBody);
 	}
 
 	@Override
@@ -93,6 +93,12 @@ public abstract class AbstractCharacter implements Character, Element {
 		
 		launcher.startWeaponAttack(power);
 		weaponsManager.removeOneAmmunition(equippedWeapon.getName());
+		equippedWeapon=null;
+	}
+	
+	@Override
+	public Weapon getEquipWeapon() {
+		return equippedWeapon;
 	}
 	
 	@Override

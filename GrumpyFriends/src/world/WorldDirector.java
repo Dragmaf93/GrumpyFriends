@@ -13,7 +13,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import physic.PhysicalObjectCreator;
+import physic.PhysicalObjectManager;
 
 public class WorldDirector {
 
@@ -21,7 +21,7 @@ public class WorldDirector {
 	
 	public WorldDirector(WorldBuilder builder) {
 		this.builder = builder;
-		PhysicalObjectCreator.getInstance();
+		PhysicalObjectManager.getInstance();
 	}
 
 	public void createWorld(String pathXMLFile) {

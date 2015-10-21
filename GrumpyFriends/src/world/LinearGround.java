@@ -1,7 +1,7 @@
 package world;
 
 import physic.PhysicalObject;
-import physic.PhysicalObjectCreator;
+import physic.PhysicalObjectManager;
 import physic.PhysicalRectangularObject;
 
 
@@ -13,7 +13,7 @@ public class LinearGround implements Ground{
 	public LinearGround(float x, float y,float width,float height) {
 		
 		this.physicBody = new PhysicalRectangularObject(x, y, width, height);
-		PhysicalObjectCreator.getInstance().buildPhysicObject(physicBody);
+		PhysicalObjectManager.getInstance().buildPhysicObject(physicBody);
 	
 	}
 

@@ -18,6 +18,7 @@ import org.jbox2d.dynamics.joints.WheelJointDef;
 import com.sun.org.apache.bcel.internal.generic.LUSHR;
 
 import element.character.Character;
+import element.weaponsManager.Weapon;
 import physic.PhysicalObject;
 
 public class TestCharacter implements Character {
@@ -292,6 +293,12 @@ public class TestCharacter implements Character {
 
 	@Override
 	public Vec2 getPositionTest() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Weapon getEquipWeapon() {
 		// TODO Auto-generated method stub
 		return null;
 	}

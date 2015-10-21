@@ -14,7 +14,6 @@ public class Chewbacca extends AbstractCharacter{
 		super(name,x, y, HEIGHT, WIDTH, team);
 
 	}
-	
 
 
 }

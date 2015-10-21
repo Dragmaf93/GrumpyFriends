@@ -2,7 +2,7 @@ package test;
 
 
 import element.character.Chewbacca;
-import physic.PhysicalObjectCreator;
+import physic.PhysicalObjectManager;
 import world.World;
 import world.WorldBuilder;
 
@@ -13,7 +13,7 @@ public class TestWorldBuilder implements WorldBuilder {
 	@Override
 	public void initializes(String typeWorld) {
 		world = new TestWorld();
-		PhysicalObjectCreator.getInstance().setWorld(world);
+		PhysicalObjectManager.getInstance().setWorld(world);
 	}
 
 	@Override

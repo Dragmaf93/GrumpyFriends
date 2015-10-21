@@ -11,12 +11,14 @@ import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.contacts.Contact;
 
 import element.character.Character;
+import element.weaponsManager.ExplosiveObject;
+import physic.weapon.PhysicalWeapon;
 
-public class CharacterContactListener implements ContactListener {
+public class PhysicalContactListener implements ContactListener {
 
 	private HashMap<Character, Integer> characterContact;
 
-	public CharacterContactListener(List<Character> characters) {
+	public PhysicalContactListener(List<Character> characters) {
 
 		characterContact = new HashMap<>();
 
@@ -27,7 +29,6 @@ public class CharacterContactListener implements ContactListener {
 	}
 
 	private Fixture getFeetFixture(Fixture f1, Fixture f2, String characterName) {
-		System.out.println(characterName);
 		if (f1.getUserData() != null && f1.getUserData().equals(characterName)) {
 			return f1;
 		} else if (f2.getUserData() != null && f2.getUserData().equals(characterName)) {
@@ -35,13 +36,29 @@ public class CharacterContactListener implements ContactListener {
 		}
 		return null;
 	}
-
+	
+	private Fixture getExplosiveObjectFixture(Fixture f1, Fixture f2){
+		if (f1.getUserData() != null && f1.getUserData() instanceof PhysicalWeapon) {
+			return f1;
+		} else if (f2.getUserData() != null && f2.getUserData()instanceof PhysicalWeapon) {
+			return f2;
+		}
+		return null;
+	}
 	@Override
 	public void beginContact(Contact contact) {
-
+		
+		// explosive object contact
+		Fixture explosiveObjectfixture=getExplosiveObjectFixture(contact.getFixtureA(),contact.getFixtureB());
+		if(explosiveObjectfixture!=null){
+			((ExplosiveObject)explosiveObjectfixture.getUserData()).explode();
+			explosiveObjectfixture.setUserData(null);
+			explosiveObjectfixture=null;
+		}
+		
+		//character contact
 		Set<Character> characters = characterContact.keySet();
 		for (Character character : characters) {
-//			System.out.println("CONTACT" +character.getName());
 			if (getFeetFixture(contact.getFixtureA(), contact.getFixtureB(), character.getName()) != null) {
 				Integer tmp = characterContact.get(character) + 1;
 				characterContact.put(character, tmp);

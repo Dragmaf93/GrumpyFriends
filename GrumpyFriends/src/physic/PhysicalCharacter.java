@@ -29,6 +29,7 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 	public PhysicalCharacter(float x, float y, float width, float height,String nameCharacter) {
 		super(x, y, width, height);		
 		this.nameCharacter=nameCharacter;
+		System.out.println(body +"     "+feet);
 	}
 
 	@Override
@@ -78,7 +79,6 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 	}
 	
 	public void unblockWheelJoint(){
-		System.out.println(MOTOR_TORQUE);
 		joint.setMaxMotorTorque(MOTOR_TORQUE);
 	}
 	public void blockWheelJoint(){

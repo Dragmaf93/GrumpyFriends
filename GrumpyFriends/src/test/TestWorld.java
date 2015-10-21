@@ -12,7 +12,7 @@ import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
 import element.character.Character;
-import physic.CharacterContactListener;
+import physic.PhysicalContactListener;
 import world.InclinedGround;
 import world.LinearGround;
 
@@ -72,7 +72,7 @@ public class TestWorld implements world.World{
 		return world;
 	}
 	public void setContactListener() {
-		world.setContactListener(new CharacterContactListener(characters));
+		world.setContactListener(new PhysicalContactListener(characters));
 		
 	}
 	
