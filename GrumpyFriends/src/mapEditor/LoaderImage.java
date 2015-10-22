@@ -2,43 +2,40 @@ package mapEditor;
 
 import java.util.HashMap;
 
+import javafx.geometry.Point2D;
+
 public class LoaderImage 
 {
-	HashMap<String, ImageForObject> images;
+	HashMap<String, PolygonObject> images;
 	MapEditor mapEditor;
 	int index = 0;
 	
 	public LoaderImage(MapEditor mapEditor) 
 	{
-		images = new HashMap<String, ImageForObject>();
+		images = new HashMap<String, PolygonObject>();
 		
 		this.mapEditor = mapEditor;
 	}
 	
-	public HashMap<String, ImageForObject> getImages()
+	public HashMap<String, PolygonObject> getImages()
 	{
 		return images;
 	}
 	
-	public void load(String path)
+	public void load()
 	{
-//		images.put("prova",new ImageForObject(path+"images.png",mapEditor));
-//		images.put("grass",new ImageForObject(path+"grass.png",mapEditor,"grass",50, 70, "null"));
-//		images.put("box",new ImageForObject(path+"box.png",mapEditor,"box",50, 70, "null"));
-//		images.put("inclinedGround",new ImageForObject(path+"box1.png",mapEditor,"inclinedGround",50, 70, "20"));
-//		images.put("ground",new ImageForObject(path+"ground.png",mapEditor,"ground",50, 70, "null"));
-//		images.put("linearGround",new ImageForObject(path+"wall.png",mapEditor,"linearGround",50, 70, "null"));
-//		images.put("wall2",new ImageForObject(path+"wall2.png",mapEditor,"wall2",50, 70, "null"));
-		images.put("quadrato",new ImageForObject(path+"quadrato.png",mapEditor,"linearGround",50, 70));
-		images.put("triangolo1",new ImageForObject(path+"triangolo1.png",mapEditor,"inclinedGround",50, 70));
-		images.put("triangolo2",new ImageForObject(path+"triangolo2.png",mapEditor,"inclinedGround",50, 70));
+		images.put("square",new Square(mapEditor,"linearGround",new Point2D(10.0, 0.0), new Point2D(10.0, 60.0),
+				new Point2D(60.0, 60.0), new Point2D(60.0, 0.0)));
+		images.put("triangle",new Triangle(mapEditor,"inclinedGround",new Point2D(10.0, 0.0), new Point2D(10.0, 60.0),
+				new Point2D(60.0, 60.0)));
+		
 	}
 	
-	public ImageForObject copyImage(String name)
+	public PolygonObject copyImage(String name)
 	{
-		ImageForObject imageCopy = null;
+		PolygonObject imageCopy = null;
 		try {
-			imageCopy = (ImageForObject) images.get(name).clone();
+			imageCopy = (PolygonObject) images.get(name).clone();
 		
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();

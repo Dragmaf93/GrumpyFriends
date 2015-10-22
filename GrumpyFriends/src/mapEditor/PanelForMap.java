@@ -16,12 +16,11 @@ public class PanelForMap extends ScrollPane {
 	private double widthStandard;
 	private double heightStandard;
 	
-	private ImageForObject dragged;
+	private PolygonObject dragged;
 	private boolean isInTheLimit;
-	private boolean moveUpperLeftPositionX;
-	private boolean moveUpperRightPosition;
-	private boolean moveUpperLeftPositionY;
-	private boolean moveBottomLeftPosition;
+	protected DrawingPanel drw;
+	protected boolean insertPushed = false;
+	protected boolean draggedPressed;
 	
 	public PanelForMap(MapEditor mapEditor, double width, double height) {
 		
@@ -45,66 +44,38 @@ public class PanelForMap extends ScrollPane {
 	        	PanelForMap.this.mapEditor.setUpper(event);
 	        	
 	        	dragged = PanelForMap.this.mapEditor.getDragged();
-	        	if (dragged != null)
-	        	{
-	        		if (dragged.isInTheLimit(event))
-	        		{
-	        			isInTheLimit = true;
-	        			
-	        			if ((int)event.getX() == (int)dragged.getUpperLeftPosition().getX())
-	        				moveUpperLeftPositionX = true;
-	        			else if ((int)event.getX() == (int)dragged.getUpperRightPosition().getX())
-	        				moveUpperRightPosition = true;
-	        			else if ((int)event.getY() == (int)dragged.getUpperLeftPosition().getY())
-	        				moveUpperLeftPositionY = true;
-	        			else if ((int)event.getY() == (int)dragged.getBottomLeftPosition().getY())
-	        				moveBottomLeftPosition = true;
-	        		}
 	        	
-//		        	System.out.println(event.getX()+" "+event.getY());
-//		        	System.out.println(dragged);
-	        	}
+	        	draggedPressed = true;
+	        	
+	        	if (event.getClickCount() == 2) {
+					if (realPane.getChildren().contains(drw))
+						realPane.getChildren().remove(drw);
+					
+					drw = new DrawingPanel(dragged, PanelForMap.this.mapEditor);
+        			realPane.getChildren().add(drw);
+        			insertPushed = true;
+    			}
         	}
 	    });
+		
+		realPane.setOnMouseMoved(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				
+			}
+		});
 		
 		realPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
 
 	        @Override
 	        public void handle(MouseEvent event) { 
-        		if (moveUpperLeftPositionX)
-        		{
-        			dragged.setWidth(dragged.getWidth()+(dragged.getUpperLeftPosition().getX()-event.getX()));
-        			dragged.setX(event.getX());
-        			dragged.modifyPosition(new Point2D(dragged.getX(), dragged.getY()), dragged.getWidth(), dragged.getHeight());
-        			dragged.relocate(dragged.getX(), dragged.getY());
-        			PanelForMap.this.mapEditor.changeCursor(Cursor.H_RESIZE);
-        		}
-        		else if (moveUpperRightPosition)
-				{
-        			dragged.setWidth(dragged.getWidth()+(event.getX()-dragged.getUpperRightPosition().getX()));
-        			dragged.modifyPosition(new Point2D(dragged.getX(), dragged.getY()), dragged.getWidth(), dragged.getHeight());
-        			PanelForMap.this.mapEditor.changeCursor(Cursor.H_RESIZE);
-				}
-        		else if (moveBottomLeftPosition)
-        		{
-        			dragged.setHeight(dragged.getHeight()+(event.getY()-dragged.getBottomLeftPosition().getY()));
-        			dragged.modifyPosition(new Point2D(dragged.getX(), dragged.getY()), dragged.getWidth(), dragged.getHeight());
-        			PanelForMap.this.mapEditor.changeCursor(Cursor.V_RESIZE);
-        		}
-        		else if (moveUpperLeftPositionY)
-        		{
-        			dragged.setHeight(dragged.getHeight()+(dragged.getUpperLeftPosition().getY()-event.getY()));
-        			dragged.setY(event.getY());
-        			dragged.modifyPosition(new Point2D(dragged.getX(),dragged.getY()), dragged.getWidth(), dragged.getHeight());
-        			dragged.relocate(dragged.getX(), dragged.getY());
-        			PanelForMap.this.mapEditor.changeCursor(Cursor.V_RESIZE);
-    			}
-        		else
+	        	if (!insertPushed)
         			PanelForMap.this.mapEditor.moveObjectInMap(event);
 	        }
 	    });
-	    
-	    realPane.setOnMouseReleased(new EventHandler<MouseEvent>() {
+
+		realPane.setOnMouseReleased(new EventHandler<MouseEvent>() {
 
 	        @Override
 	        public void handle(MouseEvent event) { 
@@ -113,10 +84,6 @@ public class PanelForMap extends ScrollPane {
 	        	else
 	        	{
 	        		isInTheLimit = false;
-	        		moveUpperLeftPositionX = false;
-	        		moveUpperRightPosition = false;
-	        		moveUpperLeftPositionY = false;
-	        		moveBottomLeftPosition = false;
 	        		PanelForMap.this.mapEditor.changeCursor(Cursor.DEFAULT);
 	        	}
 	        }
@@ -128,6 +95,11 @@ public class PanelForMap extends ScrollPane {
 			public void handle(KeyEvent event) {
 				if (event.getCode().equals(KeyCode.DELETE)) {
 					PanelForMap.this.mapEditor.removeObject();
+				}
+				if (event.getCode().equals(KeyCode.ESCAPE)) {
+					if (realPane.getChildren().contains(drw))
+						realPane.getChildren().remove(drw);
+					insertPushed = false;
 				}
 			}
 		});
@@ -141,15 +113,15 @@ public class PanelForMap extends ScrollPane {
 		return realPane;
 	}
 	
-	public void addObject(ImageForObject object) {
+	public void addObject(PolygonObject object) {
 		realPane.getChildren().add(object);
 	}
 	
-	public boolean containsObject(ImageForObject object) {
+	public boolean containsObject(PolygonObject object) {
 		return realPane.getChildren().contains(object);
 	}
 
-	public void removeObject(ImageForObject object) {
+	public void removeObject(PolygonObject object) {
 		realPane.getChildren().remove(object);
 	}
 	
@@ -173,4 +145,14 @@ public class PanelForMap extends ScrollPane {
 	public void setHeightStandard() {
 		this.realPane.setPrefHeight(heightStandard);
 	}
+	
+	public boolean getDraggedPressed() {
+		return draggedPressed;
+	}
+
+	public boolean getInsertPressed() {
+		return insertPushed;
+	}
+	
+	
 }

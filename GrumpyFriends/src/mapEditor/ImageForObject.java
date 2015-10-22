@@ -6,8 +6,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 
-public class ImageForObject extends ImageView
+public class ImageForObject extends Polygon
 {
 	private String path;
 	private String nameObject;
@@ -23,12 +24,17 @@ public class ImageForObject extends ImageView
 	
 	private DropShadow borderGlow;
 	
-	public ImageForObject(String path, MapEditor mapEditor, String nameObject, double width, double height) 
+	public ImageForObject(String path, MapEditor mapEditor, String nameObject, Point2D point1, Point2D point2, Point2D point3) 
 	{
-		super(new Image(path,50,70,false,false));
+		super();
 
-		this.width = width;
-		this.height = height;
+		this.width = point3.getX();
+		this.height = point2.getY();
+		
+		this.upperLeftPosition = point1;
+		this.bottomLeftPosition = point2;
+		this.bottomRightPosition = point3;
+		
 		if (nameObject.equals("inclinedGround"))
 			this.angleRotation = angleRotation;
 //		TODO vedere come si calcola l'angolo avendo gli estremi
@@ -51,15 +57,15 @@ public class ImageForObject extends ImageView
 	@Override
 	protected ImageForObject clone() throws CloneNotSupportedException {
 		
-		ImageForObject newImage = new ImageForObject(this.path, this.mapEditor, this.nameObject, this.width, this.height);
+		ImageForObject newImage = new ImageForObject(this.path, this.mapEditor, this.nameObject, this.upperLeftPosition, this.bottomLeftPosition, this.bottomRightPosition);
 		
-		newImage.setX(this.getX());
-		newImage.setY(this.getY());
-		
-		newImage.setUpperLeftPosition(this.upperLeftPosition);
-		newImage.setUpperRightPosition(this.upperRightPosition);
-		newImage.setBottomLeftPosition(this.bottomLeftPosition);
-		newImage.setBottomRightPosition(this.bottomRightPosition);
+		newImage.setLayoutX(this.getLayoutX());
+		newImage.setLayoutY(this.getLayoutY());
+//		
+//		newImage.setUpperLeftPosition(this.upperLeftPosition);
+//		newImage.setUpperRightPosition(this.upperRightPosition);
+//		newImage.setBottomLeftPosition(this.bottomLeftPosition);
+//		newImage.setBottomRightPosition(this.bottomRightPosition);
 		
 		if (this.nameObject.equals("inclinedGround"))
 			newImage.angleRotation = this.angleRotation;
@@ -138,13 +144,13 @@ public class ImageForObject extends ImageView
 	
 	public void setWidth(double width) {
 		this.width = width;
-		this.setImage(new Image(path,width,this.getHeight(),false,false));
+//		this.setImage(new Image(path,width,this.getHeight(),false,false));
 //		System.out.println("YO: "+this.getImage().getWidth());
 	}
 	
 	public void setHeight(double height) {
 		this.height = height;
-		this.setImage(new Image(path,this.getWidth(),height,false,false));
+//		this.setImage(new Image(path,this.getWidth(),height,false,false));
 	}
 
 	@Override

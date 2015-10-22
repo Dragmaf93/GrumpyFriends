@@ -15,6 +15,7 @@ import javax.xml.transform.stream.StreamResult;
 import mapEditor.ImageForObject;
 import mapEditor.MapEditor;
 import mapEditor.PanelForObject;
+import mapEditor.PolygonObject;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -51,7 +52,7 @@ public class ConverterMapToXml {
 	    rootElement.appendChild(dimension);
 	
 	    //objectInMap elements
-	    for (ImageForObject object : mapEditor.getObjectInMap()) {
+	    for (PolygonObject object : mapEditor.getObjectInMap()) {
 	    	if (object.getNameObject().equals("linearGround"))
 	    	{
 		    	Element elementGround = doc.createElement("linearGround");
