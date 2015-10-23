@@ -45,21 +45,23 @@ public class TestGrumpyFriends extends TestbedTest {
 		matchManager = new MatchManager(world);
 		
 		Team teamA = new Team("TeamA", 1, matchManager);
-		Team teamB = new Team("TeamB", 1, matchManager);
+//		Team teamB = new Team("TeamB", 1, matchManager);
 		
 		matchManager.setTeamA(teamA);
-		matchManager.setTeamB(teamB);
+//		matchManager.setTeamB(teamB);
 		
-		Character playerA = new Chewbacca("PlayerA", 5, 20, teamA);
-		Character playerB = new Chewbacca("PlayerB", 50, 20, teamB);
+		Character playerA = new Chewbacca("PlayerA", 100, 20, teamA);
+//		Character playerB = new Chewbacca("PlayerB", 110, 20, teamB);
 		
 		world.addCharacter(playerA);
-		world.addCharacter(playerB);
+//		world.addCharacter(playerB);
 		
 		teamA.addCharcter(playerA);
-		teamB.addCharcter(playerB);
+//		teamB.addCharcter(playerB);
 		
-		matchManager.startMatch();
+		builder.lastSettings();
+		
+		matchManager.startTest();
 		
 	}
 

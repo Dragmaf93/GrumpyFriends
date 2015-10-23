@@ -17,8 +17,9 @@ import utils.Timer;
 public abstract class AbstractCharacter implements Character, Element, ObjectWithTimer {
 
 	private final static float MAX_SPEED = 10f;
+	private final static float _SPEED = 20f;
 	private final static float _FORCE = 500f;
-	private final static float JUMP = 15f;
+	private final static float JUMP = 25f;
 
 	protected String name;
 	protected float height;
@@ -34,6 +35,7 @@ public abstract class AbstractCharacter implements Character, Element, ObjectWit
 	protected WeaponsManager weaponsManager;
 
 	protected boolean grounded;
+	protected boolean moving;
 	protected int currentDirection;
 
 	protected PhysicalObject physicBody;
@@ -80,6 +82,9 @@ public abstract class AbstractCharacter implements Character, Element, ObjectWit
 
 	@Override
 	public void equipWeapon(String weaponName) {
+		if (!grounded || moving)
+			return;
+
 		if (launcher == null)
 			launcher = new Launcher(this);
 
@@ -92,7 +97,7 @@ public abstract class AbstractCharacter implements Character, Element, ObjectWit
 
 	@Override
 	public void attack(float power) {
-		if (launcher == null || equippedWeapon == null)
+		if (launcher == null || equippedWeapon == null || !grounded || moving)
 			return;
 
 		launcher.startWeaponAttack(power);
@@ -102,7 +107,7 @@ public abstract class AbstractCharacter implements Character, Element, ObjectWit
 			weaponsManager.removeOneAmmunition(equippedWeapon.getName());
 			equippedWeapon = null;
 			team.getMatchManager().stopTurnTimer();
-			
+
 			new Timer(this).start();
 		}
 	}
@@ -130,17 +135,25 @@ public abstract class AbstractCharacter implements Character, Element, ObjectWit
 
 	@Override
 	public void move(int direction) {
+		if (!grounded)
+			return;
+
+		if (launcher != null)
+			launcher.disable();
+
 		Body body = physicBody.getBody();
 		Vec2 speed = body.getLinearVelocity();
 		force = 0;
+		moving = true;
+
 		switch (direction) {
 		case RIGHT:
-			if (speed.x < MAX_SPEED)
-				force = _FORCE;
+			// if (speed.x < MAX_SPEED)
+			force = _SPEED;
 			break;
 		case LEFT:
-			if (speed.x > -MAX_SPEED)
-				force = -_FORCE;
+			// if (speed.x > -MAX_SPEED)
+			force = -_SPEED;
 			break;
 		case STOP:
 			force = speed.x * -10;
@@ -148,14 +161,15 @@ public abstract class AbstractCharacter implements Character, Element, ObjectWit
 		}
 		if (force != 0)
 			((PhysicalCharacter) physicBody).unblockWheelJoint();
-		body.applyForce(new Vec2(force, 0), body.getWorldCenter());
+		// body.applyForce(new Vec2(force, 0), body.getWorldCenter());
+		body.setLinearVelocity(new Vec2(force, speed.y));
 
 	}
 
 	@Override
 	public void stopToMove() {
 		Body body = physicBody.getBody();
-
+		moving = false;
 		((PhysicalCharacter) physicBody).blockWheelJoint();
 		currentDirection = 0;
 		body.getLinearVelocity().x = 0f;
@@ -166,6 +180,8 @@ public abstract class AbstractCharacter implements Character, Element, ObjectWit
 	public void jump() {
 		Body body = physicBody.getBody();
 		if (grounded) {
+			if (launcher != null)
+				launcher.disable();
 			float impulse = body.getMass() * JUMP;
 			body.applyLinearImpulse(new Vec2(0, impulse), body.getWorldCenter(), true);
 		}

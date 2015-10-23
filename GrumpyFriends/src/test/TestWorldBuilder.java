@@ -49,7 +49,6 @@ public class TestWorldBuilder implements WorldBuilder {
 
 	@Override
 	public void lastSettings() {
-		System.out.println(world);
 		((TestWorld)world).setContactListener();
 		
 	}

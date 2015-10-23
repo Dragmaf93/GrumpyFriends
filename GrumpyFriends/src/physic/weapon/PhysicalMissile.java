@@ -18,15 +18,17 @@ public class PhysicalMissile extends AbstractPhysicalWeapon implements Explosive
 	private float height;
 	
 	private boolean exploded;
-
+	private Vec2 centreExplosion;
+	
 	public PhysicalMissile() {
 	}
 
-	public PhysicalMissile(float width, float height, float blastPower, float blastRadius) {
+	public PhysicalMissile(float width, float height, float blastRadius) {
 		this.width = width;
 		this.height = height;
-		this.blastPower = blastPower;
+		this.blastPower = 100*blastRadius;
 		this.blastRadius = blastRadius;
+		centreExplosion = new Vec2(width, 0);
 	}
 
 	@Override
@@ -45,9 +47,9 @@ public class PhysicalMissile extends AbstractPhysicalWeapon implements Explosive
 		vertices[2] = new Vec2(width, 0);
 		vertices[3] = new Vec2(width * 0.7f, height);
 		missileShape.set(vertices, count);
-
 		fixtureDef = new FixtureDef();
 		fixtureDef.setShape(missileShape);
+		fixtureDef.isSensor=true;
 		fixtureDef.setDensity(1.0f);
 		fixtureDef.setUserData(this);
 		fixtureDef.restitution = 0.0f;
@@ -55,7 +57,7 @@ public class PhysicalMissile extends AbstractPhysicalWeapon implements Explosive
 
 	@Override
 	public Vec2 getCenter() {
-		return body.getPosition();
+		return body.getWorldCenter();
 	}
 
 	@Override
@@ -72,6 +74,7 @@ public class PhysicalMissile extends AbstractPhysicalWeapon implements Explosive
 
 	@Override
 	public void explode() {
+		System.out.println("IL MISSILE é ESPLOSO");
 		PhysicalObjectManager.getInstance().makeAnExplosion(this);
 		exploded=true;
 	}

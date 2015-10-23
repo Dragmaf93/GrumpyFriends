@@ -7,6 +7,7 @@ import java.util.Set;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
+import org.jbox2d.collision.WorldManifold;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.contacts.Contact;
 
@@ -49,10 +50,11 @@ public class PhysicalContactListener implements ContactListener {
 	public void beginContact(Contact contact) {
 		
 		// explosive object contact
+		
 		Fixture explosiveObjectfixture=getExplosiveObjectFixture(contact.getFixtureA(),contact.getFixtureB());
 		if(explosiveObjectfixture!=null){
+		
 			((ExplosiveObject)explosiveObjectfixture.getUserData()).explode();
-			explosiveObjectfixture.setUserData(null);
 			explosiveObjectfixture=null;
 		}
 		

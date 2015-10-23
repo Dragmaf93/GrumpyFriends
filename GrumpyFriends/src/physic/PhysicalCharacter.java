@@ -17,6 +17,7 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 	
 	private final static float FEET_FRICTION=5.0f;
 	private final static float MOTOR_TORQUE=20f;
+	private final static float DENSITY = 10f;
 	
 	private Body feet;
 	private Fixture bodyFixture;
@@ -29,7 +30,7 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 	public PhysicalCharacter(float x, float y, float width, float height,String nameCharacter) {
 		super(x, y, width, height);		
 		this.nameCharacter=nameCharacter;
-		System.out.println(body +"     "+feet);
+		System.out.println(width*height);
 	}
 
 	@Override
@@ -45,7 +46,7 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 		
 		FixtureDef bodyFixtureDef = new FixtureDef();
 		bodyFixtureDef.setShape(polygonShape);
-		bodyFixtureDef.setDensity(1.0f);
+		bodyFixtureDef.setDensity(DENSITY);
 
 		bodyFixture=body.createFixture(bodyFixtureDef);
 
@@ -58,11 +59,12 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 		
 		FixtureDef feetFixtureDef = new FixtureDef();
 		feetFixtureDef.setShape(circleShape);
-		feetFixtureDef.setDensity(1.0f);
+		feetFixtureDef.setDensity(DENSITY);
 	
 		feetFixtureDef.friction=FEET_FRICTION;
 		feetFixture = feet.createFixture(feetFixtureDef);
 		
+		body.setUserData(nameCharacter);
 		feetFixture.setUserData(nameCharacter);		
 		
 		WheelJointDef wheelJointDef = new WheelJointDef();
@@ -75,7 +77,8 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 		wheelJointDef.enableMotor=true;
 		wheelJointDef.dampingRatio=20f;
 		wheelJointDef.frequencyHz=20f;
-		joint =  (WheelJoint) world.createJoint(wheelJointDef);		
+		joint =  (WheelJoint) world.createJoint(wheelJointDef);
+		System.out.println(body.getMass());
 	}
 	
 	public void unblockWheelJoint(){

@@ -5,12 +5,6 @@
   
   <dimension height="700" width="1350" />
   
- <!--
-  <character>
-  	<position x="5" y="10"/>
-  	<name>Character</name>
-  </character>
-  -->
   <linearGround>
 		<position posX="0" posY="1"/>
 		<size width="1" height="100"/>
@@ -27,18 +21,6 @@
 		<position posX="1" posY="100"/>
 		<size width="300" height="1"/>
 	</linearGround>
-	
-	<linearGround>
-		<position posX="10" posY="10"/>
-		<size width="20" height="1"/>
-	</linearGround>
-	
-  	<inclinedGround>
-  		<position posX="50" posY="10"/>
-		<size width="20" height="10"/>
-  		<angleRotation degree="0"/>
-  	</inclinedGround>
-  
   
   
 </world>

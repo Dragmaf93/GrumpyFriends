@@ -13,7 +13,7 @@ import world.LinearGround;
 
 public class TestWorld implements world.World{
 
-	public final static Vec2 GRAVITY = new Vec2(0,-10f);
+	public final static Vec2 GRAVITY = new Vec2(0,-20f);
 	
 	private World world;
 	private List<Character> characters;

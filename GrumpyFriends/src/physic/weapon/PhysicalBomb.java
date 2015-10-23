@@ -24,11 +24,10 @@ public class PhysicalBomb extends AbstractPhysicalWeapon  implements ExplosiveOb
 	
 	}
 	
-	public PhysicalBomb(float radius, float blastPower, float blastRadius){
+	public PhysicalBomb(float radius,float blastRadius){
 		this.radius=radius;
-		this.blastPower=blastPower;
+		this.blastPower=blastRadius*100;
 		this.blastRadius=blastRadius;
-		
 	}
 	
 	@Override
@@ -37,7 +36,7 @@ public class PhysicalBomb extends AbstractPhysicalWeapon  implements ExplosiveOb
 		bodyDef.fixedRotation = true;
 		bodyDef.setType(BodyType.DYNAMIC);
 		body = world.createBody(bodyDef);
-
+		body.setUserData("BOMBA");
 		CircleShape bombShape = new CircleShape();
 		bombShape.setRadius(radius);
 		fixtureDef = new FixtureDef();
@@ -48,7 +47,8 @@ public class PhysicalBomb extends AbstractPhysicalWeapon  implements ExplosiveOb
 	
 	@Override
 	public Vec2 getCenter() {
-		return body.getPosition();
+		
+		return body.getWorldCenter();
 	}
 	@Override
 	public float getBlastPower() {

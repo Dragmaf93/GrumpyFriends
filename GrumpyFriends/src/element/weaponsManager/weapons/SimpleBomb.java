@@ -15,8 +15,11 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 	private static final int NUMBER_OF_HIT = 1;
 	private static final long SEC_TO_EXPLODE=4;
 	
+	private static final float BLAST_POWER = 10000f;
+	private static final float BLAST_RADIUS = 10f;
+		
 	public SimpleBomb() {
-		physicalWeapon = new PhysicalBomb(RADIUS);
+		physicalWeapon = new PhysicalBomb(RADIUS,BLAST_RADIUS);
 		PhysicalObjectManager.getInstance().buildPhysicWeapon(physicalWeapon);
 		hit = NUMBER_OF_HIT;
 	}
