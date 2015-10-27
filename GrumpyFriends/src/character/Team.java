@@ -1,4 +1,4 @@
-package element.character;
+package character;
 
 import java.util.Collections;
 import java.util.LinkedList;

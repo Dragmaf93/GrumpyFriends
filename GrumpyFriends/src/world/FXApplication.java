@@ -21,8 +21,8 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 
-import element.character.AbstractCharacter;
-import element.character.Chewbacca;
+import character.AbstractCharacter;
+import character.Chewbacca;
 import javafx.event.ActionEvent;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;

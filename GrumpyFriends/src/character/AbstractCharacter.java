@@ -1,10 +1,9 @@
-package element.character;
+package character;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.World;
 
-import element.Element;
 import element.weaponsManager.Launcher;
 import element.weaponsManager.Weapon;
 import element.weaponsManager.WeaponsManager;
@@ -13,8 +12,9 @@ import physic.PhysicalObject;
 import physic.PhysicalObjectManager;
 import utils.ObjectWithTimer;
 import utils.Timer;
+import utils.Util;
 
-public abstract class AbstractCharacter implements Character, Element, ObjectWithTimer {
+public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 
 	private final static float MAX_SPEED = 10f;
 	private final static float _SPEED = 20f;
@@ -226,13 +226,13 @@ public abstract class AbstractCharacter implements Character, Element, ObjectWit
 	}
 
 	@Override
-	public float getHeight() {
-		return 0f;
+	public double getHeight() {
+		return Util.toPixelHeight(physicBody.getHeight());
 	}
 
 	@Override
-	public float getWidth() {
-		return 0f;
+	public double getWidth() {
+		return Util.toPixelWidth(physicBody.getWidth());
 	}
 
 	@Override
@@ -242,15 +242,13 @@ public abstract class AbstractCharacter implements Character, Element, ObjectWit
 	}
 
 	@Override
-	public float getY() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getY() {
+		return Util.toPixelPosY(physicBody.getY());
 	}
 
 	@Override
-	public float getX() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getX() {
+		return Util.toPixelPosX(physicBody.getX());
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package element.character;
+package character;
 
 public class Chewbacca extends AbstractCharacter{
 	

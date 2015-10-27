@@ -1,7 +1,7 @@
 package test;
 
 
-import element.character.Chewbacca;
+import character.Chewbacca;
 import physic.PhysicalObjectManager;
 import world.World;
 import world.WorldBuilder;

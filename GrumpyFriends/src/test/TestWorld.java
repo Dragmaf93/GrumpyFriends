@@ -6,10 +6,11 @@ import java.util.List;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
-import element.character.Character;
+import character.Character;
+import element.Ground;
+import element.ground.InclinedGround;
+import element.ground.LinearGround;
 import physic.PhysicalContactListener;
-import world.InclinedGround;
-import world.LinearGround;
 
 public class TestWorld implements world.World{
 
@@ -68,6 +69,20 @@ public class TestWorld implements world.World{
 	}
 	public void setContactListener() {
 		world.setContactListener(new PhysicalContactListener(characters));
+		
+	}
+	@Override
+	public List<Ground> getGrounds() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public List<Character> getAllCharacters() {
+		return characters;
+	}
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
 		
 	}
 	

@@ -10,7 +10,7 @@ public class PhysicalRectangularObject extends PhysicalStaticObject {
 	public PhysicalRectangularObject(float x, float y, float width, float height) {
 		super(x, y, width, height);
 	}
-
+	
 	@Override
 	public void buildSelf(World world) {
 		body = world.createBody(bodyDef);

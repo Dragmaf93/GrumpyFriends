@@ -1,8 +1,10 @@
-package world;
+package element.ground;
 
+import element.Ground;
 import physic.PhysicalObject;
 import physic.PhysicalObjectManager;
 import physic.PhysicalRectangularObject;
+import utils.Util;
 
 
 public class LinearGround implements Ground{
@@ -14,33 +16,27 @@ public class LinearGround implements Ground{
 		
 		this.physicBody = new PhysicalRectangularObject(x, y, width, height);
 		PhysicalObjectManager.getInstance().buildPhysicObject(physicBody);
-	
 	}
 
 	@Override
-	public float getX() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getY() {
+		return Util.toPixelPosY(physicBody.getY())-physicBody.getHeight();
 	}
 
 	@Override
-	public float getY() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getX() {
+		return Util.toPixelPosX(physicBody.getX());
 	}
 
 	@Override
-	public float getHeight() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getHeight() {
+		return Util.toPixelHeight(physicBody.getHeight());
 	}
 
 	@Override
-	public float getWidth() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getWidth() {
+		return Util.toPixelWidth(physicBody.getWidth());
 	}
-
 	@Override
 	public PhysicalObject getPhysicObject() {
 		return physicBody;

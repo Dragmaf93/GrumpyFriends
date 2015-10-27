@@ -1,9 +1,9 @@
 package game;
 
-import element.character.Team;
+import character.Character;
+import character.Team;
 import utils.ObjectWithTimer;
 import utils.Timer;
-import element.character.Character;
 import world.World;
 
 public class MatchManager implements ObjectWithTimer {
@@ -157,6 +157,10 @@ public class MatchManager implements ObjectWithTimer {
 	public void startTest() {
 		currentTeam = teamA;
 		currentPlayer = teamA.get(0);
+	}
+
+	public World getWorld() {
+		return battlefield;
 	}
 
 }

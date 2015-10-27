@@ -4,7 +4,7 @@ import element.weaponsManager.AbstractWeapon;
 import physic.DragForceThread;
 import physic.PhysicalObjectManager;
 import physic.weapon.PhysicalMissile;
-import world.Vector;
+import utils.Vector;
 
 public class SimpleMissile extends AbstractWeapon{
 	

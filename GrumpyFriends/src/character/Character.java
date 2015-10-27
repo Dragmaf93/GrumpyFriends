@@ -1,12 +1,13 @@
-package element.character;
+package character;
 
 
 import org.jbox2d.common.Vec2;
 
+import element.Element;
 import element.weaponsManager.Weapon;
 import physic.PhysicalObject;
 
-public interface Character 
+public interface Character extends Element
 {
 	public final static int RIGHT = 1;
 	public final static int LEFT = -1;

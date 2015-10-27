@@ -17,10 +17,13 @@
 		<position posX="300" posY="1"/>
 		<size width="1" height="100"/>
 	</linearGround>
+	<!--
   	<linearGround>
+
 		<position posX="1" posY="100"/>
 		<size width="300" height="1"/>
 	</linearGround>
+	-->
   
   
 </world>

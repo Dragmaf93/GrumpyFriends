@@ -1,6 +1,7 @@
 package world;
 
-
+import physic.PhysicalContactListener;
+import physic.PhysicalObjectManager;
 
 public class GameWorldBuilder implements WorldBuilder{
 
@@ -14,6 +15,8 @@ public class GameWorldBuilder implements WorldBuilder{
 
 		AbstractWorld.initializes(typeWorld);
 		worldToCreate = (AbstractWorld) AbstractWorld.getInstance();
+		PhysicalObjectManager.getInstance().setWorld(worldToCreate);
+
 
 	}
 	@Override
@@ -44,10 +47,10 @@ public class GameWorldBuilder implements WorldBuilder{
 	public org.jbox2d.dynamics.World getPhysicWorld() {
 		return worldToCreate.getPhysicWorld();
 	}
+	
 	@Override
 	public void lastSettings() {
-		// TODO Auto-generated method stub
-		
+		worldToCreate.setContactListener();
 	}
 
 }

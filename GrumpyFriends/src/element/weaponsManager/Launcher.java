@@ -1,10 +1,10 @@
 package element.weaponsManager;
 
-import element.character.Character;
+import character.Character;
 import physic.PhysicalCharacter;
 import physic.PhysicalLauncher;
 import physic.PhysicalObjectManager;
-import world.Vector;
+import utils.Vector;
 
 public class Launcher {
 

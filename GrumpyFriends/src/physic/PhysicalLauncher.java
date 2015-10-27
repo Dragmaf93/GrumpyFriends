@@ -12,7 +12,7 @@ import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
 import physic.weapon.PhysicalWeapon;
 import sun.font.CreatedFontTracker;
-import world.Vector;
+import utils.Vector;
 
 public class PhysicalLauncher extends PhysicalDinamicObject {
 

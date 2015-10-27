@@ -8,7 +8,11 @@ import java.util.List;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
-import element.character.Character;
+import character.Character;
+import element.Ground;
+import element.ground.InclinedGround;
+import element.ground.LinearGround;
+import physic.PhysicalContactListener;
 
 public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements world.World {
 
@@ -17,12 +21,15 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	protected HashMap<String, Character> characterContainer;
 	protected List<Ground> grounds;
 
+	private List<Character> characters;
+		
 	protected static World instanceSon;
 
 	public AbstractWorld(Vec2 gravity, boolean doSleep) {
 		super(gravity);
 		characterContainer = new HashMap<>();
 		grounds = new ArrayList<Ground>();
+		characters = new ArrayList<Character>();
 	}
 
 	public static void initializes(String typeWorld) {
@@ -73,10 +80,14 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 		}
 		return null;
 	}
-
+	@Override
+	public List<Character> getAllCharacters() {
+		return characters;
+	}
 	@Override
 	public void addCharacter(Character character) {
 		characterContainer.put(character.getName(), character);
+		characters.add(character);
 	}
 
 	@Override
@@ -103,5 +114,19 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	public void setDimension(float width, float height) {
 		this.width = width;
 		this.width = width;
+	}
+	
+	@Override
+	public List<Ground> getGrounds() {
+		return grounds;
+	}
+	
+	@Override
+	public void update() {
+		super.step(1.0f/60, 6, 3);  
+	}
+
+	public void setContactListener() {
+		super.setContactListener(new PhysicalContactListener(characters));
 	}
 }

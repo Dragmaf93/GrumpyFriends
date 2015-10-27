@@ -3,9 +3,9 @@ package test;
 import org.jbox2d.testbed.framework.TestbedSettings;
 import org.jbox2d.testbed.framework.TestbedTest;
 
-import element.character.Character;
-import element.character.Chewbacca;
-import element.character.Team;
+import character.Character;
+import character.Chewbacca;
+import character.Team;
 import game.MatchManager;
 import physic.PhysicalObjectManager;
 import world.WorldBuilder;

@@ -6,7 +6,7 @@ import physic.PhysicalObjectManager;
 import physic.weapon.PhysicalBomb;
 import utils.ObjectWithTimer;
 import utils.Timer;
-import world.Vector;
+import utils.Vector;
 
 public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 

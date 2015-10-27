@@ -1,7 +1,10 @@
 package world;
 
 
-import element.character.Character;
+import java.util.List;
+
+import character.Character;
+import element.Ground;
 
 public interface World {
 
@@ -13,7 +16,11 @@ public interface World {
 	abstract public float getWidth();
 	abstract public float getHeight();
 	abstract public Character getCharacter();
+	abstract public List<Ground> getGrounds();
 	
 	abstract public  org.jbox2d.dynamics.World getPhysicWorld();
+	public abstract List<Character> getAllCharacters();
+	
+	public abstract void update();
 	
 }

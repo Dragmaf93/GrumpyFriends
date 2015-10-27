@@ -1,6 +1,7 @@
-package world;
+package element.ground;
 
 import physic.PhysicalTriangularObject;
+import element.Ground;
 import physic.PhysicalObject;
 import physic.PhysicalObjectManager;
 
@@ -20,25 +21,25 @@ public class InclinedGround  implements Ground {
 	}
 
 	@Override
-	public float getX() {
+	public double getX() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public float getY() {
+	public double getY() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public float getHeight() {
+	public double getHeight() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public float getWidth() {
+	public double getWidth() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

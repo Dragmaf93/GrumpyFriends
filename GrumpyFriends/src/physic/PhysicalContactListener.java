@@ -11,7 +11,7 @@ import org.jbox2d.collision.WorldManifold;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.contacts.Contact;
 
-import element.character.Character;
+import character.Character;
 import element.weaponsManager.ExplosiveObject;
 import physic.weapon.PhysicalWeapon;
 

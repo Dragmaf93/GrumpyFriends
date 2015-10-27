@@ -1,6 +1,4 @@
-package world;
-
-import element.Element;
+package element;
 
 public interface Ground extends Element{
 

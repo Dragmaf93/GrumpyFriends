@@ -4,11 +4,12 @@ import physic.PhysicalObject;
 
 public interface Element 
 {
-	public abstract float getX();
-	public abstract float getY();
 	
-	public abstract float getHeight();
-	public abstract float getWidth();
+	public abstract double getX();
+	public abstract double getY();
+	
+	public abstract double getHeight();
+	public abstract double getWidth();
 	
 	public PhysicalObject getPhysicObject();
 }

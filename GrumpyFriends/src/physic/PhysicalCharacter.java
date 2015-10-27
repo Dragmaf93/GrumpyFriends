@@ -30,19 +30,20 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 	public PhysicalCharacter(float x, float y, float width, float height,String nameCharacter) {
 		super(x, y, width, height);		
 		this.nameCharacter=nameCharacter;
-		System.out.println(width*height);
 	}
 
 	@Override
 	public void buildSelf(World world) {
 
+		float bodyHeight = start_height-start_width;
+		
 		bodyDef.setType(BodyType.DYNAMIC);
 		bodyDef.setFixedRotation(true);
 		body = world.createBody(bodyDef);
 		body.setBullet(true);
 		
 		PolygonShape polygonShape = new PolygonShape();
-		polygonShape.setAsBox(start_width, start_height);
+		polygonShape.setAsBox(start_width, bodyHeight);
 		
 		FixtureDef bodyFixtureDef = new FixtureDef();
 		bodyFixtureDef.setShape(polygonShape);
@@ -50,7 +51,7 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 
 		bodyFixture=body.createFixture(bodyFixtureDef);
 
-		bodyDef.setPosition(new Vec2(start_x,start_y- start_height));
+		bodyDef.setPosition(new Vec2(start_x,start_y- bodyHeight));
 		bodyDef.setFixedRotation(false);
 		feet=world.createBody(bodyDef);
 		

@@ -1,7 +1,7 @@
 package element.weaponsManager;
 
 import physic.weapon.PhysicalWeapon;
-import world.Vector;
+import utils.Vector;
 
 public interface Weapon 
 {
