@@ -1,14 +1,19 @@
-package gui.worldDrawer;
+package gui.drawer;
 
 import element.Element;
 import element.ground.LinearGround;
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
-public class LinearGroundDrawer implements DrawerObject  {
+public class LinearGroundDrawer extends AbstractDrawerObject  {
+
+	public LinearGroundDrawer(Pane pane) {
+		super(pane);
+	}
 
 	@Override
-	public Shape getShape(Element elementToDraw) {
+	public Node getElementToDraw(Element elementToDraw) {
 		LinearGround ground = (LinearGround) elementToDraw;
 		Rectangle rectangle = new Rectangle(
 				ground.getX(),
@@ -16,6 +21,8 @@ public class LinearGroundDrawer implements DrawerObject  {
 				ground.getWidth(),
 				ground.getHeight());
 		return rectangle;
-		
 	}
+
+		
+
 }

@@ -1,11 +1,14 @@
 package character;
 
 
+
 import org.jbox2d.common.Vec2;
 
 import element.Element;
+import element.weaponsManager.Launcher;
 import element.weaponsManager.Weapon;
 import physic.PhysicalObject;
+import utils.Vector;
 
 public interface Character extends Element
 {
@@ -26,11 +29,12 @@ public interface Character extends Element
 	public abstract String getName();
 	public abstract int getLifePoints();
 	
+	public abstract Launcher getLauncher();
 	public abstract void equipWeapon(String weaponName);
 	public abstract void unequipWeapon();
 	public abstract void attack(float power);
-	public abstract void changeAngle(float direction);
-	
+	public abstract void changeAim(float direction);
+	public abstract Vector getAim();
 	
 	public abstract void setGrounded(boolean b);
 	public abstract boolean isGrounded();

@@ -84,4 +84,22 @@ public class PhysicalMissile extends AbstractPhysicalWeapon implements Explosive
 		return blastRadius;
 	}
 
+	@Override
+	public float getX() {
+		return body.getPosition().x;
+	}
+	@Override
+	public float getY() {
+		return body.getPosition().y;
+	}
+	@Override
+	public float getHeight() {
+		return height;
+	}
+	@Override
+	public float getWidth() {
+		return width;
+	}
+	
+
 }

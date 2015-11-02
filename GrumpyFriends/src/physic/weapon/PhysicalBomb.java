@@ -68,6 +68,22 @@ public class PhysicalBomb extends AbstractPhysicalWeapon  implements ExplosiveOb
 	public float getBlastRadius() {
 		return blastRadius;
 	}
+	@Override
+	public float getX() {
+		return body.getPosition().x-radius;
+	}
+	@Override
+	public float getY() {
+		return body.getPosition().y+radius;
+	}
+	@Override
+	public float getHeight() {
+		return radius;
+	}
+	@Override
+	public float getWidth() {
+		return radius;
+	}
 	
 	
 	

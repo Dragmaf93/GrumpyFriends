@@ -18,7 +18,7 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 	private final static float FEET_FRICTION=5.0f;
 	private final static float MOTOR_TORQUE=20f;
 	private final static float DENSITY = 10f;
-	
+
 	private Body feet;
 	private Fixture bodyFixture;
 	private Fixture feetFixture;
@@ -26,16 +26,69 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 	
 
 	private String nameCharacter;
+	private Vec2 vec;
 	
 	public PhysicalCharacter(float x, float y, float width, float height,String nameCharacter) {
 		super(x, y, width, height);		
 		this.nameCharacter=nameCharacter;
+		vec = new Vec2(-width/2,(height-width/2)/2); 
 	}
 
 	@Override
 	public void buildSelf(World world) {
 
-		float bodyHeight = start_height-start_width;
+//		float bodyHeight = start_height-start_width/2;
+//		
+//		bodyDef.setType(BodyType.DYNAMIC);
+//		bodyDef.setFixedRotation(true);
+//		body = world.createBody(bodyDef);
+//		body.setBullet(true);
+//		
+//		PolygonShape polygonShape = new PolygonShape();
+//		int count = 4;
+////		Vec2[] vertices = new Vec2[count];
+////		vertices[0] = new Vec2(0, 0);
+////		vertices[1] = new Vec2(start_width, 0);
+////		vertices[2] = new Vec2(start_width, bodyHeight);
+////		vertices[3] = new Vec2(0, bodyHeight);
+////		polygonShape.set(vertices, count);
+//		polygonShape.setAsBox(start_width, bodyHeight);
+//
+//		FixtureDef bodyFixtureDef = new FixtureDef();
+//		bodyFixtureDef.setShape(polygonShape);
+//		bodyFixtureDef.setDensity(DENSITY);
+//
+//		bodyFixture=body.createFixture(bodyFixtureDef);
+//
+//		bodyDef.setPosition(new Vec2(start_x+start_width/2,start_y));
+//		bodyDef.setFixedRotation(false);
+//		feet=world.createBody(bodyDef);
+//		
+//		CircleShape circleShape = new CircleShape();
+//		circleShape.setRadius(start_width/2);
+//		
+//		FixtureDef feetFixtureDef = new FixtureDef();
+//		feetFixtureDef.setShape(circleShape);
+//		feetFixtureDef.setDensity(DENSITY);
+//	
+//		feetFixtureDef.friction=FEET_FRICTION;
+//		feetFixture = feet.createFixture(feetFixtureDef);
+//		
+//		body.setUserData(nameCharacter);
+//		feetFixture.setUserData(nameCharacter);		
+//		
+//		WheelJointDef wheelJointDef = new WheelJointDef();
+//	    Vec2 axis = new Vec2(1.0f, 0.0f);
+//	    
+//	    wheelJointDef.initialize(body, feet, feet.getPosition(), axis);
+//		
+//		wheelJointDef.maxMotorTorque=MAX_MOTOR_TORQUE;
+//		wheelJointDef.collideConnected=false;
+//		wheelJointDef.enableMotor=true;
+//		wheelJointDef.dampingRatio=20f;
+//		wheelJointDef.frequencyHz=20f;
+//		joint =  (WheelJoint) world.createJoint(wheelJointDef);
+		float bodyHeight = start_height-start_width/2;
 		
 		bodyDef.setType(BodyType.DYNAMIC);
 		bodyDef.setFixedRotation(true);
@@ -43,20 +96,27 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 		body.setBullet(true);
 		
 		PolygonShape polygonShape = new PolygonShape();
-		polygonShape.setAsBox(start_width, bodyHeight);
-		
+		int count = 4;
+//		Vec2[] vertices = new Vec2[count];
+//		vertices[0] = new Vec2(0, 0);
+//		vertices[1] = new Vec2(start_width, 0);
+//		vertices[2] = new Vec2(start_width, bodyHeight);
+//		vertices[3] = new Vec2(0, bodyHeight);
+//		polygonShape.set(vertices, count);
+		polygonShape.setAsBox(start_width/2, bodyHeight/2);
+
 		FixtureDef bodyFixtureDef = new FixtureDef();
 		bodyFixtureDef.setShape(polygonShape);
 		bodyFixtureDef.setDensity(DENSITY);
 
 		bodyFixture=body.createFixture(bodyFixtureDef);
 
-		bodyDef.setPosition(new Vec2(start_x,start_y- bodyHeight));
+		bodyDef.setPosition(new Vec2(start_x,start_y-bodyHeight/2));
 		bodyDef.setFixedRotation(false);
 		feet=world.createBody(bodyDef);
 		
 		CircleShape circleShape = new CircleShape();
-		circleShape.setRadius(start_width);
+		circleShape.setRadius(start_width/2);
 		
 		FixtureDef feetFixtureDef = new FixtureDef();
 		feetFixtureDef.setShape(circleShape);
@@ -79,9 +139,16 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 		wheelJointDef.dampingRatio=20f;
 		wheelJointDef.frequencyHz=20f;
 		joint =  (WheelJoint) world.createJoint(wheelJointDef);
-		System.out.println(body.getMass());
 	}
 	
+	@Override
+	public float getX() {
+		return body.getWorldPoint(vec).x;
+	}
+	@Override
+	public float getY() {
+		return body.getWorldPoint(vec).y;
+	}
 	public void unblockWheelJoint(){
 		joint.setMaxMotorTorque(MOTOR_TORQUE);
 	}

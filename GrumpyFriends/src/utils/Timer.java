@@ -28,7 +28,10 @@ public class Timer extends Thread {
 		if (!stoped)
 			objectWithTimer.afterCountDown();
 	}
-
+	public boolean timeEnded(){
+		currentTime = System.currentTimeMillis() / 1000 - time0;
+		return currentTime >= endTimer;
+	}
 	final public int getSeconds() {
 		return (int )currentTime;
 	}

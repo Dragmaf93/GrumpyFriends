@@ -138,10 +138,11 @@ public class MatchManager implements ObjectWithTimer {
 		turnTimer = null;
 	}
 
-	public int getTimer() {
-		if (turnTimer != null)
-			return turnTimer.getSeconds();
-		return 0;
+	public Timer getTimer() {
+//		if (turnTimer != null)
+//			return turnTimer.getSeconds();
+//		return 0;
+		return null;
 	}
 
 	@Override

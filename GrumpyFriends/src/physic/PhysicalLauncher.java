@@ -10,6 +10,7 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
+import character.Character;
 import physic.weapon.PhysicalWeapon;
 import sun.font.CreatedFontTracker;
 import utils.Vector;
@@ -19,6 +20,7 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 	private final static float HEIGHT=0.2f;
 	private final static float WIDTH=1.0f;
 	private static final Vec2 DISTANCE_TO_LAUNCHER = new Vec2(1.2f,0);
+	private static final Vec2 ORIGIN_JOINT_POINT = new Vec2(-WIDTH,0);
 	
 	
 	private RevoluteJoint joint;
@@ -28,8 +30,10 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 	private FixtureDef fixtureDef;
 	private RevoluteJointDef revoluteJointDef;
 	
+	private int currentDirection;
+	
 	public PhysicalLauncher(PhysicalCharacter character) {
-		super(character.getX(),character.getY()+character.getHeight()/2,WIDTH,HEIGHT);
+		super(character.getBody().getPosition().x,character.getBody().getPosition().y+character.getHeight()/2,WIDTH,HEIGHT);
 		this.physicalCharacter=character;
 	}
 
@@ -43,13 +47,14 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape=launcherShape;
 		fixtureDef.density=1.0f;
+		fixtureDef.isSensor=true;
 
 //		body.createFixture(fixtureDef);	
 		
 		revoluteJointDef = new RevoluteJointDef();
 		revoluteJointDef.bodyA=physicalCharacter.getBody();
 		revoluteJointDef.bodyB=body;
-		revoluteJointDef.localAnchorA.set(0,physicalCharacter.getHeight()-WIDTH*0.8f);
+		revoluteJointDef.localAnchorA.set(0,physicalCharacter.getHeight()/2-WIDTH*0.8f);
 		revoluteJointDef.localAnchorB.set(-WIDTH,0);
 		revoluteJointDef.collideConnected=false;
 
@@ -60,10 +65,23 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 		revoluteJointDef.referenceAngle=(float) Math.toRadians(0);
 		revoluteJointDef.enableLimit = true;
 		revoluteJointDef.lowerAngle = (float) Math.toRadians(-70);
-		revoluteJointDef.upperAngle =  (float) Math.toRadians(250);
+		revoluteJointDef.upperAngle =  (float) Math.toRadians(90);
 		joint=(RevoluteJoint) world.createJoint(revoluteJointDef);
+		currentDirection=Character.RIGHT;
 		
 		
+	}
+	public void setLimitAngle(int direction){
+		if(direction==Character.LEFT && currentDirection!=direction){
+			currentDirection=direction;
+			joint.setLimits((float)Math.toRadians(90), (float)Math.toRadians(250));
+			body.setTransform(ORIGIN_JOINT_POINT,(float) Math.toRadians(180) );
+			
+		}else if(direction == Character.RIGHT && currentDirection!=direction){
+			joint.setLimits((float)Math.toRadians(-70),(float) Math.toRadians(90));
+			currentDirection=direction;
+			body.setTransform(ORIGIN_JOINT_POINT, (float) Math.toRadians(0));
+		}
 	}
 	
 	public void hide(){
@@ -77,7 +95,7 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 			fixture=body.createFixture(fixtureDef);		
 	}
 	
-	public Vector getPositionWeapon(){
+	public Vector getPositionAim(){
 		Vec2 v=body.getWorldPoint(DISTANCE_TO_LAUNCHER);
 		return new Vector(v.x, v.y);
 	}
@@ -95,7 +113,10 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 	}
 
 	public void rotate(float speed) {
-		joint.setMotorSpeed(speed);
+		if(currentDirection==Character.RIGHT)
+			joint.setMotorSpeed(speed);
+		else if(currentDirection==Character.LEFT)
+			joint.setMotorSpeed(-speed);
 	}
 
 }

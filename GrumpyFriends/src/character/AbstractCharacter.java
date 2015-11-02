@@ -12,7 +12,8 @@ import physic.PhysicalObject;
 import physic.PhysicalObjectManager;
 import utils.ObjectWithTimer;
 import utils.Timer;
-import utils.Util;
+import utils.Utils;
+import utils.Vector;
 
 public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 
@@ -39,7 +40,7 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 	protected int currentDirection;
 
 	protected PhysicalObject physicBody;
-
+	
 	protected Launcher launcher;
 
 	public AbstractCharacter(String name, float x, float y, float height, float width, Team team) {
@@ -57,6 +58,8 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 
 		physicBody = new PhysicalCharacter(x, y, width, height, name);
 		PhysicalObjectManager.getInstance().buildPhysicObject(physicBody);
+		
+		launcher = new Launcher(this);
 	}
 
 	@Override
@@ -96,6 +99,11 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 	}
 
 	@Override
+	public Launcher getLauncher() {
+		return launcher;
+	}
+
+	@Override
 	public void attack(float power) {
 		if (launcher == null || equippedWeapon == null || !grounded || moving)
 			return;
@@ -108,7 +116,7 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 			equippedWeapon = null;
 			team.getMatchManager().stopTurnTimer();
 
-			new Timer(this).start();
+//			new Timer(this).start();
 		}
 	}
 
@@ -118,12 +126,17 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 	}
 
 	@Override
-	public void changeAngle(float direction) {
+	public void changeAim(float direction) {
 		if (launcher == null || !launcher.isActivated())
 			return;
 
 		float angle = 2.0f;
 		launcher.changeAngle(angle * direction);
+	}
+
+	@Override
+	public Vector getAim() {
+		return launcher.getPositionAim();
 	}
 
 	@Override
@@ -145,7 +158,7 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 		Vec2 speed = body.getLinearVelocity();
 		force = 0;
 		moving = true;
-
+		currentDirection=direction;
 		switch (direction) {
 		case RIGHT:
 			// if (speed.x < MAX_SPEED)
@@ -163,6 +176,7 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 			((PhysicalCharacter) physicBody).unblockWheelJoint();
 		// body.applyForce(new Vec2(force, 0), body.getWorldCenter());
 		body.setLinearVelocity(new Vec2(force, speed.y));
+		launcher.setDirection(direction);
 
 	}
 
@@ -171,7 +185,6 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 		Body body = physicBody.getBody();
 		moving = false;
 		((PhysicalCharacter) physicBody).blockWheelJoint();
-		currentDirection = 0;
 		body.getLinearVelocity().x = 0f;
 
 	}
@@ -203,6 +216,12 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 	}
 
 	@Override
+	public Timer getTimer() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	public int getLifePoints() {
 		return lifePoints;
 	}
@@ -227,12 +246,12 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 
 	@Override
 	public double getHeight() {
-		return Util.toPixelHeight(physicBody.getHeight());
+		return Utils.heightFromJbox2dToJavaFx(physicBody.getHeight());
 	}
 
 	@Override
 	public double getWidth() {
-		return Util.toPixelWidth(physicBody.getWidth());
+		return Utils.widthFromJbox2dToJavaFx(physicBody.getWidth());
 	}
 
 	@Override
@@ -243,12 +262,12 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 
 	@Override
 	public double getY() {
-		return Util.toPixelPosY(physicBody.getY());
+		return Utils.yFromJbox2dToJavaFx(physicBody.getY());
 	}
 
 	@Override
 	public double getX() {
-		return Util.toPixelPosX(physicBody.getX());
+		return Utils.xFromJbox2dToJavaFx(physicBody.getX());
 	}
 
 	@Override

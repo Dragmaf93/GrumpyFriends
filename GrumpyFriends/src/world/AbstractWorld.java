@@ -13,6 +13,7 @@ import element.Ground;
 import element.ground.InclinedGround;
 import element.ground.LinearGround;
 import physic.PhysicalContactListener;
+import physic.PhysicalObjectManager;
 
 public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements world.World {
 
@@ -124,6 +125,8 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	@Override
 	public void update() {
 		super.step(1.0f/60, 6, 3);  
+		PhysicalObjectManager.getInstance().destroyBodies();
+
 	}
 
 	public void setContactListener() {

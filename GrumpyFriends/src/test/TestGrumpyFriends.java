@@ -73,9 +73,11 @@ public class TestGrumpyFriends extends TestbedTest {
 			break;
 		case 'a':
 			matchManager.getCurrentPlayer().move(Character.LEFT);
+			System.out.println(matchManager.getCurrentPlayer().getPhysicalObject().getX());
 			break;
 		case 'd':
 			matchManager.getCurrentPlayer().move(Character.RIGHT);
+			System.out.println(matchManager.getCurrentPlayer().getPhysicalObject().getX());
 			break;
 		case 'm':
 			matchManager.getCurrentPlayer().equipWeapon("SimpleMissile");
@@ -97,10 +99,10 @@ public class TestGrumpyFriends extends TestbedTest {
 			speed-=0.5f;
 			break;
 		case '6':
-			matchManager.getCurrentPlayer().changeAngle(Character.DECREASE);
+			matchManager.getCurrentPlayer().changeAim(Character.DECREASE);
 			break;
 		case '4':
-			matchManager.getCurrentPlayer().changeAngle(Character.INCREASE);
+			matchManager.getCurrentPlayer().changeAim(Character.INCREASE);
 			break;
 		default:
 			break;
@@ -128,7 +130,7 @@ public class TestGrumpyFriends extends TestbedTest {
 			break;
 		case '6':
 		case '4':
-			matchManager.getCurrentPlayer().changeAngle(Character.STOP);
+			matchManager.getCurrentPlayer().changeAim(Character.STOP);
 			break;
 		default:
 			break;

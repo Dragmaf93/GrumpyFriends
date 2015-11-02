@@ -33,5 +33,10 @@ public class PhysicalRectangularObject extends PhysicalStaticObject {
 
 		body.createFixture(fixtureDef);
 	}
-
+	
+	
+	@Override
+	public float getY() {
+		return body.getWorldPoint(new Vec2(0, start_height)).y;
+	}
 }

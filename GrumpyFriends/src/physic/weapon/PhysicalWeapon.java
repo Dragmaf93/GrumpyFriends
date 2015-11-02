@@ -16,4 +16,9 @@ public interface PhysicalWeapon {
 	abstract public void removeToPhisicalWorld();
 	
 	abstract public void setSize(float width, float height);
+
+	abstract public float getX();
+	abstract public float getY();
+	abstract public float getHeight();
+	abstract public float getWidth();
 }

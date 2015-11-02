@@ -37,9 +37,9 @@ public class MainApplication extends Application{
 		
 //		MatchRootNode root = new MatchRootNode(matchManager);
 		MatchPane pane = new MatchPane(matchManager);
-		ZoomingScrollPane scroll = new ZoomingScrollPane(pane);
+//		ZoomingScrollPane scroll = new ZoomingScrollPane(pane);
 		
-		MatchScene scene = new MatchScene(scroll, matchManager, 600, 600);
+		MatchScene scene = new MatchScene(pane, matchManager, 600, 600);
 		
 		primaryStage.setScene(scene);
 		primaryStage.show();

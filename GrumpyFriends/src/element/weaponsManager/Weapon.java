@@ -5,6 +5,7 @@ import utils.Vector;
 
 public interface Weapon 
 {
+	
 	public abstract float getMaxDamage();
 	public abstract float getMaxPower();
 	public abstract PhysicalWeapon getPhysicalWeapon();
@@ -12,4 +13,9 @@ public interface Weapon
 	public abstract void afterAttack();
 	public abstract String getName();
 	public abstract boolean finishHit();
+	public abstract double getX();
+	public abstract double getY();
+	public abstract double getHeight();
+	public abstract double getWidth();
+	public abstract boolean attacked();
 }

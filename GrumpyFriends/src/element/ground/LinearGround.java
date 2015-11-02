@@ -4,7 +4,7 @@ import element.Ground;
 import physic.PhysicalObject;
 import physic.PhysicalObjectManager;
 import physic.PhysicalRectangularObject;
-import utils.Util;
+import utils.Utils;
 
 
 public class LinearGround implements Ground{
@@ -20,22 +20,22 @@ public class LinearGround implements Ground{
 
 	@Override
 	public double getY() {
-		return Util.toPixelPosY(physicBody.getY())-physicBody.getHeight();
+		return Utils.yFromJbox2dToJavaFx(physicBody.getY());
 	}
 
 	@Override
 	public double getX() {
-		return Util.toPixelPosX(physicBody.getX());
+		return Utils.xFromJbox2dToJavaFx(physicBody.getX());
 	}
 
 	@Override
 	public double getHeight() {
-		return Util.toPixelHeight(physicBody.getHeight());
+		return Utils.heightFromJbox2dToJavaFx(physicBody.getHeight());
 	}
 
 	@Override
 	public double getWidth() {
-		return Util.toPixelWidth(physicBody.getWidth());
+		return Utils.widthFromJbox2dToJavaFx(physicBody.getWidth());
 	}
 	@Override
 	public PhysicalObject getPhysicObject() {

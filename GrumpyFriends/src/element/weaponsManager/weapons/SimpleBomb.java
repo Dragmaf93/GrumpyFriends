@@ -6,6 +6,7 @@ import physic.PhysicalObjectManager;
 import physic.weapon.PhysicalBomb;
 import utils.ObjectWithTimer;
 import utils.Timer;
+import utils.Utils;
 import utils.Vector;
 
 public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
@@ -17,11 +18,13 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 	
 	private static final float BLAST_POWER = 10000f;
 	private static final float BLAST_RADIUS = 10f;
-		
+	
+	private Timer timer;
 	public SimpleBomb() {
 		physicalWeapon = new PhysicalBomb(RADIUS,BLAST_RADIUS);
 		PhysicalObjectManager.getInstance().buildPhysicWeapon(physicalWeapon);
 		hit = NUMBER_OF_HIT;
+		attacked=false;
 	}
 
 	@Override
@@ -32,8 +35,8 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 		physicalWeapon.setAngularVelocity(0f);
 		physicalWeapon.setTransform(position.toVec2(), angle);
 		physicalWeapon.setLinearVelocity(speed.toVec2());
-		(new Timer(this)).start();
-		hit--;
+		attacked=true;
+		timer = new Timer(this);
 
 	}
 
@@ -66,11 +69,39 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 	public void afterAttack() {
 		PhysicalObjectManager.getInstance().removePhysicalWeapon(physicalWeapon);
 		physicalWeapon=null;
-		
+		hit--;		
 	}
+	
 	@Override
 	public void afterCountDown() {
 		((ExplosiveObject) physicalWeapon).explode();
 		afterAttack();
 	}
+
+	@Override
+	public double getX() {
+		return Utils.xFromJbox2dToJavaFx(physicalWeapon.getX());
+	}
+
+	@Override
+	public double getY() {
+		return Utils.yFromJbox2dToJavaFx(physicalWeapon.getY());
+	}
+
+	@Override
+	public double getHeight() {
+		return Utils.heightFromJbox2dToJavaFx(physicalWeapon.getHeight());
+	}
+
+	@Override
+	public double getWidth() {
+		return Utils.heightFromJbox2dToJavaFx(physicalWeapon.getWidth());
+	}
+
+	@Override
+	public Timer getTimer() {
+		return timer;
+	}
+	
+	
 }

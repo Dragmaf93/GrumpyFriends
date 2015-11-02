@@ -58,4 +58,6 @@ public abstract class AbstractPhysicalWeapon implements PhysicalWeapon{
 		if(body==null) return;
 	}
 	
+	
+	
 }

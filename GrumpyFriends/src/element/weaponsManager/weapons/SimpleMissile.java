@@ -4,6 +4,7 @@ import element.weaponsManager.AbstractWeapon;
 import physic.DragForceThread;
 import physic.PhysicalObjectManager;
 import physic.weapon.PhysicalMissile;
+import utils.Utils;
 import utils.Vector;
 
 public class SimpleMissile extends AbstractWeapon{
@@ -59,5 +60,24 @@ public class SimpleMissile extends AbstractWeapon{
 	@Override
 	public boolean finishHit() {
 		return hit==0;
+	}
+	@Override
+	public double getX() {
+		return Utils.xFromJbox2dToJavaFx(physicalWeapon.getX());
+	}
+
+	@Override
+	public double getY() {
+		return Utils.yFromJbox2dToJavaFx(physicalWeapon.getY());
+	}
+
+	@Override
+	public double getHeight() {
+		return Utils.heightFromJbox2dToJavaFx(physicalWeapon.getHeight());
+	}
+
+	@Override
+	public double getWidth() {
+		return Utils.heightFromJbox2dToJavaFx(physicalWeapon.getWidth());
 	}
 }
