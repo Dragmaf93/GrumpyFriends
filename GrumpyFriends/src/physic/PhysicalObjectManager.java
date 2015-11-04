@@ -114,8 +114,6 @@ public class PhysicalObjectManager {
 		
 	}
 	public void makeAnExplosion(ExplosiveObject explosiveObject){
-		System.out.println("BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
-//		System.out.println(explosiveObject.getCenter());
 		if(explosiveObject!=null){
 			Vec2 center = explosiveObject.getCenter();
 			
@@ -156,12 +154,12 @@ public class PhysicalObjectManager {
 		float impulseMag = explosiveObject.getBlastPower() *invDistance;
 //		impulseMag = MathUtils.min(impulseMag, 100.0f);
 //		impulseMag = MathUtils.max(impulseMag, 100.0f);
-		System.out.println("Distance "+distance+"Impulse Mag "+impulseMag);
 		Vec2 impulse = new Vec2();
 		impulse.x=blastDir.x*impulseMag;
 		impulse.y=blastDir.y*impulseMag;
 //		impulse.y = MathUtils.min(impulse.y, 800.0f);
 //		System.out.println("Impulse   "+body.getUserData()+"  "+ impulse+ " applyPoint "+ applyPoint);
+//		System.out.println(body.getUserData()+"                                          COLPITO");
 		body.applyLinearImpulse(impulse, applyPoint,true);
 	
 	}

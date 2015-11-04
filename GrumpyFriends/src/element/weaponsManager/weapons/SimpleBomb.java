@@ -19,7 +19,10 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 	private static final float BLAST_POWER = 10000f;
 	private static final float BLAST_RADIUS = 10f;
 	
+	
+	private boolean exploded;
 	private Timer timer;
+	
 	public SimpleBomb() {
 		physicalWeapon = new PhysicalBomb(RADIUS,BLAST_RADIUS);
 		PhysicalObjectManager.getInstance().buildPhysicWeapon(physicalWeapon);
@@ -30,6 +33,7 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 	@Override
 	public void attack(Vector position, Vector speed, float angle) {
 		
+		hit--;		
 		physicalWeapon.addToPhisicalWorld();
 		physicalWeapon.setActive(true);
 		physicalWeapon.setAngularVelocity(0f);
@@ -56,9 +60,8 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 	}
 
 	@Override
-	public float getMaxPower() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getBlastRadius() {
+		return Utils.widthFromJbox2dToJavaFx(BLAST_RADIUS);
 	}
 
 	@Override
@@ -69,13 +72,14 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 	public void afterAttack() {
 		PhysicalObjectManager.getInstance().removePhysicalWeapon(physicalWeapon);
 		physicalWeapon=null;
-		hit--;		
 	}
-	
+	public boolean isExploded(){
+		return exploded;
+	}
 	@Override
 	public void afterCountDown() {
+		exploded=true;
 		((ExplosiveObject) physicalWeapon).explode();
-		afterAttack();
 	}
 
 	@Override
@@ -101,6 +105,15 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 	@Override
 	public Timer getTimer() {
 		return timer;
+	}
+
+	@Override
+	public void update() {
+		physicalWeapon.update();
+		
+		if(timer.timeEnded()){
+			afterCountDown();
+		}
 	}
 	
 	

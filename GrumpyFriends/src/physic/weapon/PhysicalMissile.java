@@ -9,6 +9,7 @@ import org.jbox2d.dynamics.World;
 
 import element.weaponsManager.ExplosiveObject;
 import physic.PhysicalObjectManager;
+import utils.Vector;
 
 public class PhysicalMissile extends AbstractPhysicalWeapon implements ExplosiveObject {
 
@@ -16,17 +17,17 @@ public class PhysicalMissile extends AbstractPhysicalWeapon implements Explosive
 	private float blastRadius;
 	private float width;
 	private float height;
-	
+
 	private boolean exploded;
 	private Vec2 centreExplosion;
-	
+
 	public PhysicalMissile() {
 	}
 
 	public PhysicalMissile(float width, float height, float blastRadius) {
 		this.width = width;
 		this.height = height;
-		this.blastPower = 100*blastRadius;
+		this.blastPower = 100 * blastRadius;
 		this.blastRadius = blastRadius;
 		centreExplosion = new Vec2(width, 0);
 	}
@@ -39,17 +40,17 @@ public class PhysicalMissile extends AbstractPhysicalWeapon implements Explosive
 		bodyDef.setType(BodyType.DYNAMIC);
 		body = world.createBody(bodyDef);
 		PolygonShape missileShape = new PolygonShape();
-		// missileShape.setAsBox(width,height
-		int count = 4;
-		Vec2[] vertices = new Vec2[count];
-		vertices[0] = new Vec2(0, 0);
-		vertices[1] = new Vec2(width * 0.7f, -height);
-		vertices[2] = new Vec2(width, 0);
-		vertices[3] = new Vec2(width * 0.7f, height);
-		missileShape.set(vertices, count);
-		fixtureDef = new FixtureDef();
+		 missileShape.setAsBox(width/2,height/2);
+//		 int count = 4;
+//		 Vec2[] vertices = new Vec2[count];
+//		 vertices[0] = new Vec2(0, 0);
+//		 vertices[1] = new Vec2(width * 0.7f, -height);
+//		 vertices[2] = new Vec2(width, 0);
+//		 vertices[3] = new Vec2(width * 0.7f, height);
+//		 missileShape.set(vertices, count);
+		 fixtureDef = new FixtureDef();
 		fixtureDef.setShape(missileShape);
-		fixtureDef.isSensor=true;
+//		fixtureDef.isSensor = true;
 		fixtureDef.setDensity(1.0f);
 		fixtureDef.setUserData(this);
 		fixtureDef.restitution = 0.0f;
@@ -68,17 +69,16 @@ public class PhysicalMissile extends AbstractPhysicalWeapon implements Explosive
 
 	@Override
 	public boolean isExplosed() {
-		// TODO Auto-generated method stub
 		return exploded;
 	}
 
 	@Override
 	public void explode() {
-		System.out.println("IL MISSILE é ESPLOSO");
+//		System.out.println("IL MISSILE é ESPLOSO");
 		PhysicalObjectManager.getInstance().makeAnExplosion(this);
-		exploded=true;
+		exploded = true;
 	}
-	
+
 	@Override
 	public float getBlastRadius() {
 		return blastRadius;
@@ -86,20 +86,33 @@ public class PhysicalMissile extends AbstractPhysicalWeapon implements Explosive
 
 	@Override
 	public float getX() {
-		return body.getPosition().x;
+		return body.getPosition().x-width*0.5f;
 	}
+
 	@Override
 	public float getY() {
-		return body.getPosition().y;
+		return body.getPosition().y+height*0.5f;
 	}
+
 	@Override
 	public float getHeight() {
 		return height;
 	}
+
 	@Override
 	public float getWidth() {
 		return width;
 	}
-	
+
+	@Override
+	public void update() {
+		if (!exploded) {
+			Vec2 flightDirection = body.getLinearVelocity();
+			float angleDirection = (float) Math.atan2(flightDirection.y, flightDirection.x);
+			body.setTransform(body.getPosition(), angleDirection);
+		}else{
+			body.destroyFixture(fixture);
+		}
+	}
 
 }

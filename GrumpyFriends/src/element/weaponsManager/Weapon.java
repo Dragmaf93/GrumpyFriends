@@ -7,10 +7,12 @@ public interface Weapon
 {
 	
 	public abstract float getMaxDamage();
-	public abstract float getMaxPower();
+	public abstract double getBlastRadius();
+	
 	public abstract PhysicalWeapon getPhysicalWeapon();
 	public abstract void attack(Vector position, Vector speed, float angle);
 	public abstract void afterAttack();
+	
 	public abstract String getName();
 	public abstract boolean finishHit();
 	public abstract double getX();
@@ -18,4 +20,6 @@ public interface Weapon
 	public abstract double getHeight();
 	public abstract double getWidth();
 	public abstract boolean attacked();
+	
+	public abstract void update();
 }

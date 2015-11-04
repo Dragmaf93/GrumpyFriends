@@ -4,6 +4,8 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.World;
 
+import utils.Vector;
+
 public interface PhysicalWeapon {
 	
 	abstract public void buildSelf(World world);
@@ -21,4 +23,6 @@ public interface PhysicalWeapon {
 	abstract public float getY();
 	abstract public float getHeight();
 	abstract public float getWidth();
+	
+	abstract public void update();
 }

@@ -19,7 +19,7 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 
 	private final static float HEIGHT=0.2f;
 	private final static float WIDTH=1.0f;
-	private static final Vec2 DISTANCE_TO_LAUNCHER = new Vec2(1.2f,0);
+	private static final Vec2 DISTANCE_TO_LAUNCHER = new Vec2(1.5f,0);
 	private static final Vec2 ORIGIN_JOINT_POINT = new Vec2(-WIDTH,0);
 	
 	

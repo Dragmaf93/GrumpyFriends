@@ -6,6 +6,7 @@ import org.jbox2d.testbed.framework.TestbedTest;
 import character.Character;
 import character.Chewbacca;
 import character.Team;
+import element.weaponsManager.Weapon;
 import game.MatchManager;
 import physic.PhysicalObjectManager;
 import world.WorldBuilder;
@@ -16,7 +17,7 @@ public class TestGrumpyFriends extends TestbedTest {
 	private static TestbedTest instance;
 	private MatchManager matchManager;
 //	private Character currentPlayer;
-	
+	private Weapon weapon;
 	private float speed=10f;
 	public static TestbedTest getInstance(){
 		if(instance==null)
@@ -81,6 +82,7 @@ public class TestGrumpyFriends extends TestbedTest {
 			break;
 		case 'm':
 			matchManager.getCurrentPlayer().equipWeapon("SimpleMissile");
+			weapon=matchManager.getCurrentPlayer().getEquipWeapon();
 			break;
 		case 'b':
 			matchManager.getCurrentPlayer().equipWeapon("SimpleBomb");
@@ -117,7 +119,11 @@ public class TestGrumpyFriends extends TestbedTest {
 		addTextLine("Time "+ matchManager.getTimer());
 		getCamera().setCamera(matchManager.getCurrentPlayer().getPositionTest());
 		
+		if(weapon!=null)
+			weapon.update();
 		PhysicalObjectManager.getInstance().destroyBodies();
+		
+		
 	}
 	@Override
 	public void keyReleased(char argKeyChar, int argKeyCode) {

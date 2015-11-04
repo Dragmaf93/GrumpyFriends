@@ -84,6 +84,10 @@ public class PhysicalBomb extends AbstractPhysicalWeapon  implements ExplosiveOb
 	public float getWidth() {
 		return radius;
 	}
+	@Override
+	public void update() {
+		
+	}
 	
 	
 	

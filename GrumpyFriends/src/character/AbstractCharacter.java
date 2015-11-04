@@ -40,9 +40,11 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 	protected int currentDirection;
 
 	protected PhysicalObject physicBody;
-	
+
 	protected Launcher launcher;
 
+	protected boolean readyToEquipWeapon;
+	
 	public AbstractCharacter(String name, float x, float y, float height, float width, Team team) {
 
 		this.name = name;
@@ -58,8 +60,10 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 
 		physicBody = new PhysicalCharacter(x, y, width, height, name);
 		PhysicalObjectManager.getInstance().buildPhysicObject(physicBody);
-		
+
 		launcher = new Launcher(this);
+		
+		readyToEquipWeapon=true;
 	}
 
 	@Override
@@ -90,8 +94,13 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 
 		if (launcher == null)
 			launcher = new Launcher(this);
+		
+//		if(!readyToEquipWeapon) return;
+		
+		if (equippedWeapon != null && equippedWeapon.getName().equals(weaponName)) {
+			launcher.loadWeapon(equippedWeapon);
 
-		if (weaponsManager.isAvailable(weaponName)) {
+		} else if (weaponsManager.isAvailable(weaponName)) {
 
 			equippedWeapon = weaponsManager.getWeapon(weaponName);
 			launcher.loadWeapon(equippedWeapon);
@@ -109,14 +118,14 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 			return;
 
 		launcher.startWeaponAttack(power);
-
+		readyToEquipWeapon=false;
+		
 		if (equippedWeapon.finishHit()) {
-
+			System.out.println(equippedWeapon);
 			weaponsManager.removeOneAmmunition(equippedWeapon.getName());
 			equippedWeapon = null;
 			team.getMatchManager().stopTurnTimer();
-
-//			new Timer(this).start();
+			// new Timer(this).start();
 		}
 	}
 
@@ -158,7 +167,7 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 		Vec2 speed = body.getLinearVelocity();
 		force = 0;
 		moving = true;
-		currentDirection=direction;
+		currentDirection = direction;
 		switch (direction) {
 		case RIGHT:
 			// if (speed.x < MAX_SPEED)
@@ -182,6 +191,8 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 
 	@Override
 	public void stopToMove() {
+		if (!grounded)
+			return;
 		Body body = physicBody.getBody();
 		moving = false;
 		((PhysicalCharacter) physicBody).blockWheelJoint();
@@ -220,7 +231,7 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Override
 	public int getLifePoints() {
 		return lifePoints;

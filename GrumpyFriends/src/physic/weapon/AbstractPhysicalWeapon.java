@@ -6,12 +6,15 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.FixtureDef;
 
+import utils.Vector;
+
 public abstract class AbstractPhysicalWeapon implements PhysicalWeapon{
 	
 	protected Body body;
 	protected BodyDef bodyDef;
 	protected Fixture fixture;
 	protected FixtureDef fixtureDef;
+	
 	
 	@Override
 	public void setActive(boolean flag) {

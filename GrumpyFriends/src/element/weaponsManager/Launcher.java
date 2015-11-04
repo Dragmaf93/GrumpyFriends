@@ -9,6 +9,8 @@ import utils.Vector;
 
 public class Launcher {
 
+	public final static float MAX_LAUNCH_POWER=50f;
+	
 	private PhysicalLauncher physicalLauncher;
 
 	private boolean activated;

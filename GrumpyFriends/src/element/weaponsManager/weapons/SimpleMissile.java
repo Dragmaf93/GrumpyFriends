@@ -1,6 +1,7 @@
 package element.weaponsManager.weapons;
 
 import element.weaponsManager.AbstractWeapon;
+import element.weaponsManager.ExplosiveObject;
 import physic.DragForceThread;
 import physic.PhysicalObjectManager;
 import physic.weapon.PhysicalMissile;
@@ -9,7 +10,7 @@ import utils.Vector;
 
 public class SimpleMissile extends AbstractWeapon{
 	
-	private static final float WIDTH = 4.0f;
+	private static final float WIDTH = 2.5f;
 	private static final float HEIGHT = 1.0f;
 	public static final int NUMBER_OF_AMMUNITION = 100;
 	private static final int NUMBER_OF_HIT = 1;
@@ -29,20 +30,19 @@ public class SimpleMissile extends AbstractWeapon{
 	}
 
 	@Override
-	public float getMaxPower() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getBlastRadius() {
+		return Utils.widthFromJbox2dToJavaFx(BLAST_RADIUS);
 	}
 
 	@Override
 	public void attack(Vector position, Vector speed, float angle) {
-		
+		attacked=true;
 		physicalWeapon.addToPhisicalWorld();
 		physicalWeapon.setActive(true);
 		physicalWeapon.setAngularVelocity(0f);
 		physicalWeapon.setTransform(position.toVec2(), angle);
 		physicalWeapon.setLinearVelocity(speed.toVec2());	
-		new DragForceThread(this).start();
+//		new DragForceThread(this).start();
 		hit--;
 	}
 	
@@ -79,5 +79,17 @@ public class SimpleMissile extends AbstractWeapon{
 	@Override
 	public double getWidth() {
 		return Utils.heightFromJbox2dToJavaFx(physicalWeapon.getWidth());
+	}
+	
+	public boolean isExplosed() {
+		return ((ExplosiveObject)physicalWeapon).isExplosed();
+	}
+	public double getAngle() {
+		return physicalWeapon.getBody().getAngle();
+	}
+	
+	@Override
+	public void update() {
+		physicalWeapon.update();
 	}
 }

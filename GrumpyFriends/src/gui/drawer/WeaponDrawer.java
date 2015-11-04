@@ -75,8 +75,8 @@ public class WeaponDrawer {
 	}
 	
 	public boolean attackEnded(){
-		if(currentWeapon==null) return false;
-		return currentWeapon.finishHit();
+		if(currentWeaponGui==null) return false;
+		return currentWeaponGui.finishAnimation();
 	}
 	
 	public void resetDrawer(){
