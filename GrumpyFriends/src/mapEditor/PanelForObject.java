@@ -23,7 +23,7 @@ import javafx.scene.layout.Pane;
 
 public class PanelForObject extends Pane {
 	
-	private Pane panelForDimension;
+//	private Pane panelForDimension;
 	private Pane panelForSubmit;
 	private Pane panelForRealObject;
 	
@@ -47,6 +47,8 @@ public class PanelForObject extends Pane {
 	private boolean isInsertWidth;
 	private boolean isInsertHeight;
 	
+	private double lastItemInserted;
+	
 	public PanelForObject(MapEditor mapEditor) 
 	{
 		this.setPrefSize(mapEditor.getLarghezza()/5, mapEditor.getAltezza());
@@ -62,8 +64,16 @@ public class PanelForObject extends Pane {
 	
 	private void addComponent()
 	{
-	    panelForDimension = new Pane();
-	    panelForDimension.setPrefSize(this.getPrefWidth(), this.getPrefHeight()/4);
+//	    panelForDimension = new Pane();
+//	    panelForDimension.setPrefSize(this.getPrefWidth(), this.getPrefHeight()/4);
+		
+		panelForSubmit = new Pane();
+	    panelForSubmit.setPrefSize(this.getPrefWidth() - 10, 50);
+	    panelForSubmit.setLayoutY(this.getPrefHeight()-panelForSubmit.getPrefHeight()-50);
+	    
+	    panelForRealObject = new Pane();
+	    panelForRealObject.setPrefSize(this.getPrefWidth(), this.getPrefHeight()-panelForSubmit.getPrefHeight()-50);
+
 		
 	    buttonForUndo = new Button();
 	    ImageView imageUndo = new ImageView("file:image/imageButtonMapEditor/undo.png");
@@ -75,7 +85,7 @@ public class PanelForObject extends Pane {
 	    buttonForUndo.setPrefSize(10, 10);
 	    buttonForUndo.setBackground(null);
 	    buttonForUndo.setDisable(true);
-	    panelForDimension.getChildren().add(buttonForUndo);
+	    panelForRealObject.getChildren().add(buttonForUndo);
 	    
 	    buttonForUndo.setOnMouseReleased(new EventHandler<MouseEvent>() {
 	    	
@@ -97,7 +107,7 @@ public class PanelForObject extends Pane {
 	    buttonForRedo.setPrefSize(10, 10);
 	    buttonForRedo.setBackground(null);
 	    buttonForRedo.setDisable(true);
-	    panelForDimension.getChildren().add(buttonForRedo);
+	    panelForRealObject.getChildren().add(buttonForRedo);
 	    
 	    buttonForRedo.setOnMouseReleased(new EventHandler<MouseEvent>() {
 	    	
@@ -111,7 +121,7 @@ public class PanelForObject extends Pane {
 	    choiseTypeWorld = new Label("Type World");
 	    choiseTypeWorld.setLayoutX(buttonForUndo.getLayoutX());
 	    choiseTypeWorld.setLayoutY(buttonForRedo.getLayoutY()+buttonForRedo.getPrefHeight()+20);
-	    panelForDimension.getChildren().add(choiseTypeWorld);
+	    panelForRealObject.getChildren().add(choiseTypeWorld);
 	    
 	    choiceType = new ChoiceBox<String>(FXCollections.observableArrayList(typeWorld));
 	    choiceType.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
@@ -125,17 +135,17 @@ public class PanelForObject extends Pane {
 	    choiceType.setLayoutX(buttonForUndo.getLayoutX());
 	    choiceType.setLayoutY(choiseTypeWorld.getLayoutY()+choiseTypeWorld.getPrefHeight()+20);
 	    choiceType.setOpacity(0.7);
-	    panelForDimension.getChildren().add(choiceType);
+	    panelForRealObject.getChildren().add(choiceType);
 	    
 		choiseWidth = new Label("Width");
 	    choiseWidth.setLayoutX(buttonForUndo.getLayoutX());
 	    choiseWidth.setLayoutY(choiceType.getLayoutY()+choiceType.getPrefHeight()+30);
-	    panelForDimension.getChildren().add(choiseWidth);
+	    panelForRealObject.getChildren().add(choiseWidth);
 	    
 	    insertWidth = new TextField();
 	    insertWidth.setLayoutX(choiseWidth.getLayoutX());
 	    insertWidth.setLayoutY(choiseWidth.getLayoutY()+20);
-	    panelForDimension.getChildren().add(insertWidth);
+	    panelForRealObject.getChildren().add(insertWidth);
 	    
 	    insertWidth.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
@@ -161,12 +171,15 @@ public class PanelForObject extends Pane {
 	    choiseHeight = new Label("Height");
 	    choiseHeight.setLayoutX(insertWidth.getLayoutX());
 	    choiseHeight.setLayoutY(insertWidth.getLayoutY()+25);
-	    panelForDimension.getChildren().add(choiseHeight);
+	    panelForRealObject.getChildren().add(choiseHeight);
 	    
 	    insertHeight = new TextField();
 	    insertHeight.setLayoutX(choiseHeight.getLayoutX());
 	    insertHeight.setLayoutY(choiseHeight.getLayoutY()+20);
-	    panelForDimension.getChildren().add(insertHeight);
+	    
+	    lastItemInserted = insertHeight.getLayoutY()+50;
+	    
+	    panelForRealObject.getChildren().add(insertHeight);
 	    
 	    insertHeight.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
@@ -189,12 +202,6 @@ public class PanelForObject extends Pane {
 			}
 		});
 	    
-	    this.getChildren().add(panelForDimension);
-	    
-	    panelForSubmit = new Pane();
-	    panelForSubmit.setPrefSize(this.getPrefWidth() - 10, 50);
-	    panelForSubmit.setLayoutY(this.getPrefHeight()-panelForSubmit.getPrefHeight()-50);
-	   
 	    buttonForClear = new Button("Clear");
 	    buttonForClear.setOpacity(0.7);
 	    buttonForClear.setLayoutX(5);
@@ -229,35 +236,31 @@ public class PanelForObject extends Pane {
 	    
 	    panelForSubmit.getChildren().add(buttonForSubmit);
 	    panelForSubmit.getChildren().add(buttonForClear);
-	
-	    panelForRealObject = new Pane();
-	    panelForRealObject.setPrefSize(this.getPrefWidth(), this.getPrefHeight()-panelForDimension.getPrefHeight()-panelForSubmit.getPrefHeight()-50);
-	    panelForRealObject.setLayoutY(panelForDimension.getPrefHeight());
 	    
-	    scrollPane = new ScrollPane(panelForRealObject);
-	    scrollPane.setLayoutY(panelForRealObject.getLayoutY());
-	    scrollPane.setPrefSize(panelForRealObject.getPrefWidth(), panelForRealObject.getPrefHeight());
-        scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
-        scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-
-        scrollPane.getStylesheets().add("file:styles/customScrollBarForPanelObject.css");
-//        scrollPane.setStyle("-fx-background: #92a498; -fx-background-color: null; ");
-        scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> event,
-					Number oldValue, Number newValue) {
-				if (oldValue.doubleValue() < newValue.doubleValue())
-					moved = true;
-				else
-					moved = false;
-			}
-		});
+//	    scrollPane = new ScrollPane(panelForRealObject);
+//	    scrollPane.setLayoutY(panelForRealObject.getLayoutY());
+//	    scrollPane.setPrefSize(panelForRealObject.getPrefWidth(), panelForRealObject.getPrefHeight());
+//        scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+//        scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+//
+//        scrollPane.getStylesheets().add("file:styles/customScrollBarForPanelObject.css");
+////        scrollPane.setStyle("-fx-background: #92a498; -fx-background-color: null; ");
+//        scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
+//
+//			@Override
+//			public void changed(ObservableValue<? extends Number> event,
+//					Number oldValue, Number newValue) {
+//				if (oldValue.doubleValue() < newValue.doubleValue())
+//					moved = true;
+//				else
+//					moved = false;
+//			}
+//		});
 
         addListenerPanelForRealObject();
 	    
 	    this.getChildren().add(panelForSubmit);
-	    this.getChildren().add(scrollPane);
+	    this.getChildren().add(panelForRealObject);
 	}
 	
 	private void addListenerPanelForRealObject()
@@ -287,8 +290,8 @@ public class PanelForObject extends Pane {
 	    });
 	}
 
-	public Pane getPanelForDimension() {
-		return panelForDimension;
+	public double getLastItemInserted() {
+		return lastItemInserted;
 	}
 	
 	public Pane getPanelForRealObject() {

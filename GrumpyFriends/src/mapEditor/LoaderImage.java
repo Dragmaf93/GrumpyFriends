@@ -3,10 +3,12 @@ package mapEditor;
 import java.util.HashMap;
 
 import javafx.geometry.Point2D;
+import javafx.scene.shape.QuadCurve;
 
 public class LoaderImage 
 {
 	HashMap<String, PolygonObject> images;
+	Curve quadCurve;
 	MapEditor mapEditor;
 	int index = 0;
 	
@@ -24,11 +26,13 @@ public class LoaderImage
 	
 	public void load()
 	{
-		images.put("square",new Square(mapEditor,"linearGround",new Point2D(10.0, 0.0), new Point2D(10.0, 60.0),
+		images.put("square",new Square(mapEditor,"linearGround",new Point2D(0.0, 0.0), new Point2D(0.0, 60.0),
 				new Point2D(60.0, 60.0), new Point2D(60.0, 0.0)));
-		images.put("triangle",new Triangle(mapEditor,"inclinedGround",new Point2D(10.0, 0.0), new Point2D(10.0, 60.0),
+		images.put("triangle",new Triangle(mapEditor,"inclinedGround",new Point2D(0.0, 0.0), new Point2D(0.0, 60.0),
 				new Point2D(60.0, 60.0)));
-		
+		images.put("genericPolygon",new GenericPolygon(mapEditor,"genericGround",new Point2D(30.0, 0.0), new Point2D(0.0, 24.0),
+				new Point2D(0.0, 60.0), new Point2D(60.0, 60.0), new Point2D(60.0, 24.0)));
+		quadCurve = new Curve(mapEditor, "quadCurve", new Point2D(0.0, 0.0), new Point2D(60.0, 60.0));
 	}
 	
 	public PolygonObject copyImage(String name)
@@ -44,5 +48,7 @@ public class LoaderImage
 		return imageCopy;
 	}
 	
-	
+	public Curve getQuadCurve() {
+		return quadCurve;
+	}
 }

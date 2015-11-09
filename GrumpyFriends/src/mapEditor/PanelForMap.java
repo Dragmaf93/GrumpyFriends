@@ -6,8 +6,10 @@ import javafx.scene.Cursor;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.QuadCurve;
 
 public class PanelForMap extends ScrollPane {
 	
@@ -21,6 +23,7 @@ public class PanelForMap extends ScrollPane {
 	protected DrawingPanel drw;
 	protected boolean insertPushed = false;
 	protected boolean draggedPressed;
+	protected boolean movedObject;
 	
 	public PanelForMap(MapEditor mapEditor, double width, double height) {
 		
@@ -58,20 +61,15 @@ public class PanelForMap extends ScrollPane {
         	}
 	    });
 		
-		realPane.setOnMouseMoved(new EventHandler<MouseEvent>() {
-
-			@Override
-			public void handle(MouseEvent event) {
-				
-			}
-		});
-		
 		realPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
 
 	        @Override
 	        public void handle(MouseEvent event) { 
 	        	if (!insertPushed)
-        			PanelForMap.this.mapEditor.moveObjectInMap(event);
+	        	{
+	        		PanelForMap.this.mapEditor.moveObjectInMap(event);
+	        		movedObject = true;
+	        	}
 	        }
 	    });
 
@@ -79,13 +77,20 @@ public class PanelForMap extends ScrollPane {
 
 	        @Override
 	        public void handle(MouseEvent event) { 
-	        	if (!isInTheLimit)
-	        		PanelForMap.this.mapEditor.addObjectInListImage();
-	        	else
+	        	if (event.getButton().equals(MouseButton.SECONDARY))
 	        	{
-	        		isInTheLimit = false;
-	        		PanelForMap.this.mapEditor.changeCursor(Cursor.DEFAULT);
+	        		PanelForMap.this.mapEditor.getDragged().addVertex(new Point2D(event.getX(), event.getY()));
+	        		dragged = PanelForMap.this.mapEditor.getDragged();
+	        		if (realPane.getChildren().contains(drw))
+						realPane.getChildren().remove(drw);
+	        		
+	        		drw = new DrawingPanel(dragged, PanelForMap.this.mapEditor);
+        			realPane.getChildren().add(drw);
+	        		insertPushed = true;
+	        		movedObject = false;
 	        	}
+	        	if (movedObject)
+	        		PanelForMap.this.mapEditor.addObjectInListImage();
 	        }
 	    });
 	    
@@ -97,14 +102,18 @@ public class PanelForMap extends ScrollPane {
 					PanelForMap.this.mapEditor.removeObject();
 				}
 				if (event.getCode().equals(KeyCode.ESCAPE)) {
-					if (realPane.getChildren().contains(drw))
-						realPane.getChildren().remove(drw);
-					insertPushed = false;
+					removePanelInsert();
 				}
 			}
 		});
 	}
 	
+	public void removePanelInsert() {
+		if (realPane.getChildren().contains(drw))
+			realPane.getChildren().remove(drw);
+		insertPushed = false;		
+	}
+
 	public void setWidhtScrollPane(double width) {
 		this.setPrefWidth(width);
 	}
@@ -152,6 +161,14 @@ public class PanelForMap extends ScrollPane {
 
 	public boolean getInsertPressed() {
 		return insertPushed;
+	}
+
+	public void addObject(QuadCurve object) {
+		realPane.getChildren().add(object);
+	}
+
+	public boolean containsCurve(Curve draggedCurve) {
+		return realPane.getChildren().contains(draggedCurve);
 	}
 	
 	

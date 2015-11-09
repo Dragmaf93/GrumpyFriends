@@ -59,8 +59,8 @@ public class ConverterMapToXml {
 		    	rootElement.appendChild(elementGround);
 		    	
 		    	Element position = doc.createElement("position");
-		    	position.setAttribute("posX", Double.toString(object.getUpperLeftPosition().getX()));
-		    	position.setAttribute("posY", Double.toString(object.getUpperLeftPosition().getY()));
+//		    	position.setAttribute("posX", Double.toString(object.getUpperLeftPosition().getX()));
+//		    	position.setAttribute("posY", Double.toString(object.getUpperLeftPosition().getY()));
 		    	elementGround.appendChild(position);
 		    	
 		    	Element size = doc.createElement("size");
@@ -74,8 +74,8 @@ public class ConverterMapToXml {
 		    	rootElement.appendChild(elementGround);
 		    	
 		    	Element position = doc.createElement("position");
-		    	position.setAttribute("posX", Double.toString(object.getUpperLeftPosition().getX()));
-		    	position.setAttribute("posY", Double.toString(object.getUpperLeftPosition().getY()));
+//		    	position.setAttribute("posX", Double.toString(object.getUpperLeftPosition().getX()));
+//		    	position.setAttribute("posY", Double.toString(object.getUpperLeftPosition().getY()));
 		    	elementGround.appendChild(position);
 		    	
 		    	Element size = doc.createElement("size");

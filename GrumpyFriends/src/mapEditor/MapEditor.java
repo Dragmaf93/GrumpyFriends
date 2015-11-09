@@ -10,19 +10,16 @@ import javax.xml.transform.TransformerException;
 
 import utils.ConverterMapToXml;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Light.Point;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.QuadCurve;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -34,6 +31,7 @@ public class MapEditor extends Application{
 	private ScrollPane panelForMap;
 	
 	private PolygonObject dragged;
+	private Curve draggedCurve;
 	
 	private double widthScreen = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	private double heightScreen = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
@@ -41,29 +39,23 @@ public class MapEditor extends Application{
 	private PolygonObject image;
 	
 	private LoaderImage loaderImage;
-	private Point2D upperLeftCorner;
-	
-	private double deltaX;
-	private double deltaY;
-	
 	private boolean objectToMove;
 	private boolean isInTheMap;
 	
 	private ArrayList<PolygonObject> objectInMap;
+	private ArrayList<Curve> curveInMap;
 	private ArrayList<PolygonObject> objectToSelect;
 	private ArrayList<Pair<Point2D, PolygonObject>> objectMoveInMapForUndo;
 	private ArrayList<Pair<Point2D, PolygonObject>> objectMoveInMapForRedo;
 	private ArrayList<Pair<Point2D, PolygonObject>> objectToCancelled;
 	private DropShadow borderGlow;
 	
-	private ConverterMapToXml converter;
 	private double mouseX;
 	private double mouseY;
-	
-	private Point2D distanceUpperLeft;
-	private Point2D distanceUpperRight;
-	private Point2D distanceBottomLeft;
-	private Point2D distanceBottomRight;
+
+	private Curve quadCurve;
+	private ConverterMapToXml converter;
+	private boolean curveToMove;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -75,6 +67,8 @@ public class MapEditor extends Application{
 		objectMoveInMapForUndo = new ArrayList<Pair<Point2D, PolygonObject>>();
 		objectMoveInMapForRedo = new ArrayList<Pair<Point2D, PolygonObject>>();
 		objectToCancelled = new ArrayList<Pair<Point2D, PolygonObject>>();
+		
+		curveInMap = new ArrayList<Curve>();
 		
 		firstPane = new Pane();
 
@@ -117,15 +111,10 @@ public class MapEditor extends Application{
 		for (PolygonObject image : objectToSelect) {
 			if (image.containsPoint(new Point2D(event.getX(),event.getY())))
 	        {
-	        	upperLeftCorner = new Point2D(image.getLayoutX(),	image.getLayoutY());
-	            
-	            deltaX = event.getX() - upperLeftCorner.getX();
-	            deltaY = event.getY() - upperLeftCorner.getY();
-	            
 	            mouseX = event.getX();
 	            mouseY = event.getY();
-	            
-	        	try {
+
+	            try {
 					dragged = image.clone();
 					dragged.setEffect(borderGlow);
 				} catch (CloneNotSupportedException e) {
@@ -133,29 +122,65 @@ public class MapEditor extends Application{
 				}
 	        	dragged.computeDistanceVertex();
 	        	objectToMove = true;
+	        	curveToMove = false;
 	        }
+		}
+		if (!objectToMove && quadCurve.contains(new Point2D(event.getX(), event.getY())))
+		{
+			mouseX = event.getX();
+            mouseY = event.getY();
+
+            try {
+				draggedCurve = quadCurve.clone();
+				draggedCurve.setEffect(borderGlow);
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
+        	curveToMove = true;
+        	objectToMove = false;
 		}
 	}
 	
 	public void moveObjectFromPanelObjectInMap(MouseEvent event)
 	{
-		if (dragged != null)
+		if (dragged != null || draggedCurve != null)
     	{
 			if (!isInTheMap)
 			{
-				dragged.modifyAllVertex(event.getX(), event.getY()+((PanelForObject) panelForObject).getPanelForDimension().getPrefHeight());
-	        	if (!(panelForObject.getChildren().contains(dragged)))
-	        		panelForObject.getChildren().add(dragged);
+				if (curveToMove)
+				{
+					draggedCurve.modifyPositionFirst(new Point2D(event.getX(), event.getY()));
+					if (!(panelForObject.getChildren().contains(draggedCurve)))
+						panelForObject.getChildren().add(draggedCurve);
+				}
+				else
+				{
+					dragged.modifyAllVertex(event.getX(), event.getY(),0,0);
+					if (!(panelForObject.getChildren().contains(dragged)))
+		        		panelForObject.getChildren().add(dragged);
+				}
 			}
-			if (checkLimitForFocusPanelObject(event))
+			if (checkLimitForFocusPanelObject(event) &&
+					((PanelForMap) panelForMap).contains(new Point2D(event.getX(), event.getY())))
         	{
-				dragged.modifyAllVertex(event.getX()-panelForObject.getPrefWidth(), event.getY()+((PanelForObject) panelForObject).getPanelForDimension().getPrefHeight());
-            	if (!((PanelForMap) panelForMap).containsObject(dragged))
-            		((PanelForMap) panelForMap).addObject(dragged);
-            	
+				if (curveToMove)
+				{
+					draggedCurve.modifyPositionFirst(new Point2D(event.getX()-panelForObject.getPrefWidth(), event.getY()));
+					if (!((PanelForMap) panelForMap).containsCurve(draggedCurve))
+	            		((PanelForMap) panelForMap).addObject(draggedCurve);
+					
+					System.out.println(draggedCurve);
+				}
+				else
+				{
+					dragged.modifyAllVertex(event.getX(), event.getY(),panelForObject.getPrefWidth(),0);
+					if (!((PanelForMap) panelForMap).containsObject(dragged))
+	            		((PanelForMap) panelForMap).addObject(dragged);
+				}
             	isInTheMap = true;
         	}
         	objectToMove = true;
+        	objectToMove = false;
     	}
 	}
 
@@ -166,11 +191,6 @@ public class MapEditor extends Application{
 				image.setEffect(null);
 				if (image.contains(new Point2D(event.getX(), event.getY())))
 		        {
-		        	upperLeftCorner = new Point2D(image.getX(), image.getY());
-		            
-		            deltaX = event.getX() - upperLeftCorner.getX();
-		            deltaY = event.getY() - upperLeftCorner.getY();
-		           
 		            mouseX = event.getX();
 		            mouseY = event.getY();
 		            
@@ -179,17 +199,45 @@ public class MapEditor extends Application{
 		            
 		            dragged.setEffect(borderGlow);
 		            objectToMove = true;
+		            curveToMove = false;
 		        }
 			}
+		
+		if (!objectToMove && quadCurve.contains(new Point2D(event.getX(), event.getY())))
+		{
+			System.out.println("YO BITCH");
+			mouseX = event.getX();
+            mouseY = event.getY();
+
+            try {
+				draggedCurve = quadCurve.clone();
+				draggedCurve.setEffect(borderGlow);
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
+        	curveToMove = true;
+        	objectToMove = false;
+		}
 	}
 	
 	public void moveObjectInMap(MouseEvent event) {
 		if (dragged != null)
     	{
-			if (((PanelForMap) panelForMap).getDraggedPressed())	
-				dragged.modifyAllVertex(event.getX(), event.getY());
+			if (curveToMove)
+			{
+				draggedCurve.modifyPositionFirst(new Point2D(event.getX()-panelForObject.getPrefWidth(), event.getY()));
+				if (!((PanelForMap) panelForMap).containsCurve(draggedCurve))
+            		((PanelForMap) panelForMap).addObject(draggedCurve);
+			}
+			else
+			{
+				if (((PanelForMap) panelForMap).getDraggedPressed() &&
+						((PanelForMap) panelForMap).contains(new Point2D(event.getX(), event.getY())))	
+					dragged.modifyAllVertex(event.getX(), event.getY(),0,0);
+    	
+			}
     	}
-		objectToMove = false;
+//		objectToMove = false;
 	}
 	
 	public double getMouseX() {
@@ -202,22 +250,28 @@ public class MapEditor extends Application{
 	
 	public void addObjectInListImage()
 	{
+		if (draggedCurve != null)
+		{
+			System.out.println("YO "+draggedCurve);
+		}
 		if (dragged != null) {
-			if (!objectInMap.contains(dragged) && dragged != null)
+			Point2D point = new Point2D(dragged.getPointsVertex().get(0).getX(), dragged.getPointsVertex().get(0).getY());
+			if (!objectInMap.contains(dragged) && isInTheMap)
 			{
 				objectInMap.add(dragged);
 				dragged.setEffect(null);
 			}
-			
-			Point2D point = new Point2D(dragged.getLayoutX(), dragged.getLayoutY());
 			if (panelForObject.contains(point) && !isInTheMap)
 			{
 				panelForObject.getChildren().remove(dragged);
 				if (objectMoveInMapForUndo.size() > 1)
 					dragged = objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue();
-			}
-			else
-				objectMoveInMapForUndo.add(new Pair(point, dragged));
+			} else
+				try {
+					objectMoveInMapForUndo.add(new Pair(point, dragged.clone()));
+				} catch (CloneNotSupportedException e) {
+					e.printStackTrace();
+				}
 			
 			checkStatusButtonUndo();
 			if (!objectToMove)
@@ -246,25 +300,35 @@ public class MapEditor extends Application{
 				if (i == 0)
 				{
 					image.setLayoutX(((PanelForObject) panelForObject).getPanelForRealObject().getPrefWidth()/3);
-					image.setLayoutY(0);
+					image.setLayoutY(((PanelForObject) panelForObject).getLastItemInserted());
 					i++;
 				}
 				else
 				{
 					image.setLayoutX(((PanelForObject) panelForObject).getPanelForRealObject().getPrefWidth()/3);
-					image.setLayoutY(heiPrec);
+					image.setLayoutY(objectToSelect.get(objectToSelect.size()-1).getLayoutY()+
+							objectToSelect.get(objectToSelect.size()-1).getHeight()+20);
 				}
 				
 				image.modifyPositionFirst(new Point2D(image.getLayoutX(), image.getLayoutY()), image.getWidth(), image.getHeight());
-
+				
 				objectToSelect.add(image);
 				((PanelForObject) panelForObject).getPanelForRealObject().getChildren().add(image);
 				
-				heiPrec += image.getHeight()+20;
+				heiPrec = image.getLayoutY()+image.getHeight();
 				if (heiPrec >= ((PanelForObject) panelForObject).getPanelForRealObject().getPrefHeight())
 					((PanelForObject) panelForObject).setHeightPanelForRealObject(heiPrec+20);
 			}
 		}
+		
+		quadCurve = loaderImage.getQuadCurve();
+		quadCurve.setX(((PanelForObject) panelForObject).getPanelForRealObject().getPrefWidth()/3);
+		quadCurve.setY(objectToSelect.get(objectToSelect.size()-1).getLayoutY()+
+				objectToSelect.get(objectToSelect.size()-1).getHeight()+10);
+		
+		quadCurve.modifyPositionFirst(new Point2D(quadCurve.getX(), quadCurve.getY()));
+		
+		((PanelForObject) panelForObject).getPanelForRealObject().getChildren().add(quadCurve);
 	}
 	
 	public void saveMap() throws ParserConfigurationException, TransformerException {
@@ -279,7 +343,7 @@ public class MapEditor extends Application{
 	public double getLarghezza() {
 		return widthScreen;
 	}
-	
+
 	public double getAltezza() {
 		return heightScreen;
 	}
@@ -288,6 +352,10 @@ public class MapEditor extends Application{
 		return objectInMap;
 	}
 
+	public void addObjectInMap(QuadCurve object) {
+		((PanelForMap) panelForMap).addObject(object);
+	}
+	
 	public double getWidthPanelForObject() {
 		return panelForObject.getPrefWidth();
 	}
@@ -343,7 +411,7 @@ public class MapEditor extends Application{
 			{
 				objectToCancelled.add(new Pair<Point2D, PolygonObject>(point, dragged));
 				objectMoveInMapForRedo.add(new Pair<Point2D, PolygonObject>(point, dragged));
-				objectMoveInMapForUndo.remove(p);
+//				objectMoveInMapForUndo.remove(p);
 				actionForUndoRedo(point, dragged, objectMoveInMapForUndo, objectMoveInMapForRedo);
 			}
 			else
@@ -363,10 +431,13 @@ public class MapEditor extends Application{
 	{
 		if (dragged != null)
 			dragged.setEffect(null);
+		
+		Point2D point = null;
+		PolygonObject imageTmp = null;
 		if (objectMoveInMapForRedo.size() > 1)
 		{
-			PolygonObject imageTmp = objectMoveInMapForRedo.get(objectMoveInMapForRedo.size()-1).getValue();
-			Point2D point = objectMoveInMapForRedo.remove(objectMoveInMapForRedo.size()-1).getKey();
+			imageTmp = objectMoveInMapForRedo.get(objectMoveInMapForRedo.size()-1).getValue();
+			point = objectMoveInMapForRedo.remove(objectMoveInMapForRedo.size()-1).getKey();
 			if (!objectMoveInMapForUndo.contains(new Pair<Point2D, PolygonObject>(point, imageTmp)))
 				objectMoveInMapForUndo.add(new Pair<Point2D, PolygonObject>(point, imageTmp));
 			
@@ -387,35 +458,27 @@ public class MapEditor extends Application{
 			}
 			else
 				actionForUndoRedo(point, imageTmp, objectMoveInMapForRedo, objectMoveInMapForUndo);
-			
 		}
 		else if (objectMoveInMapForRedo.size() == 1)
-		{
-			Point2D point = null;
-			PolygonObject imageTmp = null;
 			actionForUndoRedo(point, imageTmp, objectMoveInMapForRedo, objectMoveInMapForUndo);
-		}
-			
+
 		checkStatusButtonUndo();
 		checkStatusButtonRedo();
 	}
 	
 	private void actionForUndoRedo(Point2D point, PolygonObject imageTmp, ArrayList<Pair<Point2D, PolygonObject>> objectMoveInMapForTake, ArrayList<Pair<Point2D, PolygonObject>> objectMoveInMapForInsert)
 	{
+		((PanelForMap)panelForMap).removeObject(imageTmp);
+		if (objectInMap.contains(imageTmp))
+			objectInMap.remove(imageTmp);
+		
 		point = objectMoveInMapForTake.get(objectMoveInMapForTake.size()-1).getKey();
 		imageTmp = objectMoveInMapForTake.get(objectMoveInMapForTake.size()-1).getValue();
 		if (!objectMoveInMapForInsert.contains(new Pair<Point2D, PolygonObject>(point, imageTmp)))
 			objectMoveInMapForInsert.add(new Pair<Point2D, PolygonObject>(point, imageTmp));
 
-		((PanelForMap)panelForMap).removeObject(imageTmp);
-		if (objectInMap.contains(imageTmp))
-			objectInMap.remove(imageTmp);
-
 		dragged = imageTmp;
 		
-		dragged.setLayoutX(point.getX());
-		dragged.setLayoutY(point.getY());
-
 		((PanelForMap)panelForMap).addObject(dragged);
 		if (!objectInMap.contains(dragged))
 			objectInMap.add(dragged );
@@ -423,7 +486,8 @@ public class MapEditor extends Application{
 	
 	public void removeObject()
 	{
-		Point2D point = new Point2D(dragged.getLayoutX(), dragged.getLayoutY());
+		Point2D point = new Point2D(dragged.getPointsVertex().get(0).getX(), dragged.getPointsVertex().get(0).getY());
+		
 		if (!objectMoveInMapForRedo.contains(point))
 		{
 			objectMoveInMapForRedo.add(new Pair<Point2D, PolygonObject>(point, dragged));
@@ -436,9 +500,10 @@ public class MapEditor extends Application{
 		objectInMap.remove(dragged);
 	}
 	
-	public void remove()
+	private void remove()
 	{
-		Point2D point = new Point2D(dragged.getLayoutX(), dragged.getLayoutY());
+		Point2D point = new Point2D(dragged.getPointsVertex().get(0).getX(), dragged.getPointsVertex().get(0).getY());
+		
 		if (!objectMoveInMapForRedo.contains(point))
 			objectMoveInMapForRedo.add(new Pair<Point2D, PolygonObject>(point, dragged));
 		
@@ -482,25 +547,17 @@ public class MapEditor extends Application{
 			((PanelForObject) panelForObject).changePolicyButton(1,false);
 	}
 	
-	private boolean checkLimit(MouseEvent event) {
-		System.out.println(dragged.getWidth());
-		return (event.getX()+((dragged.getLayoutX()+dragged.getWidth())-event.getX())) < ((PanelForMap) panelForMap).getRealPane().getPrefWidth()
-    			&& (event.getY()+dragged.getHeight()) < ((PanelForMap) panelForMap).getRealPane().getPrefHeight()
-    			&& (event.getY()-dragged.getHeight()) >= 0
-    			&& (event.getX()-(event.getX()-dragged.getLayoutX())) >= 0;
-	}
-	
 	private boolean checkLimitForFocusPanelObject(MouseEvent event) {
 		return (event.getX()-panelForObject.getPrefWidth()+ image.getWidth()) < ((PanelForMap) panelForMap).getRealPane().getPrefWidth()
     			&& (event.getY()-((PanelForObject) panelForObject).getPanelForSubmit().getPrefHeight()-image.getHeight()/3) < ((PanelForMap) panelForMap).getRealPane().getPrefHeight()/2
-    			&& (event.getY()+((PanelForObject) panelForObject).getPanelForDimension().getPrefHeight()-image.getHeight()/3) >= 0
+    			&& (event.getY()-image.getHeight()/3) >= 0
     			&& (event.getX()-panelForObject.getPrefWidth()-image.getWidth()) >= 0;
 	}
 	
 	private void drawAll()
 	{
         panelForObject.setLayoutX(0);
-        panelForMap.setLayoutX(panelForObject.getPrefWidth()-Double.MIN_VALUE);
+        panelForMap.setLayoutX(panelForObject.getPrefWidth());
         
         loaderImage = new LoaderImage(this);
         loaderImage.load();

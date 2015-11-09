@@ -27,11 +27,11 @@ class DrawingPanel extends Pane
 
 //    getChildren().addAll(poly);
 
-	  this.mapEditor = mapEditor;
-	  
-    for ( int i = 0; i < poly.getPoints().size(); i += 2 ) {
-      Circle circle = new Circle( poly.getPoints().get( i ), poly.getPoints().get( i + 1 ), 5 );
-      circle.setFill( Color.web( "PERU", 0.8 ) );
+  this.mapEditor = mapEditor;
+  
+	for ( int i = 0; i < poly.getPoints().size(); i += 2 ) {
+	  Circle circle = new Circle( poly.getPoints().get( i ), poly.getPoints().get( i + 1 ), 5 );
+	  circle.setFill( Color.web( "PERU", 0.8 ) );
       circle.setStroke( Color.PERU );
       circle.setStrokeWidth( 2 );
 
@@ -42,6 +42,7 @@ class DrawingPanel extends Pane
           poly.getPoints().set( polyCoordinateIndex.get(), newValue.doubleValue() );
         }
       } );
+      
       circle.centerYProperty().addListener( new ChangeListener<Number>() {
         @Override
         public void changed( ObservableValue<? extends Number> observable, Number oldValue, Number newValue ) {
@@ -68,34 +69,18 @@ class DrawingPanel extends Pane
     circle.setOnMouseDragged( new EventHandler<MouseEvent>() {
       @Override
       public void handle( MouseEvent mouseEvent ) {
-		if (circle.getCenterX() == mapEditor.getDragged().getUpperLeftPosition().getX() && 
-				circle.getCenterY() == mapEditor.getDragged().getUpperLeftPosition().getY())
-		{
-			circle.setCenterX( mouseEvent.getSceneX() + dragDeltaX );
-			circle.setCenterY( mouseEvent.getSceneY() + dragDeltaY );
-			mapEditor.getDragged().setUpperLeftPosition(new Point2D(circle.getCenterX(), circle.getCenterY()), true);
+    	  for (int i = 0; i < mapEditor.getDragged().getPointsVertex().size(); i++) {
+    		  if (circle.getCenterX() == mapEditor.getDragged().getPointsVertex().get(i).getX() && 
+    				  circle.getCenterY() == mapEditor.getDragged().getPointsVertex().get(i).getY())
+    		  {
+    			  circle.setCenterX( mouseEvent.getSceneX() + dragDeltaX );
+    			  circle.setCenterY( mouseEvent.getSceneY() + dragDeltaY );
+    			  mapEditor.getDragged().modifyPositionWithVertex(mapEditor.getDragged().getPointsVertex().get(i), 
+    					  new Point2D(circle.getCenterX(), circle.getCenterY()));
+    		  }
+			
 		}
-		else if (circle.getCenterX() == mapEditor.getDragged().getBottomLeftPosition().getX() && 
-				circle.getCenterY() == mapEditor.getDragged().getBottomLeftPosition().getY())
-		{
-			circle.setCenterX( mouseEvent.getSceneX() + dragDeltaX );
-			circle.setCenterY( mouseEvent.getSceneY() + dragDeltaY );
-			mapEditor.getDragged().setBottomLeftPosition(new Point2D(circle.getCenterX(), circle.getCenterY()), true);
-		}
-		else if (circle.getCenterX() == mapEditor.getDragged().getBottomRightPosition().getX() && 
-				circle.getCenterY() == mapEditor.getDragged().getBottomRightPosition().getY())
-		{
-			circle.setCenterX( mouseEvent.getSceneX() + dragDeltaX );
-			circle.setCenterY( mouseEvent.getSceneY() + dragDeltaY );
-			mapEditor.getDragged().setBottomRightPosition(new Point2D(circle.getCenterX(), circle.getCenterY()), true);
-		}
-		else if (circle.getCenterX() == mapEditor.getDragged().getUpperRightPosition().getX() && 
-				circle.getCenterY() == mapEditor.getDragged().getUpperRightPosition().getY() && mapEditor.getDragged() instanceof Square)
-		{
-			circle.setCenterX( mouseEvent.getSceneX() + dragDeltaX );
-			circle.setCenterY( mouseEvent.getSceneY() + dragDeltaY );
-			mapEditor.getDragged().setUpperRightPosition(new Point2D(circle.getCenterX(), circle.getCenterY()), true);
-		}
+    	
         circle.setCursor( Cursor.MOVE );
       }
     } );
