@@ -155,5 +155,9 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 	public void blockWheelJoint(){
 		joint.setMaxMotorTorque(MAX_MOTOR_TORQUE);
 	}
+
+	public boolean isSleeping() {
+		return !body.isAwake();
+	}
 	
 }

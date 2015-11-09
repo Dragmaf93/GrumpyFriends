@@ -11,7 +11,7 @@ import javafx.scene.shape.Rectangle;
 
 public class CharacterDrawer {
 
-	private Pane pane;
+	private Group pane;
 	private Character character;
 	private ImageView imageView;
 	private WeaponDrawer weaponDrawer;
@@ -22,7 +22,7 @@ public class CharacterDrawer {
 	private Node currentLauncherWeapon;
 	private Node currentBulletWeapon;
 
-	public CharacterDrawer(Pane pane, Character character) {
+	public CharacterDrawer(Group pane, Character character) {
 		this.pane = pane;
 		this.character = character;
 		this.weaponDrawer = new WeaponDrawer(character, character.getLauncher());

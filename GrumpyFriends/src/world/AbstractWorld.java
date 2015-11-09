@@ -124,7 +124,7 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	
 	@Override
 	public void update() {
-		super.step(1.0f/60, 6, 3);  
+		super.step(1.0f/30, 6, 3);  
 		PhysicalObjectManager.getInstance().destroyBodies();
 
 	}

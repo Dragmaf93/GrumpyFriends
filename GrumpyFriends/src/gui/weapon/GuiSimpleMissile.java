@@ -117,8 +117,8 @@ public class GuiSimpleMissile implements WeaponGui{
 
 	@Override
 	public void afterAttack() {
-		bazooka.afterAttack();
 		finishAnimation=true;
+		bazooka.afterAttack();
 	}
 
 	@Override

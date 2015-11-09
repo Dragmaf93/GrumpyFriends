@@ -11,16 +11,15 @@ import physic.PhysicalCharacter;
 import physic.PhysicalObject;
 import physic.PhysicalObjectManager;
 import utils.ObjectWithTimer;
-import utils.Timer;
 import utils.Utils;
 import utils.Vector;
 
-public abstract class AbstractCharacter implements Character, ObjectWithTimer {
+public abstract class AbstractCharacter implements Character {
 
 	private final static float MAX_SPEED = 10f;
-	private final static float _SPEED = 20f;
+	private final static float _SPEED = 15f;
 	private final static float _FORCE = 500f;
-	private final static float JUMP = 25f;
+	private final static float JUMP = 15f;
 
 	protected String name;
 	protected float height;
@@ -44,7 +43,9 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 	protected Launcher launcher;
 
 	protected boolean readyToEquipWeapon;
-	
+	protected boolean attacked;
+	private boolean suffereDamage;
+
 	public AbstractCharacter(String name, float x, float y, float height, float width, Team team) {
 
 		this.name = name;
@@ -62,8 +63,8 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 		PhysicalObjectManager.getInstance().buildPhysicObject(physicBody);
 
 		launcher = new Launcher(this);
-		
-		readyToEquipWeapon=true;
+
+		readyToEquipWeapon = true;
 	}
 
 	@Override
@@ -88,15 +89,21 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 	}
 
 	@Override
+	public boolean isSleeping() {
+		return ((PhysicalCharacter) physicBody).isSleeping();
+	}
+
+	@Override
 	public void equipWeapon(String weaponName) {
 		if (!grounded || moving)
 			return;
 
 		if (launcher == null)
 			launcher = new Launcher(this);
-		
-//		if(!readyToEquipWeapon) return;
-		
+
+		if (!readyToEquipWeapon)
+			return;
+
 		if (equippedWeapon != null && equippedWeapon.getName().equals(weaponName)) {
 			launcher.loadWeapon(equippedWeapon);
 
@@ -118,13 +125,13 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 			return;
 
 		launcher.startWeaponAttack(power);
-		readyToEquipWeapon=false;
-		
+		readyToEquipWeapon = false;
+
 		if (equippedWeapon.finishHit()) {
-			System.out.println(equippedWeapon);
+			// System.out.println(equippedWeapon);
 			weaponsManager.removeOneAmmunition(equippedWeapon.getName());
 			equippedWeapon = null;
-			team.getMatchManager().stopTurnTimer();
+			attacked = true;
 			// new Timer(this).start();
 		}
 	}
@@ -213,23 +220,8 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 
 	@Override
 	public void endTurn() {
-		team.getMatchManager().nextTurn();
-	}
+		((PhysicalCharacter) physicBody).blockWheelJoint();
 
-	@Override
-	public void afterCountDown() {
-		endTurn();
-	}
-
-	@Override
-	public long getSecondToStopTimer() {
-		return 10;
-	}
-
-	@Override
-	public Timer getTimer() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -252,6 +244,7 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 
 	@Override
 	public String getName() {
+		
 		return name;
 	}
 
@@ -266,12 +259,6 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 	}
 
 	@Override
-	public Vec2 getPositionTest() {
-
-		return new Vec2(physicBody.getX(), physicBody.getY());
-	}
-
-	@Override
 	public double getY() {
 		return Utils.yFromJbox2dToJavaFx(physicBody.getY());
 	}
@@ -282,8 +269,25 @@ public abstract class AbstractCharacter implements Character, ObjectWithTimer {
 	}
 
 	@Override
+	public boolean attacked() {
+		return attacked;
+	}
+
+	@Override
 	public PhysicalObject getPhysicObject() {
 		return physicBody;
+	}
+
+	@Override
+	public void prepareForTurn() {
+		readyToEquipWeapon = true;
+		attacked = false;
+		suffereDamage = false;
+	}
+
+	@Override
+	public boolean sufferedDamage() {
+		return suffereDamage;
 	}
 
 }

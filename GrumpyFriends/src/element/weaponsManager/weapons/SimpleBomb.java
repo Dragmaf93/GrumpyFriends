@@ -2,10 +2,10 @@ package element.weaponsManager.weapons;
 
 import element.weaponsManager.AbstractWeapon;
 import element.weaponsManager.ExplosiveObject;
+import game.MatchTimer;
 import physic.PhysicalObjectManager;
 import physic.weapon.PhysicalBomb;
 import utils.ObjectWithTimer;
-import utils.Timer;
 import utils.Utils;
 import utils.Vector;
 
@@ -14,14 +14,13 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 	private static final float RADIUS = 0.7f;
 	public static final int NUMBER_OF_AMMUNITION = 10;
 	private static final int NUMBER_OF_HIT = 1;
-	private static final long SEC_TO_EXPLODE=4;
+	private static final long MILLIS_TO_EXPLODE=4000;
 	
 	private static final float BLAST_POWER = 10000f;
 	private static final float BLAST_RADIUS = 10f;
 	
 	
 	private boolean exploded;
-	private Timer timer;
 	
 	public SimpleBomb() {
 		physicalWeapon = new PhysicalBomb(RADIUS,BLAST_RADIUS);
@@ -40,7 +39,7 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 		physicalWeapon.setTransform(position.toVec2(), angle);
 		physicalWeapon.setLinearVelocity(speed.toVec2());
 		attacked=true;
-		timer = new Timer(this);
+		MatchTimer.startTimer(this);
 
 	}
 
@@ -66,7 +65,7 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 
 	@Override
 	public long getSecondToStopTimer() {
-		return SEC_TO_EXPLODE;
+		return MILLIS_TO_EXPLODE;
 	}
 	@Override
 	public void afterAttack() {
@@ -76,12 +75,7 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 	public boolean isExploded(){
 		return exploded;
 	}
-	@Override
-	public void afterCountDown() {
-		exploded=true;
-		((ExplosiveObject) physicalWeapon).explode();
-	}
-
+	
 	@Override
 	public double getX() {
 		return Utils.xFromJbox2dToJavaFx(physicalWeapon.getX());
@@ -103,16 +97,12 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 	}
 
 	@Override
-	public Timer getTimer() {
-		return timer;
-	}
-
-	@Override
 	public void update() {
 		physicalWeapon.update();
 		
-		if(timer.timeEnded()){
-			afterCountDown();
+		if(MatchTimer.endObjectTimerIn()<=0 && !exploded){
+			exploded=true;
+			((ExplosiveObject) physicalWeapon).explode();
 		}
 	}
 	

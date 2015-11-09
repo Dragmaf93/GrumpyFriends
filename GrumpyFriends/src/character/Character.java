@@ -39,14 +39,19 @@ public interface Character extends Element
 	public abstract void setGrounded(boolean b);
 	public abstract boolean isGrounded();
 
+	public abstract boolean attacked();
+	
+	public abstract void prepareForTurn();
+	
+	public abstract boolean sufferedDamage();
+	
 	public abstract void endTurn();
 	abstract public PhysicalObject getPhysicalObject();
 
-
-	Vec2 getPositionTest();
-
-
 	public abstract Weapon getEquipWeapon();
+
+
+	public abstract boolean isSleeping();
 
 	
 

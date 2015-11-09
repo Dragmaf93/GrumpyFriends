@@ -1,14 +1,15 @@
 package gui.drawer;
 
 import element.Element;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
 public abstract class AbstractDrawerObject implements DrawerObject{
 
-	protected Pane pane;
+	protected Group pane;
 	
-	public AbstractDrawerObject(Pane pane){
+	public AbstractDrawerObject(Group pane){
 		this.pane=pane;
 	}
 	

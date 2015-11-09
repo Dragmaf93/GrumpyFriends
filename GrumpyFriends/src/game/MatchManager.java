@@ -1,89 +1,138 @@
 package game;
 
+import java.util.List;
+
 import character.Character;
 import character.Team;
+import javafx.scene.paint.Color;
+import physic.PhysicalCharacter;
 import utils.ObjectWithTimer;
-import utils.Timer;
 import world.World;
 
-public class MatchManager implements ObjectWithTimer {
+public class MatchManager {
 
 	private World battlefield;
-	private Team teamA;
-	private Team teamB;
+	private Team teamRed;
+	private Team teamBlue;
 
 	private Character currentPlayer;
 	private Team currentTeam;
 
-	private Timer turnTimer;
-
 	private int turn;
 
 	boolean started;
+	boolean pause;
+
+	private MatchTimer timer;
+
+	private boolean endTurn;
 
 	public MatchManager() {
 		this.battlefield = null;
-		this.teamA = null;
-		this.teamB = null;
+		this.teamRed = null;
+		this.teamBlue = null;
 		this.currentPlayer = null;
 		this.turn = 0;
 		this.started = false;
+		timer = new MatchTimer();
 	}
 
 	public MatchManager(World battlefield, Team teamA, Team teamB) {
 		this.battlefield = battlefield;
-		this.teamA = teamA;
-		this.teamB = teamB;
+		this.teamRed = teamA;
+		this.teamBlue = teamB;
 		this.turn = 0;
 		this.currentPlayer = null;
 		this.started = false;
+		timer = new MatchTimer();
+		teamBlue.setColorTeam(Color.BLUE);
+		teamRed.setColorTeam(Color.RED);
 	}
 
 	public MatchManager(World battlefield) {
 		this.battlefield = battlefield;
-		this.teamA = null;
-		this.teamB = null;
+		this.teamRed = null;
+		this.teamBlue = null;
 		this.turn = 0;
 		this.currentPlayer = null;
 		this.started = false;
+		timer = new MatchTimer();
 	}
 
 	public boolean startMatch() {
-		if (started || teamA == null || teamB == null || battlefield == null)
+		if (started || teamRed == null || teamBlue == null || battlefield == null)
 			return false;
 
 		currentTeam = getFirstTeam();
 
-		teamA.setUpForTheMatch();
-		teamB.setUpForTheMatch();
+		teamRed.setUpForTheMatch();
+		teamBlue.setUpForTheMatch();
 
 		currentPlayer = currentTeam.nextPlayer();
 
 		turn = 1;
-		turnTimer = new Timer(this);
-		turnTimer.start();
+
+		timer.startMatchTimer();
+		timer.startTurnTimer();
 
 		started = true;
+		endTurn = false;
 
 		return true;
 	}
 
-	public void nextTurn() {
+	public void endTurn() {
+		if (!endTurn)
+			currentPlayer.endTurn();
+		endTurn = true;
+	}
+
+	public boolean allCharacterAreSpleeping() {
+		List<Character> characters = teamRed.getCharactersInGame();
+
+		for (Character character : characters) {
+			if (!character.isSleeping()) {
+				return false;
+			}
+		}
+
+		characters = teamBlue.getCharactersInGame();
+		for (Character character : characters) {
+			if (!character.isSleeping()) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public void startNextTurn() {
 		if (started) {
-			if (currentTeam == teamA)
-				currentTeam = teamB;
-			else if (currentTeam == teamB)
-				currentTeam = teamA;
+			if (currentTeam == teamRed)
+				currentTeam = teamBlue;
+			else if (currentTeam == teamBlue)
+				currentTeam = teamRed;
 
 			currentPlayer = currentTeam.nextPlayer();
+			currentPlayer.prepareForTurn();
 			turn++;
-			turnTimer = new Timer(this);
-			turnTimer.start();
+			timer.startTurnTimer();
+			endTurn = false;
 		}
 	}
 
-	public void restartMatch() {
+	public void pauseMatch() {
+		pause = true;
+		timer.pauseTimers();
+	}
 
+	public void restartPausedMatch() {
+		pause = false;
+		timer.restartPausedTimers();
+	}
+
+	public void restartMatch() {
+		timer.restartTimers();
 	}
 
 	public Character getCurrentPlayer() {
@@ -103,29 +152,33 @@ public class MatchManager implements ObjectWithTimer {
 	}
 
 	public Team getTeamA() {
-		return teamA;
+		return teamRed;
 	}
 
 	public void setTeamA(Team teamA) {
-		this.teamA = teamA;
+		this.teamRed = teamA;
 	}
 
 	public Team getTeamB() {
-		return teamB;
+		return teamBlue;
 	}
 
 	public void setTeamB(Team teamB) {
-		this.teamB = teamB;
+		this.teamBlue = teamB;
 	}
 
 	private Team getFirstTeam() {
 		if (Math.random() <= 0.5)
-			return teamA;
-		return teamB;
+			return teamRed;
+		return teamBlue;
 	}
 
 	public int getTurn() {
 		return turn;
+	}
+
+	public boolean isTheCurrentTurnEnded() {
+		return endTurn;
 	}
 
 	public Team getCurrentTeam() {
@@ -133,35 +186,68 @@ public class MatchManager implements ObjectWithTimer {
 	}
 
 	public void stopTurnTimer() {
-		if (turnTimer != null)
-			turnTimer.forceToStop();
-		turnTimer = null;
-	}
-
-	public Timer getTimer() {
-//		if (turnTimer != null)
-//			return turnTimer.getSeconds();
-//		return 0;
-		return null;
-	}
-
-	@Override
-	public long getSecondToStopTimer() {
-		return 60;
-	}
-
-	@Override
-	public void afterCountDown() {
-		nextTurn();
+		timer.stopTurnTimer();
 	}
 
 	public void startTest() {
-		currentTeam = teamA;
-		currentPlayer = teamA.get(0);
+		timer.startMatchTimer();
+		timer.startTurnTimer();
+		currentTeam = teamRed;
+		currentPlayer = teamRed.get(0);
+
 	}
 
 	public World getWorld() {
 		return battlefield;
+	}
+
+	public MatchTimer getMatchTimer() {
+		return timer;
+	}
+
+	public void update() {
+		if (!pause) {
+
+			if (timer.endTurnIn() <= 0) {
+				endTurn();
+			}
+
+			if (timer.endMatchIn() <= 0) {
+				endMatch();
+			}
+
+			if (currentPlayer.attacked() && !timer.isTurnTimerStopped()) {
+				timer.startAttackTimer();
+				timer.stopTurnTimer();
+			}
+			if (timer.isTurnTimerStopped() && timer.endAttackTimerIn() <= 0) {
+				endTurn();
+			}
+
+			if (currentPlayer.sufferedDamage()) {
+				endTurn();
+			}
+
+		}
+	}
+
+	private void endMatch() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public Character nextPlayer() {
+		Team team = null;
+		if (currentTeam == teamRed)
+			team = teamBlue;
+		else if (currentTeam == teamBlue)
+			team = teamRed;
+
+		return team.whoIsNextPlayer();
+	}
+
+	public boolean isPaused() {
+		return pause;
 	}
 
 }

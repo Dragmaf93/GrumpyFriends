@@ -8,7 +8,8 @@ import character.Character;
 import element.Element;
 import element.Ground;
 import game.MatchManager;
-import gui.MatchPane;
+import gui.FieldPane;
+import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
@@ -16,7 +17,7 @@ import world.World;
 
 public class DrawerManager {
 
-	private Pane pane;
+	private Group pane;
 	private World world;
 
 	private HashMap<String, DrawerObject> drawers;
@@ -24,7 +25,7 @@ public class DrawerManager {
 	private WeaponDrawer weaponDrawer;
 	
 
-	public DrawerManager(Pane p, World world) {
+	public DrawerManager(Group p, World world) {
 		this.world = world;
 		this.pane = p;
 		
@@ -55,6 +56,7 @@ public class DrawerManager {
 		characterDrawers = new ArrayList<CharacterDrawer>();
 		
 		for (Character character : characters) {
+			System.out.println(character.getName());
 			CharacterDrawer c= new CharacterDrawer(pane,character);
 			characterDrawers.add(c);
 		}

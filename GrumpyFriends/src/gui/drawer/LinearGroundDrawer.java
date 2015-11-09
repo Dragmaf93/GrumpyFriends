@@ -2,13 +2,14 @@ package gui.drawer;
 
 import element.Element;
 import element.ground.LinearGround;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
 public class LinearGroundDrawer extends AbstractDrawerObject  {
 
-	public LinearGroundDrawer(Pane pane) {
+	public LinearGroundDrawer(Group pane) {
 		super(pane);
 	}
 

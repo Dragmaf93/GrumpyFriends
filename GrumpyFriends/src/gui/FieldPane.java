@@ -2,37 +2,32 @@ package gui;
 
 import game.MatchManager;
 import gui.drawer.DrawerManager;
+import gui.hud.MatchPane;
 import javafx.animation.AnimationTimer;
+import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import world.World;
 
-public class MatchPane extends Pane {
+public class FieldPane extends Pane {
 
 	private World world;
 	private MatchManager matchManager;
 
-	
 	private DrawerManager drawer;
 	private GraphicsContext gc;
+
+	private Group field;
 	
-	public MatchPane(MatchManager matchManager) {
+	public FieldPane(MatchManager matchManager) {
 		this.matchManager = matchManager;
 		this.world = matchManager.getWorld();
+		this.field = new Group();
 		
-		drawer = new DrawerManager(this,world);
-		
+		drawer = new DrawerManager(field,world);
 		drawer.createWorld();
-
-		new AnimationTimer() {
-
-			@Override
-			public void handle(long now) {
-				drawer.draw();
-				world.update();
-				
-			}
-		}.start();
+		
+		this.getChildren().add(field);
 	}
 	
 	public void update(){

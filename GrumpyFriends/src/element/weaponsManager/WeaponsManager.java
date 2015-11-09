@@ -88,9 +88,13 @@ public class WeaponsManager {
 		return true;
 	}
 	
-	public static void main(String[] args) {
-		WeaponsManager w = new WeaponsManager();
-		System.out.println(w.getWeapon("SimpleBomb"));
+	public String[] getWeaponList(){
+		return classList;
 	}
+	
+//	public static void main(String[] args) {
+//		WeaponsManager w = new WeaponsManager();
+//		System.out.println(w.getWeapon("SimpleBomb"));
+//	}
 	
 }

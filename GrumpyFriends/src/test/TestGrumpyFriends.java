@@ -1,5 +1,6 @@
 package test;
 
+import org.jbox2d.common.Vec2;
 import org.jbox2d.testbed.framework.TestbedSettings;
 import org.jbox2d.testbed.framework.TestbedTest;
 
@@ -116,8 +117,7 @@ public class TestGrumpyFriends extends TestbedTest {
 		super.step(settings);
 		addTextLine("Turn " + matchManager.getTurn());
 		addTextLine("Current Player "+ matchManager.getCurrentPlayer().getName()+" of "+matchManager.getCurrentTeam().getName());
-		addTextLine("Time "+ matchManager.getTimer());
-		getCamera().setCamera(matchManager.getCurrentPlayer().getPositionTest());
+		getCamera().setCamera(new Vec2((float)matchManager.getCurrentPlayer().getX(),(float)matchManager.getCurrentPlayer().getY()));
 		
 		if(weapon!=null)
 			weapon.update();
