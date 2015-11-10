@@ -24,7 +24,6 @@ public abstract class PolygonObject extends Polygon {
 	protected ArrayList<Point2D> points;
 	protected ArrayList<Point2D> distancePoints;
 	private int xMagg;
-//	protected ArrayList<QuadCurve> curves;
 	
 	public PolygonObject(MapEditor mapEditor, String nameObject) 
 	{
@@ -34,7 +33,6 @@ public abstract class PolygonObject extends Polygon {
 		
 		points = new ArrayList<Point2D>();
 		distancePoints = new ArrayList<Point2D>();
-//		curves = new ArrayList<QuadCurve>();
 		
 		borderGlow = new DropShadow();
 		borderGlow.setOffsetX(0f);

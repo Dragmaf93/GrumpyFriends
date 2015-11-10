@@ -20,8 +20,12 @@ public class Main extends Application {
     quad.setStartY(50.0f);
     quad.setEndX(50.0f);
     quad.setEndY(50.0f);
-    quad.setControlX(25.0f);
-    quad.setControlY(0.0f);
+    
+    double x1 = 2*25.0 - quad.getStartX()/2 -quad.getEndX()/2;
+    double y1 = 2*0.0 - quad.getStartY()/2 -quad.getEndY()/2;
+    
+    quad.setControlX(x1);
+    quad.setControlY(y1);
     
 //    CubicCurve quad = new CubicCurve();
 //    quad.setStartX(0.0f);
