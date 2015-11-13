@@ -8,10 +8,10 @@ public class Square extends PolygonObject {
 	{
 		super(mapEditor, nameObject);
 
-		setUpperLeftPosition(point1, false);
-		setBottomLeftPosition(point2, false);
-		setBottomRightPosition(point3, false);
-		setUpperRightPosition(point4, false);
+		points.add(point1);
+		points.add(point2);
+		points.add(point3);
+		points.add(point4);
 		
 		getPoints().addAll(new Double[]{
         	    point1.getX(), point1.getY(),
@@ -22,17 +22,15 @@ public class Square extends PolygonObject {
 		width = point4.getX()-point1.getX();
 		height = point2.getY()-point1.getY();
 		
-		
+		computeDistanceVertex();
 	}
 	
 	@Override
 	protected PolygonObject clone() throws CloneNotSupportedException 
 	{
-		PolygonObject newImage = new Square(this.mapEditor, this.nameObject, this.upperLeftPosition, this.bottomLeftPosition, 
-				this.bottomRightPosition, this.upperRightPosition);
+		PolygonObject newImage = new Square(this.mapEditor, this.nameObject, this.points.get(0), this.points.get(1), 
+				this.points.get(2), this.points.get(3));
 		
-		if (this.nameObject.equals("inclinedGround"))
-			newImage.angleRotation = this.angleRotation;
 		return newImage;
 	}
 }

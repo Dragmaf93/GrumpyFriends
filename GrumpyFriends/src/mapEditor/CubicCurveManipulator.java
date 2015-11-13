@@ -1,4 +1,5 @@
 package mapEditor;
+
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;

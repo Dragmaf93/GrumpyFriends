@@ -15,11 +15,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 
-class DrawingPanel extends Pane
+class DrawingPanelForCurve extends Pane
 {
 	MapEditor mapEditor;
 	
-  public DrawingPanel( final Polygon poly, MapEditor mapEditor )
+  public DrawingPanelForCurve( final Curve curve, MapEditor mapEditor )
   {
 //    poly.setFill( Color.web( "ANTIQUEWHITE", 0.8 ) );
 //    poly.setStroke( Color.web( "ANTIQUEWHITE" ) );
@@ -27,10 +27,21 @@ class DrawingPanel extends Pane
 
 //    getChildren().addAll(poly);
 
+	  System.out.println("NEL DRAWING: "+curve);
+	  
   this.mapEditor = mapEditor;
   
-	for ( int i = 0; i < poly.getPoints().size(); i += 2 ) {
-	  Circle circle = new Circle( poly.getPoints().get( i ), poly.getPoints().get( i + 1 ), 5 );
+	for ( int i = 0; i < curve.getPoints().size(); i += 2 ) {
+		
+//		double y1 = 2*start.getY() - getStartY()/2 -getEndY()/2;
+//		double pointC = Math.abs((-curve.getStartY()/2 -curve.getEndY()/2 - curve.getRealPoints().get(2).getY())/ 2);
+//		System.out.println(pointC);
+//		Circle circle;
+//		if (i < curve.getPoints().size()-2)
+		Circle circle = new Circle( curve.getPoints().get( i ), curve.getPoints().get( i + 1 ), 5 );
+//		else
+//			circle = new Circle( curve.getPoints().get( i ), pointC, 5 );
+			
 	  circle.setFill( Color.web( "PERU", 0.8 ) );
       circle.setStroke( Color.PERU );
       circle.setStrokeWidth( 2 );
@@ -39,14 +50,14 @@ class DrawingPanel extends Pane
       circle.centerXProperty().addListener( new ChangeListener<Number>() {
         @Override
         public void changed( ObservableValue<? extends Number> observable, Number oldValue, Number newValue ) {
-          poly.getPoints().set( polyCoordinateIndex.get(), newValue.doubleValue() );
+          curve.getPoints().set( polyCoordinateIndex.get(), newValue.doubleValue() );
         }
       } );
       
       circle.centerYProperty().addListener( new ChangeListener<Number>() {
         @Override
         public void changed( ObservableValue<? extends Number> observable, Number oldValue, Number newValue ) {
-          poly.getPoints().set( polyCoordinateIndex.get() + 1, (Double) newValue );
+          curve.getPoints().set( polyCoordinateIndex.get() + 1, (Double) newValue );
         }
       } );
       setDragHandler(circle);
@@ -69,13 +80,13 @@ class DrawingPanel extends Pane
     circle.setOnMouseDragged( new EventHandler<MouseEvent>() {
       @Override
       public void handle( MouseEvent mouseEvent ) {
-    	  for (int i = 0; i < mapEditor.getDragged().getPointsVertex().size(); i++) {
-    		  if (circle.getCenterX() == mapEditor.getDragged().getPointsVertex().get(i).getX() && 
-    				  circle.getCenterY() == mapEditor.getDragged().getPointsVertex().get(i).getY())
+    	  for (int i = 0; i < mapEditor.getDraggedCurve().getRealPoints().size(); i++) {
+    		  if (circle.getCenterX() == mapEditor.getDraggedCurve().getRealPoints().get(i).getX() && 
+    				  circle.getCenterY() == mapEditor.getDraggedCurve().getRealPoints().get(i).getY())
     		  {
     			  circle.setCenterX( mouseEvent.getSceneX() + dragDeltaX );
     			  circle.setCenterY( mouseEvent.getSceneY() + dragDeltaY );
-    			  mapEditor.getDragged().modifyPositionWithVertex(mapEditor.getDragged().getPointsVertex().get(i), 
+    			  mapEditor.getDraggedCurve().modifyPositionWithVertex(mapEditor.getDraggedCurve().getRealPoints().get(i), 
     					  new Point2D(circle.getCenterX(), circle.getCenterY()));
     		  }
 			
