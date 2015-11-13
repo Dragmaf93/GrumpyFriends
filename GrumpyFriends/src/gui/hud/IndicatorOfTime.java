@@ -2,8 +2,6 @@ package gui.hud;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 
 import game.MatchManager;
 import game.MatchTimer;
@@ -21,8 +19,10 @@ public class IndicatorOfTime extends AbstractHudElement{
 	private Font fontTurnTimer;
 	private Font fontMatchTimer;
 	
-	private final static double DISTANCE_FROM_RIGHT=205;
-	private final static double DISTANCE_FROM_BOTTOM=210;
+	private final static double DISTANCE_SCREEN_LEFT=30;
+	private final static double DISTANCE_SCREEN_TOP=5;
+	private final static Color BACKGROUND_COLOR = new Color(30d / 255d, 127d / 255d, 169d / 255d, 0.9d);
+
 	
 	private Text turnTimer;
 	private Text matchTimer;
@@ -34,7 +34,7 @@ public class IndicatorOfTime extends AbstractHudElement{
 		
 		timer = matchManager.getMatchTimer();
 		
-		clock = new Circle(80, Color.DEEPSKYBLUE);
+		clock = new Circle(68, BACKGROUND_COLOR);
 		clock.setStroke(Color.BLACK);
 		clock.setStrokeWidth(3);
 		turnTimer = new Text();
@@ -65,7 +65,7 @@ public class IndicatorOfTime extends AbstractHudElement{
 	@Override
 	public void draw() {
 		Scene scene = root.getScene();
-		root.relocate(scene.getWidth()-DISTANCE_FROM_RIGHT, scene.getHeight()-DISTANCE_FROM_BOTTOM);
+		root.relocate(DISTANCE_SCREEN_LEFT, DISTANCE_SCREEN_TOP);
 		if(!timer.isTurnTimerStopped()){
 			turnTimer.setText(timer.turnTimerStringFormat());
 			

@@ -1,6 +1,7 @@
 package world;
 
 
+import java.util.HashMap;
 import java.util.List;
 
 import character.Character;
@@ -15,8 +16,10 @@ public interface World {
 	
 	abstract public float getWidth();
 	abstract public float getHeight();
-	abstract public Character getCharacter();
+	abstract public Character getCharacter(String name);
 	abstract public List<Ground> getGrounds();
+	
+	abstract public HashMap<String, Float> getHitCharacter();
 	
 	abstract public  org.jbox2d.dynamics.World getPhysicWorld();
 	public abstract List<Character> getAllCharacters();

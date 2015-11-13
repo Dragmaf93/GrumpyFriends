@@ -1,114 +1,127 @@
 package gui.weapon;
 
-import org.jbox2d.common.Vec2;
 
 import character.Character;
 import element.weaponsManager.Weapon;
-import element.weaponsManager.weapons.SimpleBomb;
 import element.weaponsManager.weapons.SimpleMissile;
-import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.transform.Rotate;
 
-public class GuiSimpleMissile implements WeaponGui{
+public class GuiSimpleMissile extends  AbstractGuiWeapon {
 
-	private final static double BAZOOKA_WIDTH=60;
-	private final static double BAZOOKA_HEIGHT=20;
-	
-	private Group bazookaRoot;
-	private Group bulletRoot;
-	
-	private Character character;
-	private SimpleMissile bazooka;
-	
-	private Rotate bazookaRotate;
+	private final static double BAZOOKA_WIDTH = 110;
+	private final static double BAZOOKA_HEIGHT = 50;
+
+//	private Group launcherRoot;
+//	private Group bulletRoot;
+//
+//	private Character character;
+//	private SimpleMissile weapon;
+
+	private Rotate launcherRotate;
 	private Rotate bulletRotate;
-	
+
+	private ImageView launcherImage;
+	private ImageView bulletImage;
+
 	private GuiExplosion explosion;
 	
-	private Rectangle rectangle;
-//	private Polygon poly;
-	private Rectangle poly;
 	private boolean finishAnimation;
 	
-	public  GuiSimpleMissile(Weapon bomb, Character character) {
-		this.bazooka = (SimpleMissile) bomb;
-		this.character = character;
-		bulletRoot = new Group();
-		bazookaRoot = new Group();
-		finishAnimation = false;
-	
+//	private Rotate bazookaRotate3;
 
+	public GuiSimpleMissile(Weapon weapon, Character character) {
+		super(weapon, character);
+		this.weapon =  weapon;
+		this.character = character;
+
+		finishAnimation = false;
+
+		bulletImage = new ImageView(new Image("file:image/weapons/bazookaBullet.png"));
+		bulletImage.setFitHeight(weapon.getHeight());
+		bulletImage.setFitWidth(weapon.getWidth());
 	}
-	
+
 	@Override
 	public Node getWeaponLauncher() {
-		if(rectangle==null){
-			rectangle = new Rectangle(character.getX()+character.getWidth()*0.3, 
-					character.getY()+character.getWidth()/2, BAZOOKA_WIDTH, BAZOOKA_HEIGHT);
-			rectangle.setFill(Color.WHITE);
-			rectangle.setStroke(Color.BROWN);
-			bazookaRoot.getChildren().add(rectangle);
+		if (launcherImage==null) {
+			launcherImage = new ImageView(new Image("file:image/weapons/bazooka1.png"));
 			
-			bazookaRotate = new Rotate();
-			bazookaRotate.setAxis(Rotate.Z_AXIS);
-			rectangle.getTransforms().add(bazookaRotate);
+			launcherImage.setFitHeight(BAZOOKA_HEIGHT);
+			launcherImage.setFitWidth(BAZOOKA_WIDTH);
+			
+			launcherRoot.getChildren().add(launcherImage);
+			launcherRotate = new Rotate();
+//			bazookaRotate3 = new Rotate();
+			launcherRotate.setAxis(Rotate.Z_AXIS);
+
+			launcherImage.getTransforms().add(launcherRotate);
+//			bazookaImage.getTransforms().add(bazookaRotate3);
 		}
-		return bazookaRoot;
+		return launcherRoot;
 	}
 
 	@Override
 	public Node getWeaponBullet() {
 		explosion = new GuiExplosion(this);
-		poly = new Rectangle(bazooka.getX(),bazooka.getY(),bazooka.getWidth(),bazooka.getHeight());
-//		poly = new Polygon();
-//		poly.getPoints().addAll(0d,0d,bazooka.getWidth()*0.7d,-bazooka.getHeight(),bazooka.getWidth(),0d,
-//				bazooka.getWidth()*0.7d,bazooka.getHeight());
-		poly.relocate(bazooka.getX(),bazooka.getY());
-		poly.setFill(Color.GREY);
-		
+
 		bulletRotate = new Rotate();
 		bulletRotate.setAxis(Rotate.Z_AXIS);
-	
-		poly.getTransforms().add(bulletRotate);
-		bulletRoot.getChildren().add(poly);
+
+		bulletImage.getTransforms().add(bulletRotate);
+
+		bulletRoot.getChildren().add(bulletImage);
 		bulletRoot.getChildren().add(explosion.getExplosionNode());
-		
-		
+
 		return bulletRoot;
 	}
 
 	@Override
 	public void updateLauncher() {
-		bazookaRotate.setPivotX(rectangle.getX()+rectangle.getWidth()*0.1);
-		bazookaRotate.setPivotY(rectangle.getY()+rectangle.getHeight()*0.5);
-		bazookaRotate.setAngle(Math.toDegrees(-character.getLauncher().getAngle()));
-		rectangle.relocate(character.getX()+character.getWidth()*0.3, 
-				character.getY()+character.getWidth()/2);		
+		// if(bazookaRotate.getAngle()<-92){
+		//// bazookaRotate2.setAxis(Rotate.Y_AXIS);
+		//// bazookaRotate2.setPivotX(bazookaImage.getX()+BAZOOKA_WIDTH*0.5);
+		// bazookaRotate3.setAxis(Rotate.X_AXIS);
+		// bazookaRotate3.setPivotY(bazookaImage.getY()+BAZOOKA_HEIGHT*0.5);
+		//// bazookaRotate2.setAngle(180);
+		// bazookaRotate3.setAngle(180);
+		// bazookaRotate.setAxis(Rotate.Z_AXIS);
+		//
+		// bazookaRotate.setPivotX(bazookaImage.getX()+BAZOOKA_WIDTH*0.3);
+		// bazookaRotate.setPivotY(bazookaImage.getY()+BAZOOKA_HEIGHT*0.5);
+		//
+		// bazookaRotate.setAngle(Math.toDegrees(-character.getLauncher().getAngle()));
+		// bazookaImage.relocate(character.getX()-BAZOOKA_WIDTH*0.2,
+		// character.getY());
+		// return;
+		// }
+
+		super.updateLauncher();
+		launcherRotate.setAxis(Rotate.Z_AXIS);
+		launcherRotate.setPivotX(launcherImage.getX() + BAZOOKA_WIDTH * 0.3);
+		launcherRotate.setPivotY(launcherImage.getY() + BAZOOKA_HEIGHT * 0.5);
+		launcherRotate.setAngle(Math.toDegrees(-character.getLauncher().getAngle()));
+		launcherImage.relocate(character.getX() - BAZOOKA_WIDTH * 0.2, character.getY());
+//		viewfinder.relocate(character.getX()+character.getLauncher().getX() + 150, character.getY()+character.getLauncher().getY()-bulletImage.getFitHeight()-25);
 	}
 
 	@Override
 	public void updateBullet() {
-		bazooka.update();
-		
-		if (!bazooka.isExplosed()){
-			bulletRotate.setPivotX(poly.getX());
-			bulletRotate.setPivotY(poly.getY());
-			bulletRotate.setAngle(Math.toDegrees(-bazooka.getAngle()));
-			
-			poly.relocate(bazooka.getX(),bazooka.getY());
-			
-			
-		
-		}else{
+		weapon.update();
+
+		if (!((SimpleMissile) weapon).isExplosed()) {
+			bulletRotate.setPivotX(launcherImage.getX());
+			bulletRotate.setPivotY(launcherImage.getY());
+			bulletRotate.setAngle(Math.toDegrees(-((SimpleMissile) weapon).getAngle()));
+
+			bulletImage.relocate(weapon.getX(), weapon.getY());
+
+		} else {
 			explosion.playExplosionAnimation();
 		}
 	}
-
 
 	@Override
 	public boolean finishAnimation() {
@@ -117,19 +130,19 @@ public class GuiSimpleMissile implements WeaponGui{
 
 	@Override
 	public void afterAttack() {
-		finishAnimation=true;
-		bazooka.afterAttack();
+		finishAnimation = true;
+		weapon.afterAttack();
 	}
 
 	@Override
 	public Weapon getWeapon() {
-		return bazooka;
+		return weapon;
 	}
 
 	@Override
 	public void removeBullet() {
-		bulletRoot.getChildren().remove(poly);
-		
+		bulletRoot.getChildren().remove(bulletImage);
+
 	}
-	
+
 }

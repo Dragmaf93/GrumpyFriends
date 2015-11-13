@@ -1,6 +1,7 @@
 package test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.jbox2d.common.Vec2;
@@ -59,11 +60,6 @@ public class TestWorld implements world.World{
 	}
 	
 	@Override
-	public Character getCharacter() {
-		return characters.get(0);
-	}
-	
-	@Override
 	public World getPhysicWorld() {
 		return world;
 	}
@@ -84,6 +80,16 @@ public class TestWorld implements world.World{
 	public void update() {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public Character getCharacter(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public HashMap<String, Float> getHitCharacter() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

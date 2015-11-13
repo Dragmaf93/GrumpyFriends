@@ -15,6 +15,7 @@ public abstract class AbstractPhysicalWeapon implements PhysicalWeapon{
 	protected Fixture fixture;
 	protected FixtureDef fixtureDef;
 	
+	protected float maxDamage;
 	
 	@Override
 	public void setActive(boolean flag) {
@@ -61,6 +62,9 @@ public abstract class AbstractPhysicalWeapon implements PhysicalWeapon{
 		if(body==null) return;
 	}
 	
-	
+	@Override
+	public float getMaxDamage() {
+		return maxDamage;
+	}
 	
 }

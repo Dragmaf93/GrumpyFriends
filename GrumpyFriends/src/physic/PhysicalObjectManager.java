@@ -2,6 +2,7 @@ package physic;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.jbox2d.collision.shapes.CircleShape;
@@ -29,11 +30,14 @@ public class PhysicalObjectManager {
 	private static PhysicalObjectManager instance;
 	
 	private List<Body> toRemove;
-	private Body[] blastParticleBodies;
+
+	private HashMap<String, Float> hitCharacters;
+	
+	
 	
 	private PhysicalObjectManager(){
 		toRemove = new ArrayList<Body>();
-		blastParticleBodies = new Body[NUM_RAYS];
+		hitCharacters = new HashMap<>();
 	}
 	public void setWorld(world.World world){
 		this.world=world.getPhysicWorld();
@@ -132,11 +136,23 @@ public class PhysicalObjectManager {
 			}
 		}
 	}
+	
+	public HashMap<String, Float> getHitCharacters(){
+		return hitCharacters;
+	}
+	
 	public void destroyBodies(){
 		for (Body body : toRemove) {
 			world.destroyBody(body);
 		}
 		toRemove.clear();
+	}
+	private void addHitCharacter(String name, float damage){
+		if(hitCharacters.containsKey(name) && hitCharacters.get(name) < damage){
+			hitCharacters.put(name, damage);
+		}else if(!hitCharacters.containsKey(name)){
+			hitCharacters.put(name, damage);			
+		}
 	}
 	
 	private void applyBlastImpulse(Body body, Vec2 applyPoint, ExplosiveObject explosiveObject){
@@ -147,19 +163,21 @@ public class PhysicalObjectManager {
 		blastDir.y=applyPoint.y - explosiveObject.getCenter().y;
 		
 		float distance = blastDir.normalize();
-//		System.out.println(distance);
-		if(distance==0) return;
-		
+		if(distance==0) return;	
+			
+		if(body.getUserData() instanceof String){
+			System.out.println( distance+"      "+ explosiveObject.getBlastRadius());
+			addHitCharacter((String) body.getUserData(),((PhysicalWeapon)explosiveObject).getMaxDamage()-
+					((PhysicalWeapon)explosiveObject).getMaxDamage()*distance/
+					explosiveObject.getBlastRadius());
+			
+		}
 		float invDistance = 1/distance;
 		float impulseMag = explosiveObject.getBlastPower() *invDistance;
-//		impulseMag = MathUtils.min(impulseMag, 100.0f);
-//		impulseMag = MathUtils.max(impulseMag, 100.0f);
 		Vec2 impulse = new Vec2();
+
 		impulse.x=blastDir.x*impulseMag;
 		impulse.y=blastDir.y*impulseMag;
-//		impulse.y = MathUtils.min(impulse.y, 800.0f);
-//		System.out.println("Impulse   "+body.getUserData()+"  "+ impulse+ " applyPoint "+ applyPoint);
-//		System.out.println(body.getUserData()+"                                          COLPITO");
 		body.applyLinearImpulse(impulse, applyPoint,true);
 	
 	}

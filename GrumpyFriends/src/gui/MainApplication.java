@@ -7,6 +7,7 @@ import game.MatchManager;
 import gui.hud.MatchPane;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import world.GameWorldBuilder;
@@ -34,6 +35,9 @@ public class MainApplication extends Application{
 		
 		Team teamA = new Team("TeamA", 1, matchManager);
 		Team teamB = new Team("TeamB", 1, matchManager);
+		
+		teamA.setColorTeam(Color.CRIMSON);
+		teamB.setColorTeam(Color.STEELBLUE);
 		
 		matchManager.setTeamA(teamA);
 		matchManager.setTeamB(teamB);

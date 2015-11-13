@@ -20,6 +20,7 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	protected float height, width;
 
 	protected HashMap<String, Character> characterContainer;
+	
 	protected List<Ground> grounds;
 
 	private List<Character> characters;
@@ -53,11 +54,15 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 		return this;
 	}
 	@Override
-	public Character getCharacter() {
-		// TODO Auto-generated method stub
-		return null;
+	public Character getCharacter(String name) {
+		return characterContainer.get(name);
 	}
 
+	@Override
+	public HashMap<String, Float> getHitCharacter() {
+		return PhysicalObjectManager.getInstance().getHitCharacters();
+	}
+	
 	public static World getInstance() {
 		return instanceSon;
 	}
@@ -69,11 +74,7 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	public String[] getCharacterName() {
 		return (String[]) characterContainer.keySet().toArray();
 	}
-
-	public Character getCharacter(String name) {
-		return characterContainer.get(name);
-	}
-
+	
 	public Ground getGround(int x, int y) {
 		for (Ground ground : grounds) {
 			if (ground.getX() == x && ground.getY() == y)
@@ -131,5 +132,6 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 
 	public void setContactListener() {
 		super.setContactListener(new PhysicalContactListener(characters));
+
 	}
 }

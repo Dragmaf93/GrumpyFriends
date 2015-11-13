@@ -17,9 +17,10 @@ public class SimpleMissile extends AbstractWeapon{
 //	private static final long SEC_TO_EXPLODE=4;
 	private static final float BLAST_POWER = 10000f;
 	private static final float BLAST_RADIUS = 10f;
+	private static final float MAX_DAMAGE = 70f;
 	
 	public SimpleMissile() {
-		physicalWeapon=new PhysicalMissile(WIDTH, HEIGHT, BLAST_RADIUS);
+		physicalWeapon=new PhysicalMissile(WIDTH, HEIGHT, BLAST_RADIUS,MAX_DAMAGE);
 		PhysicalObjectManager.getInstance().buildPhysicWeapon(physicalWeapon);
 		hit=NUMBER_OF_HIT;
 	}

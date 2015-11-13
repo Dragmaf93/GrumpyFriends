@@ -17,18 +17,19 @@ public class PhysicalMissile extends AbstractPhysicalWeapon implements Explosive
 	private float blastRadius;
 	private float width;
 	private float height;
-
+	
 	private boolean exploded;
 	private Vec2 centreExplosion;
 
 	public PhysicalMissile() {
 	}
 
-	public PhysicalMissile(float width, float height, float blastRadius) {
+	public PhysicalMissile(float width, float height, float blastRadius,float maxDamage) {
 		this.width = width;
 		this.height = height;
 		this.blastPower = 100 * blastRadius;
 		this.blastRadius = blastRadius;
+		this.maxDamage=maxDamage;
 		centreExplosion = new Vec2(width, 0);
 	}
 
@@ -114,5 +115,6 @@ public class PhysicalMissile extends AbstractPhysicalWeapon implements Explosive
 			body.destroyFixture(fixture);
 		}
 	}
+
 
 }

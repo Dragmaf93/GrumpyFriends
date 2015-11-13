@@ -117,6 +117,7 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 			joint.setMotorSpeed(speed);
 		else if(currentDirection==Character.LEFT)
 			joint.setMotorSpeed(-speed);
+//		System.out.println(joint.getMotorSpeed());
 	}
 
 }

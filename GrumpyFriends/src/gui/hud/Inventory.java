@@ -1,11 +1,15 @@
 package gui.hud;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import element.weaponsManager.WeaponsManager;
 import game.MatchManager;
+import javafx.collections.ObservableList;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -16,6 +20,8 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 
 public class Inventory extends AbstractHudElement {
+
+	private final static String GUI_WEAPON_PATH = "gui.weapon.";
 
 	private final static double INVENTORY_WIDTH = 310;
 	private final static double INVENTORY_HEIGTH = 460;
@@ -36,18 +42,32 @@ public class Inventory extends AbstractHudElement {
 
 	private Group weaponsGroup;
 	private Group utilitiesGroup;
+	private Group hoveredItemGroup;
 
 	private Text inventoryText;
 	private Text weaponText;
 	private Text utilitiesText;
 
-	public WeaponsManager weaponManager;
-	
+	private Text hoveredItemText;
+	private Text ammunitionHoveredItem;
+
+	private VBox weaponsBox;
+	private VBox utilitiesBox;
+
+	private List<InventoryItem> weapons;
+	private List<InventoryItem> utilities;
+
+	private int lastTurn;
+	private double distanceBorder;
+
+	private boolean hide;
+
 	public Inventory(MatchManager matchManager) {
 		super(matchManager);
 
-		
 		background = new Rectangle(INVENTORY_WIDTH, INVENTORY_HEIGTH, BACKGROUND_COLOR);
+
+		lastTurn = matchManager.getTurn();
 
 		DropShadow ds = new DropShadow();
 		ds.setOffsetX(7.0);
@@ -62,10 +82,13 @@ public class Inventory extends AbstractHudElement {
 		// inventoryText.setStroke(Color.BLACK);
 		weaponText = new Text("Weapons");
 		utilitiesText = new Text("Utilities");
+		hoveredItemText = new Text();
+		ammunitionHoveredItem = new Text();
 
 		header = new StackPane();
 		weaponsGroup = new Group(weaponText);
 		utilitiesGroup = new Group(utilitiesText);
+		hoveredItemGroup = new Group(hoveredItemText, ammunitionHoveredItem);
 
 		inventoryTextContainer = new Rectangle(213, 45, BACKGROUND_COLOR1);
 		shadowTextContainer = new Rectangle(inventoryTextContainer.getWidth(), inventoryTextContainer.getHeight() / 2,
@@ -77,6 +100,8 @@ public class Inventory extends AbstractHudElement {
 		inventoryText.setFont(Font.font(32));
 		weaponText.setFont(Font.font(28));
 		utilitiesText.setFont(Font.font(28));
+		hoveredItemText.setFont(Font.font(28));
+		ammunitionHoveredItem.setFont(Font.font(28));
 
 		root.getChildren().add(background);
 		root.getChildren().add(shadowTextContainer);
@@ -92,42 +117,98 @@ public class Inventory extends AbstractHudElement {
 				-inventoryTextContainer.getHeight() / 2);
 		shadowTextContainer.relocate(background.getWidth() / 2 - inventoryTextContainer.getWidth() / 2,
 				-inventoryTextContainer.getHeight() / 2);
-		VBox weaponsBox = createInvetoryItem(3, 5);
+
+		weapons = new ArrayList<>();
+		weaponsBox = createInvetoryItem(3, 5, weapons);
 		weaponsGroup.getChildren().add(weaponsBox);
-		double distanceBorder = background.getWidth() / 2 - weaponsGroup.getLayoutBounds().getWidth() / 2;
+		distanceBorder = background.getWidth() / 2 - weaponsGroup.getLayoutBounds().getWidth() / 2;
 		weaponsGroup.relocate(distanceBorder, distanceBorder + DISTANCE_HEADER);
 		weaponsBox.relocate(0, DISTANCE_HEADER);
 
-		VBox utilitiesBox = createInvetoryItem(2, 5);
+		utilities = new ArrayList<>();
+		utilitiesBox = createInvetoryItem(2, 5, utilities);
 		utilitiesGroup.getChildren().add(utilitiesBox);
 		utilitiesGroup.relocate(distanceBorder, weaponsGroup.getLayoutY() + weaponsGroup.getLayoutBounds().getHeight());
 		utilitiesBox.relocate(0, DISTANCE_HEADER);
-		
+
+		root.getChildren().add(hoveredItemGroup);
+		hoveredItemGroup.relocate(distanceBorder,
+				INVENTORY_HEIGTH - DISTANCE_HEADER - hoveredItemText.getLayoutBounds().getHeight());
+
 		Rotate rotate = new Rotate();
 		rotate.setAngle(7);
 		root.getTransforms().add(rotate);
-		
-		
+
+		setWeaponsOfInventoryItem();
+
 	}
 
-	private VBox createInvetoryItem(int x, int y) {
-		VBox vBox = new VBox(1.5);
+	private VBox createInvetoryItem(int x, int y, List<InventoryItem> items) {
+		VBox vBox = new VBox(3);
 		for (int i = 0; i < x; i++) {
-			HBox box = new HBox(1.5);
+			HBox box = new HBox(3);
 			vBox.getChildren().add(box);
 			for (int j = 0; j < y; j++) {
-				box.getChildren().add(new InventoryItem());
+				InventoryItem item = new InventoryItem();
+				items.add(item);
+				box.getChildren().add(item);
 			}
 		}
 		return vBox;
+	}
+
+	public void setWeaponsOfInventoryItem() {
+		String[] weaponsName = WeaponsManager.getWeaponList();
+
+		for (int i = 0; i < weaponsName.length; i++) {
+			System.out.println(weaponsName[i].substring(0, weaponsName[i].length() - 5));
+			weapons.get(i).setItemName(weaponsName[i].substring(0, weaponsName[i].length() - 5));
+			weapons.get(i).setText(this);
+		}
+	}
+
+	public void itemToEquipe(String name) {
+		matchManager.getCurrentPlayer().equipWeapon(name);
+		hide=true;
 	}
 
 	@Override
 	public void draw() {
 
 		Scene scene = root.getScene();
-		if(scene!=null)
-			root.relocate(scene.getWidth()-root.getLayoutBounds().getWidth(), -10);
+		if (scene != null)
+			root.relocate(scene.getWidth() - root.getLayoutBounds().getWidth(), -10);
+		
+		if(matchManager.isTheCurrentTurnEnded() && !hide)
+			hide();
+
+	}
+
+	public void setAmmunitionOfHoveredWeapon(String name) {
+	}
+
+	public void setHoveredWeaponText(String name) {
+
+		if (!name.equals("")) {
+			ammunitionHoveredItem.setText(Integer
+					.toString(matchManager.getCurrentPlayer().getInventoryManager().getNumberOfAmmunition(name)));
+			ammunitionHoveredItem.relocate(
+					INVENTORY_WIDTH - distanceBorder * 2 - ammunitionHoveredItem.getLayoutBounds().getWidth(),
+					hoveredItemText.getLayoutBounds().getMinY());
+		} else
+			ammunitionHoveredItem.setText("");
+		hoveredItemText.setText(name);
+	}
+
+	public boolean isHidden() {
+		return hide;
+	}
+	
+	public void hide(){
+		hide=true;
+	}
+	public void show(){
+		hide=false;
 	}
 
 }

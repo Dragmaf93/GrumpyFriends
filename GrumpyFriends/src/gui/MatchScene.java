@@ -26,27 +26,26 @@ public class MatchScene extends Scene {
 			@Override
 			public void handle(KeyEvent event) {
 				if (event.getCode() == KeyCode.D) {
-					if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded())
+					if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
+							&& pane.inventoryIsHide())
 						matchManager.getCurrentPlayer().move(Character.RIGHT);
 				}
 				if (event.getCode() == KeyCode.A) {
-					if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded())
+					if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
+							&& pane.inventoryIsHide())
 						matchManager.getCurrentPlayer().move(Character.LEFT);
 				}
 				if (event.getCode() == KeyCode.SPACE) {
-					if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded())
+					if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
+							&& pane.inventoryIsHide())
 						matchManager.getCurrentPlayer().jump();
 				}
-				if (event.getCode() == KeyCode.B) {
-					matchManager.getCurrentPlayer().equipWeapon("SimpleBomb");
-				}
-				if (event.getCode() == KeyCode.M) {
-					matchManager.getCurrentPlayer().equipWeapon("SimpleMissile");
-				}
 				if (event.getCode() == KeyCode.ALT) {
-					if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()) {
+					if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
+							&& pane.inventoryIsHide()) {
 						launchPower = 5f;
 						pressedLaunchKey = true;
+						pane.launchKeyPressed();
 					}
 				}
 				if (event.getCode() == KeyCode.P) {
@@ -64,11 +63,13 @@ public class MatchScene extends Scene {
 					}
 				}
 				if (event.getCode() == KeyCode.W) {
-					if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded())
+					if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
+							&& pane.inventoryIsHide())
 						matchManager.getCurrentPlayer().changeAim(Character.INCREASE);
 				}
 				if (event.getCode() == KeyCode.S) {
-					if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded())
+					if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
+							&& pane.inventoryIsHide())
 						matchManager.getCurrentPlayer().changeAim(Character.DECREASE);
 				}
 			}
@@ -78,13 +79,15 @@ public class MatchScene extends Scene {
 
 			@Override
 			public void handle(KeyEvent event) {
-				if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()) {
+				if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
+						&& pane.inventoryIsHide()) {
 					if (event.getCode() == KeyCode.D) {
 						matchManager.getCurrentPlayer().stopToMove();
 					}
 					if (event.getCode() == KeyCode.ALT) {
 						if (pressedLaunchKey) {
 							pressedLaunchKey = false;
+							pane.launchKeyPressed();
 							matchManager.getCurrentPlayer().attack(launchPower);
 						}
 					}
@@ -105,15 +108,16 @@ public class MatchScene extends Scene {
 
 			@Override
 			public void handle(long now) {
-				pane.update();
 				if (pressedLaunchKey) {
 					launchPower += 0.5f;
-
+					pane.setLauncherPower(launchPower);
 					if (launchPower >= Launcher.MAX_LAUNCH_POWER) {
 						pressedLaunchKey = false;
+						pane.launchKeyPressed();
 						matchManager.getCurrentPlayer().attack(launchPower);
 					}
 				}
+				pane.update();
 
 			}
 		}.start();

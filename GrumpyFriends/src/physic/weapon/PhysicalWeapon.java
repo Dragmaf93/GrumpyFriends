@@ -25,4 +25,6 @@ public interface PhysicalWeapon {
 	abstract public float getWidth();
 	
 	abstract public void update();
+	
+	abstract public float getMaxDamage();
 }

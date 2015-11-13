@@ -30,7 +30,9 @@ public abstract class AbstractCharacter implements Character {
 	protected float force;
 	protected World world;
 	protected Team team;
+
 	protected Weapon equippedWeapon;
+	protected String lastEquippedWeapon;
 
 	protected WeaponsManager weaponsManager;
 
@@ -45,6 +47,7 @@ public abstract class AbstractCharacter implements Character {
 	protected boolean readyToEquipWeapon;
 	protected boolean attacked;
 	private boolean suffereDamage;
+	private boolean endTurn;
 
 	public AbstractCharacter(String name, float x, float y, float height, float width, Team team) {
 
@@ -65,6 +68,7 @@ public abstract class AbstractCharacter implements Character {
 		launcher = new Launcher(this);
 
 		readyToEquipWeapon = true;
+		currentDirection = RIGHT;
 	}
 
 	@Override
@@ -86,11 +90,27 @@ public abstract class AbstractCharacter implements Character {
 	@Override
 	public void setGrounded(boolean b) {
 		this.grounded = b;
+		((PhysicalCharacter) physicBody).blockWheelJoint();
+
 	}
 
 	@Override
 	public boolean isSleeping() {
-		return ((PhysicalCharacter) physicBody).isSleeping();
+		if (!grounded)
+			return false;
+		Vec2 v = physicBody.getBody().getLinearVelocity();
+
+		if (v.x < -0.5 || v.x > 0.5)
+			return false;
+		if (v.y < -0.5 || v.y > 0.5)
+			return false;
+
+		return true;
+	}
+
+	@Override
+	public int getCurrentDirection() {
+		return currentDirection;
 	}
 
 	@Override
@@ -103,13 +123,14 @@ public abstract class AbstractCharacter implements Character {
 
 		if (!readyToEquipWeapon)
 			return;
-
 		if (equippedWeapon != null && equippedWeapon.getName().equals(weaponName)) {
 			launcher.loadWeapon(equippedWeapon);
+			return;
 
-		} else if (weaponsManager.isAvailable(weaponName)) {
-
+		}
+		if (weaponsManager.isAvailable(weaponName)) {
 			equippedWeapon = weaponsManager.getWeapon(weaponName);
+			lastEquippedWeapon = equippedWeapon.getName();
 			launcher.loadWeapon(equippedWeapon);
 		}
 	}
@@ -117,6 +138,11 @@ public abstract class AbstractCharacter implements Character {
 	@Override
 	public Launcher getLauncher() {
 		return launcher;
+	}
+
+	@Override
+	public String getLastEquippedWeapon() {
+		return lastEquippedWeapon;
 	}
 
 	@Override
@@ -128,11 +154,9 @@ public abstract class AbstractCharacter implements Character {
 		readyToEquipWeapon = false;
 
 		if (equippedWeapon.finishHit()) {
-			// System.out.println(equippedWeapon);
 			weaponsManager.removeOneAmmunition(equippedWeapon.getName());
 			equippedWeapon = null;
 			attacked = true;
-			// new Timer(this).start();
 		}
 	}
 
@@ -167,9 +191,15 @@ public abstract class AbstractCharacter implements Character {
 		if (!grounded)
 			return;
 
-		if (launcher != null)
+		if (launcher != null && launcher.isActivated()) {
+			// if (direction == currentDirection) {
 			launcher.disable();
-
+			//
+			// } else {
+			// launcher.disable();
+			// launcher.activate();
+			// }
+		}
 		Body body = physicBody.getBody();
 		Vec2 speed = body.getLinearVelocity();
 		force = 0;
@@ -219,9 +249,21 @@ public abstract class AbstractCharacter implements Character {
 	}
 
 	@Override
+	public WeaponsManager getInventoryManager() {
+		// TODO Auto-generated method stub
+		return weaponsManager;
+	}
+
+	@Override
 	public void endTurn() {
+		endTurn = true;
 		((PhysicalCharacter) physicBody).blockWheelJoint();
 
+	}
+
+	@Override
+	public boolean finishedTurn() {
+		return endTurn;
 	}
 
 	@Override
@@ -234,6 +276,7 @@ public abstract class AbstractCharacter implements Character {
 		return world;
 	}
 
+	@Override
 	public Team getTeam() {
 		return team;
 	}
@@ -244,7 +287,7 @@ public abstract class AbstractCharacter implements Character {
 
 	@Override
 	public String getName() {
-		
+
 		return name;
 	}
 
@@ -283,6 +326,15 @@ public abstract class AbstractCharacter implements Character {
 		readyToEquipWeapon = true;
 		attacked = false;
 		suffereDamage = false;
+		endTurn = false;
+
+	}
+
+	@Override
+	public void decreaseLifePoints(int points) {
+		lifePoints-=points;
+		if(lifePoints<0) lifePoints=0;
+		suffereDamage=true;
 	}
 
 	@Override

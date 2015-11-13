@@ -3,9 +3,7 @@ package gui.drawer;
 import java.lang.reflect.InvocationTargetException;
 
 import character.Character;
-import element.weaponsManager.Launcher;
 import element.weaponsManager.Weapon;
-import element.weaponsManager.weapons.SimpleBomb;
 import gui.weapon.WeaponGui;
 import javafx.scene.Node;
 
@@ -14,13 +12,11 @@ public class WeaponDrawer {
 	private final static String packageP = "gui.weapon.";
 	
 	private Character character;
-	private Launcher launcher;
 	private WeaponGui currentWeaponGui;
 	private Weapon currentWeapon;
 	
-	public WeaponDrawer(Character character, Launcher launcher) {
+	public WeaponDrawer(Character character) {
 		this.character = character;
-		this.launcher = launcher;
 	}
 	
 	public Node getLauncherWeapon(Weapon weapon) {
@@ -56,6 +52,7 @@ public class WeaponDrawer {
 
 	public void updateLauncherAim() {
 		if(currentWeaponGui==null) return;
+		
 		currentWeaponGui.updateLauncher();
 	}
 	

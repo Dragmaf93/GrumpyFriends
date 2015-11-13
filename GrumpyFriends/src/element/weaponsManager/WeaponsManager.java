@@ -88,7 +88,7 @@ public class WeaponsManager {
 		return true;
 	}
 	
-	public String[] getWeaponList(){
+	public static String[] getWeaponList(){
 		return classList;
 	}
 	

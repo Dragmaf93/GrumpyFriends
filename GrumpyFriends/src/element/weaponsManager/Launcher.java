@@ -35,6 +35,7 @@ public class Launcher {
 		Vector position = physicalLauncher.getPositionAim();
 		Vector speedVector = physicalLauncher.getVectorSpeed(speed);
 		float angle = physicalLauncher.getAngle();
+//		System.out.println(loadedWeapon.getName());
 		loadedWeapon.attack(position, speedVector, angle);
 		attacked=true;
 //		 if(loadedWeapon.finishHit()){ 
@@ -76,6 +77,7 @@ public class Launcher {
 	}
 	
 	public void disable() {
+		physicalLauncher.rotate(0);
 		activated = false;
 		physicalLauncher.hide();
 	}
@@ -83,7 +85,11 @@ public class Launcher {
 	public void loadWeapon(Weapon weapon) {
 		if (!isActivated())
 			activate();
-		loadedWeapon = weapon;
+		else{
+			disable();
+			activate();
+		}
+			loadedWeapon = weapon;
 	}
 	
 	public boolean attacked(){

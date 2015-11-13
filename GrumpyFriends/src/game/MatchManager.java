@@ -1,6 +1,8 @@
 package game;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import character.Character;
 import character.Team;
@@ -24,8 +26,11 @@ public class MatchManager {
 	boolean pause;
 
 	private MatchTimer timer;
+	
+	
 
 	private boolean endTurn;
+	private HashMap<String, Float> hitCharacters;
 
 	public MatchManager() {
 		this.battlefield = null;
@@ -45,8 +50,9 @@ public class MatchManager {
 		this.currentPlayer = null;
 		this.started = false;
 		timer = new MatchTimer();
-		teamBlue.setColorTeam(Color.BLUE);
-		teamRed.setColorTeam(Color.RED);
+//		teamBlue.setColorTeam(Color.BLUE);
+//		teamRed.setColorTeam(Color.RED);
+		hitCharacters = battlefield.getHitCharacter();
 	}
 
 	public MatchManager(World battlefield) {
@@ -55,8 +61,10 @@ public class MatchManager {
 		this.teamBlue = null;
 		this.turn = 0;
 		this.currentPlayer = null;
+		hitCharacters = battlefield.getHitCharacter();
 		this.started = false;
 		timer = new MatchTimer();
+		hitCharacters = battlefield.getHitCharacter();
 	}
 
 	public boolean startMatch() {
@@ -82,9 +90,23 @@ public class MatchManager {
 	}
 
 	public void endTurn() {
-		if (!endTurn)
+		if (!endTurn){System.out.println(hitCharacters);
 			currentPlayer.endTurn();
-		endTurn = true;
+			
+			if(!hitCharacters.isEmpty()){
+				System.out.println("CIAOoooooooooooooooo");
+				Set<String> keys = hitCharacters.keySet();
+				for (String name : keys) {
+					System.out.println(hitCharacters.get(name));
+	
+					Character c =battlefield.getCharacter(name);
+					if(c!=null){
+						c.decreaseLifePoints((int) hitCharacters.get(name).floatValue());
+					}
+				}
+				hitCharacters.clear();
+			}
+		}endTurn = true;
 	}
 
 	public boolean allCharacterAreSpleeping() {
@@ -207,7 +229,7 @@ public class MatchManager {
 
 	public void update() {
 		if (!pause) {
-
+			
 			if (timer.endTurnIn() <= 0) {
 				endTurn();
 			}

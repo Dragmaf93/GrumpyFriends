@@ -24,10 +24,11 @@ public class PhysicalBomb extends AbstractPhysicalWeapon  implements ExplosiveOb
 	
 	}
 	
-	public PhysicalBomb(float radius,float blastRadius){
+	public PhysicalBomb(float radius,float blastRadius,float maxDamage){
 		this.radius=radius;
 		this.blastPower=blastRadius*100;
 		this.blastRadius=blastRadius;
+		this.maxDamage=maxDamage;
 	}
 	
 	@Override
