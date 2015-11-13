@@ -116,11 +116,19 @@ public class PanelForMap extends ScrollPane {
 					PanelForMap.this.mapEditor.removeObject();
 				}
 				if (event.getCode().equals(KeyCode.ESCAPE)) {
-//					System.out.println("DOPO: "+PanelForMap.this.mapEditor.getDraggedCurve());
 					removePanelInsert();
 				}
 			}
 		});
+	    
+//	    this.setOnMouseMoved(new EventHandler<MouseEvent>() {
+//
+//			@Override
+//			public void handle(MouseEvent event) {
+//				System.out.println(event.getX()+" "+event.getY());
+//			}
+//		});
+	    
 	}
 	
 	public void removePanelInsert() {
@@ -140,7 +148,8 @@ public class PanelForMap extends ScrollPane {
 	}
 	
 	public void addObject(PolygonObject object) {
-		realPane.getChildren().add(object);
+		if (!realPane.getChildren().contains(object))
+			realPane.getChildren().add(object);
 	}
 	
 	public boolean containsObject(PolygonObject object) {
@@ -153,6 +162,7 @@ public class PanelForMap extends ScrollPane {
 	
 	public void removeAllObject() {
 		realPane.getChildren().removeAll(mapEditor.getObjectInMap());
+		realPane.getChildren().removeAll(mapEditor.getCurveInMap());
 	}
 	
 	public void setDimensionStandard(double width, double height) {
@@ -180,12 +190,17 @@ public class PanelForMap extends ScrollPane {
 		return insertPushed;
 	}
 
-	public void addObject(QuadCurve object) {
-		realPane.getChildren().add(object);
+	public void addObject(Curve curve) {
+		if (!realPane.getChildren().contains(curve))
+			realPane.getChildren().add(curve);
 	}
 
 	public boolean containsCurve(Curve draggedCurve) {
 		return realPane.getChildren().contains(draggedCurve);
+	}
+
+	public void removeCurve(Curve draggedCurve) {
+		realPane.getChildren().remove(draggedCurve);
 	}
 	
 	

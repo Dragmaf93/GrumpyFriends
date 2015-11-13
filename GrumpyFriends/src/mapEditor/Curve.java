@@ -1,12 +1,10 @@
 package mapEditor;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.QuadCurve;
@@ -24,12 +22,11 @@ public class Curve extends QuadCurve {
 	private String nameObject;
 	private Point2D start;
 	private Point2D end;
-	private Point2D pointForFirstTime;
 	private ArrayList<Point2D> distancePoints;
 	private ArrayList<Point2D> points;
 	private int xMagg;
-	private double xControl;
-	private double yControl;
+	private static int id = 0;
+	private int realId;
 	
 	public Curve(MapEditor mapEditor, String nameObject, Point2D start, Point2D end) {
 		
@@ -43,18 +40,16 @@ public class Curve extends QuadCurve {
 		
 		width = end.getX() - start.getX();
 		height = 60.0;
-
+		
 		setStartX(start.getX());
 		setStartY(start.getY()+height);
-		setEndX(end.getX()+width);
-		setEndY(end.getY()+height);
-		xControl = 2*(start.getX()+start.getX()/2) - getStartX()/2 -getEndX()/2;
-	    yControl = 2*start.getY() - getStartY()/2 -getEndY()/2;
+		setEndX(end.getX());
+		setEndY(start.getY()+height);
+//		xControl = 2*(start.getX()+start.getX()/2) - getStartX()/2 -getEndX()/2;
+//	    yControl = 2*start.getY() - getStartY()/2 -getEndY()/2;
 		
-		setControlX(start.getX()+start.getX()/2);
+		setControlX(start.getX()+width/2);
 		setControlY(start.getY());
-//		setControlX(start.getX()+start.getX()/2);
-//		setControlY(start.getY());
 		
 		points.add(0,new Point2D(getStartX(), getStartY()));
 		points.add(1,new Point2D(getEndX(), getEndY()));
@@ -67,21 +62,18 @@ public class Curve extends QuadCurve {
 		borderGlow.setWidth(10f);
 		borderGlow.setHeight(10f);
 		this.setEffect(borderGlow);
+		
+		this.realId = id;
+		this.id ++;
 	}
 	
 	public void modifyPositionFirst(Point2D point) {
-
-		pointForFirstTime = point;
+		
 		setStartX(point.getX());
 		setStartY(point.getY()+height);
 		setEndX(point.getX()+width);
 		setEndY(point.getY()+height);
 		
-//		double x1 = 2*(point.getX()+width/2) - getStartX()/2 -getEndX()/2;
-//	    double y1 = 2*point.getY() - getStartY()/2 -getEndY()/2;
-//		
-//	    System.out.println(y1);
-	    
 		setControlX(point.getX()+width/2);
 		setControlY(point.getY());
 
@@ -93,8 +85,6 @@ public class Curve extends QuadCurve {
 		points.add(0,start);
 		points.add(1,end);
 		points.add(2,new Point2D(getControlX(), getControlY()));
-		
-		System.out.println(this);
 	}
 
 	public void modifyPosition(Point2D event, double x, double y) {
@@ -120,22 +110,22 @@ public class Curve extends QuadCurve {
 			{
 				if (points.get(i).getX() <= (event.getX()) && points.get(i).getY() <= event.getY())
 				{
-					System.out.println("PRIMO: "+points.get(i));
+//					System.out.println("PRIMO: "+points.get(i));
 					newPoint = new Point2D((event.getX())-distancePoints.get(i).getX(), event.getY()-distancePoints.get(i).getY());
 				}
 				else if (points.get(i).getX() <= (event.getX()) && points.get(i).getY() >= event.getY())
 				{
-					System.out.println("SECONDO: "+points.get(i));
+//					System.out.println("SECONDO: "+points.get(i));
 					newPoint = new Point2D((event.getX())-distancePoints.get(i).getX(), event.getY()+distancePoints.get(i).getY());
 				}
 				else if (points.get(i).getX() >= ((event.getX())) && points.get(i).getY() >= event.getY())
 				{
-					System.out.println("TERZO: "+points.get(i));
+//					System.out.println("TERZO: "+points.get(i));
 					newPoint = new Point2D((event.getX())+distancePoints.get(i).getX(), event.getY()+distancePoints.get(i).getY());
 				}
 				else if (points.get(i).getX() >= ((event.getX())) && points.get(i).getY() <= event.getY())
 				{
-					System.out.println("QUARTO: "+points.get(i)+" -----------> "+ event.getY()+" "+ (event.getY()-distancePoints.get(i).getY()));
+//					System.out.println("QUARTO: "+points.get(i)+" -----------> "+ event.getY()+" "+ (event.getY()-distancePoints.get(i).getY()));
 					newPoint = new Point2D((event.getX())+distancePoints.get(i).getX(), event.getY()-distancePoints.get(i).getY());
 				}
 			}
@@ -148,11 +138,6 @@ public class Curve extends QuadCurve {
 				else if (i == 2) {
 					setControlX(newPoint.getX());
 					setControlY(newPoint.getY());
-//					double x1 = 2*(newPoint.getX()) - getStartX()/2 -getEndX()/2;
-//					double y1 = 2*newPoint.getY() - getStartY()/2 -getEndY()/2;
-//					
-//					setControlX(x1);
-//					setControlY(y1);
 				}
 				else {
 					setEndX(newPoint.getX());
@@ -160,14 +145,6 @@ public class Curve extends QuadCurve {
 				}
 			}
 		}
-		
-		System.out.println("-------------------------------------------");
-//		setStartX(event.getX()-distancePoints.get(0).getX());
-//		setStartY(event.getY()-distancePoints.get(0).getY());
-//		setEndX(event.getX()-distancePoints.get(2).getX());
-//		setEndY(event.getY()-distancePoints.get(2).getY());
-//		setControlX(event.getX()-distancePoints.get(1).getX());
-//		setControlY(event.getY()-distancePoints.get(1).getY());
 		start = new Point2D(getStartX(), getStartY());
 		end = new Point2D(getEndX(), getEndY());
 		
@@ -217,11 +194,15 @@ public class Curve extends QuadCurve {
 	@Override
 	protected Curve clone() throws CloneNotSupportedException {
 		Curve curve = new Curve(mapEditor, nameObject, start, end);
-//		double x1 = 2*(start.getX()+start.getX()/2) - getStartX()/2 -getEndX()/2;
-//	    double y1 = 2*start.getY() - getStartY()/2 -getEndY()/2;
 		
-		curve.setControlX(this.points.get(2).getX());
-		curve.setControlY(this.points.get(2).getY());
+		curve.setStartX(start.getX());
+		curve.setStartY(start.getY());
+		curve.setEndX(end.getX());
+		curve.setEndY(end.getY());
+		
+		curve.setControlX(this.getControlX());
+		curve.setControlY(this.getControlY());
+		
 		curve.points.clear();
 		
 		curve.points.add(0,new Point2D(getStartX(), getStartY()));
@@ -272,4 +253,20 @@ public class Curve extends QuadCurve {
 		return height;
 	}
 	
+	public boolean atleastOneDifferentVertex(Curve curve)
+	{
+		if (this.getStartX() != curve.getStartX() || this.getStartY() != curve.getStartY() ||
+				this.getControlX() != curve.getControlX() || this.getControlY() != curve.getControlY() ||
+				this.getEndX() != curve.getEndX() || this.getEndY() != curve.getEndY())
+			return true;
+		return false;
+	}
+	
+	public void setIdObject(int id) {
+		this.realId = id;
+	}
+	
+	public int getIdObject() {
+		return realId;
+	}
 }

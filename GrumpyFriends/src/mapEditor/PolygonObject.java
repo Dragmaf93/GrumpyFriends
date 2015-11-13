@@ -25,6 +25,9 @@ public abstract class PolygonObject extends Polygon {
 	protected ArrayList<Point2D> distancePoints;
 	private int xMagg;
 	
+	private static int id = 0;
+	private int realId;
+	
 	public PolygonObject(MapEditor mapEditor, String nameObject) 
 	{
 		this.mapEditor = mapEditor;
@@ -41,6 +44,9 @@ public abstract class PolygonObject extends Polygon {
 		borderGlow.setWidth(10f);
 		borderGlow.setHeight(10f);
 		this.setEffect(borderGlow);
+		
+		this.realId = id;
+		this.id ++;
 //		this.setEffect(new Reflection());
 	}
 	
@@ -70,39 +76,7 @@ public abstract class PolygonObject extends Polygon {
 	}
 	
 	public void addVertex(Point2D newVertex) {}
-//	
-//	public void addCurve(Point2D newVertex) {
-//		Line line = null;
-//		for (int i = 0; i < points.size(); i++)
-//		{
-//			if (i < points.size()-1)
-//			{
-//				line = new Line(points.get(i).getX(), points.get(i).getY(), points.get(i+1).getX(),points.get(i+1).getY());
-//				if (line.intersects(newVertex.getX(), newVertex.getY(),1,1))
-//					break;
-//			}
-//			else
-//			{
-//				line = new Line(points.get(i).getX(), points.get(i).getY(), points.get(0).getX(),points.get(0).getY());
-//				if (line.intersects(newVertex.getX(), newVertex.getY(),1,1))
-//					break;
-//			}
-//		}
-//		
-//		if (line != null) 
-//		{
-//			QuadCurve quad = new QuadCurve();
-//		    quad.setStartX(line.getStartX());
-//		    quad.setStartY(line.getStartY());
-//		    quad.setEndX(line.getEndX());
-//		    quad.setEndY(line.getEndY());
-//		    quad.setControlX(line.getStartX()/2);
-//		    quad.setControlY(line.getStartY()/2);
-//		    curves.add(quad);
-//		    mapEditor.addObjectInMap(quad);
-//		}
-//	}
-		
+
 	public void modifyPosition(Point2D point,double width, double height) {
 		modifyPositionFirst(point, width, height);
 		clearAndAddPoints();
@@ -121,19 +95,7 @@ public abstract class PolygonObject extends Polygon {
 		for (Point2D point : points)
 			getPoints().addAll(new Double[]{point.getX(),point.getY()});
 	}
-//	
-//	public boolean isInTheArea(MouseEvent event) {
-//		return (event.getY() > upperLeftPosition.getY() && event.getY() < bottomLeftPosition.getY()) 
-//				&& (event.getX() > upperLeftPosition.getX() && event.getX() < upperRightPosition.getX());
-//	}
 
-//	public boolean isInTheLimit(MouseEvent event) {
-//		return ((int)event.getX() == (int)upperLeftPosition.getX() ||
-//				(int)event.getX() == (int)upperRightPosition.getX() || 
-//				(int)event.getY() == (int)upperLeftPosition.getY() ||
-//				(int)event.getY() == (int)bottomLeftPosition.getY());
-//	}
-	
 	public void setWidth(double width) {
 		this.width = width;
 	}
@@ -144,7 +106,8 @@ public abstract class PolygonObject extends Polygon {
 	
 	@Override
 	public String toString() {
-		return "PolygonObject [nameObject=" + nameObject + " , points=" + points + "]";
+		return "PolygonObject [nameObject=" + nameObject + " , "+realId+" ]";
+//				+ "points=" + points + "]";
 	}
 
 	public void setX(double d) {
@@ -236,6 +199,27 @@ public abstract class PolygonObject extends Polygon {
 	
 	ArrayList<Point2D> getDistancePoints() {
 		return distancePoints;
+	}
+	
+	public boolean vertexEquals(PolygonObject polygon) {
+		
+		int contVertexEquals = 0;
+		for (Point2D point : this.points) {
+			if (polygon.points.contains(point))
+				contVertexEquals++;
+		}
+		
+		if (contVertexEquals == this.points.size())
+			return true;
+		return false;
+	}
+	
+	public void setIdObject(int id) {
+		this.realId = id;
+	}
+	
+	public int getIdObject() {
+		return realId;
 	}
 	
 }
