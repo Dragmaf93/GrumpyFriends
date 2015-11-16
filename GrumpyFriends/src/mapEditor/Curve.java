@@ -269,4 +269,22 @@ public class Curve extends QuadCurve {
 	public int getIdObject() {
 		return realId;
 	}
+	
+	public void setPointWithExistingObject(Curve curve) {
+		this.setStartX(curve.getStartX());
+		this.setStartY(curve.getStartY());
+		this.setEndX(curve.getEndX());
+		this.setEndY(curve.getEndY());
+		
+		this.setControlX(curve.getControlX());
+		this.setControlY(curve.getControlY());
+	}
+
+	public boolean vertexEquals(Curve dragged) {
+		if (this.getStartX() == dragged.getStartX() && this.getStartY() == dragged.getStartY() &&
+				this.getControlX() == dragged.getControlX() && this.getControlY() == dragged.getControlY() &&
+						this.getEndX() == dragged.getEndX() && this.getEndY() == dragged.getEndY())
+			return true;
+		return false;
+	}
 }

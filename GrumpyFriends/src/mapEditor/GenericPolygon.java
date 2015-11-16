@@ -34,6 +34,11 @@ public class GenericPolygon extends PolygonObject {
 	{
 		PolygonObject newObject = new GenericPolygon(this.mapEditor, this.nameObject, this.points.get(0), this.points.get(1), 
 				this.points.get(2),this.points.get(3), this.points.get(4));
+		
+		for (Point2D point : points) {
+			if (!newObject.points.contains(point))
+				newObject.points.add(point);
+		}
 		return newObject;
 	}
 	
@@ -83,7 +88,7 @@ public class GenericPolygon extends PolygonObject {
 		for (Point2D point : listTmp)
 			points.add(point);
 
-		clearAndAddPoints();	
+		clearAndAddPoints();
 	}
 	
 }

@@ -27,9 +27,7 @@ class DrawingPanelForCurve extends Pane
 
 //    getChildren().addAll(poly);
 
-	  System.out.println("NEL DRAWING: "+curve);
-	  
-  this.mapEditor = mapEditor;
+	this.mapEditor = mapEditor;
   
 	for ( int i = 0; i < curve.getPoints().size(); i += 2 ) {
 		

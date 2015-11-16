@@ -19,7 +19,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -92,7 +91,6 @@ public class MapEditor extends Application{
 		
 		isInTheMap = false;
 		firstPane.setStyle("-fx-background-color: #858484;");
-//		TODO Provare a vedere com'è con un immagine di strisce
 		
 		BorderPane root = new BorderPane();
         root.setCenter(firstPane);
@@ -100,14 +98,6 @@ public class MapEditor extends Application{
         scene = new Scene(root, widthScreen, heightScreen);
         primaryStage.setScene(scene);
         primaryStage.show();
-        
-//        scene.setOnMouseMoved(new EventHandler<MouseEvent>() {
-//
-//			@Override
-//			public void handle(MouseEvent event) {
-//				System.out.println(event.getX()+" "+event.getY());
-//			}
-//		});
 	}
 	
 	public void changeCursor(Cursor cursor) {
@@ -116,7 +106,9 @@ public class MapEditor extends Application{
 	
 	public void setUpperAndCopyImage(MouseEvent event)
 	{
-		for (Shape image : objectInMap) 
+		for (PolygonObject image : objectInMap) 
+			image.setEffect(null);
+		for (Curve image : curveInMap) 
 			image.setEffect(null);
 		for (PolygonObject image : objectToSelect) {
 			if (image.containsPoint(new Point2D(event.getX(),event.getY())))
@@ -136,7 +128,7 @@ public class MapEditor extends Application{
 	        	curveOrPolygon = false;
 	        }
 		}
-		if (!objectToMove && quadCurve.contains(new Point2D(event.getX(), event.getY())))
+		if (quadCurve.contains(new Point2D(event.getX(), event.getY())))
 		{
 			mouseX = event.getX();
             mouseY = event.getY();
@@ -153,6 +145,7 @@ public class MapEditor extends Application{
         	objectToMove = false;
         	curveOrPolygon = true;
 		}
+		isInTheMap = false;
 	}
 	
 	public void moveObjectFromPanelObjectInMap(MouseEvent event)
@@ -219,6 +212,7 @@ public class MapEditor extends Application{
 		if (!objectToMove)
 		{
 			for (Curve curve : curveInMap) {
+				curve.setEffect(null);
 				if (curve.contains(new Point2D(event.getX(), event.getY())))
 				{
 					mouseX = event.getX();
@@ -262,34 +256,37 @@ public class MapEditor extends Application{
 	
 	public void addObjectInListImage()
 	{
-		if (draggedCurve != null && isInTheMap && !objectToMove)
+		if (draggedCurve != null)
 		{
-			int id = draggedCurve.getIdObject();
-			Point2D point = new Point2D(draggedCurve.getRealPoints().get(0).getX(), draggedCurve.getRealPoints().get(0).getY());
-
-			if (!curveInMap.contains(draggedCurve) && isInTheMap)
-			{
-				curveInMap.add(draggedCurve);
-				draggedCurve.setEffect(null);
-			}
-			if (panelForObject.contains(point) && !isInTheMap)
-			{
+			if (panelForObject.contains(draggedCurve.getX(), draggedCurve.getY()))
 				panelForObject.getChildren().remove(draggedCurve);
-				if (objectMoveInMapForUndo.size() > 1)
-					draggedCurve = (Curve) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue();
-			} else
+			if (isInTheMap && !objectToMove)
+			{
+				Point2D point = new Point2D(draggedCurve.getRealPoints().get(0).getX(), draggedCurve.getRealPoints().get(0).getY());
+	
+				if (!curveInMap.contains(draggedCurve) && isInTheMap)
+				{
+					curveInMap.add(draggedCurve);
+					draggedCurve.setEffect(null);
+				}
+				if (panelForObject.contains(point) && !isInTheMap)
+				{
+					panelForObject.getChildren().remove(draggedCurve);
+					if (objectMoveInMapForUndo.size() > 1)
+						draggedCurve = (Curve) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue();
+				}
 				try {
 					objectMoveInMapForUndo.add(new Pair(point, draggedCurve.clone()));
-					((Curve) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue()).setIdObject(id);
+					((Curve) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue()).setPointWithExistingObject(draggedCurve);
 				} catch (CloneNotSupportedException e) {
 					e.printStackTrace();
 				}
-			
-			checkStatusButtonUndo();
-			if (!curveToMove)
-				draggedCurve.setEffect(null);
+				
+				if (!curveToMove)
+					draggedCurve.setEffect(null);
+			}
 		}
-		if (dragged != null && !curveToMove) {
+		if (dragged != null && !curveOrPolygon) {
 			int id = dragged.getIdObject();
 			Point2D point = new Point2D(dragged.getPointsVertex().get(0).getX(), dragged.getPointsVertex().get(0).getY());
 			if (!objectInMap.contains(dragged) && isInTheMap)
@@ -302,23 +299,22 @@ public class MapEditor extends Application{
 				panelForObject.getChildren().remove(dragged);
 				if (objectMoveInMapForUndo.size() > 1)
 					dragged = (PolygonObject) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue();
-			} else
-				try {
-					objectMoveInMapForUndo.add(new Pair(point, dragged.clone()));
-					((PolygonObject) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue()).setIdObject(id);
-				} catch (CloneNotSupportedException e) {
-					e.printStackTrace();
-				}
+			}
+			try {
+				objectMoveInMapForUndo.add(new Pair(point, dragged.clone()));
+				((PolygonObject) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue()).setIdObject(id);
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
 			
-			checkStatusButtonUndo();
 			if (!objectToMove)
 				dragged.setEffect(null);
 		}
+		
+		checkStatusButtonUndo();
 		isInTheMap = false;
 		objectToMove = false;
 		curveToMove = false;
-		
-		System.out.println(objectMoveInMapForUndo);
 	}
 	
 	public PolygonObject getDragged() {
@@ -380,10 +376,6 @@ public class MapEditor extends Application{
 		converter.convertToXml(this);
 	}
 	
-	public Pane getPanelForObject() {
-		return panelForObject;
-	}
-	
 	public double getLarghezza() {
 		return widthScreen;
 	}
@@ -398,14 +390,6 @@ public class MapEditor extends Application{
 	
 	public ArrayList<Curve> getCurveInMap() {
 		return curveInMap;
-	}
-
-	public void addObjectInMap(Curve object) {
-		((PanelForMap) panelForMap).addObject(object);
-	}
-	
-	public double getWidthPanelForObject() {
-		return panelForObject.getPrefWidth();
 	}
 	
 	public double getWidthPanelForMap() {
@@ -453,48 +437,40 @@ public class MapEditor extends Application{
 				objectMoveInMapForRedo.clear();
 				objectMoveInMapForRedo.add(new Pair<Point2D, Shape>(point, imageTmp));
 			}
-			deleteObject(imageTmp);
-//			if (imageTmp instanceof PolygonObject)
-//			{
-//				((PanelForMap)panelForMap).removeObject(dragged);
-//				if (objectInMap.contains(imageTmp))
-//					objectInMap.remove(imageTmp);
-//			}
-//			else
-//			{
-//				((PanelForMap)panelForMap).removeCurve(draggedCurve);
-//				if (curveInMap.contains(imageTmp))
-//					curveInMap.remove(imageTmp);
-//			}
+			deleteObjectForUndo(imageTmp, objectMoveInMapForUndo, true);
 			
-			Pair<Point2D,Shape> p = new Pair<Point2D, Shape>(point,imageTmp);
-
-			if (objectToCancelled.contains(p) && objectMoveInMapForUndo.contains(p))
+			boolean objectFoundPolygon = false, objectFoundRedoPolygon = false;
+			boolean objectFoundCurve = false, objectFoundRedoCurve = false;
+			
+			checkBooleanForRepaintObjectCancelled(imageTmp, objectFoundRedoCurve, objectFoundRedoCurve, objectFoundRedoCurve, objectFoundRedoCurve);
+			if ((objectFoundPolygon && objectFoundRedoPolygon) || (objectFoundCurve && objectFoundRedoCurve))
 			{
 				if (imageTmp instanceof PolygonObject)
 				{
-					objectToCancelled.add(new Pair<Point2D, Shape>(point, dragged));
-					objectMoveInMapForRedo.add(new Pair<Point2D, Shape>(point, dragged));
-					actionForUndoRedo(point, dragged, objectMoveInMapForUndo, objectMoveInMapForRedo);
+					for (int i = 0; i < objectInMap.size(); i++)
+						if (objectInMap.get(i).vertexEquals((PolygonObject) imageTmp))
+							dragged = (PolygonObject) objectInMap.get(i);
+//					objectToCancelled.add(new Pair<Point2D, Shape>(point, imageTmp));
+//					objectMoveInMapForRedo.add(new Pair<Point2D, Shape>(point, imageTmp));
+					actionForUndoRedo(point, imageTmp, objectMoveInMapForUndo, objectMoveInMapForRedo, true, true, true);
 				}
 				else
 				{
-					objectToCancelled.add(new Pair<Point2D, Shape>(point, dragged));
-					objectMoveInMapForRedo.add(new Pair<Point2D, Shape>(point, dragged));
-					actionForUndoRedo(point, draggedCurve, objectMoveInMapForUndo, objectMoveInMapForRedo);
+					for (Curve curve : curveInMap)
+						if (((Curve) imageTmp).vertexEquals(curve))
+							draggedCurve = curve;
+//					objectToCancelled.add(new Pair<Point2D, Shape>(point, draggedCurve));
+//					objectMoveInMapForRedo.add(new Pair<Point2D, Shape>(point, draggedCurve));
+					actionForUndoRedo(point, imageTmp, objectMoveInMapForUndo, objectMoveInMapForRedo, true, true, true);
 				}
 			}
 			else
-				actionForUndoRedo(point, imageTmp, objectMoveInMapForUndo, objectMoveInMapForRedo);
+				actionForUndoRedo(point, imageTmp, objectMoveInMapForUndo, objectMoveInMapForRedo, true, true, true);
 		}
 		else if (objectMoveInMapForUndo.size() == 1)
 		{
 			objectMoveInMapForRedo.add(new Pair<Point2D, Shape>(objectMoveInMapForUndo.get(0).getKey(), objectMoveInMapForUndo.get(0).getValue()));
-			deleteObject(objectMoveInMapForUndo.get(0).getValue());
-//			if (objectMoveInMapForUndo.get(0).getValue() instanceof PolygonObject)
-//				((PanelForMap)panelForMap).removeObject(objectInMap.get(0));
-//			else
-//				((PanelForMap)panelForMap).removeCurve(curveInMap.get(0));
+			deleteObjectForUndo(objectMoveInMapForUndo.get(0).getValue(), objectMoveInMapForUndo, false);
 			objectMoveInMapForUndo.clear();
 		}
 		
@@ -502,6 +478,36 @@ public class MapEditor extends Application{
 		checkStatusButtonUndo();
 	}
 	
+	private void checkBooleanForRepaintObjectCancelled(Shape imageTmp, boolean objectFoundPolygon, boolean objectFoundCurve, boolean objectFoundRedoPolygon, boolean objectFoundRedoCurve) {
+		for (Pair<Point2D, Shape> object : objectToCancelled)
+		{
+			if (imageTmp instanceof PolygonObject && object.getValue() instanceof PolygonObject)
+			{
+				if (((PolygonObject) object.getValue()).vertexEquals((PolygonObject) imageTmp))
+					objectFoundPolygon = true;
+			}
+			else if (imageTmp instanceof Curve && object.getValue() instanceof Curve)
+			{
+				if (checkCurvePresent((Curve) imageTmp))
+					objectFoundCurve = true;
+			}
+			
+		}
+		for (Pair<Point2D, Shape> object : objectMoveInMapForRedo)
+		{
+			if (imageTmp instanceof PolygonObject && object.getValue() instanceof PolygonObject)
+			{
+				if (((PolygonObject) object.getValue()).vertexEquals((PolygonObject) imageTmp))
+					objectFoundRedoPolygon = true;
+			}
+			else if (imageTmp instanceof Curve && object.getValue() instanceof Curve)
+			{
+				if (checkCurvePresent((Curve) imageTmp))
+					objectFoundRedoCurve = true;
+			}
+		}
+	}
+
 	public void redo()
 	{
 		if (dragged != null)
@@ -518,97 +524,192 @@ public class MapEditor extends Application{
 			if (!objectMoveInMapForUndo.contains(new Pair<Point2D, Shape>(point, imageTmp)))
 				objectMoveInMapForUndo.add(new Pair<Point2D, Shape>(point, imageTmp));
 			
-//			TODO rivedere condizione!
-			if (imageTmp != dragged || imageTmp != draggedCurve)
+			boolean objectFoundPolygon = false, objectFoundRedoPolygon = false;
+			boolean objectFoundCurve = false, objectFoundRedoCurve = false;
+			
+			for (Pair<Point2D, Shape> object : objectToCancelled)
 			{
-				if (imageTmp instanceof PolygonObject)
-					((PanelForMap)panelForMap).removeObject(dragged);
-				else
-					((PanelForMap)panelForMap).removeCurve(draggedCurve);
-					
-				if (objectInMap.contains(imageTmp))
-					objectInMap.remove(imageTmp);
+				if (imageTmp instanceof PolygonObject && object.getValue() instanceof PolygonObject)
+				{
+					if (((PolygonObject) object.getValue()).vertexEquals((PolygonObject) imageTmp))
+						objectFoundPolygon = true;
+				}
+				else if (imageTmp instanceof Curve && object.getValue() instanceof Curve)
+				{
+					if (checkCurvePresent((Curve) imageTmp))
+						objectFoundCurve = true;
+				}
+				
 			}
-			Pair<Point2D,Shape> p = new Pair<Point2D, Shape>(point,imageTmp);
-
-			if (objectToCancelled.contains(p) && objectMoveInMapForRedo.contains(p))
+			for (Pair<Point2D, Shape> object : objectMoveInMapForRedo)
+			{
+				if (imageTmp instanceof PolygonObject && object.getValue() instanceof PolygonObject)
+				{
+					if (((PolygonObject) object.getValue()).vertexEquals((PolygonObject) imageTmp))
+						objectFoundRedoPolygon = true;
+				}
+				else if (imageTmp instanceof Curve && object.getValue() instanceof Curve)
+				{
+					if (checkCurvePresent((Curve) imageTmp))
+						objectFoundRedoCurve = true;
+				}
+			}
+			
+			if ((objectFoundPolygon && objectFoundRedoPolygon) || (objectFoundCurve && objectFoundRedoCurve))
 			{
 				if (imageTmp instanceof PolygonObject)
 				{
-					((PanelForMap)panelForMap).removeObject(dragged);
-					objectInMap.remove(dragged);
-					objectToCancelled.add(new Pair<Point2D, Shape>(point, dragged));
-					objectMoveInMapForUndo.add(new Pair<Point2D, Shape>(point, dragged));
+					for (int i = 0; i < objectInMap.size(); i++)
+						if (objectInMap.get(i).vertexEquals((PolygonObject) imageTmp))
+							dragged = (PolygonObject) objectInMap.get(i);
+					removeObject(dragged);
+//					objectToCancelled.add(new Pair<Point2D, Shape>(point, imageTmp));
+					int i = 0;
+					for (Pair<Point2D, Shape> object : objectMoveInMapForRedo) {
+						if (object.getValue() instanceof PolygonObject && ((PolygonObject) object.getValue()).vertexEquals(dragged))
+							i++;
+					}
+					if (i > 1)
+						actionForUndoRedo(point, imageTmp, objectMoveInMapForRedo, objectMoveInMapForUndo, false, true, true);
+					else
+						actionForUndoRedo(point, imageTmp, objectMoveInMapForRedo, objectMoveInMapForUndo, false, true, false);
+//					objectMoveInMapForUndo.add(new Pair<Point2D, Shape>(point, imageTmp));
 				}
 				else
 				{
-					((PanelForMap)panelForMap).removeCurve(draggedCurve);
-					objectInMap.remove(draggedCurve);
-					objectToCancelled.add(new Pair<Point2D, Shape>(point, draggedCurve));
-					objectMoveInMapForUndo.add(new Pair<Point2D, Shape>(point, draggedCurve));
+					draggedCurve = (Curve) imageTmp;
+					removeObject(draggedCurve);
+					
+					int i = 0;
+					for (Pair<Point2D, Shape> object : objectMoveInMapForRedo) {
+						if (object.getValue() instanceof Curve && ((Curve) object.getValue()).vertexEquals(draggedCurve))
+							i++;
+					}
+					if (i > 1)
+						actionForUndoRedo(point, imageTmp, objectMoveInMapForRedo, objectMoveInMapForUndo, false, true, true);
+					else
+						actionForUndoRedo(point, imageTmp, objectMoveInMapForRedo, objectMoveInMapForUndo, false, true, false);
+//					objectMoveInMapForUndo.add(new Pair<Point2D, Shape>(point, draggedCurve));
 				}
 			}
 			else
-				actionForUndoRedo(point, imageTmp, objectMoveInMapForRedo, objectMoveInMapForUndo);
+				actionForUndoRedo(point, imageTmp, objectMoveInMapForRedo, objectMoveInMapForUndo, false, true, true);
 		}
 		else if (objectMoveInMapForRedo.size() == 1)
-			actionForUndoRedo(point, imageTmp, objectMoveInMapForRedo, objectMoveInMapForUndo);
+			actionForUndoRedo(point, imageTmp, objectMoveInMapForRedo, objectMoveInMapForUndo, false, true, true);
 
 		checkStatusButtonUndo();
 		checkStatusButtonRedo();
 	}
 	
-	private void actionForUndoRedo(Point2D point, Shape imageTmp, ArrayList<Pair<Point2D, Shape>> listForTake, ArrayList<Pair<Point2D, Shape>> listForInsert)
+	private void actionForUndoRedo(Point2D point, Shape imageTmp, ArrayList<Pair<Point2D, Shape>> listForTake, ArrayList<Pair<Point2D, Shape>> listForInsert, boolean undo, boolean insert, boolean redo)
 	{
-		System.out.println("ENTRO NEL METODO UNDO REDO ");
-		deleteObject(imageTmp);
-		
-		point = listForTake.get(listForTake.size()-1).getKey();
-		imageTmp = listForTake.get(listForTake.size()-1).getValue();
+		boolean isAdd = false;
+		if (undo)
+		{
+			deleteObjectForUndo(imageTmp, listForTake, undo);
+			point = listForTake.get(listForTake.size()-1).getKey();
+			imageTmp = listForTake.get(listForTake.size()-1).getValue();
+		}
+		else
+		{
+			point = listForTake.get(listForTake.size()-1).getKey();
+			imageTmp = listForTake.get(listForTake.size()-1).getValue();
+			isAdd = deleteObjectForRedo(point, imageTmp, listForTake, undo, redo);
+		}
+		if (!isAdd && insert)
+		{
+			if (!listForInsert.contains(new Pair<Point2D, Shape>(point, imageTmp)))
+				listForInsert.add(new Pair<Point2D, Shape>(point, imageTmp));
+			
+			boolean isPresent = false;
+			if (imageTmp instanceof PolygonObject)
+			{
+				dragged = (PolygonObject) imageTmp;
+				
+				for (int i = 0; i < objectInMap.size(); i++)
+					if (objectInMap.get(i).vertexEquals((PolygonObject) imageTmp))
+						isPresent = true;
+				if (!isPresent)
+					addObject(dragged);
+				for (Pair<Point2D, Shape> object : objectToCancelled) {
+					if (object.getValue() instanceof PolygonObject && ((PolygonObject)object.getValue()).vertexEquals((PolygonObject) imageTmp))
+					{
+						point = object.getKey();
+						dragged = (PolygonObject)object.getValue();
+					}
+				}
+				if (objectToCancelled.contains(new Pair<Point2D, Shape>(point, dragged)) && !redo )
+					removeObject(dragged);
+			}
+			else
+			{
+				draggedCurve = (Curve) imageTmp;
+				
+				for (Curve curve : curveInMap)
+					if (draggedCurve.vertexEquals(curve))
+						isPresent = true;
+				if (!isPresent )
+					addObject(draggedCurve);
+				for (Pair<Point2D, Shape> object : objectToCancelled) {
+					if (object.getValue() instanceof Curve && ((Curve)object.getValue()).vertexEquals((Curve) imageTmp))
+					{
+						point = object.getKey();
+						draggedCurve = (Curve)object.getValue();
+					}
+				}
+				if (objectToCancelled.contains(new Pair<Point2D, Shape>(point, draggedCurve)) && !redo )
+					removeObject(draggedCurve);
+			}
+		}
+	}
 
-		if (!listForInsert.contains(new Pair<Point2D, Shape>(point, imageTmp)))
-			listForInsert.add(new Pair<Point2D, Shape>(point, imageTmp));
-		
-		boolean isPresent = false;
+	public boolean checkCurvePresent(Curve draggCurve) {
+		for (Curve curve : curveInMap)
+			if (draggedCurve.vertexEquals(curve))
+				return true;
+		return false;
+	}
+	
+	private boolean deleteObjectForRedo(Point2D point, Shape imageTmp,ArrayList<Pair<Point2D, Shape>> listForTake, boolean undo, boolean redo) {
+		boolean isAdd = false;
 		if (imageTmp instanceof PolygonObject)
 		{
-			dragged = (PolygonObject) imageTmp;
-			
-			for (int i = 0; i < objectInMap.size(); i++) {
-				if (objectInMap.get(i).vertexEquals((PolygonObject) imageTmp))
-					isPresent = true;
-			}
-			if (!isPresent)
-			{
-				((PanelForMap)panelForMap).addObject(dragged);
-				if (!objectInMap.contains(dragged))
-					objectInMap.add(dragged);
+			for (int j = 0; j < objectInMap.size(); j++) {
+				if (((PolygonObject) imageTmp).getIdObject() == objectInMap.get(j).getIdObject())
+				{
+					removeObject(objectInMap.get(j));
+					addObject((PolygonObject) imageTmp);
+					objectMoveInMapForUndo.add(new Pair<Point2D, Shape>(point, imageTmp));
+					isAdd = true;
+				}
 			}
 		}
 		else
 		{
-			draggedCurve = (Curve) imageTmp;
-			
-			System.out.println("BEFORE TO ADD");
-			for (Curve curve : curveInMap) {
-				if ((draggedCurve.getStartX() == curve.getStartX() && draggedCurve.getStartY() == curve.getStartY() &&
-						draggedCurve.getControlX() == curve.getControlX() && draggedCurve.getControlY() == curve.getControlY() &&
-						draggedCurve.getEndX() == curve.getEndX() && draggedCurve.getEndY() == curve.getEndY()))
-					isPresent = true;
+			for (int j = 0; j < curveInMap.size(); j++) {
+				if (((Curve) imageTmp).getIdObject() == curveInMap.get(j).getIdObject())
+				{
+					removeObject(curveInMap.get(j));
+					addObject((Curve)imageTmp);
+					objectMoveInMapForUndo.add(new Pair<Point2D, Shape>(point, imageTmp));
+					isAdd = true;
+					for (Pair<Point2D, Shape> object : objectToCancelled) {
+						if (object.getValue() instanceof Curve && ((Curve)object.getValue()).vertexEquals((Curve) imageTmp))
+						{
+							point = object.getKey();
+							draggedCurve = (Curve)object.getValue();
+						}
+					}
+					if (objectToCancelled.contains(new Pair<Point2D, Shape>(point, draggedCurve)) && !redo)
+						removeObject(dragged);
+				}
 			}
-			
-			if (!isPresent)
-			{
-				((PanelForMap)panelForMap).addObject(draggedCurve);
-				if (!curveInMap.contains(draggedCurve))
-					curveInMap.add(draggedCurve);
-			}
-			
-			System.out.println("AFTER ADD");
 		}
+		return isAdd;
 	}
-	
-	private void deleteObject(Shape imageTmp) {
+
+	private void deleteObjectForUndo(Shape imageTmp, ArrayList<Pair<Point2D,Shape>> listForTake, boolean undo) {
 		if (imageTmp instanceof PolygonObject)
 		{
 			PolygonObject object = null;
@@ -616,71 +717,81 @@ public class MapEditor extends Application{
 				if (objectInMap.get(i).vertexEquals((PolygonObject) imageTmp))
 				{
 					object = objectInMap.get(i);
-					((PanelForMap)panelForMap).removeObject(objectInMap.get(i));
-					if (objectInMap.contains(objectInMap.get(i)))
-						objectInMap.remove(objectInMap.get(i));
+					removeObject(objectInMap.get(i));
 				}
 			}
-			
-			for (int i = 0; i < objectMoveInMapForUndo.size(); i++) {
-				if (objectMoveInMapForUndo.get(i).getValue() instanceof PolygonObject && object != null)
-				{
-					System.out.println("VEDIAMO ID: "+((PolygonObject) objectMoveInMapForUndo.get(i).getValue()).getIdObject()+" "+object.getIdObject());
-					if (((PolygonObject) objectMoveInMapForUndo.get(i).getValue()).getIdObject() == object.getIdObject())
-						dragged = (PolygonObject) objectMoveInMapForUndo.get(i).getValue();
-				}
-			}
-			
-			if (!dragged.equals(object) && object != null)
+			if (undo)
 			{
-				((PanelForMap)panelForMap).addObject(dragged);
-				if (!objectInMap.contains(dragged))
-					objectInMap.add(dragged);
+				for (int i = 0; i < listForTake.size(); i++) {
+					if (listForTake.get(i).getValue() instanceof PolygonObject && object != null)
+						if (((PolygonObject) listForTake.get(i).getValue()).getIdObject() == object.getIdObject())
+							dragged = (PolygonObject) listForTake.get(i).getValue();
+				}
+				
+				if (!dragged.equals(object) && object != null)
+					addObject(dragged);
 			}
 		}
 		else
 		{
 			Curve object = null;
 			for (int i = 0; i < curveInMap.size(); i++) {
-				if ((((QuadCurve) imageTmp).getStartX() == curveInMap.get(i).getStartX() && ((QuadCurve) imageTmp).getStartY() == curveInMap.get(i).getStartY() &&
-						((QuadCurve) imageTmp).getControlX() == curveInMap.get(i).getControlX() && ((QuadCurve) imageTmp).getControlY() == curveInMap.get(i).getControlY() &&
-								((QuadCurve) imageTmp).getEndX() == curveInMap.get(i).getEndX() && ((QuadCurve) imageTmp).getEndY() == curveInMap.get(i).getEndY()))
+				if (curveInMap.get(i).vertexEquals((Curve) imageTmp))
 				{
 					object = curveInMap.get(i);
-					((PanelForMap)panelForMap).removeCurve(curveInMap.get(i));
-					if (curveInMap.contains(curveInMap.get(i)))
-						curveInMap.remove(curveInMap.get(i));
+					removeObject(curveInMap.get(i));
 				}
 			}
 			
-			for (int i = 0; i < objectMoveInMapForUndo.size(); i++) {
-				if (objectMoveInMapForUndo.get(i).getValue() instanceof Curve && object != null)
-				{
-					if (((Curve) objectMoveInMapForUndo.get(i).getValue()).getIdObject() == object.getIdObject())
-						draggedCurve = (Curve) objectMoveInMapForUndo.get(i).getValue();
-				}
-			}
-			
-			if (!draggedCurve.equals(object) && object != null)
+			if (undo)
 			{
-				((PanelForMap)panelForMap).addObject(draggedCurve);
-				if (!curveInMap.contains(draggedCurve))
-					curveInMap.add(draggedCurve);
+				for (int i = 0; i < listForTake.size(); i++) {
+					if (listForTake.get(i).getValue() instanceof Curve && object != null)
+						if (((Curve) listForTake.get(i).getValue()).getIdObject() == object.getIdObject())
+							draggedCurve = (Curve) listForTake.get(i).getValue();
+				}
+				
+				if (!draggedCurve.equals(object) && object != null)
+					addObject(draggedCurve);
 			}
 		}
 	}
 
+	private void removeObject(Shape object) {
+		if (object instanceof Curve)
+		{
+			((PanelForMap)panelForMap).removeCurve((Curve) object);
+			if (curveInMap.contains(object))
+				curveInMap.remove(object);
+		}
+		else
+		{
+			((PanelForMap)panelForMap).removeObject((PolygonObject) object);
+			if (objectInMap.contains(object))
+				objectInMap.remove(object);
+		}
+	}
+	
+	private void addObject(Shape object) {
+		if (object instanceof Curve)
+		{
+			((PanelForMap)panelForMap).addObject((Curve) object);
+			if (!curveInMap.contains((Curve) object))
+				curveInMap.add((Curve) object);
+		}
+		else
+		{
+			((PanelForMap)panelForMap).addObject((PolygonObject) object);
+			if (!objectInMap.contains((PolygonObject) object))
+				objectInMap.add((PolygonObject) object);
+		}
+	}
+	
 	public void removeObject()
 	{
 		if (!curveOrPolygon)
 		{
 			Point2D point = new Point2D(dragged.getPointsVertex().get(0).getX(), dragged.getPointsVertex().get(0).getY());
-			
-			if (!objectMoveInMapForRedo.contains(point))
-			{
-				objectMoveInMapForRedo.add(new Pair<Point2D, Shape>(point, dragged));
-				objectMoveInMapForRedo.add(new Pair<Point2D, Shape>(point, dragged));
-			}
 			objectToCancelled.add(new Pair<Point2D, Shape>(point, dragged));
 			objectMoveInMapForUndo.add(new Pair<Point2D, Shape>(point, dragged));
 			
@@ -690,39 +801,9 @@ public class MapEditor extends Application{
 		else
 		{
 			Point2D point = new Point2D(draggedCurve.getRealPoints().get(0).getX(), draggedCurve.getRealPoints().get(0).getY());
-			
-			if (!objectMoveInMapForRedo.contains(point))
-			{
-				objectMoveInMapForRedo.add(new Pair<Point2D, Shape>(point, draggedCurve));
-				objectMoveInMapForRedo.add(new Pair<Point2D, Shape>(point, draggedCurve));
-			}
 			objectToCancelled.add(new Pair<Point2D, Shape>(point, draggedCurve));
 			objectMoveInMapForUndo.add(new Pair<Point2D, Shape>(point, draggedCurve));
-			
-			((PanelForMap)panelForMap).removeCurve(draggedCurve);
-			curveInMap.remove(draggedCurve);
-		}
-	}
-	
-	private void remove(Pair<Point2D, Shape> object)
-	{
-		if (object.getValue() instanceof PolygonObject)
-		{
-			Point2D point = new Point2D(dragged.getPointsVertex().get(0).getX(), dragged.getPointsVertex().get(0).getY());
-			
-			if (!objectMoveInMapForRedo.contains(point))
-				objectMoveInMapForRedo.add(new Pair<Point2D, Shape>(point, dragged));
-			
-			((PanelForMap)panelForMap).removeObject(dragged);
-			objectInMap.remove(dragged);
-		}
-		else
-		{
-			Point2D point = new Point2D(draggedCurve.getRealPoints().get(0).getX(), draggedCurve.getRealPoints().get(0).getY());
-			
-			if (!objectMoveInMapForRedo.contains(point))
-				objectMoveInMapForRedo.add(new Pair<Point2D, Shape>(point, draggedCurve));
-			
+
 			((PanelForMap)panelForMap).removeCurve(draggedCurve);
 			curveInMap.remove(draggedCurve);
 		}
@@ -738,15 +819,11 @@ public class MapEditor extends Application{
 		objectMoveInMapForRedo.clear();
 		objectMoveInMapForUndo.clear();
 		objectToCancelled.clear();
-		
+		((PanelForMap) panelForMap).removePanelInsert();
 		((PanelForObject) panelForObject).cancTextInTextField();
 		
 		checkStatusButtonRedo();
 		checkStatusButtonUndo();
-	}
-	
-	public boolean isInMap() {
-		return isInTheMap;
 	}
 	
 	private void checkStatusButtonRedo()
@@ -764,21 +841,7 @@ public class MapEditor extends Application{
 		else
 			((PanelForObject) panelForObject).changePolicyButton(1,false);
 	}
-	
-//	private boolean checkLimitForFocusPanelObject(MouseEvent event) {
-//		return (event.getX()-panelForObject.getPrefWidth()+ image.getWidth()) < ((PanelForMap) panelForMap).getRealPane().getPrefWidth()
-//    			&& (event.getY()-((PanelForObject) panelForObject).getPanelForSubmit().getPrefHeight()-image.getHeight()/3) < ((PanelForMap) panelForMap).getRealPane().getPrefHeight()/2
-//    			&& (event.getY()-image.getHeight()/3) >= 0
-//    			&& (event.getX()-panelForObject.getPrefWidth()-image.getWidth()) >= 0;
-//	}
-	
-	private boolean checkLimitForFocusPanelObject(MouseEvent event) {
-		return (event.getX()) < ((PanelForMap) panelForMap).getRealPane().getPrefWidth()
-    			&& (event.getY()) < ((PanelForMap) panelForMap).getRealPane().getPrefHeight()/2
-    			&& (event.getY()) >= 0
-    			&& (event.getX()) >= 0;
-	}
-	
+
 	private void drawAll()
 	{
         panelForObject.setLayoutX(0);
@@ -796,5 +859,17 @@ public class MapEditor extends Application{
 
 	public boolean isDragged() {
 		return objectToMove;
+	}
+
+	public void setDraggedCurve(Curve draggedCurve2) {
+		draggedCurve = draggedCurve2;
+	}
+
+	public void setDragged(PolygonObject dragged2) {
+		dragged = dragged2;
+	}
+
+	public PanelForObject getPanelForObject() {
+		return (PanelForObject) panelForObject;
 	}
 }

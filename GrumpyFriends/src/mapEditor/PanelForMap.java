@@ -20,12 +20,13 @@ public class PanelForMap extends ScrollPane {
 	
 	private PolygonObject dragged;
 	private boolean isInTheLimit;
-	private DrawingPanel drw;
+	private DrawingPanel drawingObject;
 	private DrawingPanelForCurve drawingCurve;
 	private boolean insertPushed = false;
 	private boolean draggedPressed;
 	private boolean movedObject;
 	private Curve draggedCurve;
+	protected boolean vertexModify;
 	
 	public PanelForMap(MapEditor mapEditor, double width, double height) {
 		
@@ -54,24 +55,24 @@ public class PanelForMap extends ScrollPane {
 	        		draggedCurve = PanelForMap.this.mapEditor.getDraggedCurve();
 	        	
 	        	draggedPressed = true;
+	        	movedObject = false;
 	        	
 	        	if (event.getClickCount() == 2) {
-					if (realPane.getChildren().contains(drw))
-						realPane.getChildren().remove(drw);
+					if (realPane.getChildren().contains(drawingObject))
+						realPane.getChildren().remove(drawingObject);
 					
-					if (PanelForMap.this.mapEditor.isDragged())
+					if (PanelForMap.this.mapEditor.isDragged() && PanelForMap.this.mapEditor.getDragged() != null)
 					{
-						drw = new DrawingPanel(dragged, PanelForMap.this.mapEditor);
-						realPane.getChildren().add(drw);
+						drawingObject = new DrawingPanel(dragged, PanelForMap.this.mapEditor);
+						realPane.getChildren().add(drawingObject);
 					}
 					else
 					{
-//						System.out.println("PRIMA: "+PanelForMap.this.mapEditor.getDraggedCurve());
-
 						drawingCurve = new DrawingPanelForCurve(draggedCurve, PanelForMap.this.mapEditor);
 						realPane.getChildren().add(drawingCurve);
 					}
 					insertPushed = true;
+					vertexModify = false;
     			}
         	}
 	    });
@@ -84,6 +85,7 @@ public class PanelForMap extends ScrollPane {
 	        	{
 	        		PanelForMap.this.mapEditor.moveObjectInMap(event);
 	        		movedObject = true;
+	        		vertexModify = false;
 	        	}
 	        }
 	    });
@@ -98,10 +100,11 @@ public class PanelForMap extends ScrollPane {
 	        		dragged = PanelForMap.this.mapEditor.getDragged();
 	        		removePanelInsert();
 	        		
-	        		drw = new DrawingPanel(dragged, PanelForMap.this.mapEditor);
-        			realPane.getChildren().add(drw);
+	        		drawingObject = new DrawingPanel(dragged, PanelForMap.this.mapEditor);
+        			realPane.getChildren().add(drawingObject);
 	        		insertPushed = true;
 	        		movedObject = false;
+	        		vertexModify = true;
 	        	}
 	        	if (movedObject)
 	        		PanelForMap.this.mapEditor.addObjectInListImage();
@@ -117,23 +120,19 @@ public class PanelForMap extends ScrollPane {
 				}
 				if (event.getCode().equals(KeyCode.ESCAPE)) {
 					removePanelInsert();
+					if (!vertexModify)
+						PanelForMap.this.mapEditor.setDraggedCurve(PanelForMap.this.mapEditor.getDraggedCurve());
+					else
+						PanelForMap.this.mapEditor.setDragged(PanelForMap.this.mapEditor.getDragged());
+					PanelForMap.this.mapEditor.addObjectInListImage();
 				}
 			}
 		});
-	    
-//	    this.setOnMouseMoved(new EventHandler<MouseEvent>() {
-//
-//			@Override
-//			public void handle(MouseEvent event) {
-//				System.out.println(event.getX()+" "+event.getY());
-//			}
-//		});
-	    
 	}
 	
 	public void removePanelInsert() {
-		if (realPane.getChildren().contains(drw))
-			realPane.getChildren().remove(drw);
+		if (realPane.getChildren().contains(drawingObject))
+			realPane.getChildren().remove(drawingObject);
 		if (realPane.getChildren().contains(drawingCurve))
 			realPane.getChildren().remove(drawingCurve);
 		insertPushed = false;		

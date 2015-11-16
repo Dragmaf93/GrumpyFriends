@@ -12,7 +12,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import mapEditor.ImageForObject;
 import mapEditor.MapEditor;
 import mapEditor.PanelForObject;
 import mapEditor.PolygonObject;

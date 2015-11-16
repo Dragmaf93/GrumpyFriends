@@ -71,8 +71,7 @@ public abstract class PolygonObject extends Polygon {
 	}
 	
 	public String getAngleRotation() {
-		return Integer.toString((int) angleRotation);
-//		TODO VEdere se è possibile trasformare un double in string e non un int
+		return Double.toString((double) angleRotation);
 	}
 	
 	public void addVertex(Point2D newVertex) {}
@@ -106,8 +105,7 @@ public abstract class PolygonObject extends Polygon {
 	
 	@Override
 	public String toString() {
-		return "PolygonObject [nameObject=" + nameObject + " , "+realId+" ]";
-//				+ "points=" + points + "]";
+		return "PolygonObject [nameObject=" + nameObject + " , "+realId+" points=" + points + "]";
 	}
 
 	public void setX(double d) {

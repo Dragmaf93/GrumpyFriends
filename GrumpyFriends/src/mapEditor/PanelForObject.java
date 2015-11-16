@@ -48,6 +48,7 @@ public class PanelForObject extends Pane {
 	private boolean isInsertHeight;
 	
 	private double lastItemInserted;
+	protected boolean movedObject;
 	
 	public PanelForObject(MapEditor mapEditor) 
 	{
@@ -270,6 +271,7 @@ public class PanelForObject extends Pane {
 	        @Override
 	        public void handle(MouseEvent event) {
 	        	PanelForObject.this.mapEditor.setUpperAndCopyImage(event);
+	        	movedObject = false;
 	        }
 	    });
 	    
@@ -278,6 +280,7 @@ public class PanelForObject extends Pane {
 	        @Override
 	        public void handle(MouseEvent event) { 
 	            PanelForObject.this.mapEditor.moveObjectFromPanelObjectInMap(event);
+	            movedObject = true;
 	        }
 	    });
 	    
@@ -285,7 +288,8 @@ public class PanelForObject extends Pane {
 	
 	        @Override
 	        public void handle(MouseEvent event) { 
-	        	PanelForObject.this.mapEditor.addObjectInListImage();
+	        	if (movedObject)
+	        		PanelForObject.this.mapEditor.addObjectInListImage();
 	        }
 	    });
 	}
