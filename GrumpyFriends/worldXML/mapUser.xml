@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <world>
     <type>Planet</type>
-    <dimension height="900" width="1200"/>
+    <dimension height="754.0" width="1092.8"/>
     <linearGround>
-        <position posX="347.86666666666673" posY="197.0"/>
-        <size height="326.0" width="397.9333333333333"/>
+        <point x="8.2" y="991.25"/>
+        <point x="8.2" y="988.25"/>
+        <point x="9.09" y="988.25"/>
+        <point x="9.09" y="991.25"/>
     </linearGround>
-    <linearGround>
-        <position posX="178.86666666666667" posY="324.0"/>
-        <size height="70.0" width="50.0"/>
-    </linearGround>
+    <inclinedGround>
+        <point x="10.2" y="984.85"/>
+        <point x="10.2" y="981.85"/>
+        <point x="13.2" y="981.85"/>
+    </inclinedGround>
+    <curveGround>
+        <start x="37.05" y="988.71"/>
+        <end x="40.05" y="988.71"/>
+        <control x="38.04" y="991.71"/>
+    </curveGround>
 </world>

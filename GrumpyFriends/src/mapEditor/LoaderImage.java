@@ -32,7 +32,7 @@ public class LoaderImage
 				new Point2D(60.0, 60.0)));
 		images.put("genericPolygon",new GenericPolygon(mapEditor,"genericGround",new Point2D(30.0, 0.0), new Point2D(0.0, 24.0),
 				new Point2D(0.0, 60.0), new Point2D(60.0, 60.0), new Point2D(60.0, 24.0)));
-		quadCurve = new Curve(mapEditor, "quadCurve", new Point2D(0.0, 0.0), new Point2D(60.0, 60.0));
+		quadCurve = new Curve(mapEditor, "curveGround", new Point2D(0.0, 0.0), new Point2D(60.0, 60.0));
 	}
 	
 	public PolygonObject copyImage(String name)
