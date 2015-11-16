@@ -57,7 +57,7 @@ public class InventoryItem extends StackPane{
 	
 
 
-	public void setText(Inventory inventory) {
+	public void setText(final Inventory inventory) {
 		this.inventory = inventory;
 		this.setOnMouseEntered(new EventHandler<MouseEvent>
 		() {

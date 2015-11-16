@@ -24,7 +24,7 @@ public class GuiExplosion {
 
 	private boolean ranning;
 
-	public GuiExplosion(WeaponGui weaponGui) {
+	public GuiExplosion(final WeaponGui weaponGui) {
 
 		explosion = new Circle(INITIAL_RADIUS, Color.YELLOW);
 		weapon = weaponGui.getWeapon();

@@ -39,7 +39,7 @@ public class IndicatorOfEquippedWeapon extends AbstractHudElement {
 	private Rectangle nameContainerShadow;
 	private Circle ammunitionContainerShadow;
 	
-	public IndicatorOfEquippedWeapon(MatchManager matchManager) {
+	public IndicatorOfEquippedWeapon(final MatchManager matchManager) {
 		super(matchManager);
 
 		ammunitionContainer = new Circle();

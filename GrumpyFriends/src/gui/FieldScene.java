@@ -45,7 +45,7 @@ public class FieldScene extends SubScene {
 	private boolean cameraMoving;
 	private boolean movementNextPlayer;
 
-	public FieldScene(Parent parent, MatchManager matchManager, double width, double height) {
+	public FieldScene(Parent parent, final MatchManager matchManager, double width, double height) {
 		super(parent, width, height);
 		this.pane = (FieldPane) parent;
 		this.matchManager = matchManager;
