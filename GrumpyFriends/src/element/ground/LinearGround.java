@@ -1,16 +1,26 @@
 package element.ground;
 
+import java.util.List;
+
 import element.Ground;
 import physic.PhysicalObject;
 import physic.PhysicalObjectManager;
 import physic.PhysicalRectangularObject;
+import utils.Point;
 import utils.Utils;
+import utils.Vector;
 
 
 public class LinearGround implements Ground{
 
 	private PhysicalObject physicBody;
-
+	private List<Point> points;
+	
+	public LinearGround(List<Vector> points){
+		
+		this.physicBody = new PhysicalPolygonObject(points);
+		PhysicalObjectManager.getInstance().buildPhysicObject(physicBody);
+	}
 	
 	public LinearGround(float x, float y,float width,float height) {
 		
@@ -41,4 +51,11 @@ public class LinearGround implements Ground{
 	public PhysicalObject getPhysicObject() {
 		return physicBody;
 	}
+
+	@Override
+	public List<Point> getPoint() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

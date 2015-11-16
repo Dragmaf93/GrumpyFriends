@@ -1,6 +1,8 @@
 package world;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -14,11 +16,12 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import physic.PhysicalObjectManager;
+import utils.Vector;
 
 public class WorldDirector {
 
 	private WorldBuilder builder;
-	
+
 	public WorldDirector(WorldBuilder builder) {
 		this.builder = builder;
 		PhysicalObjectManager.getInstance();
@@ -49,47 +52,61 @@ public class WorldDirector {
 					case "linearGround": {
 						float x = 0, y = 0, width = 0, height = 0;
 						NodeList child = item.getChildNodes();
-						for (int j = 0; j < child.getLength(); j++)
-							if (child.item(j).getNodeName().equals("position")) {
+						List<Vector> points = new ArrayList();
+						for (int j = 0; j < child.getLength(); j++) {
+							if (child.item(j).getNodeName().equals("point")) {
 								NamedNodeMap positon = child.item(j).getAttributes();
-								x = Integer.parseInt(positon.getNamedItem("posX").getNodeValue());
-								y = Integer.parseInt(positon.getNamedItem("posY").getNodeValue());
-
-							} else if (child.item(j).getNodeName().equals("size")) {
-								NamedNodeMap size = child.item(j).getAttributes();
-								width = Float.parseFloat(size.getNamedItem("width").getNodeValue());
-								height = Float.parseFloat(size.getNamedItem("height").getNodeValue());
-
+								x = (float) Double.parseDouble(positon.getNamedItem("x").getNodeValue());
+								y = (float) Double.parseDouble(positon.getNamedItem("y").getNodeValue());
+								Vector point = new Vector(x, y);
+								System.out.println(point);
+								points.add(point);
 							}
-						builder.addLinearGround(x, y, width, height);
+
+						}
+						builder.addLinearGround(points);
 						break;
 					}
 					case "inclinedGround": {
-						float x = 0, y = 0, width = 0, height = 0;
-						int angleRotation = 0;
-						
+						float x = 0, y = 0;
 						NodeList child = item.getChildNodes();
-						for (int j = 0; j < child.getLength(); j++)
-							if (child.item(j).getNodeName().equals("position")) {
+						List<Vector> points = new ArrayList();
+						for (int j = 0; j < child.getLength(); j++) {
+							if (child.item(j).getNodeName().equals("point")) {
 								NamedNodeMap positon = child.item(j).getAttributes();
-								x = Integer.parseInt(positon.getNamedItem("posX").getNodeValue());
-								y = Integer.parseInt(positon.getNamedItem("posY").getNodeValue());
-
-							} else if (child.item(j).getNodeName().equals("size")) {
-								NamedNodeMap size = child.item(j).getAttributes();
-								width = Float.parseFloat(size.getNamedItem("width").getNodeValue());
-								height = Float.parseFloat(size.getNamedItem("height").getNodeValue());
-
-							} else if (child.item(j).getNodeName().equals("angleRotation")) {
-								angleRotation = Integer
-										.parseInt(child.item(j).getAttributes().getNamedItem("degree").getNodeValue());
+								x = (float) Double.parseDouble(positon.getNamedItem("x").getNodeValue());
+								y = (float) Double.parseDouble(positon.getNamedItem("y").getNodeValue());
+								Vector point = new Vector(x, y);
+								System.out.println(point);
+								points.add(point);
 							}
-						builder.addInclinedGround(x, y, width, height, angleRotation);
+
+						}
+						builder.addInclinedGround(points);
 						break;
 					}
+					case "genericGround": {
+						float x = 0, y = 0;
+						NodeList child = item.getChildNodes();
+						List<Vector> points = new ArrayList();
+						for (int j = 0; j < child.getLength(); j++) {
+							if (child.item(j).getNodeName().equals("point")) {
+								NamedNodeMap positon = child.item(j).getAttributes();
+								x = (float) Double.parseDouble(positon.getNamedItem("x").getNodeValue());
+								y = (float) Double.parseDouble(positon.getNamedItem("y").getNodeValue());
+								Vector point = new Vector(x, y);
+								System.out.println(point);
+								points.add(point);
+							}
+
+						}
+						builder.addGenericGround(points);
+						break;
+					}
+					
 					case "character": {
-						float x =0, y = 0;
-						String name ="";
+						float x = 0, y = 0;
+						String name = "";
 						NodeList child = item.getChildNodes();
 						for (int j = 0; j < child.getLength(); j++)
 							if (child.item(j).getNodeName().equals("position")) {

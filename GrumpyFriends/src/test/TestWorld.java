@@ -12,6 +12,7 @@ import element.Ground;
 import element.ground.InclinedGround;
 import element.ground.LinearGround;
 import physic.PhysicalContactListener;
+import utils.Vector;
 
 public class TestWorld implements world.World{
 
@@ -90,6 +91,11 @@ public class TestWorld implements world.World{
 	public HashMap<String, Float> getHitCharacter() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public void addLinearGround(List<Vector> points) {
+		new LinearGround(points);
+		
 	}
 	
 	

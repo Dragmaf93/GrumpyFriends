@@ -1,8 +1,11 @@
 package test;
 
 
+import java.util.List;
+
 import character.Chewbacca;
 import physic.PhysicalObjectManager;
+import utils.Vector;
 import world.World;
 import world.WorldBuilder;
 
@@ -51,6 +54,11 @@ public class TestWorldBuilder implements WorldBuilder {
 	public void lastSettings() {
 		((TestWorld)world).setContactListener();
 		
+	}
+
+	@Override
+	public void addLinearGround(List<Vector> points) {
+		world.addLinearGround(points);
 	}
 
 }

@@ -1,9 +1,13 @@
 package physic;
 
+import java.util.List;
+
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
+
+import utils.Vector;
 
 public class PhysicalRectangularObject extends PhysicalStaticObject {
 

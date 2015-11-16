@@ -3,19 +3,27 @@
     <type>Planet</type>
     <dimension height="754.0" width="1092.8"/>
     <linearGround>
-        <point x="8.2" y="991.25"/>
-        <point x="8.2" y="988.25"/>
-        <point x="9.09" y="988.25"/>
-        <point x="9.09" y="991.25"/>
+        <point x="3.25" y="996.96"/>
+        <point x="2.25" y="967.25"/>
+        <point x="5.3" y="966.85"/>
+        <point x="6.25" y="996.96"/>
     </linearGround>
-    <inclinedGround>
-        <point x="10.2" y="984.85"/>
-        <point x="10.2" y="981.85"/>
-        <point x="13.2" y="981.85"/>
-    </inclinedGround>
-    <curveGround>
-        <start x="37.05" y="988.71"/>
-        <end x="40.05" y="988.71"/>
-        <control x="38.04" y="991.71"/>
-    </curveGround>
+    <linearGround>
+        <point x="9.2" y="969.75"/>
+        <point x="9.2" y="966.75"/>
+        <point x="44.44" y="966.75"/>
+        <point x="47.59" y="969.05"/>
+    </linearGround>
+    <linearGround>
+        <point x="36.95" y="997.3"/>
+        <point x="24.15" y="990.0"/>
+        <point x="53.39" y="989.91"/>
+        <point x="43.84" y="997.3"/>
+    </linearGround>
+    <linearGround>
+        <point x="47.3" y="980.0"/>
+        <point x="45.1" y="971.85"/>
+        <point x="51.55" y="971.8"/>
+        <point x="51.35" y="989.0"/>
+    </linearGround>
 </world>

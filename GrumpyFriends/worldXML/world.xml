@@ -1,47 +1,12 @@
-<?xml version="1.0"?>
-
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <world>
-  <type>Planet</type>
-  
-  <dimension height="700" width="1350" />
-  
-  	<linearGround>
-
-		<position posX="0" posY="1"/>
-		<size width="1" height="50"/>
-	</linearGround>
-	
-	<linearGround>
-
-		<position posX="1" posY="50"/>
-		<size width="100" height="1"/>
-	</linearGround>
-	
-	<linearGround>
-
-		<position posX="130" posY="1"/>
-		<size width="1" height="50"/>
-	</linearGround>
-	
-  <linearGround>
-		<position posX="50" posY="1"/>
-		<size width="20" height="20"/>
-	</linearGround>
-	<linearGround>
-		<position posX="0" posY="0"/>
-		<size width="300" height="1"/>
-	</linearGround>
-	<linearGround>
-		<position posX="105" posY="1"/>
-		<size width="20" height="20"/>
-	</linearGround>
-	<!--
-  	<linearGround>
-
-		<position posX="1" posY="100"/>
-		<size width="300" height="1"/>
-	</linearGround>
-	-->
-  
-  
+    <type>Planet</type>
+    <dimension height="754.0" width="1092.8"/>
+    <linearGround>
+        <point x="8.2" y="991.25"/>
+        <point x="8.2" y="988.25"/>
+        <point x="9.09" y="988.25"/>
+        <point x="9.09" y="991.25"/>
+    </linearGround>
 </world>
+

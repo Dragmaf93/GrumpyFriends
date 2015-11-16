@@ -10,10 +10,12 @@ import org.jbox2d.dynamics.World;
 
 import character.Character;
 import element.Ground;
+import element.ground.GenericGround;
 import element.ground.InclinedGround;
 import element.ground.LinearGround;
 import physic.PhysicalContactListener;
 import physic.PhysicalObjectManager;
+import utils.Vector;
 
 public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements world.World {
 
@@ -57,7 +59,12 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	public Character getCharacter(String name) {
 		return characterContainer.get(name);
 	}
-
+	
+	@Override
+	public void addLinearGround(List<Vector> points) {
+		grounds.add(new LinearGround(points));
+	}
+	
 	@Override
 	public HashMap<String, Float> getHitCharacter() {
 		return PhysicalObjectManager.getInstance().getHitCharacters();
@@ -133,5 +140,13 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	public void setContactListener() {
 		super.setContactListener(new PhysicalContactListener(characters));
 
+	}
+
+	public void addInclinedGround(List<Vector> points) {
+		grounds.add(new InclinedGround(points));
+	}
+
+	public void addGenericGround(List<Vector> points) {
+		grounds.add(new GenericGround(points));
 	}
 }
