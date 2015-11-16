@@ -4,7 +4,6 @@ import character.Character;
 import character.Chewbacca;
 import character.Team;
 import game.MatchManager;
-import gui.hud.MatchPane;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;

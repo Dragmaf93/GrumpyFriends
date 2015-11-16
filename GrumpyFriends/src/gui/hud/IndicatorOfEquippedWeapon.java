@@ -101,6 +101,8 @@ public class IndicatorOfEquippedWeapon extends AbstractHudElement {
 				if (event.getButton() != MouseButton.SECONDARY) {
 //					if (iconContainer.contains(event.getX(), event.getY()) || nameContainer.contains(event.getX(), event.getY())
 //							|| ammunitionContainer.contains(event.getX(), event.getY()))
+					
+					System.out.println(nameText.getText());
 						if (nameText.getText() != null && !nameText.getText().equals(""))
 							matchManager.getCurrentPlayer().equipWeapon(nameText.getText());
 				}
@@ -126,12 +128,12 @@ public class IndicatorOfEquippedWeapon extends AbstractHudElement {
 		Scene scene = root.getScene();
 		root.relocate(scene.getWidth() - DISTANCE_SCREEN_RIGHT, +DISTANCE_SCREEN_TOP);
 		if (matchManager.getCurrentPlayer().getLastEquippedWeapon() != null) {
-			if (!matchManager.getCurrentPlayer().getLastEquippedWeapon().equals(nameWeapon)) {
-
+//			if (!matchManager.getCurrentPlayer().getLastEquippedWeapon().equals(nameWeapon)) {
+				
 				nameText.setText(nameWeapon = matchManager.getCurrentPlayer().getLastEquippedWeapon());
-			}
-			if (lastAmmunition != matchManager.getCurrentPlayer().getInventoryManager()
-					.getNumberOfAmmunition(nameWeapon))
+//			}
+//			if (lastAmmunition != matchManager.getCurrentPlayer().getInventoryManager()
+//					.getNumberOfAmmunition(nameWeapon))
 				ammunitionText.setText(Integer.toString(lastAmmunition = matchManager.getCurrentPlayer()
 						.getInventoryManager().getNumberOfAmmunition(nameWeapon)));
 		} else {

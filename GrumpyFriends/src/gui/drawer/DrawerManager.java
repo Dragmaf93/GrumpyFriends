@@ -33,15 +33,6 @@ public class DrawerManager {
 	
 	}
 
-	public void createWorld() {
-		
-		List<Ground> grounds = world.getGrounds();
-		
-		for (Ground ground : grounds) {
-			drawers.get(ground.getClass().getSimpleName()).draw(ground);
-		}
-	}
-
 	public void draw() {
 
 		for (CharacterDrawer cd : characterDrawers) {

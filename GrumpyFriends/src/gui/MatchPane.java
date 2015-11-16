@@ -1,8 +1,11 @@
-package gui.hud;
+package gui;
 
 import game.MatchManager;
-import gui.FieldPane;
-import gui.FieldScene;
+import gui.hud.IndicatorOfEquippedWeapon;
+import gui.hud.IndicatorOfLauncher;
+import gui.hud.IndicatorOfPlayerLife;
+import gui.hud.IndicatorOfTime;
+import gui.hud.Inventory;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
@@ -34,6 +37,8 @@ public class MatchPane extends Pane {
 		this.inventory = new Inventory(matchManager);
 		this.equippedWeaponInd = new IndicatorOfEquippedWeapon(matchManager);
 		this.launcherInd = new IndicatorOfLauncher(matchManager);
+		
+		fieldPane.setScene(fieldScene);
 		
 		this.getChildren().add(fieldScene);
 		this.getChildren().add(timerInd.getNode());

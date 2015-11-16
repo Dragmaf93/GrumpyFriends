@@ -20,6 +20,7 @@ public class TestGrumpyFriends extends TestbedTest {
 //	private Character currentPlayer;
 	private Weapon weapon;
 	private float speed=10f;
+	private world.World world;
 	public static TestbedTest getInstance(){
 		if(instance==null)
 			instance = new TestGrumpyFriends();
@@ -41,7 +42,7 @@ public class TestGrumpyFriends extends TestbedTest {
 		WorldBuilder builder = new TestWorldBuilder();
 		WorldDirector director = new WorldDirector(builder);
 		director.createWorld("worldXML/world.xml");
-		world.World world = builder.getWorld();
+		world = builder.getWorld();
 		
 		
 		matchManager = new MatchManager(world);
@@ -115,9 +116,11 @@ public class TestGrumpyFriends extends TestbedTest {
 	@Override
 	public void step(TestbedSettings settings) {
 		super.step(settings);
-		addTextLine("Turn " + matchManager.getTurn());
-		addTextLine("Current Player "+ matchManager.getCurrentPlayer().getName()+" of "+matchManager.getCurrentTeam().getName());
-		getCamera().setCamera(new Vec2((float)matchManager.getCurrentPlayer().getX(),(float)matchManager.getCurrentPlayer().getY()));
+		world.update();
+		getCamera().setCamera(new Vec2((float)matchManager.getCurrentPlayer().getPhysicalObject().getBody().getPosition().x,
+				(float)matchManager.getCurrentPlayer().getPhysicalObject().getBody().getPosition().y));
+//		addTextLine("Turn " + matchManager.getTurn());
+//		addTextLine("Current Player "+ matchManager.getCurrentPlayer().getName()+" of "+matchManager.getCurrentTeam().getName());
 		
 		if(weapon!=null)
 			weapon.update();

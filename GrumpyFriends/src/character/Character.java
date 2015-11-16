@@ -58,6 +58,7 @@ public interface Character extends Element
 
 	public abstract boolean isSleeping();
 
+	public abstract int getLastDamagePoints();
 
 	public abstract WeaponsManager getInventoryManager();
 

@@ -15,14 +15,12 @@ public class GuiSimpleBomb extends AbstractGuiWeapon{
 	private Rotate launcherRotate;
 	
 	// prove
-	private Circle circle;
-	private Circle bullet;
-
 	private GuiExplosion explosion;
 
 	private boolean finishAnimation;
 
 	private ImageView bombImage;
+	private ImageView bullet;
 
 	public GuiSimpleBomb(Weapon weapon, Character character) {
 		super(weapon, character);
@@ -41,11 +39,6 @@ public class GuiSimpleBomb extends AbstractGuiWeapon{
 
 	@Override
 	public Node getWeaponLauncher() {
-		if (circle == null) {
-			circle = new Circle(character.getX() + character.getWidth(), character.getY() + character.getHeight() * 0.2,
-					weapon.getWidth());
-			circle.setFill(Color.RED);
-			launcherRoot.getChildren().add(circle);
 			bombImage.setX(character.getX() + character.getWidth());
 			bombImage.setY(character.getY() + character.getHeight() * 0.2);
 			 launcherRoot.getChildren().add(bombImage);
@@ -54,15 +47,15 @@ public class GuiSimpleBomb extends AbstractGuiWeapon{
 //			circle.getTransforms().add(launcherRotate);
 			bombImage.getTransforms().add(launcherRotate);
 
-		}
 		return launcherRoot;
 	}
 
 	@Override
 	public Node getWeaponBullet() {
 		
-		launcherRoot.getChildren().remove(circle);
-		bullet = new Circle(weapon.getX(), weapon.getY(), weapon.getWidth(),Color.RED);
+		bullet = new ImageView(new Image("file:image/weapons/SimpleBomb.png"));
+		 bullet.setFitHeight(weapon.getHeight()*2);
+		 bullet.setFitWidth(weapon.getWidth()*2);
 		explosion = new GuiExplosion(this);
 		bulletRoot.getChildren().add(bullet);
 		bulletRoot.getChildren().add(explosion.getExplosionNode());
@@ -83,7 +76,6 @@ public class GuiSimpleBomb extends AbstractGuiWeapon{
 		launcherRotate.setPivotX(character.getX());
 		launcherRotate.setPivotY(bombImage.getY());
 		launcherRotate.setAngle(Math.toDegrees(-character.getLauncher().getAngle()));
-		circle.relocate(character.getX() + character.getWidth() + 5, character.getY() + character.getHeight() * 0.2);
 		 bombImage.relocate(character.getX()+character.getWidth()+5,
 		 character.getY()+character.getHeight()*0.2);
 		//

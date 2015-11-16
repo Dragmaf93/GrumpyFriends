@@ -66,6 +66,7 @@ public class IndicatorOfTime extends AbstractHudElement{
 	public void draw() {
 		Scene scene = root.getScene();
 		root.relocate(DISTANCE_SCREEN_LEFT, DISTANCE_SCREEN_TOP);
+		
 		if(!timer.isTurnTimerStopped()){
 			turnTimer.setText(timer.turnTimerStringFormat());
 			

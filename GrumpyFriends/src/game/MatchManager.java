@@ -1,8 +1,11 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+
+import com.sun.org.apache.bcel.internal.generic.DMUL;
 
 import character.Character;
 import character.Team;
@@ -25,12 +28,12 @@ public class MatchManager {
 	boolean started;
 	boolean pause;
 
+	boolean appliedDamage;
 	private MatchTimer timer;
-	
-	
 
 	private boolean endTurn;
 	private HashMap<String, Float> hitCharacters;
+	private List<Character> damagedCharacters;
 
 	public MatchManager() {
 		this.battlefield = null;
@@ -39,7 +42,9 @@ public class MatchManager {
 		this.currentPlayer = null;
 		this.turn = 0;
 		this.started = false;
+		appliedDamage = false;
 		timer = new MatchTimer();
+		damagedCharacters = new ArrayList<Character>();
 	}
 
 	public MatchManager(World battlefield, Team teamA, Team teamB) {
@@ -49,10 +54,12 @@ public class MatchManager {
 		this.turn = 0;
 		this.currentPlayer = null;
 		this.started = false;
+		appliedDamage = false;
 		timer = new MatchTimer();
-//		teamBlue.setColorTeam(Color.BLUE);
-//		teamRed.setColorTeam(Color.RED);
+		// teamBlue.setColorTeam(Color.BLUE);
+		// teamRed.setColorTeam(Color.RED);
 		hitCharacters = battlefield.getHitCharacter();
+		damagedCharacters = new ArrayList<Character>();
 	}
 
 	public MatchManager(World battlefield) {
@@ -65,6 +72,8 @@ public class MatchManager {
 		this.started = false;
 		timer = new MatchTimer();
 		hitCharacters = battlefield.getHitCharacter();
+		appliedDamage = false;
+		damagedCharacters = new ArrayList<Character>();
 	}
 
 	public boolean startMatch() {
@@ -90,23 +99,32 @@ public class MatchManager {
 	}
 
 	public void endTurn() {
-		if (!endTurn){System.out.println(hitCharacters);
-			currentPlayer.endTurn();
-			
-			if(!hitCharacters.isEmpty()){
-				System.out.println("CIAOoooooooooooooooo");
+		if (endTurn)
+			return;
+		currentPlayer.endTurn();
+		endTurn = true;
+		appliedDamage = false;
+	}
+
+	public void applyDamageToHitCharacter() {
+		if (!appliedDamage) {
+			if (!hitCharacters.isEmpty()) {
 				Set<String> keys = hitCharacters.keySet();
 				for (String name : keys) {
-					System.out.println(hitCharacters.get(name));
-	
-					Character c =battlefield.getCharacter(name);
-					if(c!=null){
+					Character c = battlefield.getCharacter(name);
+					if (c != null) {
 						c.decreaseLifePoints((int) hitCharacters.get(name).floatValue());
+						damagedCharacters.add(c);
 					}
 				}
 				hitCharacters.clear();
 			}
-		}endTurn = true;
+			appliedDamage = true;
+		}
+	}
+
+	public List<Character> getDamagedCharacters() {
+		return damagedCharacters;
 	}
 
 	public boolean allCharacterAreSpleeping() {
@@ -135,11 +153,16 @@ public class MatchManager {
 			else if (currentTeam == teamBlue)
 				currentTeam = teamRed;
 
+			
 			currentPlayer = currentTeam.nextPlayer();
 			currentPlayer.prepareForTurn();
+			damagedCharacters.clear();
 			turn++;
 			timer.startTurnTimer();
 			endTurn = false;
+			appliedDamage = false;
+			
+			
 		}
 	}
 
@@ -212,8 +235,8 @@ public class MatchManager {
 	}
 
 	public void startTest() {
-		timer.startMatchTimer();
-		timer.startTurnTimer();
+//		timer.startMatchTimer();
+//		timer.startTurnTimer();
 		currentTeam = teamRed;
 		currentPlayer = teamRed.get(0);
 
@@ -229,9 +252,10 @@ public class MatchManager {
 
 	public void update() {
 		if (!pause) {
-			
+
 			if (timer.endTurnIn() <= 0) {
 				endTurn();
+//				timer.pauseTimers();
 			}
 
 			if (timer.endMatchIn() <= 0) {
@@ -241,14 +265,16 @@ public class MatchManager {
 			if (currentPlayer.attacked() && !timer.isTurnTimerStopped()) {
 				timer.startAttackTimer();
 				timer.stopTurnTimer();
+//				timer.pauseTimers();
 			}
 			if (timer.isTurnTimerStopped() && timer.endAttackTimerIn() <= 0) {
 				endTurn();
+				applyDamageToHitCharacter();
 			}
 
-			if (currentPlayer.sufferedDamage()) {
-				endTurn();
-			}
+			// if (currentPlayer.sufferedDamage()) {
+			// endTurn();
+			// }
 
 		}
 	}
@@ -256,6 +282,10 @@ public class MatchManager {
 	private void endMatch() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public boolean isAppliedDamage() {
+		return appliedDamage;
 	}
 
 	public Character nextPlayer() {

@@ -2,7 +2,7 @@ package gui.weapon;
 
 import character.Character;
 import element.weaponsManager.Weapon;
-import gui.drawer.GuiViewfinder;
+import gui.drawer.*;
 import javafx.scene.Group;
 
 public abstract class AbstractGuiWeapon implements WeaponGui {

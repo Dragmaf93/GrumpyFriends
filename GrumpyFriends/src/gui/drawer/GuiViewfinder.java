@@ -32,11 +32,11 @@ public class GuiViewfinder {
 	}
 	
 	public void update(Character character,Weapon weapon){
-		rotation.setPivotX(image.getX()-DISTANCE_LAUNCHER-character.getLauncher().getX() );
+		rotation.setPivotX(image.getX()-DISTANCE_LAUNCHER );
 		rotation.setPivotY(image.getY()+weapon.getHeight());
 		rotation.setAngle(Math.toDegrees(-character.getLauncher().getAngle()));
-		image.relocate(character.getX()+character.getLauncher().getX() + DISTANCE_LAUNCHER,
-				character.getY()+character.getLauncher().getY()-weapon.getHeight()-SIZE/2);
+		image.relocate(character.getLauncher().getX() + DISTANCE_LAUNCHER,
+			character.getLauncher().getY()-weapon.getHeight()-SIZE/2);
 	}
 	
 	

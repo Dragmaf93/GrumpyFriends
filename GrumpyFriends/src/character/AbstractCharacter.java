@@ -38,6 +38,8 @@ public abstract class AbstractCharacter implements Character {
 
 	protected boolean grounded;
 	protected boolean moving;
+	protected boolean activeLauncher;
+	
 	protected int currentDirection;
 
 	protected PhysicalObject physicBody;
@@ -48,6 +50,7 @@ public abstract class AbstractCharacter implements Character {
 	protected boolean attacked;
 	private boolean suffereDamage;
 	private boolean endTurn;
+	private int lastDamagePoints;
 
 	public AbstractCharacter(String name, float x, float y, float height, float width, Team team) {
 
@@ -123,8 +126,10 @@ public abstract class AbstractCharacter implements Character {
 
 		if (!readyToEquipWeapon)
 			return;
+		
 		if (equippedWeapon != null && equippedWeapon.getName().equals(weaponName)) {
 			launcher.loadWeapon(equippedWeapon);
+			activeLauncher=true;
 			return;
 
 		}
@@ -132,6 +137,7 @@ public abstract class AbstractCharacter implements Character {
 			equippedWeapon = weaponsManager.getWeapon(weaponName);
 			lastEquippedWeapon = equippedWeapon.getName();
 			launcher.loadWeapon(equippedWeapon);
+			activeLauncher=true;
 		}
 	}
 
@@ -170,7 +176,7 @@ public abstract class AbstractCharacter implements Character {
 		if (launcher == null || !launcher.isActivated())
 			return;
 
-		float angle = 2.0f;
+		float angle = (float) Math.toRadians(1.0);
 		launcher.changeAngle(angle * direction);
 	}
 
@@ -194,7 +200,7 @@ public abstract class AbstractCharacter implements Character {
 		if (launcher != null && launcher.isActivated()) {
 			// if (direction == currentDirection) {
 			launcher.disable();
-			//
+			
 			// } else {
 			// launcher.disable();
 			// launcher.activate();
@@ -234,7 +240,9 @@ public abstract class AbstractCharacter implements Character {
 		moving = false;
 		((PhysicalCharacter) physicBody).blockWheelJoint();
 		body.getLinearVelocity().x = 0f;
-
+		
+		if(activeLauncher) launcher.activate();
+		
 	}
 
 	@Override
@@ -327,14 +335,22 @@ public abstract class AbstractCharacter implements Character {
 		attacked = false;
 		suffereDamage = false;
 		endTurn = false;
+		launcher.restartLauncher();
 
 	}
 
 	@Override
+	public int getLastDamagePoints() {
+		return lastDamagePoints;
+	}
+
+	@Override
 	public void decreaseLifePoints(int points) {
-		lifePoints-=points;
-		if(lifePoints<0) lifePoints=0;
-		suffereDamage=true;
+		lastDamagePoints = points;
+		lifePoints -= points;
+		if (lifePoints < 0)
+			lifePoints = 0;
+		suffereDamage = true;
 	}
 
 	@Override

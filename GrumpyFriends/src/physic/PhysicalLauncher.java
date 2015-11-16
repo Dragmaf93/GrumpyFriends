@@ -19,7 +19,7 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 
 	private final static float HEIGHT=0.2f;
 	private final static float WIDTH=1.0f;
-	private static final Vec2 DISTANCE_TO_LAUNCHER = new Vec2(1.5f,0);
+	private static final Vec2 DISTANCE_TO_LAUNCHER = new Vec2(2.5f,0);
 	private static final Vec2 ORIGIN_JOINT_POINT = new Vec2(-WIDTH,0);
 	
 	
@@ -48,6 +48,8 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 		fixtureDef.shape=launcherShape;
 		fixtureDef.density=1.0f;
 		fixtureDef.isSensor=true;
+		
+		body.setGravityScale(0);
 
 //		body.createFixture(fixtureDef);	
 		
@@ -61,7 +63,7 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 		revoluteJointDef.enableMotor=true;
 //		revoluteJointDef.motorSpeed=2.0f;
 		revoluteJointDef.maxMotorTorque=500000000000000000.0f;
-	
+		
 		revoluteJointDef.referenceAngle=(float) Math.toRadians(0);
 		revoluteJointDef.enableLimit = true;
 		revoluteJointDef.lowerAngle = (float) Math.toRadians(-70);
@@ -74,8 +76,8 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 	public void setLimitAngle(int direction){
 		if(direction==Character.LEFT && currentDirection!=direction){
 			currentDirection=direction;
-			joint.setLimits((float)Math.toRadians(90), (float)Math.toRadians(250));
 			body.setTransform(ORIGIN_JOINT_POINT,(float) Math.toRadians(180) );
+			joint.setLimits((float)Math.toRadians(90), (float)Math.toRadians(250));
 			
 		}else if(direction == Character.RIGHT && currentDirection!=direction){
 			joint.setLimits((float)Math.toRadians(-70),(float) Math.toRadians(90));
@@ -85,14 +87,18 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 	}
 	
 	public void hide(){
-		if(fixture!=null)
-			body.destroyFixture(fixture);
-		fixture=null;
+		joint.setMotorSpeed(0);
+//		System.out.println(joint.getMotorSpeed());
+//		if(fixture!=null)
+//			body.destroyFixture(fixture);
+//		fixture=null;
 	}
 	
 	public void expose(){
-//		if(fixture==null)
+		if(fixture==null)
 			fixture=body.createFixture(fixtureDef);		
+			joint.setMotorSpeed(0);
+
 	}
 	
 	public Vector getPositionAim(){

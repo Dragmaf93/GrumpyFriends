@@ -24,6 +24,7 @@ public class MatchTimer {
 	private long initialAttackTimer;
 	private boolean stopTurn;
 
+	private boolean pause;
 	private static long initialObjectTimer;
 	private static long pauseObjectTime;
 	
@@ -36,9 +37,13 @@ public class MatchTimer {
 
 	public void pauseTimers() {
 		initialPause = System.currentTimeMillis();
+		pause=true;
 	}
-
+	public boolean isPaused(){
+		return pause;
+	}
 	public void restartPausedTimers() {
+		pause=false;
 		endPause = System.currentTimeMillis();
 		matchPauseTime += endPause - initialPause;
 		turnPauseTime += endPause - initialPause;

@@ -3,7 +3,6 @@ package gui;
 import character.Character;
 import element.weaponsManager.Launcher;
 import game.MatchManager;
-import gui.hud.MatchPane;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
