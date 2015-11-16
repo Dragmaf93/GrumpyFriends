@@ -17,7 +17,13 @@ public class Utils {
 	    return y;
 	}
 	 
-	 
+	 public static float xFromJavaFxToJbox2d(double x){
+		 return (float) (x*PHYSICS_WIDTH/javaFxWidth());
+	 }
+
+	 public static float yFromJavaFxToJbox2d(double y){
+		 return (float) (PHYSICS_HEIGHT*(javaFxHeight()-y)/javaFxHeight());
+	 }
 	//Convert a JBox2D width to pixel width
 	public static float widthFromJbox2dToJavaFx(float width) {
 	    return METER_TO_PIXES*width;
