@@ -4,6 +4,7 @@ import java.util.List;
 
 import physic.PhysicalContactListener;
 import physic.PhysicalObjectManager;
+import utils.Point;
 import utils.Vector;
 
 public class GameWorldBuilder implements WorldBuilder{
@@ -55,20 +56,18 @@ public class GameWorldBuilder implements WorldBuilder{
 	public void lastSettings() {
 		worldToCreate.setContactListener();
 	}
-	
 	@Override
-	public void addLinearGround(List<Vector> points) {
+	public void addLinearGround(List<Point> points) {
 		worldToCreate.addLinearGround(points);
-		
 	}
 	@Override
-	public void addGenericGround(List<Vector> points) {
+	public void addGenericGround(List<Point> points) {
 		worldToCreate.addGenericGround(points);
 	}
-	
 	@Override
-	public void addInclinedGround(List<Vector> points) {
+	public void addInclinedGround(List<Point> points) {
 		worldToCreate.addInclinedGround(points);
 	}
+
 
 }

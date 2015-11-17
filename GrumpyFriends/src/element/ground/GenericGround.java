@@ -2,51 +2,40 @@ package element.ground;
 
 import java.util.List;
 
-import element.Ground;
-import physic.PhysicalObject;
+import physic.PhysicalObjectManager;
 import utils.Point;
-import utils.Vector;
 
-public class GenericGround implements Ground{
+public class GenericGround extends AbstractGround{
 
-	public GenericGround(List<Vector> points) {
-		// TODO Auto-generated constructor stub
+	public GenericGround(List<Point> points) {
+		super(points);
+		physicalObject = new PhysicalPolygonObject(points);
+		PhysicalObjectManager.getInstance().buildPhysicObject(physicalObject);
+		
+		
 	}
 
 	@Override
-	public double getX() {
-		// TODO Auto-generated method stub
-		return 0;
+	public void setPosition() {
+		positionX = points.get(0).x;
+		positionY = points.get(0).y;
 	}
 
 	@Override
-	public double getY() {
-		// TODO Auto-generated method stub
-		return 0;
+	public void setSize() {
+		double minX=Double.MAX_VALUE,minY=Double.MAX_VALUE,
+				maxY=Double.MIN_VALUE,maxX=Double.MIN_VALUE;
+		for (Point point : points) {
+			if(point.x<minX) minX=point.x;
+			if(point.x>maxX) maxX=point.x;
+			if(point.y<minY) minY=point.y;
+			if(point.y>maxY) maxY=point.y;
+		}
+		
+		height=maxY-minY;
+		width=maxX-minX;
 	}
-
-	@Override
-	public double getHeight() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getWidth() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public PhysicalObject getPhysicObject() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Point> getPoint() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+	
 
 }

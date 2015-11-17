@@ -2,67 +2,47 @@ package element.ground;
 
 import physic.PhysicalTriangularObject;
 import utils.Point;
-import utils.Vector;
 
 import java.util.List;
-
-import element.Ground;
-import physic.PhysicalObject;
 import physic.PhysicalObjectManager;
 
-public class InclinedGround  implements Ground {
+public class InclinedGround  extends AbstractGround {
 
 	private float angleRotation;
-	
-	private PhysicalObject physicObject;
-	private List<Point> points;
 	
 	public InclinedGround(float x, float y, float width, float height, int angleRotationDegree) {
 		
 		this.angleRotation=(float) Math.toRadians(angleRotationDegree);
 		
-		this.physicObject = new PhysicalTriangularObject(x, y, width, height, angleRotation);
-		PhysicalObjectManager.getInstance().buildPhysicObject(physicObject);
+		physicalObject = new PhysicalTriangularObject(x, y, width, height, angleRotation);
+		PhysicalObjectManager.getInstance().buildPhysicObject(physicalObject);
 	
 	}
 
-	public InclinedGround(List<Vector> points2) {
-		// TODO Auto-generated constructor stub
+	public InclinedGround(List<Point> points) {
+		super(points);
+		physicalObject = new PhysicalPolygonObject(points);
+		PhysicalObjectManager.getInstance().buildPhysicObject(physicalObject);
+	}
+	
+	@Override
+	public void setPosition() {
+		positionX = points.get(0).x;
+		positionY = points.get(0).y;
 	}
 
 	@Override
-	public double getX() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getY() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getHeight() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getWidth() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public PhysicalObject getPhysicObject() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Point> getPoint() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setSize() {
+		double minX=Double.MAX_VALUE,minY=Double.MAX_VALUE,
+				maxY=Double.MIN_VALUE,maxX=Double.MIN_VALUE;
+		for (Point point : points) {
+			if(point.x<minX) minX=point.x;
+			if(point.x>maxX) maxX=point.x;
+			if(point.y<minY) minY=point.y;
+			if(point.y>maxY) maxY=point.y;
+		}
+		
+		height=maxY-minY;
+		width=maxX-minX;		
 	}
 }

@@ -53,7 +53,7 @@ public class DrawerManager {
 		}
 		
 		this.drawers = new HashMap<>();
-		drawers.put("LinearGround", new LinearGroundDrawer(pane));
+		drawers.put("LinearGround", new PolygonGroundDrawer(pane));
 		
 
 	}

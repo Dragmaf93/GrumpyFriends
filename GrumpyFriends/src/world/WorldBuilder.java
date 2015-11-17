@@ -2,6 +2,7 @@ package world;
 
 import java.util.List;
 
+import utils.Point;
 import utils.Vector;
 import world.World;
 
@@ -13,7 +14,6 @@ public interface WorldBuilder {
 	
 	abstract public void addLinearGround(float x, float y, float width, float height);
 	
-	abstract public void addLinearGround(List<Vector> points);
 	
 	abstract public void addInclinedGround(float x, float y, float width, float height, int angleRotation);
 	
@@ -24,8 +24,9 @@ public interface WorldBuilder {
 	abstract public World getWorld();
 	abstract public org.jbox2d.dynamics.World getPhysicWorld();
 
-	public abstract void addGenericGround(List<Vector> points);
 
-	public abstract void addInclinedGround(List<Vector> points);
+	abstract public void addLinearGround(List<Point> points);
+	public abstract void addGenericGround(List<Point> points);
+	public abstract void addInclinedGround(List<Point> points);
 	
 }

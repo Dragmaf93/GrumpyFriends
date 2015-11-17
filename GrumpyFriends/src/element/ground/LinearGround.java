@@ -11,51 +11,39 @@ import utils.Utils;
 import utils.Vector;
 
 
-public class LinearGround implements Ground{
-
-	private PhysicalObject physicBody;
-	private List<Point> points;
+public class LinearGround extends AbstractGround{
 	
-	public LinearGround(List<Vector> points){
-		
-		this.physicBody = new PhysicalPolygonObject(points);
-		PhysicalObjectManager.getInstance().buildPhysicObject(physicBody);
+	public LinearGround(List<Point> points){
+		super(points);
+		this.physicalObject = new PhysicalPolygonObject(points);
+		PhysicalObjectManager.getInstance().buildPhysicObject(physicalObject);
 	}
 	
 	public LinearGround(float x, float y,float width,float height) {
 		
-		this.physicBody = new PhysicalRectangularObject(x, y, width, height);
-		PhysicalObjectManager.getInstance().buildPhysicObject(physicBody);
+		this.physicalObject = new PhysicalRectangularObject(x, y, width, height);
+		PhysicalObjectManager.getInstance().buildPhysicObject(physicalObject);
 	}
 
 	@Override
-	public double getY() {
-		return Utils.yFromJbox2dToJavaFx(physicBody.getY());
+	public void setPosition() {
+		positionX = points.get(0).x;
+		positionY = points.get(0).y;
 	}
 
 	@Override
-	public double getX() {
-		return Utils.xFromJbox2dToJavaFx(physicBody.getX());
-	}
-
-	@Override
-	public double getHeight() {
-		return Utils.heightFromJbox2dToJavaFx(physicBody.getHeight());
-	}
-
-	@Override
-	public double getWidth() {
-		return Utils.widthFromJbox2dToJavaFx(physicBody.getWidth());
-	}
-	@Override
-	public PhysicalObject getPhysicObject() {
-		return physicBody;
-	}
-
-	@Override
-	public List<Point> getPoint() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setSize() {
+		double minX=Double.MAX_VALUE,minY=Double.MAX_VALUE,
+				maxY=Double.MIN_VALUE,maxX=Double.MIN_VALUE;
+		for (Point point : points) {
+			if(point.x<minX) minX=point.x;
+			if(point.x>maxX) maxX=point.x;
+			if(point.y<minY) minY=point.y;
+			if(point.y>maxY) maxY=point.y;
+		}
+		
+		height=maxY-minY;
+		width=maxX-minX;		
 	}
 	
 }

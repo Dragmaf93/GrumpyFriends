@@ -5,6 +5,7 @@ import java.util.List;
 
 import character.Chewbacca;
 import physic.PhysicalObjectManager;
+import utils.Point;
 import utils.Vector;
 import world.World;
 import world.WorldBuilder;
@@ -56,9 +57,24 @@ public class TestWorldBuilder implements WorldBuilder {
 		
 	}
 
+	
+
 	@Override
-	public void addLinearGround(List<Vector> points) {
-		world.addLinearGround(points);
+	public void addGenericGround(List<Point> points) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addInclinedGround(List<Point> points) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addLinearGround(List<Point> points) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

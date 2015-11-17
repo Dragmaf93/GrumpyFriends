@@ -22,7 +22,7 @@ public class MainApplication extends Application{
 		//match config
 		WorldBuilder builder = new GameWorldBuilder();
 		WorldDirector director = new WorldDirector(builder);
-		director.createWorld("worldXML/mapUser.xml");
+		director.createWorld("worldXML/map1.xml");
 		World world = builder.getWorld();
 		MatchManager matchManager = new MatchManager(world);
 //		Team teamA = new Team("TeamA", 1, matchManager);

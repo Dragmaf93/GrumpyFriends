@@ -16,6 +16,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import physic.PhysicalObjectManager;
+import utils.Point;
 import utils.Vector;
 
 public class WorldDirector {
@@ -50,15 +51,15 @@ public class WorldDirector {
 						break;
 					}
 					case "linearGround": {
-						float x = 0, y = 0, width = 0, height = 0;
+						double x = 0, y = 0;
 						NodeList child = item.getChildNodes();
-						List<Vector> points = new ArrayList();
+						List<Point> points = new ArrayList();
 						for (int j = 0; j < child.getLength(); j++) {
 							if (child.item(j).getNodeName().equals("point")) {
 								NamedNodeMap positon = child.item(j).getAttributes();
-								x = (float) Double.parseDouble(positon.getNamedItem("x").getNodeValue());
-								y = (float) Double.parseDouble(positon.getNamedItem("y").getNodeValue());
-								Vector point = new Vector(x, y);
+								x = Double.parseDouble(positon.getNamedItem("x").getNodeValue());
+								y = Double.parseDouble(positon.getNamedItem("y").getNodeValue());
+								Point point = new Point(x, y);
 								System.out.println(point);
 								points.add(point);
 							}
@@ -68,15 +69,15 @@ public class WorldDirector {
 						break;
 					}
 					case "inclinedGround": {
-						float x = 0, y = 0;
+						double x = 0, y = 0;
 						NodeList child = item.getChildNodes();
-						List<Vector> points = new ArrayList();
+						List<Point> points = new ArrayList();
 						for (int j = 0; j < child.getLength(); j++) {
 							if (child.item(j).getNodeName().equals("point")) {
 								NamedNodeMap positon = child.item(j).getAttributes();
-								x = (float) Double.parseDouble(positon.getNamedItem("x").getNodeValue());
-								y = (float) Double.parseDouble(positon.getNamedItem("y").getNodeValue());
-								Vector point = new Vector(x, y);
+								x = Double.parseDouble(positon.getNamedItem("x").getNodeValue());
+								y = Double.parseDouble(positon.getNamedItem("y").getNodeValue());
+								Point point = new Point(x, y);
 								System.out.println(point);
 								points.add(point);
 							}
@@ -86,15 +87,15 @@ public class WorldDirector {
 						break;
 					}
 					case "genericGround": {
-						float x = 0, y = 0;
+						double x = 0, y = 0;
 						NodeList child = item.getChildNodes();
-						List<Vector> points = new ArrayList();
+						List<Point> points = new ArrayList();
 						for (int j = 0; j < child.getLength(); j++) {
 							if (child.item(j).getNodeName().equals("point")) {
 								NamedNodeMap positon = child.item(j).getAttributes();
 								x = (float) Double.parseDouble(positon.getNamedItem("x").getNodeValue());
 								y = (float) Double.parseDouble(positon.getNamedItem("y").getNodeValue());
-								Vector point = new Vector(x, y);
+								Point point = new Point(x, y);
 								System.out.println(point);
 								points.add(point);
 							}

@@ -15,6 +15,7 @@ import element.ground.InclinedGround;
 import element.ground.LinearGround;
 import physic.PhysicalContactListener;
 import physic.PhysicalObjectManager;
+import utils.Point;
 import utils.Vector;
 
 public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements world.World {
@@ -61,7 +62,7 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	}
 	
 	@Override
-	public void addLinearGround(List<Vector> points) {
+	public void addLinearGround(List<Point> points) {
 		grounds.add(new LinearGround(points));
 	}
 	
@@ -125,6 +126,8 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 		this.width = width;
 	}
 	
+	
+	
 	@Override
 	public List<Ground> getGrounds() {
 		return grounds;
@@ -142,11 +145,11 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 
 	}
 
-	public void addInclinedGround(List<Vector> points) {
+	public void addInclinedGround(List<Point> points) {
 		grounds.add(new InclinedGround(points));
 	}
 
-	public void addGenericGround(List<Vector> points) {
+	public void addGenericGround(List<Point> points) {
 		grounds.add(new GenericGround(points));
 	}
 }

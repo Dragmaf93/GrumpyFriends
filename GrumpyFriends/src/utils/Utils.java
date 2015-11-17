@@ -6,13 +6,13 @@ public class Utils {
 	private final static float METER_TO_PIXES = 20f;
 
 	
-	public static float xFromJbox2dToJavaFx(float posX) {
+	public static double xFromJbox2dToJavaFx(float posX) {
 	    float x = posX*javaFxWidth()/PHYSICS_WIDTH;
 	    return x;
 	}
 	 
 	//Convert a JBox2D y coordinate to a JavaFX pixel y coordinate
-	public static float yFromJbox2dToJavaFx(float posY) {
+	public static double yFromJbox2dToJavaFx(float posY) {
 	    float y = javaFxHeight()-(posY*javaFxHeight()/PHYSICS_HEIGHT);
 	    return y;
 	}
@@ -25,12 +25,12 @@ public class Utils {
 		 return (float) (PHYSICS_HEIGHT*(javaFxHeight()-y)/javaFxHeight());
 	 }
 	//Convert a JBox2D width to pixel width
-	public static float widthFromJbox2dToJavaFx(float width) {
+	public static double widthFromJbox2dToJavaFx(float width) {
 	    return METER_TO_PIXES*width;
 	}
 	 
 	//Convert a JBox2D height to pixel height
-	public static float heightFromJbox2dToJavaFx(float height) {
+	public static double heightFromJbox2dToJavaFx(float height) {
 	    return METER_TO_PIXES*height;
 	}
 	
@@ -45,7 +45,7 @@ public class Utils {
 	public static Vector vectorToFx(Vector jbox2d){
 		Vector fx = new Vector();
 		fx.x=jbox2d.x;
-		fx.y=yFromJbox2dToJavaFx(jbox2d.y);
+		fx.y=(float) yFromJbox2dToJavaFx(jbox2d.y);
 		return fx;
 	}
 }

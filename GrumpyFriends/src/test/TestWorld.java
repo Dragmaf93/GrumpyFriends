@@ -12,6 +12,7 @@ import element.Ground;
 import element.ground.InclinedGround;
 import element.ground.LinearGround;
 import physic.PhysicalContactListener;
+import utils.Point;
 import utils.Vector;
 
 public class TestWorld implements world.World{
@@ -92,11 +93,22 @@ public class TestWorld implements world.World{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	@Override
-	public void addLinearGround(List<Vector> points) {
-		new LinearGround(points);
+	
+	public void addLinearGround(List<Point> points) {
+		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void addInclinedGround(List<Point> points) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void addGenericGround(List<Point> points) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	
 	
 }

@@ -10,31 +10,23 @@ import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
 import physic.PhysicalObject;
-import utils.Vector;
+import utils.Point;
 
 public class PhysicalPolygonObject implements PhysicalObject {
 
 	private Vec2[] vertices;
-	private List<Vector> points;
-	private float start_x,start_y;
 	
 	private Body body;
 	private BodyDef bodyDef;
 	
-	public PhysicalPolygonObject(List<Vector> points) {
+	public PhysicalPolygonObject(List<Point> points) {
 		this.vertices = new Vec2[points.size()];
-		this.points = points;
 	
 		for (int i = 0; i<points.size();i++) {
-			this.vertices[i]=new Vec2(points.get(i).x, points.get(i).y);
+			this.vertices[i]=new Vec2((float)points.get(i).x, (float) points.get(i).y);
 		}
 		
 		bodyDef = new BodyDef();
-//		start_x=bodyDef.position.x=this.points[0].x;
-//		start_y=bodyDef.position.y=this.points[0].y;
-		
-		
-		
 	}
 	
 	@Override
@@ -48,7 +40,7 @@ public class PhysicalPolygonObject implements PhysicalObject {
 //		vertices[1] = new Vec2(start_width, 0);
 //		vertices[2] = new Vec2(start_width, start_height);
 //		vertices[3] = new Vec2(0, start_height);
-		System.out.println(vertices);
+//		System.out.println(vertices);
 		polygonShape.set(vertices, vertices.length);
 
 		FixtureDef fixtureDef = new FixtureDef();
@@ -58,10 +50,6 @@ public class PhysicalPolygonObject implements PhysicalObject {
 		fixtureDef.restitution = 0.1f;
 
 		body.createFixture(fixtureDef);
-	}
-	
-	public List<Vector> getPoints(){
-		return points;
 	}
 	
 	@Override

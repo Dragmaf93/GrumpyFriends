@@ -11,7 +11,7 @@ import element.Ground;
 import game.MatchManager;
 import gui.drawer.CharacterDrawer;
 import gui.drawer.DrawerObject;
-import gui.drawer.LinearGroundDrawer;
+import gui.drawer.PolygonGroundDrawer;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import world.World;
@@ -43,6 +43,7 @@ public class FieldPane extends Pane {
 		this.getChildren().add(field);
 
 		damagedCharacters = new ArrayList<Character>();
+		this.setStyle("-fx-background: #6b5d5d; -fx-background-color: red; ");
 	}
 
 	private void initializeDrawers() {
@@ -56,7 +57,7 @@ public class FieldPane extends Pane {
 		}
 
 		this.drawers = new HashMap<>();
-		drawers.put("LinearGround", new LinearGroundDrawer(field));
+		drawers.put("GenericGround", new PolygonGroundDrawer(field));
 
 	}
 
