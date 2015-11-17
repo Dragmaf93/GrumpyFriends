@@ -57,10 +57,12 @@ public class MapEditor extends Application{
 	private ConverterMapToXml converter;
 	private boolean curveToMove;
 	private boolean curveOrPolygon;
+	private Stage primaryStage;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
+		this.primaryStage = primaryStage;
 		primaryStage.setTitle("Map Editor");        
 		
 		objectInMap = new ArrayList<PolygonObject>();
@@ -98,6 +100,10 @@ public class MapEditor extends Application{
         scene = new Scene(root, widthScreen, heightScreen);
         primaryStage.setScene(scene);
         primaryStage.show();
+	}
+	
+	public Stage getStage() {
+		return primaryStage;
 	}
 	
 	public void changeCursor(Cursor cursor) {
@@ -371,9 +377,9 @@ public class MapEditor extends Application{
 		((PanelForObject) panelForObject).getPanelForRealObject().getChildren().add(quadCurve);
 	}
 	
-	public void saveMap() throws ParserConfigurationException, TransformerException {
+	public void saveMap(String nameFile) throws ParserConfigurationException, TransformerException {
 		converter = new ConverterMapToXml();
-		converter.convertToXml(this);
+		converter.convertToXml(this, nameFile);
 	}
 	
 	public double getLarghezza() {

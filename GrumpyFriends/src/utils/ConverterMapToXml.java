@@ -4,6 +4,9 @@ import java.io.File;
 import java.math.BigDecimal;
 
 import javafx.geometry.Point2D;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.ImageView;
 import javafx.scene.shape.Shape;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -43,7 +46,7 @@ public class ConverterMapToXml {
 		doc.appendChild(rootElement);
 	}
 	
-	public void convertToXml(MapEditor mapEditor) throws TransformerException
+	public void convertToXml(MapEditor mapEditor, String nameFile) throws TransformerException
 	{
 		//type element
 		Element typeWorld  = doc.createElement("type");
@@ -92,10 +95,37 @@ public class ConverterMapToXml {
 	    TransformerFactory transformerFactory = TransformerFactory.newInstance();
 	    Transformer transformer = transformerFactory.newTransformer();
 	    DOMSource source = new DOMSource(doc);
-		StreamResult result =  new StreamResult(new File("worldXML/mapUser.xml"));
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount","4");
-		transformer.transform(source, result);
+	    File dir = new File("worldXML/");
+	    boolean exist = false;
+	    String[] children = dir.list();
+	    if (children != null)
+	    {
+	        for (int i=0; i < children.length; i++) {
+	            String filename = children[i];
+	            if (filename.equals(nameFile+".xml"))
+	            {
+	            	Alert alert = new Alert(AlertType.WARNING);
+	        		alert.setTitle("Information Submit");
+	        		alert.setHeaderText(null);
+	        		alert.setContentText("Existing name");
+	        		alert.showAndWait();
+	        		mapEditor.getPanelForObject().setAlert();
+	            	exist = true;
+	            }
+	        }
+	    }
+	    if (!exist)
+	    {
+			StreamResult result =  new StreamResult(new File("worldXML/"+nameFile+".xml"));
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount","4");
+			transformer.transform(source, result);
+			Alert alert = new Alert(AlertType.INFORMATION);
+    		alert.setTitle("Information Submit");
+    		alert.setHeaderText(null);
+    		alert.setContentText("Submit saved with success");
+    		alert.showAndWait();
+	    }
 	}
 	
 	private void insertPoints(Shape object, Node elementGround) {

@@ -59,7 +59,7 @@ public class Triangle extends PolygonObject {
 		angleBetweenBottRightAndUpLeft = Math.toDegrees(firstSide/hipotenuse);
 		angleBetweenBottLeftAndBottRight = 180 -(angleBetweenBottRightAndUpLeft+angleBetweenUpLeftAndBottLeft);
 	
-		System.out.println(angleBetweenBottLeftAndBottRight+" "+angleBetweenBottRightAndUpLeft+" "+angleBetweenUpLeftAndBottLeft);
+//		System.out.println(angleBetweenBottLeftAndBottRight+" "+angleBetweenBottRightAndUpLeft+" "+angleBetweenUpLeftAndBottLeft);
 	
 //		TODO Rivede calcolo degli angoli, sono errati... con (secondSide(hipotenuse) si trova il coseno
 	}

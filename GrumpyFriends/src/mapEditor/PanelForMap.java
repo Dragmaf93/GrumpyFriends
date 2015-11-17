@@ -19,7 +19,6 @@ public class PanelForMap extends ScrollPane {
 	private double heightStandard;
 	
 	private PolygonObject dragged;
-	private boolean isInTheLimit;
 	private DrawingPanel drawingObject;
 	private DrawingPanelForCurve drawingCurve;
 	private boolean insertPushed = false;
