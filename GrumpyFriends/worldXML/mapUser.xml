@@ -3,21 +3,9 @@
     <type>Planet</type>
     <dimension height="754.0" width="1092.8"/>
     <linearGround>
-        <point x="6.05" y="996.1"/>
-        <point x="3.7" y="968.91"/>
-        <point x="10.5" y="968.96"/>
-        <point x="9.45" y="996.66"/>
-    </linearGround>
-    <linearGround>
-        <point x="14.25" y="972.25"/>
-        <point x="14.25" y="969.25"/>
-        <point x="42.55" y="969.0"/>
-        <point x="42.85" y="972.66"/>
-    </linearGround>
-    <linearGround>
-        <point x="33.3" y="989.35"/>
-        <point x="24.8" y="986.85"/>
-        <point x="36.3" y="986.35"/>
-        <point x="37.95" y="990.5"/>
+        <point x="10.35" y="985.41"/>
+        <point x="10.35" y="982.41"/>
+        <point x="13.35" y="982.41"/>
+        <point x="13.35" y="985.41"/>
     </linearGround>
 </world>

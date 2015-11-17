@@ -2,10 +2,12 @@ package utils;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import javafx.geometry.Point2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Shape;
 
@@ -104,13 +106,24 @@ public class ConverterMapToXml {
 	            String filename = children[i];
 	            if (filename.equals(nameFile+".xml"))
 	            {
-	            	Alert alert = new Alert(AlertType.WARNING);
-	        		alert.setTitle("Information Submit");
-	        		alert.setHeaderText(null);
-	        		alert.setContentText("Existing name");
-	        		alert.showAndWait();
-	        		mapEditor.getPanelForObject().setAlert();
-	            	exist = true;
+//	            	Alert alert = new Alert(AlertType.WARNING);
+//	        		alert.setTitle("Information Submit");
+//	        		alert.setHeaderText(null);
+//	        		alert.setContentText("Existing name");
+//	        		alert.showAndWait();
+//	        		mapEditor.getPanelForObject().setAlert();
+	            	Alert alert = new Alert(AlertType.CONFIRMATION);
+	            	alert.setTitle("Confirmation Dialog");
+	            	alert.setHeaderText("Existing name");
+	            	alert.setContentText("Do you want save?");
+
+	            	Optional<ButtonType> result = alert.showAndWait();
+	            	if (result.get() == ButtonType.OK){
+	            	    exist = false;
+	            	} else {
+	            		exist = true;
+	            		mapEditor.getPanelForObject().setAlert();
+	            	}
 	            }
 	        }
 	    }
