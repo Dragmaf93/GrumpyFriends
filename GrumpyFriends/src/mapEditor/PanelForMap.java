@@ -200,6 +200,11 @@ public class PanelForMap extends ScrollPane {
 	public void removeCurve(Curve draggedCurve) {
 		realPane.getChildren().remove(draggedCurve);
 	}
+
+	public boolean containsPoints(Point2D point) {
+		return (point.getX() > this.realPane.getLayoutX() && point.getY() > this.realPane.getLayoutY()
+				&& point.getX() < this.realPane.getPrefWidth() && point.getY() < this.realPane.getPrefHeight());
+	}
 	
 	
 }

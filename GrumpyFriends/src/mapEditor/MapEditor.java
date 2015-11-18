@@ -177,7 +177,7 @@ public class MapEditor extends Application{
 			
 			if (((dragged != null && event.getX()-dragged.getWidth() > panelForObject.getPrefWidth()) || 
 					(draggedCurve != null && event.getX()-draggedCurve.getWidth() > panelForObject.getPrefWidth()))  && 
-					((PanelForMap) panelForMap).contains(new Point2D(event.getX(), event.getY())))
+					((PanelForMap) panelForMap).containsPoints(new Point2D(event.getX(), event.getY())))
         	{
 				if (curveToMove)
 				{
@@ -240,15 +240,18 @@ public class MapEditor extends Application{
 	public void moveObjectInMap(MouseEvent event) {
 		if (curveToMove)
 		{
-			if (draggedCurve != null) 
+			if (draggedCurve != null &&
+					((PanelForMap) panelForMap).containsPoints(new Point2D(event.getX(), event.getY()))) 
 				draggedCurve.modifyPosition(new Point2D(event.getX(), event.getY()),0,0);
 		}
 		else
 		{
 			if (dragged != null)
+			{
 				if (((PanelForMap) panelForMap).getDraggedPressed() &&
-						((PanelForMap) panelForMap).contains(new Point2D(event.getX(), event.getY())))	
+						((PanelForMap) panelForMap).containsPoints(new Point2D(event.getX(), event.getY())))
 					dragged.modifyAllVertex(event.getX(), event.getY(),0,0);
+			}
 		}
 	}
 	
@@ -281,13 +284,15 @@ public class MapEditor extends Application{
 					if (objectMoveInMapForUndo.size() > 1)
 						draggedCurve = (Curve) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue();
 				}
-				try {
-					objectMoveInMapForUndo.add(new Pair(point, draggedCurve.clone()));
-					((Curve) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue()).setPointWithExistingObject(draggedCurve);
-				} catch (CloneNotSupportedException e) {
-					e.printStackTrace();
+				else
+				{
+					try {
+						objectMoveInMapForUndo.add(new Pair(point, draggedCurve.clone()));
+						((Curve) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue()).setPointWithExistingObject(draggedCurve);
+					} catch (CloneNotSupportedException e) {
+						e.printStackTrace();
+					}
 				}
-				
 				if (!curveToMove)
 					draggedCurve.setEffect(null);
 			}
@@ -306,18 +311,20 @@ public class MapEditor extends Application{
 				if (objectMoveInMapForUndo.size() > 1)
 					dragged = (PolygonObject) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue();
 			}
-			try {
-				objectMoveInMapForUndo.add(new Pair(point, dragged.clone()));
-				((PolygonObject) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue()).setIdObject(id);
-			} catch (CloneNotSupportedException e) {
-				e.printStackTrace();
+			else
+			{
+				try {
+					objectMoveInMapForUndo.add(new Pair(point, dragged.clone()));
+					((PolygonObject) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue()).setIdObject(id);
+				} catch (CloneNotSupportedException e) {
+					e.printStackTrace();
+				}
 			}
-			
 			if (!objectToMove)
 				dragged.setEffect(null);
+			checkStatusButtonUndo();
 		}
 		
-		checkStatusButtonUndo();
 		isInTheMap = false;
 		objectToMove = false;
 		curveToMove = false;
