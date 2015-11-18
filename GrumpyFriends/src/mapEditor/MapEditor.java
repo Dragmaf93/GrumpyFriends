@@ -32,6 +32,8 @@ public class MapEditor extends Application{
 	
 	private PolygonObject dragged;
 	private Curve draggedCurve;
+//	private PolygonObject draggedTmp;
+//	private Curve draggedCurveTmp;
 	
 	private double widthScreen = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	private double heightScreen = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
@@ -328,6 +330,12 @@ public class MapEditor extends Application{
 		isInTheMap = false;
 		objectToMove = false;
 		curveToMove = false;
+//		if (dragged != null)
+//			draggedTmp = dragged;
+//		if (draggedCurve != null)
+//			draggedCurveTmp = draggedCurve;
+		dragged = null;
+		draggedCurve = null;
 	}
 	
 	public PolygonObject getDragged() {
@@ -740,9 +748,10 @@ public class MapEditor extends Application{
 						if (((PolygonObject) listForTake.get(i).getValue()).getIdObject() == object.getIdObject())
 							dragged = (PolygonObject) listForTake.get(i).getValue();
 				}
-				
-				if (!dragged.equals(object) && object != null)
-					addObject(dragged);
+			
+				if (dragged != null)
+					if (!dragged.equals(object) && object != null)
+						addObject(dragged);
 			}
 		}
 		else
@@ -764,8 +773,9 @@ public class MapEditor extends Application{
 							draggedCurve = (Curve) listForTake.get(i).getValue();
 				}
 				
-				if (!draggedCurve.equals(object) && object != null)
-					addObject(draggedCurve);
+				if (draggedCurve != null)
+					if (!draggedCurve.equals(object) && object != null)
+						addObject(draggedCurve);
 			}
 		}
 	}

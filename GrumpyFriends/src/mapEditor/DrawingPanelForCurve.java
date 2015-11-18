@@ -28,7 +28,8 @@ class DrawingPanelForCurve extends Pane
 //    getChildren().addAll(poly);
 
 	this.mapEditor = mapEditor;
-  
+  if (curve != null)
+  {
 	for ( int i = 0; i < curve.getPoints().size(); i += 2 ) {
 		
 //		double y1 = 2*start.getY() - getStartY()/2 -getEndY()/2;
@@ -40,27 +41,28 @@ class DrawingPanelForCurve extends Pane
 //		else
 //			circle = new Circle( curve.getPoints().get( i ), pointC, 5 );
 			
-	  circle.setFill( Color.web( "PERU", 0.8 ) );
-      circle.setStroke( Color.PERU );
-      circle.setStrokeWidth( 2 );
-
-      final AtomicInteger polyCoordinateIndex = new AtomicInteger( i );
-      circle.centerXProperty().addListener( new ChangeListener<Number>() {
-        @Override
-        public void changed( ObservableValue<? extends Number> observable, Number oldValue, Number newValue ) {
-          curve.getPoints().set( polyCoordinateIndex.get(), newValue.doubleValue() );
-        }
-      } );
-      
-      circle.centerYProperty().addListener( new ChangeListener<Number>() {
-        @Override
-        public void changed( ObservableValue<? extends Number> observable, Number oldValue, Number newValue ) {
-          curve.getPoints().set( polyCoordinateIndex.get() + 1, (Double) newValue );
-        }
-      } );
-      setDragHandler(circle);
-      getChildren().add(circle);
-    }
+		  circle.setFill( Color.web( "PERU", 0.8 ) );
+	      circle.setStroke( Color.PERU );
+	      circle.setStrokeWidth( 2 );
+	
+	      final AtomicInteger polyCoordinateIndex = new AtomicInteger( i );
+	      circle.centerXProperty().addListener( new ChangeListener<Number>() {
+	        @Override
+	        public void changed( ObservableValue<? extends Number> observable, Number oldValue, Number newValue ) {
+	          curve.getPoints().set( polyCoordinateIndex.get(), newValue.doubleValue() );
+	        }
+	      } );
+	      
+	      circle.centerYProperty().addListener( new ChangeListener<Number>() {
+	        @Override
+	        public void changed( ObservableValue<? extends Number> observable, Number oldValue, Number newValue ) {
+	          curve.getPoints().set( polyCoordinateIndex.get() + 1, (Double) newValue );
+	        }
+	      } );
+	      setDragHandler(circle);
+	      getChildren().add(circle);
+	    }
+  	}
   }
 
   private double dragDeltaX, dragDeltaY; 
