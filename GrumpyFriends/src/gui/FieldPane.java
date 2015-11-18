@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-
 import character.Character;
 import element.Ground;
 import game.MatchManager;
@@ -13,7 +12,9 @@ import gui.drawer.CharacterDrawer;
 import gui.drawer.DrawerObject;
 import gui.drawer.PolygonGroundDrawer;
 import javafx.scene.Group;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.ImagePattern;
 import world.World;
 
 public class FieldPane extends Pane {
@@ -58,6 +59,8 @@ public class FieldPane extends Pane {
 
 		this.drawers = new HashMap<>();
 		drawers.put("GenericGround", new PolygonGroundDrawer(field));
+		drawers.put("LinearGround", new PolygonGroundDrawer(field));
+		drawers.put("InclinedGround", new PolygonGroundDrawer(field));
 
 	}
 
@@ -68,7 +71,7 @@ public class FieldPane extends Pane {
 	private void createWorld() {
 
 		List<Ground> grounds = world.getGrounds();
-
+		
 		for (Ground ground : grounds) {
 			drawers.get(ground.getClass().getSimpleName()).draw(ground);
 		}

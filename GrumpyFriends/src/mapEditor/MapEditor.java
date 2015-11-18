@@ -158,43 +158,46 @@ public class MapEditor extends Application{
 	
 	public void moveObjectFromPanelObjectInMap(MouseEvent event)
 	{
-		if (dragged != null || draggedCurve != null)
-    	{
-			if (!isInTheMap)
+		if (!isInTheMap)
+		{
+			if (curveToMove)
 			{
-				if (curveToMove)
+				if (draggedCurve != null)
 				{
 					draggedCurve.modifyPosition(new Point2D(event.getX(), event.getY()),0,0);
 					if (!(panelForObject.getChildren().contains(draggedCurve)))
 						panelForObject.getChildren().add(draggedCurve);
 				}
-				else
+			}
+			else
+			{
+				if (dragged != null)
 				{
 					dragged.modifyAllVertex(event.getX(), event.getY(),0,0);
 					if (!(panelForObject.getChildren().contains(dragged)))
 		        		panelForObject.getChildren().add(dragged);
 				}
-				isInTheMap = false;
 			}
-			
-			if (((dragged != null && event.getX()-dragged.getWidth() > panelForObject.getPrefWidth()) || 
-					(draggedCurve != null && event.getX()-draggedCurve.getWidth() > panelForObject.getPrefWidth()))  && 
-					((PanelForMap) panelForMap).containsPoints(new Point2D(event.getX(), event.getY())))
-        	{
-				if (curveToMove)
-				{
-					draggedCurve.modifyPosition(new Point2D(event.getX()-panelForObject.getPrefWidth(), event.getY()),panelForObject.getPrefWidth(),0);
-					if (!((PanelForMap) panelForMap).containsCurve(draggedCurve))
-	            		((PanelForMap) panelForMap).addObject(draggedCurve);
-				}
-				else
-				{
-					dragged.modifyAllVertex(event.getX(), event.getY(),panelForObject.getPrefWidth(),0);
-					if (!((PanelForMap) panelForMap).containsObject(dragged))
-	            		((PanelForMap) panelForMap).addObject(dragged);
-				}
-            	isInTheMap = true;
-        	}
+			isInTheMap = false;
+		}
+		
+		if (((dragged != null && event.getX()-dragged.getWidth() > panelForObject.getPrefWidth()) || 
+				(draggedCurve != null && event.getX()-draggedCurve.getWidth() > panelForObject.getPrefWidth()))  && 
+				((PanelForMap) panelForMap).containsPoints(new Point2D(event.getX(), event.getY())))
+    	{
+			if (curveToMove)
+			{
+				draggedCurve.modifyPosition(new Point2D(event.getX()-panelForObject.getPrefWidth(), event.getY()),panelForObject.getPrefWidth(),0);
+				if (!((PanelForMap) panelForMap).containsCurve(draggedCurve))
+            		((PanelForMap) panelForMap).addCurve(draggedCurve);
+			}
+			else
+			{
+				dragged.modifyAllVertex(event.getX(), event.getY(),panelForObject.getPrefWidth(),0);
+				if (!((PanelForMap) panelForMap).containsObject(dragged))
+            		((PanelForMap) panelForMap).addObject(dragged);
+			}
+        	isInTheMap = true;
     	}
 	}
 
@@ -288,6 +291,7 @@ public class MapEditor extends Application{
 				}
 				else
 				{
+					((PanelForMap) panelForMap).addCurve(draggedCurve);
 					try {
 						objectMoveInMapForUndo.add(new Pair(point, draggedCurve.clone()));
 						((Curve) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue()).setPointWithExistingObject(draggedCurve);
@@ -315,6 +319,7 @@ public class MapEditor extends Application{
 			}
 			else
 			{
+				((PanelForMap) panelForMap).addObject(dragged);
 				try {
 					objectMoveInMapForUndo.add(new Pair(point, dragged.clone()));
 					((PolygonObject) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue()).setIdObject(id);
@@ -324,16 +329,12 @@ public class MapEditor extends Application{
 			}
 			if (!objectToMove)
 				dragged.setEffect(null);
-			checkStatusButtonUndo();
 		}
 		
+		checkStatusButtonUndo();
 		isInTheMap = false;
 		objectToMove = false;
 		curveToMove = false;
-//		if (dragged != null)
-//			draggedTmp = dragged;
-//		if (draggedCurve != null)
-//			draggedCurveTmp = draggedCurve;
 		dragged = null;
 		draggedCurve = null;
 	}
@@ -634,9 +635,9 @@ public class MapEditor extends Application{
 		}
 		else
 		{
+			deleteObjectForRedo(point, imageTmp, listForTake, undo, redo);
 			point = listForTake.get(listForTake.size()-1).getKey();
 			imageTmp = listForTake.get(listForTake.size()-1).getValue();
-			isAdd = deleteObjectForRedo(point, imageTmp, listForTake, undo, redo);
 		}
 		if (!isAdd && insert)
 		{
@@ -670,7 +671,7 @@ public class MapEditor extends Application{
 				for (Curve curve : curveInMap)
 					if (draggedCurve.vertexEquals(curve))
 						isPresent = true;
-				if (!isPresent )
+				if (!isPresent)
 					addObject(draggedCurve);
 				for (Pair<Point2D, Shape> object : objectToCancelled) {
 					if (object.getValue() instanceof Curve && ((Curve)object.getValue()).vertexEquals((Curve) imageTmp))
@@ -712,9 +713,7 @@ public class MapEditor extends Application{
 				if (((Curve) imageTmp).getIdObject() == curveInMap.get(j).getIdObject())
 				{
 					removeObject(curveInMap.get(j));
-					addObject((Curve)imageTmp);
-					objectMoveInMapForUndo.add(new Pair<Point2D, Shape>(point, imageTmp));
-					isAdd = true;
+//					isAdd = true;
 					for (Pair<Point2D, Shape> object : objectToCancelled) {
 						if (object.getValue() instanceof Curve && ((Curve)object.getValue()).vertexEquals((Curve) imageTmp))
 						{
@@ -798,7 +797,7 @@ public class MapEditor extends Application{
 	private void addObject(Shape object) {
 		if (object instanceof Curve)
 		{
-			((PanelForMap)panelForMap).addObject((Curve) object);
+			((PanelForMap)panelForMap).addCurve((Curve) object);
 			if (!curveInMap.contains((Curve) object))
 				curveInMap.add((Curve) object);
 		}

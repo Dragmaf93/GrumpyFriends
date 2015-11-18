@@ -59,6 +59,8 @@ public class PanelForMap extends ScrollPane {
 	        	if (event.getClickCount() == 2) {
 					if (realPane.getChildren().contains(drawingObject))
 						realPane.getChildren().remove(drawingObject);
+					if (realPane.getChildren().contains(drawingCurve))
+						realPane.getChildren().remove(drawingCurve);
 					
 					if (PanelForMap.this.mapEditor.isDragged() && PanelForMap.this.mapEditor.getDragged() != null)
 					{
@@ -188,7 +190,7 @@ public class PanelForMap extends ScrollPane {
 		return insertPushed;
 	}
 
-	public void addObject(Curve curve) {
+	public void addCurve(Curve curve) {
 		if (!realPane.getChildren().contains(curve))
 			realPane.getChildren().add(curve);
 	}
