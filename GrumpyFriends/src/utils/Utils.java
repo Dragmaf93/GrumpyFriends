@@ -1,10 +1,15 @@
 package utils;
 public class Utils {
 	
-	private final static float PHYSICS_WIDTH = 1000f;
-	private final static float PHYSICS_HEIGHT = 1000f;
-	private final static float METER_TO_PIXES = 20f;
+	private static float PHYSICS_WIDTH ;
+	private static float PHYSICS_HEIGHT;
+	private static float METER_TO_PIXES = 20f;
 
+	public static void setPhysicsSize(double width, double height){
+		PHYSICS_WIDTH=(float) (width);
+		PHYSICS_HEIGHT=(float) (height);
+		System.out.println(PHYSICS_WIDTH+"    "+ PHYSICS_HEIGHT);
+	}
 	
 	public static double xFromJbox2dToJavaFx(float posX) {
 	    float x = posX*javaFxWidth()/PHYSICS_WIDTH;
@@ -13,14 +18,26 @@ public class Utils {
 	 
 	//Convert a JBox2D y coordinate to a JavaFX pixel y coordinate
 	public static double yFromJbox2dToJavaFx(float posY) {
-	    float y = javaFxHeight()-(posY*javaFxHeight()/PHYSICS_HEIGHT);
+		System.out.println("HEIGHT: "+javaFxHeight());
+		System.out.println("SOTT: "+posY*javaFxHeight()/PHYSICS_HEIGHT+" "+posY);
+		System.out.println("Y BOX TO JAVA "+(javaFxHeight()-(posY*javaFxHeight()/PHYSICS_HEIGHT)));
+	    System.out.println("--------------------");
+		float y = javaFxHeight()-(posY*javaFxHeight()/PHYSICS_HEIGHT);
 	    return y;
 	}
 	 
 	 public static float xFromJavaFxToJbox2d(double x){
+		 System.out.println(x*PHYSICS_WIDTH/javaFxWidth());
 		 return (float) (x*PHYSICS_WIDTH/javaFxWidth());
 	 }
 
+	 public static float getJboxHeight(){
+		 return PHYSICS_HEIGHT;
+	 }
+
+	 public static float getJboxWidth(){
+		 return PHYSICS_WIDTH;
+	 }
 	 public static float yFromJavaFxToJbox2d(double y){
 		 return (float) (PHYSICS_HEIGHT*(javaFxHeight()-y)/javaFxHeight());
 	 }
@@ -32,6 +49,10 @@ public class Utils {
 	//Convert a JBox2D height to pixel height
 	public static double heightFromJbox2dToJavaFx(float height) {
 	    return METER_TO_PIXES*height;
+	}
+	
+	public static float sizeToJbox(double s){
+		return (float) (s/METER_TO_PIXES);
 	}
 	
 	public static float javaFxHeight(){

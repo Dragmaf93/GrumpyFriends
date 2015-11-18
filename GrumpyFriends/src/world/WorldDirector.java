@@ -17,6 +17,7 @@ import org.xml.sax.SAXException;
 
 import physic.PhysicalObjectManager;
 import utils.Point;
+import utils.Utils;
 import utils.Vector;
 
 public class WorldDirector {
@@ -47,6 +48,7 @@ public class WorldDirector {
 						NamedNodeMap attributes = item.getAttributes();
 						float height = Float.parseFloat(attributes.getNamedItem("height").getNodeValue());
 						float width = Float.parseFloat(attributes.getNamedItem("width").getNodeValue());
+						Utils.setPhysicsSize(width, height);
 						builder.setWorldDimension(width, height);
 						break;
 					}
@@ -95,7 +97,7 @@ public class WorldDirector {
 								NamedNodeMap positon = child.item(j).getAttributes();
 								x = (float) Double.parseDouble(positon.getNamedItem("x").getNodeValue());
 								y = (float) Double.parseDouble(positon.getNamedItem("y").getNodeValue());
-								Point point = new Point(x, y);
+								Point point = new Point(Utils.xFromJbox2dToJavaFx((float) x), Utils.yFromJbox2dToJavaFx((float) y));
 								System.out.println(point);
 								points.add(point);
 							}

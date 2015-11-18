@@ -11,6 +11,7 @@ import org.jbox2d.dynamics.World;
 
 import physic.PhysicalObject;
 import utils.Point;
+import utils.Utils;
 
 public class PhysicalPolygonObject implements PhysicalObject {
 
@@ -23,7 +24,8 @@ public class PhysicalPolygonObject implements PhysicalObject {
 		this.vertices = new Vec2[points.size()];
 	
 		for (int i = 0; i<points.size();i++) {
-			this.vertices[i]=new Vec2((float)points.get(i).x, (float) points.get(i).y);
+			this.vertices[i]=new Vec2((float)Utils.xFromJavaFxToJbox2d(points.get(i).x),
+					(float) Utils.yFromJavaFxToJbox2d( points.get(i).y));
 		}
 		
 		bodyDef = new BodyDef();

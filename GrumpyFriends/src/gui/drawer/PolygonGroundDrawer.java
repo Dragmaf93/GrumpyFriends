@@ -30,9 +30,11 @@ public class PolygonGroundDrawer extends AbstractDrawerObject  {
 		
 		Polygon shape = new Polygon();
 		for (Point point : points) {
+			System.out.println("PUNTO : ");
+			System.out.println(ground.getPhysicObject().getX() + " "+ ground.getPhysicObject().getY());
 			System.out.println(point.x +"  "+point.y);
-			shape.getPoints().add(Utils.xFromJbox2dToJavaFx((float) point.x));
-			shape.getPoints().add(Utils.yFromJbox2dToJavaFx((float) point.y));
+			shape.getPoints().add( point.x);
+			shape.getPoints().add(point.y);
 		}
 	
 		return shape;

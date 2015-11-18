@@ -343,16 +343,16 @@ public class PanelForObject extends Pane {
 		return typeWorld.get(typeWorldChoise);
 	}
 
-	public String getHeightToInsert() {
+	public double getHeightToInsert() {
 		if (!isInsertHeight)
-			return Double.toString(mapEditor.getHeightPanelForMap());
-		return insertHeight.getText();
+			return mapEditor.getHeightPanelForMap();
+		return Double.parseDouble(insertHeight.getText());
 	}
 	
-	public String getWidthToInsert() {
+	public double getWidthToInsert() {
 		if (!isInsertWidth)
-			return Double.toString(mapEditor.getWidthPanelForMap());
-		return insertWidth.getText();
+			return mapEditor.getWidthPanelForMap();
+		return Double.parseDouble(insertWidth.getText());
 	}
 	
 	private void setDimensionStandard(boolean widthOrHeight) {

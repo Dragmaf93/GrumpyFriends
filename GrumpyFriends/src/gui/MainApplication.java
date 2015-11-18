@@ -22,7 +22,7 @@ public class MainApplication extends Application{
 		//match config
 		WorldBuilder builder = new GameWorldBuilder();
 		WorldDirector director = new WorldDirector(builder);
-		director.createWorld("worldXML/map1.xml");
+		director.createWorld("worldXML/Map.xml");
 		World world = builder.getWorld();
 		MatchManager matchManager = new MatchManager(world);
 //		Team teamA = new Team("TeamA", 1, matchManager);
@@ -41,8 +41,8 @@ public class MainApplication extends Application{
 		matchManager.setTeamA(teamA);
 		matchManager.setTeamB(teamB);
 		
-		Character playerA = new Chewbacca("PlayerA", 20, 1000, teamA);
-		Character playerB = new Chewbacca("PlayerB", 30, 1000, teamB);
+		Character playerA = new Chewbacca("PlayerA", 20, 100, teamA);
+		Character playerB = new Chewbacca("PlayerB", 30, 100, teamB);
 		
 		world.addCharacter(playerA);
 		world.addCharacter(playerB);

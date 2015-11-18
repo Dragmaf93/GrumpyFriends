@@ -32,6 +32,8 @@ import org.w3c.dom.Node;
 
 public class ConverterMapToXml {
 
+	private final static double SCALE_VALUE = 2.5;
+
 	private DocumentBuilderFactory documentBuilderFactory;
 	private DocumentBuilder documentBuilder;
 	private Document doc;
@@ -57,8 +59,12 @@ public class ConverterMapToXml {
 	
 		//dimension elements
 	    Element dimension = doc.createElement("dimension");
-	    dimension.setAttribute("height", ((PanelForObject) mapEditor.getPanelForObject()).getHeightToInsert());
-	    dimension.setAttribute("width", ((PanelForObject) mapEditor.getPanelForObject()).getWidthToInsert());
+	    
+	    Utils.setPhysicsSize(Utils.sizeToJbox(SCALE_VALUE*((PanelForObject) mapEditor.getPanelForObject()).getWidthToInsert()),
+	    		Utils.sizeToJbox(SCALE_VALUE*((PanelForObject) mapEditor.getPanelForObject()).getHeightToInsert()));
+	    
+	    dimension.setAttribute("width", Double.toString(Utils.getJboxWidth()));
+	    dimension.setAttribute("height", Double.toString(Utils.getJboxHeight()));
 	    rootElement.appendChild(dimension);
 	
 	    //objectInMap elements
@@ -146,8 +152,9 @@ public class ConverterMapToXml {
 		{
 			for (Point2D point : ((PolygonObject) object).getPointsVertex()) {
 	    		Element elementPoint = doc.createElement("point");
-		    	elementPoint.setAttribute("x", Double.toString(new BigDecimal(Utils.xFromJavaFxToJbox2d(point.getX())).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
-			    elementPoint.setAttribute("y", Double.toString(new BigDecimal(Utils.yFromJavaFxToJbox2d(point.getY())).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
+	    		System.out.println((Utils.javaFxHeight()+"  - "+point.getY()*SCALE_VALUE + "  =  "+(Utils.javaFxHeight()-point.getY()*SCALE_VALUE)));
+		    	elementPoint.setAttribute("x", Double.toString(new BigDecimal(Utils.xFromJavaFxToJbox2d(point.getX()*SCALE_VALUE)).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
+			    elementPoint.setAttribute("y", Double.toString(new BigDecimal(Utils.yFromJavaFxToJbox2d(Utils.javaFxHeight()-point.getY()*SCALE_VALUE)).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
 			    elementGround.appendChild(elementPoint);
 			}
 		}
