@@ -11,6 +11,7 @@ import game.MatchManager;
 import gui.drawer.CharacterDrawer;
 import gui.drawer.DrawerObject;
 import gui.drawer.PolygonGroundDrawer;
+import gui.drawer.RoundGroundDrawer;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -61,6 +62,7 @@ public class FieldPane extends Pane {
 		drawers.put("GenericGround", new PolygonGroundDrawer(field));
 		drawers.put("LinearGround", new PolygonGroundDrawer(field));
 		drawers.put("InclinedGround", new PolygonGroundDrawer(field));
+		drawers.put("CurveGround", new RoundGroundDrawer(field));
 
 	}
 

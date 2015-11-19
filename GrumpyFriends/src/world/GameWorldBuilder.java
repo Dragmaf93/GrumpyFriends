@@ -68,6 +68,15 @@ public class GameWorldBuilder implements WorldBuilder{
 	public void addInclinedGround(List<Point> points) {
 		worldToCreate.addInclinedGround(points);
 	}
+	@Override
+	public void addRoundGround(List<Point> points) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void addRoundGround(Point start, Point end, Point control) {
+		worldToCreate.addRoundGround(start, end, control);
+	}
 
 
 }

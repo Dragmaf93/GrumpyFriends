@@ -7,12 +7,14 @@ import java.util.List;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
+import org.jbox2d.dynamics.contacts.Contact;
 
 import character.Character;
 import element.Ground;
 import element.ground.GenericGround;
 import element.ground.InclinedGround;
 import element.ground.LinearGround;
+import element.ground.RoundGround;
 import physic.PhysicalContactListener;
 import physic.PhysicalObjectManager;
 import utils.Point;
@@ -151,5 +153,16 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 
 	public void addGenericGround(List<Point> points) {
 		grounds.add(new GenericGround(points));
+	}
+	
+	@Override
+	public void addRoundGround(List<Point> points) {
+		
+	}
+	
+	@Override
+	public void addRoundGround(Point start, Point end, Point control) {
+		grounds.add(new RoundGround(start, end, control));
+		
 	}
 }

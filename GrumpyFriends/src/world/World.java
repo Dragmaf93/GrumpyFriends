@@ -15,6 +15,9 @@ public interface World {
 	abstract public void addLinearGround(float x, float y, float width, float height);
 	abstract public void addLinearGround(List<Point> points);
 	
+	abstract public void addRoundGround(Point start, Point end, Point control);
+	abstract public void addRoundGround(List<Point> points);
+	
 	abstract public void addInclinedGround(List<Point> points);
 	abstract public void addInclinedGround(float x, float y,float width, float height, int angleRotation);
 	

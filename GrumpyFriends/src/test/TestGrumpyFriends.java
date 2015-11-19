@@ -41,7 +41,7 @@ public class TestGrumpyFriends extends TestbedTest {
 
 		WorldBuilder builder = new TestWorldBuilder();
 		WorldDirector director = new WorldDirector(builder);
-		director.createWorld("worldXML/mapUser.xml");
+		director.createWorld("worldXML/Map.xml");
 		world = builder.getWorld();
 		
 		

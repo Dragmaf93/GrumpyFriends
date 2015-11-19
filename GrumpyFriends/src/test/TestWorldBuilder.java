@@ -61,20 +61,27 @@ public class TestWorldBuilder implements WorldBuilder {
 
 	@Override
 	public void addGenericGround(List<Point> points) {
-		// TODO Auto-generated method stub
-		
+		world.addGenericGround(points);
 	}
 
 	@Override
 	public void addInclinedGround(List<Point> points) {
-		// TODO Auto-generated method stub
-		
+		world.addInclinedGround(points);
 	}
 
 	@Override
 	public void addLinearGround(List<Point> points) {
-		// TODO Auto-generated method stub
-		
+		world.addLinearGround(points);
+	}
+
+	@Override
+	public void addRoundGround(List<Point> points) {
+		world.addRoundGround(points);
+	}
+
+	@Override
+	public void addRoundGround(Point start, Point end, Point control) {
+		world.addRoundGround(start, end, control);
 	}
 
 }

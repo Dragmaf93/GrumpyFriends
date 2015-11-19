@@ -10,6 +10,8 @@ public class GenericGround extends AbstractGround{
 	public GenericGround(List<Point> points) {
 		super(points);
 		physicalObject = new PhysicalPolygonObject(points);
+//		
+//		physicalObject = new PhysicalCurveObject();
 		PhysicalObjectManager.getInstance().buildPhysicObject(physicalObject);
 		
 		

@@ -61,8 +61,7 @@ public class WorldDirector {
 								NamedNodeMap positon = child.item(j).getAttributes();
 								x = Double.parseDouble(positon.getNamedItem("x").getNodeValue());
 								y = Double.parseDouble(positon.getNamedItem("y").getNodeValue());
-								Point point = new Point(x, y);
-								System.out.println(point);
+								Point point = new Point(Utils.xFromJbox2dToJavaFx((float) x), Utils.yFromJbox2dToJavaFx((float) y));
 								points.add(point);
 							}
 
@@ -79,8 +78,7 @@ public class WorldDirector {
 								NamedNodeMap positon = child.item(j).getAttributes();
 								x = Double.parseDouble(positon.getNamedItem("x").getNodeValue());
 								y = Double.parseDouble(positon.getNamedItem("y").getNodeValue());
-								Point point = new Point(x, y);
-								System.out.println(point);
+								Point point = new Point(Utils.xFromJbox2dToJavaFx((float) x), Utils.yFromJbox2dToJavaFx((float) y));
 								points.add(point);
 							}
 
@@ -98,7 +96,6 @@ public class WorldDirector {
 								x = (float) Double.parseDouble(positon.getNamedItem("x").getNodeValue());
 								y = (float) Double.parseDouble(positon.getNamedItem("y").getNodeValue());
 								Point point = new Point(Utils.xFromJbox2dToJavaFx((float) x), Utils.yFromJbox2dToJavaFx((float) y));
-								System.out.println(point);
 								points.add(point);
 							}
 
@@ -106,7 +103,33 @@ public class WorldDirector {
 						builder.addGenericGround(points);
 						break;
 					}
-					
+					case "curveGround" : {
+						double x = 0, y=0;
+						Point start = null,end = null,control = null;
+						NodeList child = item.getChildNodes();
+						for (int j = 0; j < child.getLength(); j++) {
+							if (child.item(j).getNodeName().equals("start")) {
+								NamedNodeMap positon = child.item(j).getAttributes();
+								x = (float) Double.parseDouble(positon.getNamedItem("x").getNodeValue());
+								y = (float) Double.parseDouble(positon.getNamedItem("y").getNodeValue());
+								start = new Point(Utils.xFromJbox2dToJavaFx((float) x), Utils.yFromJbox2dToJavaFx((float) y));
+							}
+							if (child.item(j).getNodeName().equals("end")) {
+								NamedNodeMap positon = child.item(j).getAttributes();
+								x = (float) Double.parseDouble(positon.getNamedItem("x").getNodeValue());
+								y = (float) Double.parseDouble(positon.getNamedItem("y").getNodeValue());
+								end = new Point(Utils.xFromJbox2dToJavaFx((float) x), Utils.yFromJbox2dToJavaFx((float) y));
+							}
+							if (child.item(j).getNodeName().equals("control")) {
+								NamedNodeMap positon = child.item(j).getAttributes();
+								x = (float) Double.parseDouble(positon.getNamedItem("x").getNodeValue());
+								y = (float) Double.parseDouble(positon.getNamedItem("y").getNodeValue());
+								control= new Point(Utils.xFromJbox2dToJavaFx((float) x), Utils.yFromJbox2dToJavaFx((float) y));
+							}
+						}
+						builder.addRoundGround(start, end, control);
+						break;
+					}
 					case "character": {
 						float x = 0, y = 0;
 						String name = "";

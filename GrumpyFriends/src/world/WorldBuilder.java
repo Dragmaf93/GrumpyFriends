@@ -29,4 +29,7 @@ public interface WorldBuilder {
 	public abstract void addGenericGround(List<Point> points);
 	public abstract void addInclinedGround(List<Point> points);
 	
+	abstract public void addRoundGround(List<Point> points);
+	abstract public void addRoundGround(Point start, Point end, Point control);
+	
 }

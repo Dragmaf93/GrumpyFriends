@@ -9,8 +9,10 @@ import org.jbox2d.dynamics.World;
 
 import character.Character;
 import element.Ground;
+import element.ground.GenericGround;
 import element.ground.InclinedGround;
 import element.ground.LinearGround;
+import element.ground.RoundGround;
 import physic.PhysicalContactListener;
 import utils.Point;
 import utils.Vector;
@@ -95,18 +97,22 @@ public class TestWorld implements world.World{
 	}
 	
 	public void addLinearGround(List<Point> points) {
-		// TODO Auto-generated method stub
-		
+		new LinearGround(points);
 	}
 	@Override
 	public void addInclinedGround(List<Point> points) {
-		// TODO Auto-generated method stub
-		
+		new InclinedGround(points);
 	}
 	@Override
 	public void addGenericGround(List<Point> points) {
-		// TODO Auto-generated method stub
-		
+		new GenericGround(points);
+	}
+	@Override
+	public void addRoundGround(Point start, Point end, Point control) {
+		new RoundGround(start, end, control);
+	}
+	@Override
+	public void addRoundGround(List<Point> points) {
 	}
 	
 	
