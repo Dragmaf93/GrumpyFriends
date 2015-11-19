@@ -813,21 +813,27 @@ public class MapEditor extends Application{
 	{
 		if (!curveOrPolygon)
 		{
-			Point2D point = new Point2D(dragged.getPointsVertex().get(0).getX(), dragged.getPointsVertex().get(0).getY());
-			objectToCancelled.add(new Pair<Point2D, Shape>(point, dragged));
-			objectMoveInMapForUndo.add(new Pair<Point2D, Shape>(point, dragged));
-			
-			((PanelForMap)panelForMap).removeObject(dragged);
-			objectInMap.remove(dragged);
+			if (dragged != null)
+			{
+				Point2D point = new Point2D(dragged.getPointsVertex().get(0).getX(), dragged.getPointsVertex().get(0).getY());
+				objectToCancelled.add(new Pair<Point2D, Shape>(point, dragged));
+				objectMoveInMapForUndo.add(new Pair<Point2D, Shape>(point, dragged));
+				
+				((PanelForMap)panelForMap).removeObject(dragged);
+				objectInMap.remove(dragged);
+			}
 		}
 		else
 		{
-			Point2D point = new Point2D(draggedCurve.getRealPoints().get(0).getX(), draggedCurve.getRealPoints().get(0).getY());
-			objectToCancelled.add(new Pair<Point2D, Shape>(point, draggedCurve));
-			objectMoveInMapForUndo.add(new Pair<Point2D, Shape>(point, draggedCurve));
-
-			((PanelForMap)panelForMap).removeCurve(draggedCurve);
-			curveInMap.remove(draggedCurve);
+			if (draggedCurve != null)
+			{
+				Point2D point = new Point2D(draggedCurve.getRealPoints().get(0).getX(), draggedCurve.getRealPoints().get(0).getY());
+				objectToCancelled.add(new Pair<Point2D, Shape>(point, draggedCurve));
+				objectMoveInMapForUndo.add(new Pair<Point2D, Shape>(point, draggedCurve));
+	
+				((PanelForMap)panelForMap).removeCurve(draggedCurve);
+				curveInMap.remove(draggedCurve);
+			}
 		}
 	}
 	

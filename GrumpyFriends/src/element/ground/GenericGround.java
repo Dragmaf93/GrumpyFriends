@@ -3,6 +3,7 @@ package element.ground;
 import java.util.List;
 
 import physic.PhysicalObjectManager;
+import physic.PhysicalPolygonObject;
 import utils.Point;
 
 public class GenericGround extends AbstractGround{

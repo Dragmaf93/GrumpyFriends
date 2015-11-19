@@ -1,9 +1,11 @@
 package element.ground;
 
+import physic.PhysicalPolygonObject;
 import physic.PhysicalTriangularObject;
 import utils.Point;
 
 import java.util.List;
+
 import physic.PhysicalObjectManager;
 
 public class InclinedGround  extends AbstractGround {

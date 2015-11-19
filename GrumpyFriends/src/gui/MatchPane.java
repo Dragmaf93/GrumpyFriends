@@ -1,11 +1,13 @@
 package gui;
 
+import utils.Point;
 import game.MatchManager;
 import gui.hud.IndicatorOfEquippedWeapon;
 import gui.hud.IndicatorOfLauncher;
 import gui.hud.IndicatorOfPlayerLife;
 import gui.hud.IndicatorOfTime;
 import gui.hud.Inventory;
+import javafx.scene.Camera;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
@@ -31,8 +33,11 @@ public class MatchPane extends Pane {
 		this.matchManager = matchManager;
 
 		this.fieldPane = new FieldPane(matchManager);
-		this.fieldScene = new FieldScene(fieldPane, matchManager, Screen.getPrimary().getBounds().getWidth(),
-				Screen.getPrimary().getBounds().getHeight());
+		this.fieldScene = new FieldScene(fieldPane, matchManager, fieldPane.getWidth(),
+				fieldPane.getHeight());
+//		this.fieldScene = new FieldScene(fieldPane, matchManager, Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight());
+		this.fieldScene.setLayoutX(Screen.getPrimary().getBounds().getWidth()/2-fieldPane.getWidth()/2);
+		this.fieldScene.setLayoutY(Screen.getPrimary().getBounds().getHeight()/2-fieldPane.getHeight()/2);
 		this.timerInd = new IndicatorOfTime(matchManager);
 		this.inventory = new Inventory(matchManager);
 		this.equippedWeaponInd = new IndicatorOfEquippedWeapon(matchManager);
@@ -100,5 +105,25 @@ public class MatchPane extends Pane {
 	public void launchKeyPressed() {
 		if(matchManager.getCurrentPlayer().getLauncher().isActivated())
 		launcherInd.launchKeyPressed();
+	}
+	
+	public Point getCameraPosition() {
+		return fieldScene.getCameraPosition();
+	}
+	
+	public void focusPlayer(boolean focus) {
+		fieldScene.setFocusPlayer(focus);
+	}
+	
+	public Camera getCamera() {
+		return fieldScene.getCamera();
+	}
+	
+	public double getZoomCamera() {
+		return fieldScene.getZoom();
+	}
+	
+	public void setZoomOutCamera(boolean zoom) {
+		fieldScene.setZoom(zoom);
 	}
 }

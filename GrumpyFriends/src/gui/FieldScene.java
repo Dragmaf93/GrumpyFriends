@@ -10,6 +10,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.SubScene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.MoveTo;
@@ -20,7 +22,7 @@ import utils.Vector;
 
 public class FieldScene extends SubScene {
 
-	private final static int MAX_ZOOM = 10000;
+	private final static int MAX_ZOOM = -9000;
 	private final static int MIN_ZOOM = -700;
 	private final static int INCR_ZOOM = 50;
 	private final static double MAX_TIME = 100;
@@ -29,7 +31,7 @@ public class FieldScene extends SubScene {
 	private PerspectiveCamera camera;
 	private FieldPane pane;
 
-	private int zoom;
+	private double zoom;
 
 	List<Point> movementOfCamera;
 
@@ -45,6 +47,8 @@ public class FieldScene extends SubScene {
 	private boolean cameraMoving;
 	private boolean movementNextPlayer;
 
+	private boolean focusPlayer;
+	
 	public FieldScene(Parent parent, final MatchManager matchManager, double width, double height) {
 		super(parent, width, height);
 		this.pane = (FieldPane) parent;
@@ -62,25 +66,13 @@ public class FieldScene extends SubScene {
 		camera.setFarClip(MAX_ZOOM);
 		camera.setFieldOfView(35);
 		setCamera(camera);
-
-		setOnScroll(new EventHandler<ScrollEvent>() {
-			@Override
-			public void handle(ScrollEvent event) {
-				if (!matchManager.isPaused()) {
-					if (event.getDeltaY() > 0 && zoom + INCR_ZOOM <= MIN_ZOOM) {
-						zoom += INCR_ZOOM;
-						camera.setTranslateZ(zoom);
-					}
-					if (event.getDeltaY() < 0) {
-						zoom -= INCR_ZOOM;
-						camera.setTranslateZ(zoom);
-					}
-				}
-			}
-		});
-
+		focusPlayer=true;
 	}
 
+	public Point getCameraPosition() {
+		return cameraPosition;
+	}
+	
 	public void moveCamera(double x, double y) {
 
 	}
@@ -91,7 +83,9 @@ public class FieldScene extends SubScene {
 		if (cameraMoving) {
 			moveCameraToNextPoint();
 		} else {
-			cameraPosition.set(matchManager.getCurrentPlayer().getX(), matchManager.getCurrentPlayer().getY());
+			if (focusPlayer)
+				cameraPosition.set(matchManager.getCurrentPlayer().getX(), matchManager.getCurrentPlayer().getY());
+			
 			camera.setTranslateX(cameraPosition.x);
 			camera.setTranslateY(cameraPosition.y);
 		}
@@ -191,6 +185,21 @@ public class FieldScene extends SubScene {
 			movementNextPlayer = false;
 			
 		}
+	}
+
+	public void setFocusPlayer(boolean focus) {
+		focusPlayer = focus;
+	}
+
+	public double getZoom() {
+		return zoom;
+	}
+
+	public void setZoom(boolean zoom) {
+		if (zoom && this.zoom + INCR_ZOOM <= MIN_ZOOM)
+			this.zoom += INCR_ZOOM;
+		else if (!zoom)
+			this.zoom -= INCR_ZOOM;
 	}
 
 }

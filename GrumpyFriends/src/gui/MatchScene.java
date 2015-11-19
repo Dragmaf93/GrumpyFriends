@@ -9,9 +9,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.ScrollEvent;
 
 public class MatchScene extends Scene {
 
+	private final static double VALUE_MOVE_CAMERA = 20.0;
+	
 	private MatchPane pane;
 	private boolean pressedLaunchKey;
 	private float launchPower;
@@ -71,6 +74,24 @@ public class MatchScene extends Scene {
 							&& pane.inventoryIsHide())
 						matchManager.getCurrentPlayer().changeAim(Character.DECREASE);
 				}
+				if (event.getCode() == KeyCode.UP) {
+					pane.getCameraPosition().set(pane.getCameraPosition().x, pane.getCameraPosition().y - VALUE_MOVE_CAMERA);
+					pane.focusPlayer(false);
+				}
+				if (event.getCode() == KeyCode.DOWN) {
+					pane.getCameraPosition().set(pane.getCameraPosition().x, pane.getCameraPosition().y + VALUE_MOVE_CAMERA);
+					pane.focusPlayer(false);
+				}
+				if (event.getCode() == KeyCode.LEFT) {
+					pane.getCameraPosition().set(pane.getCameraPosition().x - VALUE_MOVE_CAMERA, pane.getCameraPosition().y);
+					pane.focusPlayer(false);
+				}
+				if (event.getCode() == KeyCode.RIGHT) {
+					pane.getCameraPosition().set(pane.getCameraPosition().x + VALUE_MOVE_CAMERA, pane.getCameraPosition().y);
+					pane.focusPlayer(false);
+				}
+				if (event.getCode() == KeyCode.F)
+					pane.focusPlayer(true);
 			}
 		});
 
@@ -103,6 +124,22 @@ public class MatchScene extends Scene {
 			}
 		});
 
+		setOnScroll(new EventHandler<ScrollEvent>() {
+			@Override
+			public void handle(ScrollEvent event) {
+				if (!matchManager.isPaused()) {
+					if (event.getDeltaY() > 0) {
+						pane.setZoomOutCamera(true);
+						pane.getCamera().setTranslateZ(pane.getZoomCamera());
+					}
+					if (event.getDeltaY() < 0) {
+						pane.setZoomOutCamera(false);
+						pane.getCamera().setTranslateZ(pane.getZoomCamera());
+					}
+				}
+			}
+		});
+		
 		new AnimationTimer() {
 
 			@Override

@@ -18,10 +18,10 @@ public class Utils {
 	 
 	//Convert a JBox2D y coordinate to a JavaFX pixel y coordinate
 	public static double yFromJbox2dToJavaFx(float posY) {
-		System.out.println("HEIGHT: "+javaFxHeight());
-		System.out.println("SOTT: "+posY*javaFxHeight()/PHYSICS_HEIGHT+" "+posY);
-		System.out.println("Y BOX TO JAVA "+(javaFxHeight()-(posY*javaFxHeight()/PHYSICS_HEIGHT)));
-	    System.out.println("--------------------");
+//		System.out.println("HEIGHT: "+javaFxHeight());
+//		System.out.println("SOTT: "+posY*javaFxHeight()/PHYSICS_HEIGHT+" "+posY);
+//		System.out.println("Y BOX TO JAVA "+(javaFxHeight()-(posY*javaFxHeight()/PHYSICS_HEIGHT)));
+//	    System.out.println("--------------------");
 		float y = javaFxHeight()-(posY*javaFxHeight()/PHYSICS_HEIGHT);
 	    return y;
 	}

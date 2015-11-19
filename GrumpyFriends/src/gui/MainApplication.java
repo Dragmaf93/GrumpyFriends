@@ -41,7 +41,7 @@ public class MainApplication extends Application{
 		matchManager.setTeamA(teamA);
 		matchManager.setTeamB(teamB);
 		
-		Character playerA = new Chewbacca("PlayerA", 20, 100, teamA);
+		Character playerA = new Chewbacca("PlayerA", 150, 100, teamA);
 		Character playerB = new Chewbacca("PlayerB", 30, 100, teamB);
 		
 		world.addCharacter(playerA);
@@ -58,6 +58,7 @@ public class MainApplication extends Application{
 //		
 		MatchPane matchPane = new MatchPane(matchManager);
 		MatchScene scene = new MatchScene(matchPane, matchManager,Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight());
+//		MatchScene scene = new MatchScene(matchPane, matchManager,Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight());
 		primaryStage.setScene(scene);
 //		
 			primaryStage.show();

@@ -18,6 +18,7 @@ import element.ground.RoundGround;
 import physic.PhysicalContactListener;
 import physic.PhysicalObjectManager;
 import utils.Point;
+import utils.Utils;
 import utils.Vector;
 
 public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements world.World {
@@ -124,8 +125,8 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 
 	@Override
 	public void setDimension(float width, float height) {
-		this.width = width;
-		this.width = width;
+		this.width = (float) Utils.widthFromJbox2dToJavaFx(width);
+		this.height = (float) Utils.heightFromJbox2dToJavaFx(height);
 	}
 	
 	
@@ -163,6 +164,5 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	@Override
 	public void addRoundGround(Point start, Point end, Point control) {
 		grounds.add(new RoundGround(start, end, control));
-		
 	}
 }

@@ -62,6 +62,7 @@ public class WorldDirector {
 								x = Double.parseDouble(positon.getNamedItem("x").getNodeValue());
 								y = Double.parseDouble(positon.getNamedItem("y").getNodeValue());
 								Point point = new Point(Utils.xFromJbox2dToJavaFx((float) x), Utils.yFromJbox2dToJavaFx((float) y));
+								System.out.println("LINEAR: "+point);
 								points.add(point);
 							}
 
@@ -79,6 +80,7 @@ public class WorldDirector {
 								x = Double.parseDouble(positon.getNamedItem("x").getNodeValue());
 								y = Double.parseDouble(positon.getNamedItem("y").getNodeValue());
 								Point point = new Point(Utils.xFromJbox2dToJavaFx((float) x), Utils.yFromJbox2dToJavaFx((float) y));
+								System.out.println("INCLINED: "+point);
 								points.add(point);
 							}
 
@@ -96,6 +98,7 @@ public class WorldDirector {
 								x = (float) Double.parseDouble(positon.getNamedItem("x").getNodeValue());
 								y = (float) Double.parseDouble(positon.getNamedItem("y").getNodeValue());
 								Point point = new Point(Utils.xFromJbox2dToJavaFx((float) x), Utils.yFromJbox2dToJavaFx((float) y));
+								System.out.println("GENERIC: "+point);
 								points.add(point);
 							}
 

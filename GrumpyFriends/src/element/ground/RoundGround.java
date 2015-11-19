@@ -24,7 +24,7 @@ public class RoundGround extends AbstractGround {
 		
 		points = new ArrayList<Point>();
 		
-		for (double t = 0.0; t <= 1; t += 0.05) {
+		for (double t = 0.0; t <= 1; t += 0.01) {
 
 			Point point = new Point();
 

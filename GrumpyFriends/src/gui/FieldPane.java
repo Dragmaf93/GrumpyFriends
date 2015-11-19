@@ -39,6 +39,9 @@ public class FieldPane extends Pane {
 		this.world = matchManager.getWorld();
 		this.field = new Group();
 
+		this.setWidth(world.getWidth());
+		this.setHeight(world.getHeight());
+		
 		initializeDrawers();
 		createWorld();
 
@@ -62,7 +65,7 @@ public class FieldPane extends Pane {
 		drawers.put("GenericGround", new PolygonGroundDrawer(field));
 		drawers.put("LinearGround", new PolygonGroundDrawer(field));
 		drawers.put("InclinedGround", new PolygonGroundDrawer(field));
-		drawers.put("CurveGround", new RoundGroundDrawer(field));
+		drawers.put("RoundGround", new RoundGroundDrawer(field));
 
 	}
 

@@ -43,11 +43,11 @@ public class PhysicalCurveObject implements PhysicalObject {
 //			System.out.println("disegna edge dal punto "+points[i-1]+"   al punto "+ points[i]);
 			EdgeShape shape = new EdgeShape();
 			shape.set(points[i-1],points[i]);
-			body.createFixture(shape, 0.0f);
+			body.createFixture(shape, 1.0f);
 		}
 		EdgeShape shape = new EdgeShape();
 		shape.set(points[0], points[points.length-1]);
-		body.createFixture(shape,0.0f);
+		body.createFixture(shape,1.0f);
 	}
 	//
 

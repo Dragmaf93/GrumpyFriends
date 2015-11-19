@@ -5,6 +5,7 @@ import java.util.List;
 import element.Ground;
 import physic.PhysicalObject;
 import physic.PhysicalObjectManager;
+import physic.PhysicalPolygonObject;
 import physic.PhysicalRectangularObject;
 import utils.Point;
 import utils.Utils;

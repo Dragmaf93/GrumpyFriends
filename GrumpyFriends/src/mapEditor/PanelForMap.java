@@ -118,6 +118,7 @@ public class PanelForMap extends ScrollPane {
 			public void handle(KeyEvent event) {
 				if (event.getCode().equals(KeyCode.DELETE)) {
 					PanelForMap.this.mapEditor.removeObject();
+					removePanelInsert();
 				}
 				if (event.getCode().equals(KeyCode.ESCAPE)) {
 					removePanelInsert();

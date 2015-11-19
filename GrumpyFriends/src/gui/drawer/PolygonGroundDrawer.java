@@ -2,10 +2,10 @@ package gui.drawer;
 
 import java.util.List;
 
+import physic.PhysicalPolygonObject;
 import element.Element;
 import element.Ground;
 import element.ground.LinearGround;
-import element.ground.PhysicalPolygonObject;
 import gui.ImageLoader;
 import javafx.scene.Group;
 import javafx.scene.Node;
