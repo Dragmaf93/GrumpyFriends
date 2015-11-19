@@ -161,18 +161,18 @@ public class ConverterMapToXml {
 		else
 		{
     		Element elementPointStart = doc.createElement("start");
-    		elementPointStart.setAttribute("x", Double.toString(new BigDecimal(Utils.xFromJavaFxToJbox2d(((Curve) object).getRealPoints().get(0).getX())).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
-    		elementPointStart.setAttribute("y", Double.toString(new BigDecimal(Utils.yFromJavaFxToJbox2d(((Curve) object).getRealPoints().get(0).getY())).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
+    		elementPointStart.setAttribute("x", Double.toString(new BigDecimal(Utils.xFromJavaFxToJbox2d(((Curve) object).getRealPoints().get(0).getX()*SCALE_VALUE)).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
+    		elementPointStart.setAttribute("y", Double.toString(new BigDecimal(Utils.yFromJavaFxToJbox2d(Utils.javaFxHeight()-((Curve) object).getRealPoints().get(0).getY()*SCALE_VALUE)).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
 		    elementGround.appendChild(elementPointStart);
 		    
 		    Element elementPointEnd = doc.createElement("end");
-		    elementPointEnd.setAttribute("x", Double.toString(new BigDecimal(Utils.xFromJavaFxToJbox2d(((Curve) object).getRealPoints().get(1).getX())).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
-		    elementPointEnd.setAttribute("y", Double.toString(new BigDecimal(Utils.yFromJavaFxToJbox2d(((Curve) object).getRealPoints().get(1).getY())).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
+		    elementPointEnd.setAttribute("x", Double.toString(new BigDecimal(Utils.xFromJavaFxToJbox2d(((Curve) object).getRealPoints().get(1).getX()*SCALE_VALUE)).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
+		    elementPointEnd.setAttribute("y", Double.toString(new BigDecimal(Utils.yFromJavaFxToJbox2d(Utils.javaFxHeight()-((Curve) object).getRealPoints().get(1).getY()*SCALE_VALUE)).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
 		    elementGround.appendChild(elementPointEnd);
 		    
 		    Element elementPointControl = doc.createElement("control");
-		    elementPointControl.setAttribute("x", Double.toString(new BigDecimal(Utils.xFromJavaFxToJbox2d(((Curve) object).getRealPoints().get(2).getX())).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
-		    elementPointControl.setAttribute("y", Double.toString(new BigDecimal(Utils.yFromJavaFxToJbox2d(((Curve) object).getRealPoints().get(2).getY())).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
+		    elementPointControl.setAttribute("x", Double.toString(new BigDecimal(Utils.xFromJavaFxToJbox2d(((Curve) object).getRealPoints().get(2).getX()*SCALE_VALUE)).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
+		    elementPointControl.setAttribute("y", Double.toString(new BigDecimal(Utils.yFromJavaFxToJbox2d(Utils.javaFxHeight()-((Curve) object).getRealPoints().get(2).getY()*SCALE_VALUE)).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
 		    elementGround.appendChild(elementPointControl);
 		}
 	}

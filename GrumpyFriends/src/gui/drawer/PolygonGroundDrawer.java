@@ -39,7 +39,7 @@ public class PolygonGroundDrawer extends AbstractDrawerObject  {
 			shape.getPoints().add(point.y);
 		}
 	
-		shape.setFill(imagePattern);
+//		shape.setFill(imagePattern);
 		return shape;
 	}
 
