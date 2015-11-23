@@ -14,6 +14,8 @@ public interface Weapon
 	public abstract void afterAttack();
 	
 	public abstract String getName();
+	
+	public abstract double getDistanceFromLauncher();
 	public abstract boolean finishHit();
 	public abstract double getX();
 	public abstract double getY();

@@ -115,7 +115,7 @@ import utils.Vector;
 
 public class Launcher {
 
-	public final static float MAX_LAUNCH_POWER = 50f;
+	public final static float MAX_LAUNCH_POWER = 80f;
 	private Character character;
 	// private PhysicalLauncher physicalLauncher;
 
@@ -153,7 +153,8 @@ public class Launcher {
 		// Vector position = physicalLauncher.getPositionAim();
 		// Vector speedVector = physicalLauncher.getVectorSpeed(speed);
 		// float angle = physicalLauncher.getAngle();
-		position.set(character.getPhysicalObject().getBody().getPosition().x,
+		position.set((float) (character.getPhysicalObject().getBody().getPosition().x+
+				currentDirection*loadedWeapon.getDistanceFromLauncher()),
 				character.getPhysicalObject().getBody().getPosition().y
 						+ character.getPhysicalObject().getHeight() / 2);
 		// speedVector.set((float)(position.x +Math.cos(angle)*speed) ,(float)
@@ -161,10 +162,9 @@ public class Launcher {
 		float y = (float) (Math.sin(angle) * speed);
 		float x = (float) (Math.cos(angle) * speed);
 		speedVector.set(x, y);
-		System.out.println(position + "  " + speedVector);
 		loadedWeapon.attack(position, speedVector, angle);
 		attacked = true;
-		loadedWeapon=null;
+		loadedWeapon = null;
 		// if(loadedWeapon.finishHit()){
 		// loadedWeapon = null;
 		// disable();
@@ -172,7 +172,8 @@ public class Launcher {
 	}
 
 	public boolean isActivated() {
-		if(loadedWeapon==null) return false;
+		if (loadedWeapon == null)
+			return false;
 		return activated;
 	}
 
@@ -186,15 +187,16 @@ public class Launcher {
 
 		return Utils.vectorToFx(position);
 	}
-	
-	public void restartLauncher(){
-		attacked=false;
+
+	public void restartLauncher() {
+		attacked = false;
 	}
-	
+
 	public void activate() {
-		if(loadedWeapon==null) return;
+		if (loadedWeapon == null)
+			return;
 		activated = true;
-//		attacked = false;
+		// attacked = false;
 
 		// physicalLauncher.expose();
 	}
@@ -211,23 +213,19 @@ public class Launcher {
 	}
 
 	public void changeAngle(float val) {
-		
-//		physicalLauncher.rotate(val);
-		if(currentDirection==Character.RIGHT && 
-				val > 0 && Math.toDegrees(angle+val)<90)
-				angle+=val;
-		else if(currentDirection==Character.RIGHT && 
-				val < 0 && Math.toDegrees(angle+val)>-90)
-//			System.out.println(angle);
-			angle+=val;
-		else if (currentDirection == Character.LEFT && 
-			val > 0 && Math.toDegrees(angle-val)>90)
-			angle-=val;
-		
-	else if( currentDirection == Character.LEFT && 
-			val < 0 && Math.toDegrees(angle-val)< 270 )
-			angle-=val;
-		System.out.println(Math.toDegrees(angle%6.28));
+
+		// physicalLauncher.rotate(val);
+		if (currentDirection == Character.RIGHT && val > 0 && Math.toDegrees(angle + val) < 90)
+			angle += val;
+		else if (currentDirection == Character.RIGHT && val < 0 && Math.toDegrees(angle + val) > -90)
+			// System.out.println(angle);
+			angle += val;
+		else if (currentDirection == Character.LEFT && val > 0 && Math.toDegrees(angle - val) > 90)
+			angle -= val;
+
+		else if (currentDirection == Character.LEFT && val < 0 && Math.toDegrees(angle - val) < 270)
+			angle -= val;
+		System.out.println(Math.toDegrees(angle % 6.28));
 	}
 
 	public double getX() {
@@ -248,11 +246,11 @@ public class Launcher {
 	}
 
 	public void loadWeapon(Weapon weapon) {
-		if (!isActivated()){
+		if (!isActivated()) {
 			loadedWeapon = weapon;
 			activate();
 		}
-		
+
 	}
 
 	public boolean attacked() {

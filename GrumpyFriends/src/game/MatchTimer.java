@@ -92,6 +92,15 @@ public class MatchTimer {
 
 		return toSeconds(MATCH_DURATION_MILLIS - (currentMatchTime - initialMatchTime - matchPauseTime));
 	}
+	
+	public boolean isTurnTimerEnded(){
+		return endTurnIn()<=0;
+	}
+	
+	public boolean isMatchTimerEnded(){
+		return endMatchIn()<=0;
+	}
+	
 	public int endAttackTimerIn(){
 		long currentTime = System.currentTimeMillis();
 		int t = toSeconds(ATTACK_TIMER_DURATION - (currentTime - initialAttackTimer - attackPauseTime));
@@ -145,4 +154,10 @@ public class MatchTimer {
 		
 		return toSeconds(endTimer - (currentTime -initialObjectTimer -pauseObjectTime));
 	}
+
+	public boolean isAttackTimerEnded() {
+		return endAttackTimerIn()<=0;
+	}
+	
 }
+	

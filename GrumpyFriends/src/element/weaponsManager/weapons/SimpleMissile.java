@@ -93,4 +93,9 @@ public class SimpleMissile extends AbstractWeapon{
 	public void update() {
 		physicalWeapon.update();
 	}
+	
+	@Override
+	public double getDistanceFromLauncher() {
+		return 2.5;
+	}
 }

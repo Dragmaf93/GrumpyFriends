@@ -30,6 +30,8 @@ public abstract class AbstractCharacter implements Character {
 	protected float force;
 	protected World world;
 	protected Team team;
+	
+	protected boolean died;
 
 	protected Weapon equippedWeapon;
 	protected String lastEquippedWeapon;
@@ -63,7 +65,7 @@ public abstract class AbstractCharacter implements Character {
 
 		equippedWeapon = null;
 		grounded = true;
-		lifePoints = 100;
+		lifePoints = 10;
 
 		physicBody = new PhysicalCharacter(x, y, width, height, name);
 		PhysicalObjectManager.getInstance().buildPhysicObject(physicBody);
@@ -77,7 +79,7 @@ public abstract class AbstractCharacter implements Character {
 	@Override
 	public boolean isDead() {
 
-		return lifePoints == 0;
+		return lifePoints==0;
 	}
 
 	@Override
@@ -141,6 +143,12 @@ public abstract class AbstractCharacter implements Character {
 		}
 	}
 
+
+	@Override
+	public void afterDeath() {
+			PhysicalObjectManager.getInstance().removePhysicalObject(physicBody);
+	}
+	
 	@Override
 	public Launcher getLauncher() {
 		return launcher;
@@ -176,7 +184,7 @@ public abstract class AbstractCharacter implements Character {
 		if (launcher == null || !launcher.isActivated())
 			return;
 
-		float angle = (float) Math.toRadians(1.0);
+		float angle = (float) Math.toRadians(2.0);
 		launcher.changeAngle(angle * direction);
 	}
 

@@ -41,7 +41,7 @@ public class MainApplication extends Application{
 		matchManager.setTeamA(teamA);
 		matchManager.setTeamB(teamB);
 		
-		Character playerA = new Chewbacca("PlayerA", 150, 100, teamA);
+		Character playerA = new Chewbacca("PlayerA", 50, 100, teamA);
 		Character playerB = new Chewbacca("PlayerB", 30, 100, teamB);
 		
 		world.addCharacter(playerA);

@@ -18,4 +18,6 @@ public abstract class AbstractWeapon implements Weapon {
 	public boolean attacked() {
 		return attacked;
 	}
+	
+	
 }

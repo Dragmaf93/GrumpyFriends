@@ -1,5 +1,7 @@
 package character;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +14,7 @@ public class Team {
 	private Color color;
 
 	private int numberOfCharacter;
-	
+
 	private List<Character> characters;
 	private List<Character> charactersInGame;
 
@@ -60,12 +62,13 @@ public class Team {
 		Collections.shuffle(charactersInGame);
 		currentPlayer = 0;
 	}
-	public Character whoIsNextPlayer(){
+
+	public Character whoIsNextPlayer() {
 		return charactersInGame.get((currentPlayer + 1) % charactersInGame.size());
 
 	}
-	public Character nextPlayer() {
 
+	public Character nextPlayer() {
 		currentPlayer = (currentPlayer + 1) % charactersInGame.size();
 		return charactersInGame.get(currentPlayer);
 	}
@@ -106,4 +109,20 @@ public class Team {
 	public List<Character> getCharactersInGame() {
 		return charactersInGame;
 	}
+
+	public int getNumberOfAliveCharacter(){
+		return charactersInGame.size();
+	}
+	
+	public void checkDiedCharacter(List<Character> diedCharacters) {
+		
+		for (Character character : characters) {
+			if (character.isDead() && charactersInGame.contains(character)) {
+				charactersInGame.remove(character);
+				diedCharacters.add(character);
+			}
+		}
+	}
+	
+	
 }

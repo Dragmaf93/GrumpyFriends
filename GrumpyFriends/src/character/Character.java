@@ -64,6 +64,7 @@ public interface Character extends Element
 
 	public abstract Team getTeam();
 	
+	public abstract void afterDeath();
 
 	
 }

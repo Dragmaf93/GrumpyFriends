@@ -14,7 +14,7 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 	private static final float RADIUS = 0.7f;
 	public static final int NUMBER_OF_AMMUNITION = 10;
 	private static final int NUMBER_OF_HIT = 1;
-	private static final long MILLIS_TO_EXPLODE=4000;
+	private static final long MILLIS_TO_EXPLODE=8000;
 	
 	private static final float BLAST_POWER = 10000f;
 	private static final float BLAST_RADIUS = 10f;
@@ -106,6 +106,11 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer{
 			exploded=true;
 			((ExplosiveObject) physicalWeapon).explode();
 		}
+	}
+	
+	@Override
+	public double getDistanceFromLauncher() {
+		return 1.0;
 	}
 	
 	

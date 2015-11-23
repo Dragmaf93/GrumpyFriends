@@ -93,7 +93,7 @@ public class MatchPane extends Pane {
 			
 			equippedWeaponInd.draw();
 			
-			matchManager.update();
+//			matchManager.update();
 			timerInd.draw();
 		}
 	}
