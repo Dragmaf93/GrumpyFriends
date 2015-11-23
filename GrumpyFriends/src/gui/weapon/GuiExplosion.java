@@ -6,27 +6,38 @@ import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 public class GuiExplosion {
 
-	private final static double INITIAL_RADIUS = 3.0;
+	private final static double INITIAL_RADIUS = 5.0;
 
 	private ScaleTransition transition;
 	private FadeTransition fadeTransition;
 
 	private Weapon weapon;
 
-	private Circle explosion;
+//	private Circle explosion;
+	private ImageView explosion;
 
 	private boolean ranning;
 
 	public GuiExplosion(final WeaponGui weaponGui) {
 
-		explosion = new Circle(INITIAL_RADIUS, Color.YELLOW);
+//		explosion = new Circle(INITIAL_RADIUS,null);
+//		explosion.setFill(new ImagePattern(new Image("file:image/expl.gif")));
+		explosion = new ImageView("file:image/expl3.gif");
+		explosion.setLayoutX(weaponGui.getWeapon().getBlastRadius() / INITIAL_RADIUS);
+		explosion.setLayoutY(weaponGui.getWeapon().getBlastRadius() / INITIAL_RADIUS);
+		explosion.setFitWidth(INITIAL_RADIUS*3);
+		explosion.setFitHeight(INITIAL_RADIUS*3);
+		
 		weapon = weaponGui.getWeapon();
 		transition = new ScaleTransition(Duration.millis(50), explosion);
 		transition.setFromX(1.0);
