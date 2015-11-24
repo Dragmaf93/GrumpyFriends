@@ -187,6 +187,10 @@ public class FieldScene extends SubScene {
 		}
 	}
 
+	public boolean getMovementNextPlayer() {
+		return movementNextPlayer;
+	}
+	
 	public void setFocusPlayer(boolean focus) {
 		focusPlayer = focus;
 	}

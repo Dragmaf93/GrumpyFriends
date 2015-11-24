@@ -7,6 +7,7 @@ import gui.hud.IndicatorOfLauncher;
 import gui.hud.IndicatorOfPlayerLife;
 import gui.hud.IndicatorOfTime;
 import gui.hud.Inventory;
+import gui.hud.PanelForNextTurn;
 import javafx.scene.Camera;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -28,6 +29,8 @@ public class MatchPane extends Pane {
 	private FieldScene fieldScene;
 
 	boolean pause;
+
+	private PanelForNextTurn paneForNextTurn;
 
 	public MatchPane(MatchManager matchManager) {
 		this.matchManager = matchManager;
@@ -85,14 +88,27 @@ public class MatchPane extends Pane {
 
 	public void update() {
 		if (!pause) {
-			fieldScene.update();
-			inventory.draw();
-			launcherInd.draw();
-			if(inventory.isHidden() && !inventoryIsHide())
-				hideInventory();
-			
-			equippedWeaponInd.draw();
-			
+			if (fieldScene.getMovementNextPlayer())
+			{
+				if (!this.getChildren().contains(paneForNextTurn))
+				{
+					paneForNextTurn = new PanelForNextTurn(matchManager);
+					this.getChildren().add(paneForNextTurn);
+				}
+				fieldScene.update();
+			}
+			else
+			{
+				fieldScene.update();
+				inventory.draw();
+				launcherInd.draw();
+				if(inventory.isHidden() && !inventoryIsHide())
+					hideInventory();
+				
+				equippedWeaponInd.draw();
+				if (paneForNextTurn != null && this.getChildren().contains(paneForNextTurn))
+					this.getChildren().remove(paneForNextTurn);
+			}
 //			matchManager.update();
 			timerInd.draw();
 		}

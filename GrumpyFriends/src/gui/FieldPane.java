@@ -52,7 +52,7 @@ public class FieldPane extends Pane {
 		initializeDrawers();
 		createWorld();
 
-		this.setStyle("-fx-background: #6b5d5d; -fx-background-color: red; ");
+//		this.setStyle("-fx-background: #6b5d5d; -fx-background-color: #6b5d5d; ");
 		this.getChildren().add(field);
 
 		damagedCharacters = new ArrayList<Character>();
