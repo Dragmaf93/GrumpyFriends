@@ -22,6 +22,7 @@ public interface Character extends Element
 	public final static int MAX_HEIGHT=5;
 	
 	public abstract boolean isDead();
+	public abstract boolean isOutWorld();
 	
 	
 	public abstract void move(int direction);
@@ -65,6 +66,9 @@ public interface Character extends Element
 	public abstract Team getTeam();
 	
 	public abstract void afterDeath();
+
+
+	public abstract void setDied(boolean bool);
 
 	
 }

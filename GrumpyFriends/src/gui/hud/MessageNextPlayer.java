@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 
-public class PanelForNextTurn extends Pane {
+public class MessageNextPlayer extends Pane {
 
 	private static final String FONT_PATH = "font/clockFont.ttf";
 	private static final String colorFont = "#0a5fbf";
@@ -21,7 +21,7 @@ public class PanelForNextTurn extends Pane {
 	
 	private Font fontTurnNext;
 
-	public PanelForNextTurn(MatchManager matchManager) {
+	public MessageNextPlayer(MatchManager matchManager) {
 		
 		this.setPrefSize(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight()/4);
 		this.setStyle("-fx-background: #bcb5b5; -fx-background-color: rgba(0, 100, 100, 0.5); ");

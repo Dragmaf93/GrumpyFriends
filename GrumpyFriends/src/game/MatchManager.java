@@ -362,4 +362,5 @@ public class MatchManager {
 		currentTurnPhase = phase;
 		System.out.println(currentTurnPhase);
 	}
+	
 }

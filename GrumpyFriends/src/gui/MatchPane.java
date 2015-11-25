@@ -7,7 +7,7 @@ import gui.hud.IndicatorOfLauncher;
 import gui.hud.IndicatorOfPlayerLife;
 import gui.hud.IndicatorOfTime;
 import gui.hud.Inventory;
-import gui.hud.PanelForNextTurn;
+import gui.hud.MessageNextPlayer;
 import javafx.scene.Camera;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -30,7 +30,7 @@ public class MatchPane extends Pane {
 
 	boolean pause;
 
-	private PanelForNextTurn paneForNextTurn;
+	private MessageNextPlayer paneForNextTurn;
 
 	public MatchPane(MatchManager matchManager) {
 		this.matchManager = matchManager;
@@ -92,7 +92,7 @@ public class MatchPane extends Pane {
 			{
 				if (!this.getChildren().contains(paneForNextTurn))
 				{
-					paneForNextTurn = new PanelForNextTurn(matchManager);
+					paneForNextTurn = new MessageNextPlayer(matchManager);
 					this.getChildren().add(paneForNextTurn);
 				}
 				fieldScene.update();

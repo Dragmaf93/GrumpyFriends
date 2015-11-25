@@ -32,6 +32,7 @@ public abstract class AbstractCharacter implements Character {
 	protected Team team;
 	
 	protected boolean died;
+	protected boolean isOutWorld;
 
 	protected Weapon equippedWeapon;
 	protected String lastEquippedWeapon;
@@ -366,4 +367,15 @@ public abstract class AbstractCharacter implements Character {
 		return suffereDamage;
 	}
 
+	@Override
+	public void setDied(boolean bool) {
+		isOutWorld = bool;
+		lifePoints = 0;
+	}
+	
+	@Override
+	public boolean isOutWorld() {
+		return isOutWorld;
+	}
+	
 }

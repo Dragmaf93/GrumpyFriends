@@ -100,6 +100,12 @@ public class FieldPane extends Pane {
 
 				world.update();
 
+				if (matchManager.getCurrentPlayer().getX() < 0 || matchManager.getCurrentPlayer().getX() > world.getWidth())
+				{
+					matchManager.setTurnPhase(TurnPhaseType.DEATH_PHASE);
+					matchManager.getCurrentPlayer().setDied(true);
+				}
+				
 				Collection<CharacterDrawer> collection = characterDrawers.values();
 
 				for (CharacterDrawer characterDrawer : collection) {
@@ -158,6 +164,13 @@ public class FieldPane extends Pane {
 							} else
 								matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
 						}
+					}
+					if (matchManager.getCurrentPlayer().isOutWorld())
+					{
+						matchManager.getCurrentPlayer().endTurn();
+						matchManager.getMatchTimer().stopTurnTimer();
+						matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
+						scene.focusNextPlayer();
 					}
 				}
 
