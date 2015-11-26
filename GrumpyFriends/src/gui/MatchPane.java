@@ -92,7 +92,7 @@ public class MatchPane extends Pane {
 			{
 				if (!this.getChildren().contains(paneForNextTurn))
 				{
-					paneForNextTurn = new MessageNextPlayer(matchManager);
+					paneForNextTurn = new MessageNextPlayer(matchManager.getCurrentPlayer().getName(), "0a5fbf", false);
 					this.getChildren().add(paneForNextTurn);
 				}
 				fieldScene.update();
@@ -111,6 +111,13 @@ public class MatchPane extends Pane {
 			}
 //			matchManager.update();
 			timerInd.draw();
+		}
+		else {
+			if (!this.getChildren().contains(paneForNextTurn))
+			{
+				paneForNextTurn = new MessageNextPlayer("Pause","d95208", true);
+				this.getChildren().add(paneForNextTurn);
+			}
 		}
 	}
 

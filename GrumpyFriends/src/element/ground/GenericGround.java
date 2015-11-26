@@ -37,6 +37,9 @@ public class GenericGround extends AbstractGround{
 		
 		height=maxY-minY;
 		width=maxX-minX;
+		
+		positionX=minX;
+		positionY=minY;
 	}
 	
 	

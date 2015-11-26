@@ -21,10 +21,8 @@ public class ImageLoader {
 		grounds.put("groundPlanet", new Image("file:image/ground/groundPlanet.png"));
 	}
 	
-	public ImagePattern getImage(String typeWorld) {
-		ImagePattern image = new ImagePattern(grounds.get("ground"+typeWorld),0.2, 0.2, 5.8,5.8, true);
-		
-		return image;
+	public Image getImage(String typeWorld) {
+		return grounds.get("ground"+typeWorld);
 	}
 	
 }

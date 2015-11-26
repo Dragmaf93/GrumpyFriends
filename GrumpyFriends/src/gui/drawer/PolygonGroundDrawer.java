@@ -9,6 +9,8 @@ import element.ground.LinearGround;
 import gui.ImageLoader;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
 import utils.Point;
@@ -31,16 +33,25 @@ public class PolygonGroundDrawer extends AbstractDrawerObject  {
 		List<Point> points = ground.getPoint();
 		
 		Polygon shape = new Polygon();
-		
-		ImagePattern imagePattern = imageLoader.getImage(TYPE_WORLD);
+//		shape.getPoints().addAll(new Double[]{30.0, 0.0,
+//				0.0, 24.0,  0.0, 60.0,   60.0, 60.0,   60.0, 24.0
+//		});
 		
 		for (Point point : points) {
-			shape.getPoints().add( point.x);
-			shape.getPoints().add(point.y);
+			shape.getPoints().add( point.x-ground.getX());
+			shape.getPoints().add(point.y-ground.getY());
 		}
-	
+//	
+		ImageView imageView = new ImageView(new Image("file:image/ground/groundPlanet.png"));
+		imageView.setClip(shape);
+		System.out.println(this.getClass()+"         "+ ground.getWidth()+"    "+ground.getHeight());
+		imageView.setFitHeight(ground.getHeight());
+		imageView.setFitWidth(ground.getWidth());
+		imageView.setLayoutX(ground.getX());
+		imageView.setLayoutY(ground.getY());
 //		shape.setFill(imagePattern);
-		return shape;
+		return imageView;
+//		return shape;
 	}
 
 		

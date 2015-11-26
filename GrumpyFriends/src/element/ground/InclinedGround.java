@@ -46,5 +46,8 @@ public class InclinedGround  extends AbstractGround {
 		
 		height=maxY-minY;
 		width=maxX-minX;		
+		
+		positionX=minX;
+		positionY=minY;
 	}
 }
