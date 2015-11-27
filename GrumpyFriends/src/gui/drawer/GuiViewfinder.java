@@ -28,7 +28,6 @@ public class GuiViewfinder {
 		image.getTransforms().add(rotation);
 		root.getChildren().add(image);
 		
-
 	}
 	
 	public void update(Character character,Weapon weapon){

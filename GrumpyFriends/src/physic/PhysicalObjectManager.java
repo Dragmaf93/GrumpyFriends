@@ -166,7 +166,6 @@ public class PhysicalObjectManager {
 		if(distance==0) return;	
 			
 		if(body.getUserData() instanceof String){
-			System.out.println( distance+"      "+ explosiveObject.getBlastRadius());
 			addHitCharacter((String) body.getUserData(),((PhysicalWeapon)explosiveObject).getMaxDamage()-
 					((PhysicalWeapon)explosiveObject).getMaxDamage()*distance/
 					explosiveObject.getBlastRadius());

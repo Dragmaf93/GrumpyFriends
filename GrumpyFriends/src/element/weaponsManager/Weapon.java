@@ -24,4 +24,5 @@ public interface Weapon
 	public abstract boolean attacked();
 	
 	public abstract void update();
+	public abstract void reset();
 }

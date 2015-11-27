@@ -4,6 +4,8 @@ import java.awt.PointerInfo;
 
 import character.Character;
 import element.weaponsManager.Weapon;
+import game.MatchManager;
+import gui.FieldPane;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -44,6 +46,8 @@ public class CharacterDrawer {
 	private boolean finishedLifePointsUpdate;
 	private int pointCounter;
 
+	private MatchManager matchManager;
+	
 	private boolean canStart = true;
 
 	private int turn;
@@ -52,10 +56,12 @@ public class CharacterDrawer {
 
 	private boolean deathAnimationEnd;
 
-	public CharacterDrawer(Group pane, Character character) {
+	public CharacterDrawer(Group pane, Character character, WeaponDrawer weaponDrawer,MatchManager matchManager) {
 		this.pane = pane;
 		this.character = character;
-		this.weaponDrawer = new WeaponDrawer(character);
+		this.matchManager=matchManager;
+		// this.weaponDrawer = new WeaponDrawer(character);
+		this.weaponDrawer = weaponDrawer;
 
 		root = new Group();
 		characterBody = new Rectangle(character.getX(), character.getY(), character.getWidth(), character.getHeight());
@@ -104,87 +110,89 @@ public class CharacterDrawer {
 				turn = character.getTeam().getMatchManager().getTurn();
 				canStart = true;
 			}
-			// System.out.println("PRIMA DEL IF : ABILITA ARMA");
-			if (character.getLauncher().isActivated() && !root.getChildren().contains(currentLauncherWeapon)
-					&& !weaponDrawer.attackEnded() && !character.getLauncher().attacked()) {
-				equipedWeapon = character.getEquipWeapon();
-				// System.out.println("DENTRO DEL IF : ABILITA ARMA" +
-				// equipedWeapon);
-				currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon);
-				root.getChildren().add(currentLauncherWeapon);
-				entry = false;
+			if (character == matchManager.getCurrentPlayer()) {
+				// System.out.println("PRIMA DEL IF : ABILITA ARMA");
+				if (character.getLauncher().isActivated() && !root.getChildren().contains(currentLauncherWeapon)
+						&& !weaponDrawer.attackEnded() && !character.getLauncher().attacked()) {
+					equipedWeapon = character.getEquipWeapon();
+					// System.out.println("DENTRO DEL IF : ABILITA ARMA" +
+					// equipedWeapon);
+					currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon, character);
+					root.getChildren().add(currentLauncherWeapon);
+					entry = false;
 
-			}
-			// System.out.println("FINE DEL IF : ABILITA ARMA");
-
-			// System.out.println("PRIMA DEL IF : CAMBIA ARMA");
-			if (character.getLauncher().isActivated() && root.getChildren().contains(currentLauncherWeapon)
-					&& !weaponDrawer.attackEnded() && equipedWeapon != null && character.getEquipWeapon() != null
-					&& !character.getEquipWeapon().getName().equals(equipedWeapon.getName())) {
-
-				entry = false;
-				root.getChildren().remove(currentLauncherWeapon);
-				equipedWeapon = character.getEquipWeapon();
-				currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon);
-				root.getChildren().add(currentLauncherWeapon);
-			}
-			// System.out.println("FINE DEL IF : CAMBIA ARMA");
-
-			// System.out.println("PRIMA DEL IF : DISABILITA ARMA");
-			if (!character.getLauncher().isActivated() && root.getChildren().contains(currentLauncherWeapon)
-					&& !weaponDrawer.attackEnded()) {
-				root.getChildren().remove(currentLauncherWeapon);
-			}
-			// System.out.println("FINE DEL IF : DISABILITA ARMA");
-
-			// System.out.println("PRIMA DEL IF : AGGIORNA MIRA");
-			if (character.getLauncher().isActivated() && !weaponDrawer.attackEnded()) {
-				weaponDrawer.updateLauncherAim();
-			}
-			// System.out.println("FINE DEL IF : AGGIORNA MIRA");
-
-			// System.out.println("PRIMA DEL IF : INIZIO ATTACCO");
-			if (weaponDrawer.bulletLaunched() && !weaponDrawer.attackEnded()) {
-
-				character.getLauncher().disable();
-				if (currentBulletWeapon == null) {
-					currentBulletWeapon = weaponDrawer.drawAttack();
-					pane.getChildren().add(currentBulletWeapon);
 				}
-				weaponDrawer.updateBullet();
+				// System.out.println("FINE DEL IF : ABILITA ARMA");
+
+				// System.out.println("PRIMA DEL IF : CAMBIA ARMA");
+				if (character.getLauncher().isActivated() && root.getChildren().contains(currentLauncherWeapon)
+						&& !weaponDrawer.attackEnded() && equipedWeapon != null && character.getEquipWeapon() != null
+						&& !character.getEquipWeapon().getName().equals(equipedWeapon.getName())) {
+
+					entry = false;
+					root.getChildren().remove(currentLauncherWeapon);
+					equipedWeapon = character.getEquipWeapon();
+					currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon, character);
+					root.getChildren().add(currentLauncherWeapon);
+				}
+				// System.out.println("FINE DEL IF : CAMBIA ARMA");
+
+				// System.out.println("PRIMA DEL IF : DISABILITA ARMA");
+				if (!character.getLauncher().isActivated() && root.getChildren().contains(currentLauncherWeapon)
+						&& !weaponDrawer.attackEnded()) {
+					root.getChildren().remove(currentLauncherWeapon);
+				}
+				// System.out.println("FINE DEL IF : DISABILITA ARMA");
+
+				// System.out.println("PRIMA DEL IF : AGGIORNA MIRA");
+				if (character.getLauncher().isActivated() && !weaponDrawer.attackEnded()) {
+					weaponDrawer.updateLauncherAim();
+				}
+				// System.out.println("FINE DEL IF : AGGIORNA MIRA");
+
+				// System.out.println("PRIMA DEL IF : INIZIO ATTACCO");
+				if (weaponDrawer.bulletLaunched() && !weaponDrawer.attackEnded()) {
+
+					character.getLauncher().disable();
+					if (currentBulletWeapon == null) {
+						currentBulletWeapon = weaponDrawer.drawAttack();
+						pane.getChildren().add(currentBulletWeapon);
+					}
+					weaponDrawer.updateBullet();
+				}
+				// System.out.println("FINE DEL IF : INIZIO ATTACCO");
+
+				// System.out.println("PRIMA DEL IF : FINE ATTACCO");
+				if (weaponDrawer.attackEnded()) {
+					pane.getChildren().remove(currentBulletWeapon);
+					root.getChildren().remove(currentLauncherWeapon);
+					weaponDrawer.resetDrawer();
+					currentBulletWeapon = null;
+					equipedWeapon = null;
+					currentLauncherWeapon = null;
+
+				}
+				// System.out.println("FINE DEL IF : FINE ATTACCO");
+
+				// System.out.println("PRIMA DEL IF : FINE TURNO");
+				if (character.finishedTurn() && !weaponDrawer.attackEnded() && !entry) {
+					entry = true;
+					pane.getChildren().remove(currentBulletWeapon);
+					root.getChildren().remove(currentLauncherWeapon);
+					weaponDrawer.resetDrawer();
+					currentBulletWeapon = null;
+					equipedWeapon = null;
+					currentLauncherWeapon = null;
+				}
+				// System.out.println("FINE DEL IF : FINE TURNO");
+
+				// System.out.println("PRIMA DEL IF : CAMBIO DIREZIONE");
+				// if (currentPlayerDirection !=
+				// character.getCurrentDirection()) {
+				// currentPlayerDirection = character.getCurrentDirection();
+				// }
+				// System.out.println("FINE DEL IF : CAMBIO DIREZIONE");
 			}
-			// System.out.println("FINE DEL IF : INIZIO ATTACCO");
-
-			// System.out.println("PRIMA DEL IF : FINE ATTACCO");
-			if (weaponDrawer.attackEnded()) {
-				pane.getChildren().remove(currentBulletWeapon);
-				root.getChildren().remove(currentLauncherWeapon);
-				weaponDrawer.resetDrawer();
-				currentBulletWeapon = null;
-				equipedWeapon = null;
-				currentLauncherWeapon = null;
-
-			}
-			// System.out.println("FINE DEL IF : FINE ATTACCO");
-
-			// System.out.println("PRIMA DEL IF : FINE TURNO");
-			if (character.finishedTurn() && !weaponDrawer.attackEnded() && !entry) {
-				entry = true;
-				pane.getChildren().remove(currentBulletWeapon);
-				root.getChildren().remove(currentLauncherWeapon);
-				weaponDrawer.resetDrawer();
-				currentBulletWeapon = null;
-				equipedWeapon = null;
-				currentLauncherWeapon = null;
-			}
-			// System.out.println("FINE DEL IF : FINE TURNO");
-
-			// System.out.println("PRIMA DEL IF : CAMBIO DIREZIONE");
-			// if (currentPlayerDirection != character.getCurrentDirection()) {
-			// currentPlayerDirection = character.getCurrentDirection();
-			// }
-			// System.out.println("FINE DEL IF : CAMBIO DIREZIONE");
-
 			characterBody.relocate(character.getX(), character.getY());
 
 			if (lifePointsUpdate) {
@@ -217,8 +225,8 @@ public class CharacterDrawer {
 
 			if (deathAnimation) {
 				pane.getChildren().remove(root);
-				deathAnimation=false;
-				deathAnimationEnd=true;
+				deathAnimation = false;
+				deathAnimationEnd = true;
 				root = null;
 			}
 		}

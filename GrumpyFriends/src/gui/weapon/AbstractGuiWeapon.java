@@ -15,12 +15,16 @@ public abstract class AbstractGuiWeapon implements WeaponGui {
 
 	protected GuiViewfinder viewfinder;
 	
-	public AbstractGuiWeapon(Weapon weapon, Character character) {
+	public AbstractGuiWeapon(Weapon weapon) {
 		this.weapon = weapon;
 		this.character = character;
 		launcherRoot = new Group();
 		bulletRoot = new Group();
 		viewfinder = new GuiViewfinder(launcherRoot);
+	}
+	@Override
+	public void setCurrentCharacter(Character currentCharacter) {
+		this.character = currentCharacter;
 	}
 	
 	@Override
@@ -28,4 +32,5 @@ public abstract class AbstractGuiWeapon implements WeaponGui {
 		viewfinder.update(character, weapon);
 	}
 
+	
 }

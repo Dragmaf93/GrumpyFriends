@@ -14,6 +14,7 @@ import gui.drawer.CharacterDrawer;
 import gui.drawer.DrawerObject;
 import gui.drawer.PolygonGroundDrawer;
 import gui.drawer.RoundGroundDrawer;
+import gui.drawer.WeaponDrawer;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -27,7 +28,8 @@ public class FieldPane extends Pane {
 
 	private HashMap<String, DrawerObject> drawers;
 	private HashMap<String, CharacterDrawer> characterDrawers;
-
+	private WeaponDrawer weaponDrawer;
+	
 	private FieldScene scene;
 
 	private Group field;
@@ -49,6 +51,7 @@ public class FieldPane extends Pane {
 		this.setWidth(world.getWidth());
 		this.setHeight(world.getHeight());
 
+		weaponDrawer = new WeaponDrawer();
 		initializeDrawers();
 		createWorld();
 
@@ -66,7 +69,7 @@ public class FieldPane extends Pane {
 		characterDrawers = new HashMap();
 
 		for (Character character : characters) {
-			CharacterDrawer cd = new CharacterDrawer(field, character);
+			CharacterDrawer cd = new CharacterDrawer(field, character,weaponDrawer,matchManager);
 			characterDrawers.put(character.getName(), cd);
 		}
 
@@ -111,6 +114,7 @@ public class FieldPane extends Pane {
 				for (CharacterDrawer characterDrawer : collection) {
 					characterDrawer.draw();
 				}
+				
 				if(matchManager.getCurrentTurnPhase()==TurnPhaseType.STARTER_PHASE){
 					
 					if (matchManager.allCharacterAreSpleeping())
@@ -120,12 +124,10 @@ public class FieldPane extends Pane {
 					if (matchManager.getMatchTimer().isTurnTimerEnded()) {
 						matchManager.getCurrentPlayer().endTurn();
 						matchManager.getMatchTimer().stopTurnTimer();
-						matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
-					
-						
+						matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);	
 					} else if (matchManager.getCurrentPlayer().attacked()
 							&& !matchManager.getMatchTimer().isTurnTimerStopped()) {
-						System.out.println("MAIN PHASE");
+//						System.out.println("MAIN PHASE");
 						matchManager.getMatchTimer().startAttackTimer();
 						matchManager.getMatchTimer().stopTurnTimer();
 
@@ -152,7 +154,7 @@ public class FieldPane extends Pane {
 							currentDiedCD.startDeathAnimation();
 
 							if (currentDiedCD.isDeathAnimationFinished()) {
-								System.out.println("ciao");
+//								System.out.println("ciao");
 								diedCharacters.remove(0).afterDeath();
 								currentDiedCD = null;
 							}

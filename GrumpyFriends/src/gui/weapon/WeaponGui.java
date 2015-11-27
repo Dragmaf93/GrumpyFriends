@@ -1,5 +1,6 @@
 package gui.weapon;
 
+import character.Character;
 import element.weaponsManager.Weapon;
 import javafx.scene.Node;
 
@@ -16,4 +17,7 @@ public interface WeaponGui {
 	abstract public void afterAttack();
 	abstract public boolean finishAnimation();
 	abstract public Weapon getWeapon();
+	public abstract void setCurrentCharacter(Character currentCharacter);
+	
+	abstract public void resetItem();
 }

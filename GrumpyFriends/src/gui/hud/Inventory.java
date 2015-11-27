@@ -161,7 +161,6 @@ public class Inventory extends AbstractHudElement {
 		String[] weaponsName = WeaponsManager.getWeaponList();
 
 		for (int i = 0; i < weaponsName.length; i++) {
-			System.out.println(weaponsName[i].substring(0, weaponsName[i].length() - 5));
 			weapons.get(i).setItemName(weaponsName[i].substring(0, weaponsName[i].length() - 5));
 			weapons.get(i).setText(this);
 		}

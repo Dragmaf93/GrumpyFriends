@@ -1,85 +1,103 @@
 package gui.drawer;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 
 import character.Character;
 import element.weaponsManager.Weapon;
+import gui.hud.InventoryItem;
 import gui.weapon.WeaponGui;
 import javafx.scene.Node;
 
 public class WeaponDrawer {
-	
+
 	private final static String packageP = "gui.weapon.";
-	
-	private Character character;
-	private WeaponGui currentWeaponGui;
+
+	private Character currentCharacter;
 	private Weapon currentWeapon;
-	
-	public WeaponDrawer(Character character) {
-		this.character = character;
+
+	private WeaponGui currentWeaponGui;
+
+	private HashMap<String, WeaponGui> inventoryItemsGui;
+
+	public WeaponDrawer() {
+		this.inventoryItemsGui = new HashMap<>();
 	}
+
 	
-	public Node getLauncherWeapon(Weapon weapon) {
-		try {
-			currentWeapon=weapon;
-			String weaponName = weapon.getName();
-			String guiWeaponName = "Gui"+weaponName;
-			Class<?> classDefinition = Class.forName(packageP+guiWeaponName);
-			currentWeaponGui=(WeaponGui) classDefinition.getConstructor(Weapon.class,Character.class).newInstance(weapon,character);
-//			currentWeaponGui = (WeaponGui) classDefinition.newInstance();
+	public Node getLauncherWeapon(Weapon weapon,Character character) {
+		
+		if (inventoryItemsGui.containsKey(weapon.getName())) {
+			currentWeaponGui =inventoryItemsGui.get(weapon.getName());
+			currentWeapon = weapon;
+			currentCharacter = character;
+			currentWeaponGui.setCurrentCharacter(currentCharacter);
 			return currentWeaponGui.getWeaponLauncher();
-		} catch (InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} else {
+
+			try {
+				currentWeapon = weapon;
+				String weaponName = weapon.getName();
+				String guiWeaponName = "Gui" + weaponName;
+				currentCharacter=character;
+				Class<?> classDefinition = Class.forName(packageP + guiWeaponName);
+				currentWeaponGui = (WeaponGui) classDefinition.getConstructor(Weapon.class)
+						.newInstance(weapon);
+				// currentWeaponGui = (WeaponGui) classDefinition.newInstance();
+				inventoryItemsGui.put(weaponName, currentWeaponGui);
+				currentWeaponGui.setCurrentCharacter(currentCharacter);
+				return currentWeaponGui.getWeaponLauncher();
+			} catch (InstantiationException | IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
 
 	public void updateLauncherAim() {
-		if(currentWeaponGui==null) return;
-		
+		if (currentWeaponGui == null)
+			return;
+
 		currentWeaponGui.updateLauncher();
 	}
-	
-	public Node drawAttack(){
-		if(currentWeaponGui==null) return null;
+
+	public Node drawAttack() {
+		if (currentWeaponGui == null)
+			return null;
 		return currentWeaponGui.getWeaponBullet();
 	}
-	
-	public void updateBullet(){
-		if(currentWeaponGui==null) return;
+
+	public void updateBullet() {
+		if (currentWeaponGui == null)
+			return;
 		currentWeaponGui.updateBullet();
 	}
 
 	public boolean bulletLaunched() {
-		if(currentWeapon==null) return false;
+		if (currentWeapon == null)
+			return false;
 		return currentWeapon.attacked();
 	}
-	
-	public boolean attackEnded(){
-		if(currentWeaponGui==null) return false;
+
+	public boolean attackEnded() {
+		if (currentWeaponGui == null)
+			return false;
 		return currentWeaponGui.finishAnimation();
 	}
-	
-	public void resetDrawer(){
-		currentWeapon=null;
-		currentWeaponGui=null;
+
+	public void resetDrawer() {
+		currentWeapon = null;
+		currentWeaponGui = null;
 	}
-	
 
 }

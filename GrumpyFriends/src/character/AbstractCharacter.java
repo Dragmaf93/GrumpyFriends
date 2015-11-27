@@ -138,6 +138,7 @@ public abstract class AbstractCharacter implements Character {
 		}
 		if (weaponsManager.isAvailable(weaponName)) {
 			equippedWeapon = weaponsManager.getWeapon(weaponName);
+			System.out.println(equippedWeapon);
 			lastEquippedWeapon = equippedWeapon.getName();
 			launcher.loadWeapon(equippedWeapon);
 			activeLauncher=true;

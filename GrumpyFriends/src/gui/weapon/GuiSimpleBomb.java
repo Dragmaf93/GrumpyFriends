@@ -10,10 +10,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.transform.Rotate;
 
-public class GuiSimpleBomb extends AbstractGuiWeapon{
+public class GuiSimpleBomb extends AbstractGuiWeapon {
 
 	private Rotate launcherRotate;
-	
+
 	// prove
 	private GuiExplosion explosion;
 
@@ -22,43 +22,47 @@ public class GuiSimpleBomb extends AbstractGuiWeapon{
 	private ImageView bombImage;
 	private ImageView bullet;
 
-	public GuiSimpleBomb(Weapon weapon, Character character) {
-		super(weapon, character);
+	public GuiSimpleBomb(Weapon weapon) {
+		super(weapon);
 		this.weapon = weapon;
-		this.character = character;
 
 		finishAnimation = false;
 		//
-		 bombImage = new ImageView(new Image("file:image/weapons/SimpleBomb.png"));
-		 bombImage.setFitHeight(weapon.getHeight()*2);
-		 bombImage.setFitWidth(weapon.getWidth()*2);
+		bombImage = new ImageView(new Image("file:image/weapons/SimpleBomb.png"));
+		bombImage.setFitHeight(weapon.getHeight() * 2);
+		bombImage.setFitWidth(weapon.getWidth() * 2);
 
+		bullet = new ImageView(new Image("file:image/weapons/SimpleBomb.png"));
+		bullet.setFitHeight(weapon.getHeight() * 2);
+		bullet.setFitWidth(weapon.getWidth() * 2);
 		//
 
+		explosion = new GuiExplosion(this);
 	}
 
 	@Override
 	public Node getWeaponLauncher() {
-			bombImage.setX(character.getX() + character.getWidth());
-			bombImage.setY(character.getY() + character.getHeight() * 0.2);
-			 launcherRoot.getChildren().add(bombImage);
+		// aggiungere solo la prima volta
+		
+		if (!launcherRoot.getChildren().contains(bombImage)) {
+			launcherRoot.getChildren().add(bombImage);
+//			bombImage.setX(character.getX() + character.getWidth());
+//			bombImage.setY(character.getY() + character.getHeight() * 0.2);
 			launcherRotate = new Rotate();
 			launcherRotate.setAxis(Rotate.Z_AXIS);
-//			circle.getTransforms().add(launcherRotate);
+			// circle.getTransforms().add(launcherRotate);
 			bombImage.getTransforms().add(launcherRotate);
-
+		}
 		return launcherRoot;
 	}
 
 	@Override
 	public Node getWeaponBullet() {
-		
-		bullet = new ImageView(new Image("file:image/weapons/SimpleBomb.png"));
-		 bullet.setFitHeight(weapon.getHeight()*2);
-		 bullet.setFitWidth(weapon.getWidth()*2);
-		explosion = new GuiExplosion(this);
-		bulletRoot.getChildren().add(bullet);
-		bulletRoot.getChildren().add(explosion.getExplosionNode());
+
+		if (!bulletRoot.getChildren().contains(bullet)) {
+			bulletRoot.getChildren().add(bullet);
+//			bulletRoot.getChildren().add(explosion.getExplosionNode());
+		}
 		return bulletRoot;
 	}
 
@@ -73,22 +77,25 @@ public class GuiSimpleBomb extends AbstractGuiWeapon{
 	@Override
 	public void updateLauncher() {
 		super.updateLauncher();
-		launcherRotate.setPivotX(character.getX());
-		launcherRotate.setPivotY(bombImage.getY());
-		launcherRotate.setAngle(Math.toDegrees(-character.getLauncher().getAngle()));
-		 bombImage.relocate(character.getX()+character.getWidth()+5,
-		 character.getY()+character.getHeight()*0.2);
+
+//		launcherRotate.setPivotX(character.getX()+character.getWidth());
+//		launcherRotate.setPivotY(character.getY()+character.getHeight()*0.2);
+//		launcherRotate.setAngle(Math.toDegrees(-character.getLauncher().getAngle()));
+		bombImage.relocate(character.getX() + character.getWidth() + 5, character.getY() + character.getHeight() * 0.2);
 		//
 	}
-
+	@Override
+	public void resetItem() {
+		finishAnimation=false;
+	}
 	@Override
 	public void updateBullet() {
-		
+
 		bullet.relocate(weapon.getX(), weapon.getY());
 
 		weapon.update();
 
-		if (((SimpleBomb)weapon).isExploded()) {
+		if (((SimpleBomb) weapon).isExploded()) {
 			explosion.playExplosionAnimation();
 		}
 	}
