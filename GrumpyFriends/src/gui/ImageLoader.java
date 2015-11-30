@@ -3,14 +3,15 @@ package gui;
 import java.util.HashMap;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.ImagePattern;
 
 public class ImageLoader {
 	
-	HashMap<String, Image> grounds;
+	HashMap<String, ImageView> grounds;
 	
 	public ImageLoader() {
-		grounds = new HashMap<String, Image>();
+		grounds = new HashMap<String, ImageView>();
 		
 		loader();
 		
@@ -18,10 +19,10 @@ public class ImageLoader {
 	
 	private void loader() {
 //		TODO inserire immagini
-		grounds.put("groundPlanet", new Image("file:image/ground/groundPlanet.png"));
+		grounds.put("groundPlanet", new ImageView("file:image/ground/groundPlanet.png"));
 	}
 	
-	public Image getImage(String typeWorld) {
+	public ImageView getImage(String typeWorld) {
 		return grounds.get("ground"+typeWorld);
 	}
 	

@@ -19,7 +19,6 @@ public class Menu extends Application{
 	private int height = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 	private Pane panelForBackground;
 	
-	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		panelForBackground = new Pane();
@@ -42,12 +41,20 @@ public class Menu extends Application{
 
 			@Override
 			public void handle(Event event) {
-				MainApplication mainApplication = new MainApplication();
+				
+				InsertInformation insertInformation = new InsertInformation();
 				try {
-					mainApplication.start(primaryStage);
+					insertInformation.start(primaryStage);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				
+//				MainApplication mainApplication = new MainApplication();
+//				try {
+//					mainApplication.start(primaryStage);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
 			}
 		});
 		

@@ -42,6 +42,7 @@ public class FieldPane extends Pane {
 	private List<Character> diedCharacters;
 	private CharacterDrawer currentDiedCD;
 	private int currentTurn;
+	private ImageLoader imageLoader;
 
 	public FieldPane(MatchManager matchManager) {
 		this.matchManager = matchManager;
@@ -60,11 +61,13 @@ public class FieldPane extends Pane {
 
 		damagedCharacters = new ArrayList<Character>();
 		diedCharacters = matchManager.getDiedCharacters();
+		
 
 	}
 
 	private void initializeDrawers() {
 
+		imageLoader = new ImageLoader();
 		List<Character> characters = world.getAllCharacters();
 		characterDrawers = new HashMap();
 
@@ -74,9 +77,9 @@ public class FieldPane extends Pane {
 		}
 
 		this.drawers = new HashMap<>();
-		drawers.put("GenericGround", new PolygonGroundDrawer(field));
-		drawers.put("LinearGround", new PolygonGroundDrawer(field));
-		drawers.put("InclinedGround", new PolygonGroundDrawer(field));
+		drawers.put("GenericGround", new PolygonGroundDrawer(field, imageLoader));
+		drawers.put("LinearGround", new PolygonGroundDrawer(field, imageLoader));
+		drawers.put("InclinedGround", new PolygonGroundDrawer(field, imageLoader));
 		drawers.put("RoundGround", new RoundGroundDrawer(field));
 
 	}

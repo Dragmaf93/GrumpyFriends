@@ -22,9 +22,10 @@ public class PolygonGroundDrawer extends AbstractDrawerObject  {
 	private ImageLoader imageLoader;
 	private static final String TYPE_WORLD = "Planet";
 	
-	public PolygonGroundDrawer(Group pane) {
+	public PolygonGroundDrawer(Group pane, ImageLoader imageLoader) {
 		super(pane);
-		imageLoader = new ImageLoader();
+//		imageLoader = new ImageLoader();
+		this.imageLoader = imageLoader;
 	}
 
 	@Override
@@ -43,6 +44,7 @@ public class PolygonGroundDrawer extends AbstractDrawerObject  {
 		}
 //	
 		
+//		ImageView imageView = imageLoader.getImage("Planet");
 		ImageView imageView = new ImageView(new Image("file:image/ground/groundPlanet.png"));
 		imageView.setClip(shape);
 		System.out.println(this.getClass()+"         "+ ground.getWidth()+"    "+ground.getHeight());
