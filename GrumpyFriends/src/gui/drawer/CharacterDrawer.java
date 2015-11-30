@@ -111,12 +111,19 @@ public class CharacterDrawer {
 				canStart = true;
 			}
 			if (character == matchManager.getCurrentPlayer()) {
-				// System.out.println("PRIMA DEL IF : ABILITA ARMA");
+//				 System.out.println("PRIMA DEL IF : ABILITA ARMA "
+//				 		+ "!root.getChildren().contains(currentLauncherWeapon)" +!root.getChildren().contains(currentLauncherWeapon)+
+//				 		" !weaponDrawer.attackEnded() "+ !weaponDrawer.attackEnded() +" !character.getLauncher().attacked() "
+//				 		+ !character.getLauncher().attacked());
 				if (character.getLauncher().isActivated() && !root.getChildren().contains(currentLauncherWeapon)
 						&& !weaponDrawer.attackEnded() && !character.getLauncher().attacked()) {
 					equipedWeapon = character.getEquipWeapon();
-					// System.out.println("DENTRO DEL IF : ABILITA ARMA" +
-					// equipedWeapon);
+//					System.out.println("PRIMA DEL IF : ABILITA ARMA "
+//							+ "!root.getChildren().contains(currentLauncherWeapon)" +!root.getChildren().contains(currentLauncherWeapon)+
+//							" !weaponDrawer.attackEnded() "+ !weaponDrawer.attackEnded() +" !character.getLauncher().attacked() "
+//							+ !character.getLauncher().attacked());
+//					 System.out.println("DENTRO DEL IF : ABILITA ARMA" +
+//					 equipedWeapon);
 					currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon, character);
 					root.getChildren().add(currentLauncherWeapon);
 					entry = false;
@@ -178,6 +185,7 @@ public class CharacterDrawer {
 				if (character.finishedTurn() && !weaponDrawer.attackEnded() && !entry) {
 					entry = true;
 					pane.getChildren().remove(currentBulletWeapon);
+					
 					root.getChildren().remove(currentLauncherWeapon);
 					weaponDrawer.resetDrawer();
 					currentBulletWeapon = null;

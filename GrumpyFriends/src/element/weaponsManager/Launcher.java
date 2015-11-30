@@ -225,7 +225,6 @@ public class Launcher {
 
 		else if (currentDirection == Character.LEFT && val < 0 && Math.toDegrees(angle - val) < 270)
 			angle -= val;
-		System.out.println(Math.toDegrees(angle % 6.28));
 	}
 
 	public double getX() {

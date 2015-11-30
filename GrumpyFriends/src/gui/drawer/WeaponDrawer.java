@@ -32,6 +32,7 @@ public class WeaponDrawer {
 			currentWeapon = weapon;
 			currentCharacter = character;
 			currentWeaponGui.setCurrentCharacter(currentCharacter);
+			currentWeaponGui.resetItem();
 			return currentWeaponGui.getWeaponLauncher();
 		} else {
 
@@ -43,7 +44,6 @@ public class WeaponDrawer {
 				Class<?> classDefinition = Class.forName(packageP + guiWeaponName);
 				currentWeaponGui = (WeaponGui) classDefinition.getConstructor(Weapon.class)
 						.newInstance(weapon);
-				// currentWeaponGui = (WeaponGui) classDefinition.newInstance();
 				inventoryItemsGui.put(weaponName, currentWeaponGui);
 				currentWeaponGui.setCurrentCharacter(currentCharacter);
 				return currentWeaponGui.getWeaponLauncher();

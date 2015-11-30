@@ -39,7 +39,12 @@ public class GuiSimpleMissile extends AbstractGuiWeapon {
 		launcherImage.setFitWidth(BAZOOKA_WIDTH);
 		launcherRotate = new Rotate();
 		launcherRotate.setAxis(Rotate.Z_AXIS);
+
 		launcherImage.getTransforms().add(launcherRotate);
+
+		bulletRotate = new Rotate();
+		bulletRotate.setAxis(Rotate.Z_AXIS);
+		bulletImage.getTransforms().add(bulletRotate);
 	}
 
 	@Override
@@ -55,13 +60,8 @@ public class GuiSimpleMissile extends AbstractGuiWeapon {
 		if (!bulletRoot.getChildren().contains(bulletImage)) {
 			explosion = new GuiExplosion(this);
 
-			bulletRotate = new Rotate();
-			bulletRotate.setAxis(Rotate.Z_AXIS);
-
-			bulletImage.getTransforms().add(bulletRotate);
-
 			bulletRoot.getChildren().add(bulletImage);
-//			bulletRoot.getChildren().add(explosion.getExplosionNode());
+			bulletRoot.getChildren().add(explosion.getExplosionNode());
 		}
 		return bulletRoot;
 	}
@@ -82,7 +82,6 @@ public class GuiSimpleMissile extends AbstractGuiWeapon {
 		finishAnimation = false;
 
 	}
-	//TODO riaggiungere le esplosioni
 
 	@Override
 	public void updateBullet() {
@@ -95,7 +94,7 @@ public class GuiSimpleMissile extends AbstractGuiWeapon {
 			bulletImage.relocate(weapon.getX(), weapon.getY());
 
 		} else {
-//			explosion.playExplosionAnimation();
+			explosion.playExplosionAnimation();
 		}
 	}
 
@@ -117,9 +116,7 @@ public class GuiSimpleMissile extends AbstractGuiWeapon {
 
 	@Override
 	public void removeBullet() {
-
 		bulletRoot.getChildren().remove(bulletImage);
-
 	}
 
 }

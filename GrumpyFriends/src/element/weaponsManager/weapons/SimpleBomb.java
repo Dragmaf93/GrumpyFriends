@@ -14,7 +14,7 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer {
 	private static final float RADIUS = 0.7f;
 	public static final int NUMBER_OF_AMMUNITION = 10;
 	private static final int NUMBER_OF_HIT = 1;
-	private static final long MILLIS_TO_EXPLODE = 8000;
+	private static final long MILLIS_TO_EXPLODE = 3000;
 
 	private static final float BLAST_POWER = 10000f;
 	private static final float BLAST_RADIUS = 10f;
@@ -71,7 +71,6 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer {
 	@Override
 	public void afterAttack() {
 		PhysicalObjectManager.getInstance().removePhysicalWeapon(physicalWeapon);
-//		physicalWeapon = null;
 	}
 
 	public boolean isExploded() {
@@ -110,7 +109,6 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer {
 	@Override
 	public void update() {
 		physicalWeapon.update();
-
 		if (MatchTimer.endObjectTimerIn() <= 0 && !exploded) {
 			exploded = true;
 			((ExplosiveObject) physicalWeapon).explode();

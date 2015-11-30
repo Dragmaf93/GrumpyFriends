@@ -55,6 +55,7 @@ public class PhysicalMissile extends AbstractPhysicalWeapon implements Explosive
 		fixtureDef.setDensity(1.0f);
 		fixtureDef.setUserData(this);
 		fixtureDef.restitution = 0.0f;
+		exploded=false;
 	}
 
 	@Override

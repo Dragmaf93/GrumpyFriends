@@ -37,7 +37,6 @@ public class GuiSimpleBomb extends AbstractGuiWeapon {
 		bullet.setFitWidth(weapon.getWidth() * 2);
 		//
 
-		explosion = new GuiExplosion(this);
 	}
 
 	@Override
@@ -46,11 +45,8 @@ public class GuiSimpleBomb extends AbstractGuiWeapon {
 		
 		if (!launcherRoot.getChildren().contains(bombImage)) {
 			launcherRoot.getChildren().add(bombImage);
-//			bombImage.setX(character.getX() + character.getWidth());
-//			bombImage.setY(character.getY() + character.getHeight() * 0.2);
 			launcherRotate = new Rotate();
 			launcherRotate.setAxis(Rotate.Z_AXIS);
-			// circle.getTransforms().add(launcherRotate);
 			bombImage.getTransforms().add(launcherRotate);
 		}
 		return launcherRoot;
@@ -60,8 +56,9 @@ public class GuiSimpleBomb extends AbstractGuiWeapon {
 	public Node getWeaponBullet() {
 
 		if (!bulletRoot.getChildren().contains(bullet)) {
+			explosion = new GuiExplosion(this);
 			bulletRoot.getChildren().add(bullet);
-//			bulletRoot.getChildren().add(explosion.getExplosionNode());
+			bulletRoot.getChildren().add(explosion.getExplosionNode());
 		}
 		return bulletRoot;
 	}
@@ -92,9 +89,8 @@ public class GuiSimpleBomb extends AbstractGuiWeapon {
 	public void updateBullet() {
 
 		bullet.relocate(weapon.getX(), weapon.getY());
-
 		weapon.update();
-
+		
 		if (((SimpleBomb) weapon).isExploded()) {
 			explosion.playExplosionAnimation();
 		}
