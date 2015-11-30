@@ -24,7 +24,7 @@ public class PolygonGroundDrawer extends AbstractDrawerObject  {
 	
 	public PolygonGroundDrawer(Group pane, ImageLoader imageLoader) {
 		super(pane);
-//		imageLoader = new ImageLoader();
+//		this.imageLoader = new ImageLoader();
 		this.imageLoader = imageLoader;
 	}
 
@@ -44,12 +44,12 @@ public class PolygonGroundDrawer extends AbstractDrawerObject  {
 		}
 //	
 		
-//		ImageView imageView = imageLoader.getImage("Planet");
-		ImageView imageView = new ImageView(new Image("file:image/ground/groundPlanet.png"));
+		ImageView imageView = new ImageView(imageLoader.getImageGrounds("Planet"));
+//		ImageView imageView = new ImageView(new Image("file:image/ground/groundPlanet.png"));
 		imageView.setClip(shape);
-		System.out.println(this.getClass()+"         "+ ground.getWidth()+"    "+ground.getHeight());
-		imageView.setFitHeight(ground.getHeight());
-		imageView.setFitWidth(ground.getWidth());
+//		System.out.println(this.getClass()+"         "+ ground.getWidth()+"    "+ground.getHeight());
+//		imageView.setFitHeight(ground.getHeight());
+//		imageView.setFitWidth(ground.getWidth());
 		imageView.setLayoutX(ground.getX());
 		imageView.setLayoutY(ground.getY());
 //		shape.setFill(imagePattern);

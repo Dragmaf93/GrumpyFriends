@@ -17,6 +17,11 @@ import gui.drawer.RoundGroundDrawer;
 import gui.drawer.WeaponDrawer;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
 import world.World;
@@ -53,10 +58,12 @@ public class FieldPane extends Pane {
 		this.setHeight(world.getHeight());
 
 		weaponDrawer = new WeaponDrawer();
+		imageLoader = new ImageLoader();
+
 		initializeDrawers();
 		createWorld();
 
-//		this.setStyle("-fx-background: #6b5d5d; -fx-background-color: #6b5d5d; ");
+		this.setStyle("-fx-background: null; -fx-background-color: null; ");
 		this.getChildren().add(field);
 
 		damagedCharacters = new ArrayList<Character>();
@@ -64,10 +71,13 @@ public class FieldPane extends Pane {
 		
 
 	}
+	
+	public ImageLoader getImageLoader() {
+		return imageLoader;
+	}
 
 	private void initializeDrawers() {
 
-		imageLoader = new ImageLoader();
 		List<Character> characters = world.getAllCharacters();
 		characterDrawers = new HashMap();
 
@@ -94,6 +104,7 @@ public class FieldPane extends Pane {
 
 		for (Ground ground : grounds) {
 			drawers.get(ground.getClass().getSimpleName()).draw(ground);
+//			new PolygonGroundDrawer(field, imageLoader).draw(ground);
 		}
 	}
 

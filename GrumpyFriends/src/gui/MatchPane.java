@@ -9,6 +9,10 @@ import gui.hud.IndicatorOfTime;
 import gui.hud.Inventory;
 import gui.hud.MessageNextPlayer;
 import javafx.scene.Camera;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
@@ -53,6 +57,9 @@ public class MatchPane extends Pane {
 		this.getChildren().add(equippedWeaponInd.getNode());
 		this.getChildren().add(launcherInd.getNode());
 		pause = false;
+		
+		this.setBackground(new Background(new BackgroundImage(fieldPane.getImageLoader().getImageBackgrounds("Planet"), null,
+				null, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
 
 	}
 
