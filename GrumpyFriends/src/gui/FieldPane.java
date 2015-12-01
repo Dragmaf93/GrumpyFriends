@@ -90,7 +90,7 @@ public class FieldPane extends Pane {
 		drawers.put("GenericGround", new PolygonGroundDrawer(field, imageLoader));
 		drawers.put("LinearGround", new PolygonGroundDrawer(field, imageLoader));
 		drawers.put("InclinedGround", new PolygonGroundDrawer(field, imageLoader));
-		drawers.put("RoundGround", new RoundGroundDrawer(field));
+		drawers.put("RoundGround", new RoundGroundDrawer(field, imageLoader));
 
 	}
 

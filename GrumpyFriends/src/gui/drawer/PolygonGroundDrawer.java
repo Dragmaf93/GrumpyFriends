@@ -44,8 +44,13 @@ public class PolygonGroundDrawer extends AbstractDrawerObject  {
 		}
 //	
 		
-		ImageView imageView = new ImageView(imageLoader.getImageGrounds("Planet"));
+//		ImageView imageView = new ImageView(imageLoader.getImageGrounds("Planet"));
 //		ImageView imageView = new ImageView(new Image("file:image/ground/groundPlanet.png"));
+		
+		ImagePattern imageP = new ImagePattern(imageLoader.getImageGrounds("Planet"));
+//		shape.setFill(imageP);
+		ImageView imageView = new ImageView(imageP.getImage());
+		imageView.resize(ground.getWidth(), ground.getHeight());
 		imageView.setClip(shape);
 //		System.out.println(this.getClass()+"         "+ ground.getWidth()+"    "+ground.getHeight());
 //		imageView.setFitHeight(ground.getHeight());

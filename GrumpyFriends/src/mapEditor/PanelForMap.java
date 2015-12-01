@@ -26,6 +26,7 @@ public class PanelForMap extends ScrollPane {
 	private boolean movedObject;
 	private Curve draggedCurve;
 	protected boolean vertexModify;
+	protected boolean drawingObjectValue;
 	
 	public PanelForMap(MapEditor mapEditor, double width, double height) {
 		
@@ -66,15 +67,22 @@ public class PanelForMap extends ScrollPane {
 					{
 						drawingObject = new DrawingPanel(dragged, PanelForMap.this.mapEditor);
 						realPane.getChildren().add(drawingObject);
+						drawingObjectValue = true;
 					}
 					else
 					{
 						drawingCurve = new DrawingPanelForCurve(draggedCurve, PanelForMap.this.mapEditor);
 						realPane.getChildren().add(drawingCurve);
+						drawingObjectValue = false;
 					}
 					insertPushed = true;
 					vertexModify = false;
     			}
+//	        	else
+//	        	{
+//	        		
+//	        	}
+//	        	(drawingCurve != null && !drawingCurve.contains(event.getX(), event.getY())))
         	}
 	    });
 		
@@ -109,6 +117,10 @@ public class PanelForMap extends ScrollPane {
 	        	}
 	        	if (movedObject)
 	        		PanelForMap.this.mapEditor.addObjectInListImage();
+	        	
+	        	if (drawingObject != null)
+	        		if (!drawingObject.contains(event.getX(), event.getY()) && !drawingCurve.contains(event.getX(), event.getY()) && drawingCurve != null)
+	        			removePanelInsert();
 	        }
 	    });
 	    
