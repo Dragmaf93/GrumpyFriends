@@ -230,8 +230,13 @@ public class CharacterDrawer {
 
 				lifePointsPane.setVisible(false);
 			}
-
-			if (deathAnimation) {
+			
+			
+			if(character.isOutWorld()){
+				pane.getChildren().remove(root);
+				root=null;
+			}
+			else if (deathAnimation) {
 				pane.getChildren().remove(root);
 				deathAnimation = false;
 				deathAnimationEnd = true;
@@ -255,7 +260,7 @@ public class CharacterDrawer {
 	}
 
 	public boolean finishedLifePointUpdate() {
-		return finishedLifePointsUpdate;
+		return finishedLifePointsUpdate || character.isOutWorld();
 	}
 
 	public void startDeathAnimation() {

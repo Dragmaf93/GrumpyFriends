@@ -51,6 +51,14 @@ public class Team {
 		return false;
 	}
 
+	public int getTeamLifePoint(){
+		
+		int tot = 0;
+		for (Character character : charactersInGame)
+			tot+=character.getLifePoints();
+		return tot;
+	}
+	
 	public Character get(int i) {
 		return characters.get(i);
 	}
@@ -101,7 +109,7 @@ public class Team {
 	public MatchManager getMatchManager() {
 		return matchManager;
 	}
-
+	
 	public void setMatchManager(MatchManager matchManager) {
 		this.matchManager = matchManager;
 	}

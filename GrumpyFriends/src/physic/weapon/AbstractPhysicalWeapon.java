@@ -11,6 +11,9 @@ import utils.Vector;
 public abstract class AbstractPhysicalWeapon implements PhysicalWeapon{
 	
 	protected Body body;
+	
+	protected Body[] bodiesToRemove;
+	
 	protected BodyDef bodyDef;
 	protected Fixture fixture;
 	protected FixtureDef fixtureDef;

@@ -32,58 +32,67 @@ public class PhysicalContactListener implements ContactListener {
 	private Fixture getFeetFixture(Fixture f1, Fixture f2, String characterName) {
 		if (f1.getUserData() != null && f1.getUserData().equals(characterName)) {
 			return f1;
-		} else if (f2.getUserData() != null && f2.getUserData().equals(characterName)) {
+		} else if (f2.getUserData() != null
+				&& f2.getUserData().equals(characterName)) {
 			return f2;
 		}
 		return null;
 	}
-	
-	private Fixture getExplosiveObjectFixture(Fixture f1, Fixture f2){
-		if (f1.getUserData() != null && f1.getUserData() instanceof PhysicalWeapon) {
+
+	private Fixture getExplosiveObjectFixture(Fixture f1, Fixture f2) {
+		if (f1.getUserData() != null
+				&& f1.getUserData() instanceof PhysicalWeapon) {
 			return f1;
-		} else if (f2.getUserData() != null && f2.getUserData()instanceof PhysicalWeapon) {
+		} else if (f2.getUserData() != null
+				&& f2.getUserData() instanceof PhysicalWeapon) {
 			return f2;
 		}
 		return null;
 	}
+
 	@Override
 	public void beginContact(Contact contact) {
-		
+
 		// explosive object contact
-		
-		Fixture explosiveObjectfixture=getExplosiveObjectFixture(contact.getFixtureA(),contact.getFixtureB());
-		if(explosiveObjectfixture!=null){
-		
-			((ExplosiveObject)explosiveObjectfixture.getUserData()).explode();
-			explosiveObjectfixture=null;
+
+		Fixture explosiveObjectfixture = getExplosiveObjectFixture(
+				contact.getFixtureA(), contact.getFixtureB());
+		if (explosiveObjectfixture != null) {
+
+			((ExplosiveObject) explosiveObjectfixture.getUserData()).explode();
+			explosiveObjectfixture = null;
 		}
-		
-		//character contact
+
+		// character contact
 		Set<Character> characters = characterContact.keySet();
 		for (Character character : characters) {
-			if (getFeetFixture(contact.getFixtureA(), contact.getFixtureB(), character.getName()) != null) {
-				Integer tmp = characterContact.get(character) + 1;
-				characterContact.put(character, tmp);
-			}
+			if (!character.isDead() && !character.isOutWorld()) {
+				if (getFeetFixture(contact.getFixtureA(),
+						contact.getFixtureB(), character.getName()) != null) {
+					Integer tmp = characterContact.get(character) + 1;
+					characterContact.put(character, tmp);
+				}
 
-			if (characterContact.get(character) > 0)
-				character.setGrounded(true);
+				if (characterContact.get(character) > 0)
+					character.setGrounded(true);
+			}
 		}
 
 	}
 
 	@Override
 	public void endContact(Contact contact) {
-		
+
 		Set<Character> characters = characterContact.keySet();
 
 		for (Character character : characters) {
-			if (getFeetFixture(contact.getFixtureA(), contact.getFixtureB(),character.getName()) != null){
+			if (getFeetFixture(contact.getFixtureA(), contact.getFixtureB(),
+					character.getName()) != null) {
 				Integer tmp = characterContact.get(character) - 1;
-				characterContact.put(character, tmp);			
+				characterContact.put(character, tmp);
 			}
-			
-			if (characterContact.get(character)<= 0)
+
+			if (characterContact.get(character) <= 0)
 				character.setGrounded(false);
 		}
 	}

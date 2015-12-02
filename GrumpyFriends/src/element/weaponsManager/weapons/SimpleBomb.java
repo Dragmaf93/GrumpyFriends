@@ -4,6 +4,7 @@ import element.weaponsManager.AbstractWeapon;
 import element.weaponsManager.ExplosiveObject;
 import game.MatchTimer;
 import physic.PhysicalObjectManager;
+import physic.RemovablePhysicalObject;
 import physic.weapon.PhysicalBomb;
 import utils.ObjectWithTimer;
 import utils.Utils;
@@ -70,7 +71,7 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer {
 
 	@Override
 	public void afterAttack() {
-		PhysicalObjectManager.getInstance().removePhysicalWeapon(physicalWeapon);
+		PhysicalObjectManager.getInstance().removePhysicalWeapon((RemovablePhysicalObject)physicalWeapon);
 	}
 
 	public boolean isExploded() {

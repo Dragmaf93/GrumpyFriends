@@ -23,7 +23,7 @@ import utils.Vector;
 public class FieldScene extends SubScene {
 
 	private final static int MAX_ZOOM = -9000;
-	private final static int MIN_ZOOM = -700;
+	private final static int MIN_ZOOM = -5000;
 	private final static int INCR_ZOOM = 50;
 	private final static double MAX_TIME = 100;
 

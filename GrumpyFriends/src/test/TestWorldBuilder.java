@@ -38,7 +38,7 @@ public class TestWorldBuilder implements WorldBuilder {
 
 	@Override
 	public void addCharacter(String name, float x, float y) {
-		world.addCharacter(new Chewbacca(name, x, y,null));
+		world.addCharacter(new Chewbacca(name, x, y,null,world));
 	}
 
 	@Override
@@ -56,8 +56,6 @@ public class TestWorldBuilder implements WorldBuilder {
 		((TestWorld)world).setContactListener();
 		
 	}
-
-	
 
 	@Override
 	public void addGenericGround(List<Point> points) {

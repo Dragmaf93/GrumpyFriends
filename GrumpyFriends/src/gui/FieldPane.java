@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import character.Character;
+import character.Team;
 import element.Ground;
 import game.MatchManager;
 import game.TurnPhaseType;
@@ -109,19 +110,18 @@ public class FieldPane extends Pane {
 	}
 
 	public void update() {
-		if (!matchManager.isPaused()) {
-
-			if (matchManager.isMatchFinished() && matchManager.getCurrentTurnPhase() == TurnPhaseType.END_PHASE) {
-
-			} else {
+		if (!matchManager.isPaused() && 
+				!(matchManager.isMatchFinished() && matchManager.getCurrentTurnPhase() == TurnPhaseType.END_PHASE)) {
 
 				world.update();
-
-				if (matchManager.getCurrentPlayer().getX() < 0 || matchManager.getCurrentPlayer().getX() > world.getWidth())
-				{
-					matchManager.setTurnPhase(TurnPhaseType.DEATH_PHASE);
-					matchManager.getCurrentPlayer().setDied(true);
-				}
+				
+				matchManager.checkCharactersOutOfWorld();
+				
+//				if (matchManager.getCurrentPlayer().getX() < 0 || matchManager.getCurrentPlayer().getX() > world.getWidth())
+//				{
+//					matchManager.setTurnPhase(TurnPhaseType.DEATH_PHASE);
+//					matchManager.getCurrentPlayer().setDied(true);
+//				}
 				
 				Collection<CharacterDrawer> collection = characterDrawers.values();
 
@@ -129,12 +129,23 @@ public class FieldPane extends Pane {
 					characterDrawer.draw();
 				}
 				
+				
+				if (matchManager.getCurrentPlayer().isOutWorld())
+				{
+					matchManager.getMatchTimer().stopTurnTimer();
+					matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
+				}
+				
 				if(matchManager.getCurrentTurnPhase()==TurnPhaseType.STARTER_PHASE){
 					
-					if (matchManager.allCharacterAreSpleeping())
+					if (matchManager.isMatchFinished())
+						matchManager.setTurnPhase(TurnPhaseType.END_PHASE);
+					
+					else if (matchManager.allCharacterAreSpleeping())
 						scene.focusNextPlayer();
 				}
 				 if (matchManager.getCurrentTurnPhase() == TurnPhaseType.MAIN_PHASE) {
+					
 					if (matchManager.getMatchTimer().isTurnTimerEnded()) {
 						matchManager.getCurrentPlayer().endTurn();
 						matchManager.getMatchTimer().stopTurnTimer();
@@ -149,7 +160,6 @@ public class FieldPane extends Pane {
 							&& matchManager.getMatchTimer().isAttackTimerEnded()) {
 						matchManager.getCurrentPlayer().endTurn();
 						matchManager.setTurnPhase(TurnPhaseType.DAMAGE_PHASE);
-						matchManager.applyDamageToHitCharacter();
 					}
 				}
 
@@ -168,32 +178,19 @@ public class FieldPane extends Pane {
 							currentDiedCD.startDeathAnimation();
 
 							if (currentDiedCD.isDeathAnimationFinished()) {
-//								System.out.println("ciao");
 								diedCharacters.remove(0).afterDeath();
 								currentDiedCD = null;
 							}
 
 						} else {
-
-							if (matchManager.isMatchFinished()) {
-								matchManager.setTurnPhase(TurnPhaseType.END_PHASE);
-							} else
 								matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
 						}
-					}
-					if (matchManager.getCurrentPlayer().isOutWorld())
-					{
-						matchManager.getCurrentPlayer().endTurn();
-						matchManager.getMatchTimer().stopTurnTimer();
-						matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
-						scene.focusNextPlayer();
 					}
 				}
 
 				if (matchManager.getCurrentTurnPhase() == TurnPhaseType.DAMAGE_PHASE) {
 					
 					matchManager.applyDamageToHitCharacter();
-					
 					if (matchManager.isAppliedDamage() && matchManager.allCharacterAreSpleeping()) {
 
 						if (!matchManager.getDamagedCharacters().isEmpty()) {
@@ -201,13 +198,15 @@ public class FieldPane extends Pane {
 							int cont = 0;
 							damagedCharacters = matchManager.getDamagedCharacters();
 							for (Character c : damagedCharacters) {
+								
 								CharacterDrawer cd = characterDrawers.get(c.getName());
-
+								
+								
 								if (cd.canStartUpdate()) {
 									cd.startLifePointsUpdate();
 								}
 
-								if (!cd.finishedLifePointUpdate()) {
+								if (cd.finishedLifePointUpdate()) {
 									cont++;
 								}
 							}
@@ -252,7 +251,7 @@ public class FieldPane extends Pane {
 				}
 
 			}
-		}
+		
 	}
 	// public void update() {
 	//

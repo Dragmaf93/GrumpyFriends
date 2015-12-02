@@ -69,6 +69,8 @@ public interface Character extends Element
 
 
 	public abstract void setDied(boolean bool);
+	
+	public abstract void update();
 
 	
 }

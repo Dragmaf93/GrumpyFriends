@@ -13,7 +13,7 @@ import org.jbox2d.dynamics.joints.Joint;
 import org.jbox2d.dynamics.joints.WheelJoint;
 import org.jbox2d.dynamics.joints.WheelJointDef;
 
-public class PhysicalCharacter extends AbstractPhysicalObject{
+public class PhysicalCharacter extends AbstractPhysicalObject implements RemovablePhysicalObject{
 	
 	private final static float FEET_FRICTION=5.0f;
 	private final static float MOTOR_TORQUE=20f;
@@ -24,6 +24,7 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 	private Fixture feetFixture;
 	private WheelJoint joint;
 	
+	private Body[] bodiesToRemove;
 
 	private String nameCharacter;
 	private Vec2 vec;
@@ -32,6 +33,7 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 		super(x, y, width, height);		
 		this.nameCharacter=nameCharacter;
 		vec = new Vec2(-width/2,(height-width/2)/2); 
+		bodiesToRemove= new Body[2];
 	}
 
 	@Override
@@ -122,6 +124,9 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 		feetFixtureDef.setShape(circleShape);
 		feetFixtureDef.setDensity(DENSITY);
 	
+		bodiesToRemove[0]=body;
+		bodiesToRemove[1]=feet;
+		
 		feetFixtureDef.friction=FEET_FRICTION;
 		feetFixture = feet.createFixture(feetFixtureDef);
 		
@@ -139,6 +144,7 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 		wheelJointDef.dampingRatio=20f;
 		wheelJointDef.frequencyHz=20f;
 		joint =  (WheelJoint) world.createJoint(wheelJointDef);
+		
 	}
 	
 	@Override
@@ -158,6 +164,11 @@ public class PhysicalCharacter extends AbstractPhysicalObject{
 
 	public boolean isSleeping() {
 		return !body.isAwake();
+	}
+
+	@Override
+	public Body[] getBodiesToRemove() {
+		return bodiesToRemove;
 	}
 	
 }

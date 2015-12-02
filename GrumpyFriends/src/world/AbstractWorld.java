@@ -32,12 +32,17 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	private List<Character> characters;
 		
 	protected static World instanceSon;
-
+	
+	protected List<Character> charactersOutOfWorld;
+	protected HashMap<String, Boolean> charactersAlreadyOutWorld;
+	
 	public AbstractWorld(Vec2 gravity, boolean doSleep) {
 		super(gravity);
 		characterContainer = new HashMap<>();
 		grounds = new ArrayList<Ground>();
 		characters = new ArrayList<Character>();
+		charactersOutOfWorld = new ArrayList<Character>();
+		charactersAlreadyOutWorld = new HashMap<String, Boolean>();
 	}
 
 	public static void initializes(String typeWorld) {
@@ -101,6 +106,7 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	public void addCharacter(Character character) {
 		characterContainer.put(character.getName(), character);
 		characters.add(character);
+		charactersAlreadyOutWorld.put(character.getName(), false);
 	}
 
 	@Override
@@ -129,8 +135,6 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 		this.height = (float) Utils.heightFromJbox2dToJavaFx(height);
 	}
 	
-	
-	
 	@Override
 	public List<Ground> getGrounds() {
 		return grounds;
@@ -139,6 +143,17 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	@Override
 	public void update() {
 		super.step(1.0f/30, 6, 3);  
+		
+		for (Character character : characters) {
+			
+			character.update();
+			
+			if(character.isOutWorld() && !charactersAlreadyOutWorld.get(character.getName())){
+				character.afterDeath();
+				charactersOutOfWorld.add(character);
+				charactersAlreadyOutWorld.put(character.getName(), true);
+		}	}
+		
 		PhysicalObjectManager.getInstance().destroyBodies();
 
 	}
@@ -151,7 +166,11 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	public void addInclinedGround(List<Point> points) {
 		grounds.add(new InclinedGround(points));
 	}
-
+	
+	@Override
+	public List<Character> getCharacatersOutOfWorld() {
+		return charactersOutOfWorld;
+	}
 	public void addGenericGround(List<Point> points) {
 		grounds.add(new GenericGround(points));
 	}

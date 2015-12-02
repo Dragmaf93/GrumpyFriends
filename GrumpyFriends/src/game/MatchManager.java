@@ -40,7 +40,7 @@ public class MatchManager {
 
 	private TurnPhaseType currentTurnPhase;
 	private boolean characterSufferedDamage;
-
+	
 	public MatchManager() {
 		this.battlefield = null;
 		this.teamRed = null;
@@ -86,7 +86,8 @@ public class MatchManager {
 	}
 
 	public boolean startMatch() {
-		if (started || teamRed == null || teamBlue == null || battlefield == null)
+		if (started || teamRed == null || teamBlue == null
+				|| battlefield == null)
 			return false;
 
 		currentTeam = getFirstTeam();
@@ -117,22 +118,23 @@ public class MatchManager {
 	}
 
 	public void applyDamageToHitCharacter() {
-		if(!appliedDamage){
+		if (!appliedDamage) {
 			if (!hitCharacters.isEmpty()) {
 				Set<String> keys = hitCharacters.keySet();
 				for (String name : keys) {
 					Character c = battlefield.getCharacter(name);
 					if (c != null) {
-						c.decreaseLifePoints((int) hitCharacters.get(name).floatValue());
+						c.decreaseLifePoints((int) hitCharacters.get(name)
+								.floatValue());
 						damagedCharacters.add(c);
 					}
 				}
 				hitCharacters.clear();
 				appliedDamage = true;
-				characterSufferedDamage=true;
+				characterSufferedDamage = true;
 			} else
-				characterSufferedDamage=false;
-			appliedDamage=true;
+				characterSufferedDamage = false;
+			appliedDamage = true;
 		}
 	}
 
@@ -175,7 +177,7 @@ public class MatchManager {
 			endTurn = false;
 			currentTurnPhase = TurnPhaseType.MAIN_PHASE;
 			appliedDamage = false;
-			characterSufferedDamage=false;
+			characterSufferedDamage = false;
 		}
 	}
 
@@ -265,7 +267,8 @@ public class MatchManager {
 
 	public boolean isMatchFinished() {
 
-		return teamBlue.isLose() || teamRed.isLose() || timer.isMatchTimerEnded();
+		return teamBlue.isLose() || teamRed.isLose()
+				|| timer.isMatchTimerEnded();
 	}
 
 	public void swapTeam() {
@@ -274,58 +277,74 @@ public class MatchManager {
 		else if (currentTeam == teamBlue)
 			currentTeam = teamRed;
 	}
-	public void checkDiedCharacters(){
+
+	public void checkDiedCharacters() {
 		teamBlue.checkDiedCharacter(diedCharactersOfTheCurrentTurn);
 		teamRed.checkDiedCharacter(diedCharactersOfTheCurrentTurn);
 	}
-//	public void update() {
-//		if (!pause) {
-//
-//			if (isMatchFinished() && currentTurnPhase == TurnPhaseType.END_PHASE) {
-//				
-//				
-//			} else {
-//
-//				if (currentTurnPhase == TurnPhaseType.MAIN_PHASE) {
-//
-//					if (timer.endTurnIn() <= 0) {
-//						timer.stopTurnTimer();
-//						endMainPhase();
-//					}
-//
-//					else if (currentPlayer.attacked() && !timer.isTurnTimerStopped()) {
-//						timer.startAttackTimer();
-//						timer.stopTurnTimer();
-//						// timer.pauseTimers();
-//					} else if (timer.isTurnTimerStopped() && timer.isAttackTimerEnded()) {
-//						endMainPhase();
-//						applyDamageToHitCharacter();
-//					}
-//					
-//					
-//					// timer.pauseTimers();
-//				}
-//				
-//				if (currentTurnPhase == TurnPhaseType.DAMAGE_PHASE){
-//				
-//				}
-//				
-//				if (currentTurnPhase == TurnPhaseType.DEATH_PHASE) {
-//					teamBlue.checkDiedCharacter(diedCharactersOfTheCurrentTurn);
-//					teamRed.checkDiedCharacter(diedCharactersOfTheCurrentTurn);
-//					
-//					
-//				}
-//			}
-//
-//		}
-//		// if (currentPlayer.sufferedDamage()) {
-//		// endTurn();
-//		// }
-//
-//	
-//
-//	}
+
+	public Team getTeamWithMaxLifePoints() {
+
+		int teamRedLF = teamRed.getTeamLifePoint();
+		int teamBlueLF = teamBlue.getTeamLifePoint();
+
+		if (teamRedLF < teamBlueLF)
+			return teamBlue;
+		else if (teamRedLF > teamBlueLF)
+			return teamRed;
+		//in caso di pareggio null
+		return null;
+
+	}
+
+	// public void update() {
+	// if (!pause) {
+	//
+	// if (isMatchFinished() && currentTurnPhase == TurnPhaseType.END_PHASE) {
+	//
+	//
+	// } else {
+	//
+	// if (currentTurnPhase == TurnPhaseType.MAIN_PHASE) {
+	//
+	// if (timer.endTurnIn() <= 0) {
+	// timer.stopTurnTimer();
+	// endMainPhase();
+	// }
+	//
+	// else if (currentPlayer.attacked() && !timer.isTurnTimerStopped()) {
+	// timer.startAttackTimer();
+	// timer.stopTurnTimer();
+	// // timer.pauseTimers();
+	// } else if (timer.isTurnTimerStopped() && timer.isAttackTimerEnded()) {
+	// endMainPhase();
+	// applyDamageToHitCharacter();
+	// }
+	//
+	//
+	// // timer.pauseTimers();
+	// }
+	//
+	// if (currentTurnPhase == TurnPhaseType.DAMAGE_PHASE){
+	//
+	// }
+	//
+	// if (currentTurnPhase == TurnPhaseType.DEATH_PHASE) {
+	// teamBlue.checkDiedCharacter(diedCharactersOfTheCurrentTurn);
+	// teamRed.checkDiedCharacter(diedCharactersOfTheCurrentTurn);
+	//
+	//
+	// }
+	// }
+	//
+	// }
+	// // if (currentPlayer.sufferedDamage()) {
+	// // endTurn();
+	// // }
+	//
+	//
+	//
+	// }
 
 	public List<Character> getDiedCharacters() {
 		return diedCharactersOfTheCurrentTurn;
@@ -362,5 +381,29 @@ public class MatchManager {
 		currentTurnPhase = phase;
 		System.out.println(currentTurnPhase);
 	}
-	
+
+	public Team getWinnerTeam() {
+		if (teamBlue.isLose() && !teamRed.isLose())
+			return teamRed;
+		if (teamRed.isLose() && !teamBlue.isLose())
+			return teamBlue;
+		return null;
+	}
+
+	public boolean hasWinnerTeam() {
+		return teamBlue.isLose() ^ teamRed.isLose();
+	}
+
+	public void checkCharactersOutOfWorld() {
+		List<Character> charactersOutOfWorld = battlefield.getCharacatersOutOfWorld();
+		
+		for (Character character : charactersOutOfWorld) {
+			if(character.getTeam()==teamBlue)
+				teamBlue.removeCharacterInGame(character);
+			else if(character.getTeam()==teamRed)
+				teamRed.removeCharacterInGame(character);
+		}
+		charactersOutOfWorld.clear();
+	}
+
 }

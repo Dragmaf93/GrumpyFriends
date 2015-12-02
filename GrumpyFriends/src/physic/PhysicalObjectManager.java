@@ -66,13 +66,21 @@ public class PhysicalObjectManager {
 		
 	}
 	
-	public void removePhysicalObject(PhysicalObject object){
+	public void removePhysicalObject(RemovablePhysicalObject object){
 //		world.destroyBody(object.getBody());
-		toRemove.add(object.getBody());	
+		Body[] bodies = object.getBodiesToRemove();
+		for (Body body : bodies) {
+			
+			toRemove.add(body);	
+		}
 	}
 	
-	public void removePhysicalWeapon(PhysicalWeapon weapon){
-		toRemove.add(weapon.getBody());	
+	public void removePhysicalWeapon(RemovablePhysicalObject object){
+		Body[] bodies = object.getBodiesToRemove();
+		for (Body body : bodies) {
+			
+			toRemove.add(body);	
+		}
 //		world.destroyBody(weapon.getBody());
 	}
 	public void makeAnExplosionWithParticle(ExplosiveObject explosiveObject){

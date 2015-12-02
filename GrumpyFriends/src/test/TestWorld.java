@@ -82,7 +82,6 @@ public class TestWorld implements world.World{
 	}
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
 		
 	}
 	@Override
@@ -113,6 +112,11 @@ public class TestWorld implements world.World{
 	}
 	@Override
 	public void addRoundGround(List<Point> points) {
+	}
+	@Override
+	public List<Character> getCharacatersOutOfWorld() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

@@ -1,8 +1,9 @@
 package character;
 
+
+
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.World;
 
 import element.weaponsManager.Launcher;
 import element.weaponsManager.Weapon;
@@ -10,17 +11,21 @@ import element.weaponsManager.WeaponsManager;
 import physic.PhysicalCharacter;
 import physic.PhysicalObject;
 import physic.PhysicalObjectManager;
+import physic.RemovablePhysicalObject;
 import utils.ObjectWithTimer;
 import utils.Utils;
 import utils.Vector;
+import world.World;
 
 public abstract class AbstractCharacter implements Character {
 
 	private final static float MAX_SPEED = 10f;
 	private final static float _SPEED = 15f;
 	private final static float _FORCE = 500f;
-	private final static float JUMP = 15f;
+	private final static float JUMP = 55f;
 
+	
+	
 	protected String name;
 	protected float height;
 	protected float width;
@@ -30,7 +35,7 @@ public abstract class AbstractCharacter implements Character {
 	protected float force;
 	protected World world;
 	protected Team team;
-	
+
 	protected boolean died;
 	protected boolean isOutWorld;
 
@@ -42,7 +47,7 @@ public abstract class AbstractCharacter implements Character {
 	protected boolean grounded;
 	protected boolean moving;
 	protected boolean activeLauncher;
-	
+
 	protected int currentDirection;
 
 	protected PhysicalObject physicBody;
@@ -55,13 +60,14 @@ public abstract class AbstractCharacter implements Character {
 	private boolean endTurn;
 	private int lastDamagePoints;
 
-	public AbstractCharacter(String name, float x, float y, float height, float width, Team team) {
+	public AbstractCharacter(String name, float x, float y, float height,
+			float width, Team team,World world) {
 
 		this.name = name;
 		this.team = team;
 		this.height = height;
 		this.width = width;
-
+		this.world = world;
 		weaponsManager = new WeaponsManager();
 
 		equippedWeapon = null;
@@ -80,7 +86,7 @@ public abstract class AbstractCharacter implements Character {
 	@Override
 	public boolean isDead() {
 
-		return lifePoints==0;
+		return lifePoints == 0;
 	}
 
 	@Override
@@ -96,7 +102,10 @@ public abstract class AbstractCharacter implements Character {
 	@Override
 	public void setGrounded(boolean b) {
 		this.grounded = b;
+		
 		((PhysicalCharacter) physicBody).blockWheelJoint();
+		
+		
 
 	}
 
@@ -129,10 +138,11 @@ public abstract class AbstractCharacter implements Character {
 
 		if (!readyToEquipWeapon)
 			return;
-		
-		if (equippedWeapon != null && equippedWeapon.getName().equals(weaponName)) {
+
+		if (equippedWeapon != null
+				&& equippedWeapon.getName().equals(weaponName)) {
 			launcher.loadWeapon(equippedWeapon);
-			activeLauncher=true;
+			activeLauncher = true;
 			return;
 
 		}
@@ -140,16 +150,16 @@ public abstract class AbstractCharacter implements Character {
 			equippedWeapon = weaponsManager.getWeapon(weaponName);
 			lastEquippedWeapon = equippedWeapon.getName();
 			launcher.loadWeapon(equippedWeapon);
-			activeLauncher=true;
+			activeLauncher = true;
 		}
 	}
 
-
 	@Override
 	public void afterDeath() {
-			PhysicalObjectManager.getInstance().removePhysicalObject(physicBody);
+		System.out.println("REMOVE PHYSIC OF "+ name);
+		PhysicalObjectManager.getInstance().removePhysicalObject((RemovablePhysicalObject)physicBody);
 	}
-	
+
 	@Override
 	public Launcher getLauncher() {
 		return launcher;
@@ -206,38 +216,39 @@ public abstract class AbstractCharacter implements Character {
 		if (!grounded)
 			return;
 
-		if (launcher != null && launcher.isActivated()) {
-			// if (direction == currentDirection) {
+		if (currentDirection != direction && launcher.isActivated()) {
 			launcher.disable();
+			currentDirection = direction;
+			launcher.setDirection(direction);
+		} else {
+
+			if(launcher.isActivated())
+				launcher.disable();
 			
-			// } else {
-			// launcher.disable();
-			// launcher.activate();
-			// }
+			Body body = physicBody.getBody();
+			Vec2 speed = body.getLinearVelocity();
+			force = 0;
+			moving = true;
+			currentDirection = direction;
+			switch (direction) {
+			case RIGHT:
+				// if (speed.x < MAX_SPEED)
+				force = _SPEED;
+				break;
+			case LEFT:
+				// if (speed.x > -MAX_SPEED)
+				force = -_SPEED;
+				break;
+			case STOP:
+				force = speed.x * -10;
+				break;
+			}
+			if (force != 0)
+				((PhysicalCharacter) physicBody).unblockWheelJoint();
+			// body.applyForce(new Vec2(force, 0), body.getWorldCenter());
+			body.setLinearVelocity(new Vec2(force, speed.y));
+			launcher.setDirection(direction);
 		}
-		Body body = physicBody.getBody();
-		Vec2 speed = body.getLinearVelocity();
-		force = 0;
-		moving = true;
-		currentDirection = direction;
-		switch (direction) {
-		case RIGHT:
-			// if (speed.x < MAX_SPEED)
-			force = _SPEED;
-			break;
-		case LEFT:
-			// if (speed.x > -MAX_SPEED)
-			force = -_SPEED;
-			break;
-		case STOP:
-			force = speed.x * -10;
-			break;
-		}
-		if (force != 0)
-			((PhysicalCharacter) physicBody).unblockWheelJoint();
-		// body.applyForce(new Vec2(force, 0), body.getWorldCenter());
-		body.setLinearVelocity(new Vec2(force, speed.y));
-		launcher.setDirection(direction);
 
 	}
 
@@ -249,19 +260,34 @@ public abstract class AbstractCharacter implements Character {
 		moving = false;
 		((PhysicalCharacter) physicBody).blockWheelJoint();
 		body.getLinearVelocity().x = 0f;
+
+		if (activeLauncher)
+			launcher.activate();
+
+	}
+	
+	@Override
+	public void update() {
+		double x = getX(), y = getY();
 		
-		if(activeLauncher) launcher.activate();
-		
+		if(x > world.getWidth()+ World.DISTANCE_WORLDS_BORDER || x < -World.DISTANCE_WORLDS_BORDER
+				|| y > world.getHeight()+ World.DISTANCE_WORLDS_BORDER)
+			isOutWorld=true;
+			
+			
 	}
 
 	@Override
 	public void jump() {
 		Body body = physicBody.getBody();
 		if (grounded) {
-			if (launcher != null)
+			if(launcher.isActivated())
+				activeLauncher=true;
+			
 				launcher.disable();
 			float impulse = body.getMass() * JUMP;
-			body.applyLinearImpulse(new Vec2(0, impulse), body.getWorldCenter(), true);
+			body.applyLinearImpulse(new Vec2(0, impulse),
+					body.getWorldCenter(), true);
 		}
 	}
 
@@ -372,10 +398,10 @@ public abstract class AbstractCharacter implements Character {
 		isOutWorld = bool;
 		lifePoints = 0;
 	}
-	
+
 	@Override
 	public boolean isOutWorld() {
 		return isOutWorld;
 	}
-	
+
 }

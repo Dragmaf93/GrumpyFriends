@@ -4,9 +4,10 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.World;
 
+import physic.RemovablePhysicalObject;
 import utils.Vector;
 
-public interface PhysicalWeapon {
+public interface PhysicalWeapon extends RemovablePhysicalObject{
 	
 	abstract public void buildSelf(World world);
 	abstract public Body getBody();

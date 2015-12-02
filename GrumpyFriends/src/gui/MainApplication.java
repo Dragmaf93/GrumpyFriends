@@ -23,7 +23,7 @@ public class MainApplication extends Application{
 	String nameTeamB = "TeamB";
 	ArrayList<String> namesPlayerTeamB;
 	
-	String mapChoosed="Map1.xml";
+	String mapChoosed="Map.xml";
 
 	public MainApplication() {
 	}
@@ -54,8 +54,8 @@ public class MainApplication extends Application{
 //		teamA.addCharcter(playerA);
 //		matchManager.startTest();
 		
-		Team teamA = new Team(nameTeamA, 1, matchManager);
-		Team teamB = new Team(nameTeamB, 1, matchManager);
+		Team teamA = new Team(nameTeamA, 4, matchManager);
+		Team teamB = new Team(nameTeamB, 4, matchManager);
 		
 		teamA.setColorTeam(Color.CRIMSON);
 		teamB.setColorTeam(Color.STEELBLUE);
@@ -63,17 +63,38 @@ public class MainApplication extends Application{
 		matchManager.setTeamA(teamA);
 		matchManager.setTeamB(teamB);
 		
-//		Character playerA = new Chewbacca(namesPlayerTeamA.get(0), 50, 100, teamA);
-//		Character playerB = new Chewbacca(namesPlayerTeamB.get(0), 30, 100, teamB);
+		
 //		
-		Character playerA = new Chewbacca("PlayerA", 50, 100, teamA);
-		Character playerB = new Chewbacca("PlayerB", 30, 100, teamB);
+		Character playerA1 = new Chewbacca("Player A1", 50, 100, teamA,world);
+		Character playerB1 = new Chewbacca("Player B1", 30, 100, teamB,world);
 		
-		world.addCharacter(playerA);
-		world.addCharacter(playerB);
+		Character playerA2 = new Chewbacca("Player A2", 90, 100, teamA, world);
+		Character playerB2 = new Chewbacca("Player B2", 130, 100, teamB, world);
+
+		Character playerA3 = new Chewbacca("Player A3", 120, 100, teamA,world);
+		Character playerB3 = new Chewbacca("Player B3", 90, 100, teamB,world);
 		
-		teamA.addCharcter(playerA);
-		teamB.addCharcter(playerB);
+		Character playerA4 = new Chewbacca("Player A4", 160, 100, teamA,world);
+		Character playerB4 = new Chewbacca("Player B4", 150, 100, teamB,world);
+		
+		world.addCharacter(playerA1);
+		world.addCharacter(playerB1);
+		world.addCharacter(playerA2);
+		world.addCharacter(playerB2);
+		world.addCharacter(playerA3);
+		world.addCharacter(playerB3);
+		world.addCharacter(playerA4);
+		world.addCharacter(playerB4);
+//		
+		teamA.addCharcter(playerA1);
+		teamA.addCharcter(playerA2);
+		teamA.addCharcter(playerA3);
+		teamA.addCharcter(playerA4);
+		
+		teamB.addCharcter(playerB1);
+		teamB.addCharcter(playerB2);
+		teamB.addCharcter(playerB3);
+		teamB.addCharcter(playerB4);
 
 		builder.lastSettings();
 		// ui

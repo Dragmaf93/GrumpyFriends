@@ -1,7 +1,9 @@
 package gui;
 
+import character.Team;
 import utils.Point;
 import game.MatchManager;
+import game.TurnPhaseType;
 import gui.hud.IndicatorOfEquippedWeapon;
 import gui.hud.IndicatorOfLauncher;
 import gui.hud.IndicatorOfPlayerLife;
@@ -94,7 +96,31 @@ public class MatchPane extends Pane {
 	}
 
 	public void update() {
-		if (!pause) {
+		if (pause) {
+			if (!this.getChildren().contains(paneForNextTurn))
+			{
+				paneForNextTurn = new MessageNextPlayer("Pause","d95208", true);
+				this.getChildren().add(paneForNextTurn);
+			}
+		}
+		else if (matchManager.isMatchFinished() && matchManager.getCurrentTurnPhase() == TurnPhaseType.END_PHASE){
+			String winnerString ="";
+			if(matchManager.hasWinnerTeam())
+				winnerString = "Il vincitore è :"+ matchManager.getWinnerTeam().getName();
+			
+			else{
+				Team winner = matchManager.getTeamWithMaxLifePoints();
+				
+				if(winner == null) winnerString = "Pareggio";
+				else
+					winnerString = "Il vincitore è :"+ matchManager.getWinnerTeam().getName();
+			}
+			this.getChildren().add(new MessageNextPlayer(winnerString,"d95208" , true));
+
+			
+			
+		}
+		else {
 			if (fieldScene.getMovementNextPlayer())
 			{
 				if (!this.getChildren().contains(paneForNextTurn))
@@ -119,14 +145,8 @@ public class MatchPane extends Pane {
 //			matchManager.update();
 			timerInd.draw();
 		}
-		else {
-			if (!this.getChildren().contains(paneForNextTurn))
-			{
-				paneForNextTurn = new MessageNextPlayer("Pause","d95208", true);
-				this.getChildren().add(paneForNextTurn);
-			}
-		}
 	}
+	
 
 	public void setLauncherPower(float launchPower) {
 		launcherInd.setLauncherPower(launchPower);

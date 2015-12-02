@@ -2,6 +2,7 @@ package physic.weapon;
 
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
@@ -29,6 +30,7 @@ public class PhysicalBomb extends AbstractPhysicalWeapon  implements ExplosiveOb
 		this.blastPower=blastRadius*100;
 		this.blastRadius=blastRadius;
 		this.maxDamage=maxDamage;
+		bodiesToRemove = new Body[1];
 	}
 	
 	@Override
@@ -36,7 +38,9 @@ public class PhysicalBomb extends AbstractPhysicalWeapon  implements ExplosiveOb
 		bodyDef = new BodyDef();
 		bodyDef.fixedRotation = true;
 		bodyDef.setType(BodyType.DYNAMIC);
+		
 		body = world.createBody(bodyDef);
+		bodiesToRemove[0]=body;
 		body.setUserData("BOMBA");
 		CircleShape bombShape = new CircleShape();
 		bombShape.setRadius(radius);
@@ -90,7 +94,10 @@ public class PhysicalBomb extends AbstractPhysicalWeapon  implements ExplosiveOb
 		
 	}
 	
-	
+	@Override
+	public Body[] getBodiesToRemove() {
+		return bodiesToRemove;
+	}
 	
 	
 	
