@@ -61,6 +61,8 @@ public class MapEditor extends Application{
 	private boolean curveOrPolygon;
 	private Stage primaryStage;
 	
+	private double oldHeight;
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
@@ -80,6 +82,7 @@ public class MapEditor extends Application{
 		panelForObject = new PanelForObject(this);
         panelForMap = new PanelForMap(this, widthScreen-panelForObject.getPrefWidth(),panelForObject.getPrefWidth());
         ((PanelForMap) panelForMap).setDimensionStandard(widthScreen-panelForObject.getPrefWidth(),panelForObject.getPrefHeight());
+        oldHeight = ((PanelForMap)panelForMap).getRealPane().getPrefHeight();
         
 		drawAll();
 		
@@ -187,13 +190,24 @@ public class MapEditor extends Application{
     	{
 			if (curveToMove)
 			{
-				draggedCurve.modifyPosition(new Point2D(event.getX()-panelForObject.getPrefWidth(), event.getY()),panelForObject.getPrefWidth(),0);
+//				if (((PanelForMap) panelForMap).isUp())
+//					draggedCurve.modifyPosition(new Point2D(event.getX()-panelForObject.getPrefWidth(), event.getY()-((PanelForMap) panelForMap).getValueScroll()),panelForObject.getPrefWidth(),0);
+//				else
+					draggedCurve.modifyPosition(new Point2D(event.getX()-panelForObject.getPrefWidth(), event.getY()-((PanelForMap) panelForMap).getValueScroll()),panelForObject.getPrefWidth(),0);
+					
 				if (!((PanelForMap) panelForMap).containsCurve(draggedCurve))
             		((PanelForMap) panelForMap).addCurve(draggedCurve);
 			}
 			else
 			{
-				dragged.modifyAllVertex(event.getX(), event.getY(),panelForObject.getPrefWidth(),0);
+//				if (((PanelForMap) panelForMap).isUp())
+//					dragged.modifyAllVertex(event.getX(), event.getY()+((PanelForMap) panelForMap).getValueScroll(),panelForObject.getPrefWidth(),0);
+//				else
+//				System.out.println("OOOOOH: "+((PanelForMap) panelForMap).getValueScroll()+"       "+ event.getY() + "      "+(event.getY()+((PanelForMap) panelForMap).getValueScroll()));
+				double value = (2*((PanelForMap)panelForMap).getRealPane().getPrefHeight())/oldHeight;
+				System.out.println("EHI: "+((PanelForMap) panelForMap).getValueScroll()*value);
+				dragged.modifyAllVertex(event.getX(), event.getY()-((PanelForMap) panelForMap).getValueScroll()*value,panelForObject.getPrefWidth(),((PanelForMap) panelForMap).getValueScroll()*value);
+				
 				if (!((PanelForMap) panelForMap).containsObject(dragged))
             		((PanelForMap) panelForMap).addObject(dragged);
 			}
@@ -203,6 +217,8 @@ public class MapEditor extends Application{
 
 	public void setUpper(MouseEvent event)
 	{
+		curveToMove = false;
+		objectToMove = false;
 		for (PolygonObject image : objectInMap) {
 			image.setEffect(null);
 			if (image.contains(new Point2D(event.getX(), event.getY())))
@@ -889,6 +905,10 @@ public class MapEditor extends Application{
 		return objectToMove;
 	}
 
+	public boolean isDraggedCurve() {
+		return curveToMove;
+	}
+	
 	public void setDraggedCurve(Curve draggedCurve2) {
 		draggedCurve = draggedCurve2;
 	}
