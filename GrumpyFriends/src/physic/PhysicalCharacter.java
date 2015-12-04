@@ -15,7 +15,7 @@ import org.jbox2d.dynamics.joints.WheelJointDef;
 
 public class PhysicalCharacter extends AbstractPhysicalObject implements RemovablePhysicalObject{
 	
-	private final static float FEET_FRICTION=5.0f;
+	private final static float FEET_FRICTION=100.0f;
 	private final static float MOTOR_TORQUE=20f;
 	private final static float DENSITY = 10f;
 
@@ -111,8 +111,8 @@ public class PhysicalCharacter extends AbstractPhysicalObject implements Removab
 		bodyFixtureDef.setShape(polygonShape);
 		bodyFixtureDef.setDensity(DENSITY);
 
+		bodyFixtureDef.setUserData(nameCharacter+"Body");
 		bodyFixture=body.createFixture(bodyFixtureDef);
-
 		bodyDef.setPosition(new Vec2(start_x,start_y-bodyHeight/2));
 		bodyDef.setFixedRotation(false);
 		feet=world.createBody(bodyDef);
@@ -129,10 +129,9 @@ public class PhysicalCharacter extends AbstractPhysicalObject implements Removab
 		
 		feetFixtureDef.friction=FEET_FRICTION;
 		feetFixture = feet.createFixture(feetFixtureDef);
-		
-		body.setUserData(nameCharacter);
 		feetFixture.setUserData(nameCharacter);		
 		
+		body.setUserData(nameCharacter);
 		WheelJointDef wheelJointDef = new WheelJointDef();
 	    Vec2 axis = new Vec2(1.0f, 0.0f);
 	    

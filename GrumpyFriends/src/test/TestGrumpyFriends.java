@@ -146,7 +146,6 @@ public class TestGrumpyFriends extends TestbedTest {
 	public void step(TestbedSettings settings) {
 		super.step(settings);
 		world.update();
-		
 		getCamera().setCamera(new Vec2((float)matchManager.getCurrentPlayer().getPhysicalObject().getBody().getPosition().x,
 				(float)matchManager.getCurrentPlayer().getPhysicalObject().getBody().getPosition().y));
 //		addTextLine("Turn " + matchManager.getTurn());
@@ -154,7 +153,6 @@ public class TestGrumpyFriends extends TestbedTest {
 		
 		if(weapon!=null)
 			weapon.update();
-		System.out.println(weapon);
 		PhysicalObjectManager.getInstance().destroyBodies();
 		
 		

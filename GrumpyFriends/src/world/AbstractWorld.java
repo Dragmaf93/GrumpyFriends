@@ -144,6 +144,8 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	public void update() {
 		super.step(1.0f/30, 6, 3);  
 		
+		
+		
 		for (Character character : characters) {
 			
 			character.update();

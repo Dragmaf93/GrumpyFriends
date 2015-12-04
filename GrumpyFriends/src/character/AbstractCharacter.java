@@ -4,6 +4,7 @@ package character;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyType;
 
 import element.weaponsManager.Launcher;
 import element.weaponsManager.Weapon;
@@ -21,7 +22,7 @@ public abstract class AbstractCharacter implements Character {
 
 	private final static float MAX_SPEED = 10f;
 	private final static float _SPEED = 15f;
-	private final static float _FORCE = 500f;
+	private final static float _FORCE = 7500f;
 	private final static float JUMP = 25f;
 
 	
@@ -213,7 +214,7 @@ public abstract class AbstractCharacter implements Character {
 
 	@Override
 	public void move(int direction) {
-		if (!grounded)
+		if (!grounded )
 			return;
 
 		if (currentDirection != direction && launcher.isActivated()) {
@@ -226,27 +227,37 @@ public abstract class AbstractCharacter implements Character {
 				launcher.disable();
 			
 			Body body = physicBody.getBody();
-			Vec2 speed = body.getLinearVelocity();
-			force = 0;
-			moving = true;
-			currentDirection = direction;
-			switch (direction) {
-			case RIGHT:
-				// if (speed.x < MAX_SPEED)
-				force = _SPEED;
-				break;
-			case LEFT:
-				// if (speed.x > -MAX_SPEED)
-				force = -_SPEED;
-				break;
-			case STOP:
-				force = speed.x * -10;
-				break;
-			}
-			if (force != 0)
+//			Vec2 speed = body.getLinearVelocity();
+//			force = 0;
+//			moving = true;
+//			currentDirection = direction;
+//			switch (direction) {
+//			case RIGHT:
+//				// if (speed.x < MAX_SPEED)
+//				force = _SPEED;
+//				break;
+//			case LEFT:
+//				// if (speed.x > -MAX_SPEED)
+//				force = -_SPEED;
+//				break;
+//			case STOP:
+//				force = speed.x * -10;
+//				break;
+//			}
+			
+			 Vec2 vel = body.getLinearVelocity();
+			    float force = 0;
+			    switch ( direction )
+			    {
+			      case LEFT:  if ( vel.x > -10 ) force = -_FORCE;  break;
+			      case STOP:  force = vel.x * -10; break;
+			      case RIGHT: if ( vel.x <  10 ) force =  _FORCE; break;
+			    }
+			    body.applyForce( new Vec2(force,0), body.getWorldCenter());
+			if (force != 0 && body.getLinearVelocity().y>0)
 				((PhysicalCharacter) physicBody).unblockWheelJoint();
 			// body.applyForce(new Vec2(force, 0), body.getWorldCenter());
-			body.setLinearVelocity(new Vec2(force, speed.y));
+//			body.setLinearVelocity(new Vec2(force, speed.y));
 			launcher.setDirection(direction);
 		}
 
@@ -265,11 +276,9 @@ public abstract class AbstractCharacter implements Character {
 			launcher.activate();
 
 	}
-	
 	@Override
 	public void update() {
 		double x = getX(), y = getY();
-		
 		if(x > world.getWidth()+ World.DISTANCE_WORLDS_BORDER || x < -World.DISTANCE_WORLDS_BORDER
 				|| y > world.getHeight()+ World.DISTANCE_WORLDS_BORDER)
 			isOutWorld=true;

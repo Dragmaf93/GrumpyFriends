@@ -49,12 +49,13 @@ public class PhysicalPolygonObject implements PhysicalObject {
 		{
 			EdgeShape shape = new EdgeShape();
 			shape.set(vertices[i-1], vertices[i]);
-			body.createFixture(shape,1.0f);
+			body.createFixture(shape,1.0f).setFriction(1);
+			
 		}
 		
 		EdgeShape shape = new EdgeShape();
 		shape.set(vertices[0], vertices[vertices.length-1]);
-		body.createFixture(shape, 1.0f);
+		body.createFixture(shape, 1.0f).setFriction(1);
 	}
 	
 	@Override

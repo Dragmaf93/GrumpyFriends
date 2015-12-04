@@ -4,10 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.text.DefaultEditorKit.CutAction;
+
+import org.apache.log4j.chainsaw.Main;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
+import org.jbox2d.collision.ManifoldPoint;
 import org.jbox2d.collision.WorldManifold;
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.contacts.Contact;
 
@@ -18,11 +24,12 @@ import physic.weapon.PhysicalWeapon;
 public class PhysicalContactListener implements ContactListener {
 
 	private HashMap<Character, Integer> characterContact;
+	private List<Character> charactersList;
 
 	public PhysicalContactListener(List<Character> characters) {
 
 		characterContact = new HashMap<>();
-
+		charactersList = characters;
 		for (Character character : characters) {
 			characterContact.put(character, new Integer(0));
 		}
@@ -34,6 +41,22 @@ public class PhysicalContactListener implements ContactListener {
 			return f1;
 		} else if (f2.getUserData() != null
 				&& f2.getUserData().equals(characterName)) {
+			return f2;
+		}
+		return null;
+	}
+
+	private Fixture getBodyFixture(Fixture f1, Fixture f2,
+			String currentCharacter, String characterName) {
+		if (f1.getUserData() != null
+				&& f1.getUserData().equals(characterName + "Body")
+				&& f2.getUserData() != null
+				&& f2.getUserData().equals(currentCharacter + "Body")) {
+			return f1;
+		} else if (f2.getUserData() != null
+				&& f2.getUserData().equals(characterName + "Body")
+				&& f1.getUserData() != null
+				&& f1.getUserData().equals(currentCharacter + "Body")) {
 			return f2;
 		}
 		return null;
@@ -63,21 +86,40 @@ public class PhysicalContactListener implements ContactListener {
 			explosiveObjectfixture = null;
 		}
 
-		// character contact
-		Set<Character> characters = characterContact.keySet();
-		for (Character character : characters) {
-			if (!character.isDead() && !character.isOutWorld()) {
-				if (getFeetFixture(contact.getFixtureA(),
-						contact.getFixtureB(), character.getName()) != null) {
-					Integer tmp = characterContact.get(character) + 1;
-					characterContact.put(character, tmp);
-				}
+		{
+			// character contact
+			Set<Character> characters = characterContact.keySet();
+			for (Character character : characters) {
+				if (!character.isDead() && !character.isOutWorld()) {
+					if (getFeetFixture(contact.getFixtureA(),
+							contact.getFixtureB(), character.getName()) != null) {
+						Integer tmp = characterContact.get(character) + 1;
+						characterContact.put(character, tmp);
+					}
 
-				if (characterContact.get(character) > 0)
-					character.setGrounded(true);
+					if (characterContact.get(character) > 0)
+						character.setGrounded(true);
+				}
 			}
 		}
-
+//		{
+//			Set<Character> characters = characterContact.keySet();
+//			Character currentCharacter = charactersList.get(0).getTeam()
+//					.getMatchManager().getCurrentPlayer();
+//
+//			for (Character character : characters) {
+//				if (character != currentCharacter && !character.isDead()
+//						&& !character.isOutWorld()) {
+//					Fixture fixture;
+//					if ((fixture = getBodyFixture(contact.getFixtureA(),
+//							contact.getFixtureB(), currentCharacter.getName(),
+//							character.getName())) != null) {
+//						System.out.println("Fixture " + fixture.getUserData());
+//					}
+//
+//				}
+//			}
+//		}
 	}
 
 	@Override
@@ -98,15 +140,47 @@ public class PhysicalContactListener implements ContactListener {
 	}
 
 	@Override
-	public void postSolve(Contact arg0, ContactImpulse arg1) {
-		// TODO Auto-generated method stub
-
+	public void postSolve(Contact contact, ContactImpulse contactImpulse) {
+//		{
+//			Set<Character> characters = characterContact.keySet();
+//			Character currentCharacter = charactersList.get(0).getTeam()
+//					.getMatchManager().getCurrentPlayer();
+//
+//			for (Character character : characters) {
+//				if (character != currentCharacter && !character.isDead()
+//						&& !character.isOutWorld()) {
+//					Fixture fixture;
+//					if ((fixture = getBodyFixture(contact.getFixtureA(),
+//							contact.getFixtureB(), currentCharacter.getName(),
+//							character.getName())) != null) {
+//						System.out.println(contactImpulse.normalImpulses);
+//					}
+//
+//				}
+//			}
+//		}
 	}
 
 	@Override
-	public void preSolve(Contact arg0, Manifold arg1) {
-		// TODO Auto-generated method stub
+	public void preSolve(Contact contact, Manifold manifold) {
 
+//		Set<Character> characters = characterContact.keySet();
+//		Character currentCharacter = charactersList.get(0).getTeam()
+//				.getMatchManager().getCurrentPlayer();
+//
+//		for (Character character : characters) {
+//			if (character != currentCharacter && !character.isDead()
+//					&& !character.isOutWorld()) {
+//				Fixture fixture;
+//				if ((fixture = getBodyFixture(contact.getFixtureA(),
+//						contact.getFixtureB(), currentCharacter.getName(),
+//						character.getName())) != null) {
+//					contact.setEnabled(false);
+////					fixture.getBody().applyForceToCenter(new Vec2(-manifold.localNormal.x*5000,0));
+//				}
+//
+//			}
+//		}
 	}
 
 }
