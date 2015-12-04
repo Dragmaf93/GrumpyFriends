@@ -34,32 +34,26 @@ public class PolygonGroundDrawer extends AbstractDrawerObject  {
 		List<Point> points = ground.getPoint();
 		
 		Polygon shape = new Polygon();
-//		shape.getPoints().addAll(new Double[]{30.0, 0.0,
-//				0.0, 24.0,  0.0, 60.0,   60.0, 60.0,   60.0, 24.0
-//		});
 		
 		for (Point point : points) {
-			shape.getPoints().add( point.x-ground.getX());
+			shape.getPoints().add(point.x-ground.getX());
 			shape.getPoints().add(point.y-ground.getY());
 		}
-//	
 		
-//		ImageView imageView = new ImageView(imageLoader.getImageGrounds("Planet"));
-//		ImageView imageView = new ImageView(new Image("file:image/ground/groundPlanet.png"));
-		
-		ImagePattern imageP = new ImagePattern(imageLoader.getImageGrounds("Planet"));
-//		shape.setFill(imageP);
-		ImageView imageView = new ImageView(imageP.getImage());
-		imageView.resize(ground.getWidth(), ground.getHeight());
-		imageView.setClip(shape);
-//		System.out.println(this.getClass()+"         "+ ground.getWidth()+"    "+ground.getHeight());
-//		imageView.setFitHeight(ground.getHeight());
-//		imageView.setFitWidth(ground.getWidth());
-		imageView.setLayoutX(ground.getX());
-		imageView.setLayoutY(ground.getY());
-//		shape.setFill(imagePattern);
-		return imageView;
-//		return shape;
+		ImageView imageView = null;
+		if (ground.getHeight() > ground.getWidth())
+			imageView = new ImageView(imageLoader.getImageGrounds(TYPE_WORLD,"Height"));
+		else
+			imageView = new ImageView(imageLoader.getImageGrounds(TYPE_WORLD,"Width"));
+			
+		if (imageView != null) {
+			imageView.resize(ground.getWidth(), ground.getHeight());
+			imageView.setClip(shape);
+			imageView.setLayoutX(ground.getX());
+			imageView.setLayoutY(ground.getY());
+			return imageView;
+		}
+		return null;
 	}
 
 		

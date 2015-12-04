@@ -53,14 +53,25 @@ public class RoundGround extends AbstractGround {
 	}
 	@Override
 	public void setPosition() {
-		// TODO Auto-generated method stub
-
+		positionX = points.get(0).x;
+		positionY = points.get(0).y;
 	}
 
 	@Override
 	public void setSize() {
-		// TODO Auto-generated method stub
-
+		double minX=Double.MAX_VALUE,minY=Double.MAX_VALUE,
+				maxY=Double.MIN_VALUE,maxX=Double.MIN_VALUE;
+		for (Point point : points) {
+			if(point.x<minX) minX=point.x;
+			if(point.x>maxX) maxX=point.x;
+			if(point.y<minY) minY=point.y;
+			if(point.y>maxY) maxY=point.y;
+		}
+		
+		height=maxY-minY;
+		width=maxX-minX;		
+		positionX=minX;
+		positionY=minY;
 	}
 
 }

@@ -24,18 +24,19 @@ public class RoundGroundDrawer extends AbstractDrawerObject{
 		
 		if(ground.isABezierCurve()){
 			QuadCurve shape = 
-					new QuadCurve(ground.getStart().x,
-									ground.getStart().y,
-									ground.getControl().x, 
-									ground.getControl().y,
-									ground.getEnd().x,
-									ground.getEnd().y);
+					new QuadCurve(ground.getStart().x - ground.getX(),
+									ground.getStart().y - ground.getY(),
+									ground.getControl().x - ground.getX(), 
+									ground.getControl().y - ground.getY(),
+									ground.getEnd().x - ground.getX(),
+									ground.getEnd().y - ground.getY());
 			
-			ImageView imageView = new ImageView(imageLoader.getImageGrounds("Planet"));
+			ImageView imageView = new ImageView(imageLoader.getImageGrounds("Planet","Width"));
+
+			imageView.resize(ground.getWidth(), ground.getHeight());
 			imageView.setClip(shape);
 			imageView.setLayoutX(ground.getX());
 			imageView.setLayoutY(ground.getY());
-			
 			return imageView;
 			
 		}
