@@ -21,6 +21,7 @@ public class IndicatorOfTime extends AbstractHudElement{
 	
 	private final static double DISTANCE_SCREEN_LEFT=30;
 	private final static double DISTANCE_SCREEN_TOP=5;
+	
 	private final static Color BACKGROUND_COLOR = new Color(30d / 255d, 127d / 255d, 169d / 255d, 0.9d);
 
 	
@@ -57,8 +58,6 @@ public class IndicatorOfTime extends AbstractHudElement{
 		root.getChildren().add(clock);
 		root.getChildren().add(turnTimer);
 		root.getChildren().add(matchTimer);
-		
-		
 	}
 	
 	

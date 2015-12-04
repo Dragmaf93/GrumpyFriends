@@ -21,6 +21,7 @@ public class Team {
 	private int currentPlayer;
 
 	private MatchManager matchManager;
+	private int maxTeamLifePoints;
 
 	public Team(String name, int numberOfCharacter, MatchManager matchManager) {
 		this.name = name;
@@ -56,6 +57,9 @@ public class Team {
 		int tot = 0;
 		for (Character character : charactersInGame)
 			tot+=character.getLifePoints();
+		
+		if(maxTeamLifePoints==0)
+			maxTeamLifePoints=tot;
 		return tot;
 	}
 	
@@ -130,6 +134,10 @@ public class Team {
 				diedCharacters.add(character);
 			}
 		}
+	}
+
+	public double getMaxLifePoints() {
+		return maxTeamLifePoints;
 	}
 	
 	

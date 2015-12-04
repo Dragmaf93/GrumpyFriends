@@ -22,7 +22,7 @@ public abstract class AbstractCharacter implements Character {
 	private final static float MAX_SPEED = 10f;
 	private final static float _SPEED = 15f;
 	private final static float _FORCE = 500f;
-	private final static float JUMP = 55f;
+	private final static float JUMP = 25f;
 
 	
 	
@@ -72,7 +72,7 @@ public abstract class AbstractCharacter implements Character {
 
 		equippedWeapon = null;
 		grounded = true;
-		lifePoints = 10;
+		lifePoints = 100;
 
 		physicBody = new PhysicalCharacter(x, y, width, height, name);
 		PhysicalObjectManager.getInstance().buildPhysicObject(physicBody);

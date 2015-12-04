@@ -6,7 +6,7 @@ import game.MatchManager;
 import game.TurnPhaseType;
 import gui.hud.IndicatorOfEquippedWeapon;
 import gui.hud.IndicatorOfLauncher;
-import gui.hud.IndicatorOfPlayerLife;
+import gui.hud.IndicatorOfTeamLife;
 import gui.hud.IndicatorOfTime;
 import gui.hud.Inventory;
 import gui.hud.MessageNextPlayer;
@@ -26,7 +26,7 @@ public class MatchPane extends Pane {
 	private IndicatorOfTime timerInd;
 	private IndicatorOfLauncher launcherInd;
 	private IndicatorOfEquippedWeapon equippedWeaponInd;
-	private IndicatorOfPlayerLife playerLifeInd;
+	private IndicatorOfTeamLife teamLifeInd;
 	private Inventory inventory;
 
 	private MatchManager matchManager;
@@ -51,6 +51,7 @@ public class MatchPane extends Pane {
 		this.inventory = new Inventory(matchManager);
 		this.equippedWeaponInd = new IndicatorOfEquippedWeapon(matchManager);
 		this.launcherInd = new IndicatorOfLauncher(matchManager);
+		this.teamLifeInd = new IndicatorOfTeamLife(matchManager);
 		
 		fieldPane.setScene(fieldScene);
 		
@@ -58,6 +59,7 @@ public class MatchPane extends Pane {
 		this.getChildren().add(timerInd.getNode());
 		this.getChildren().add(equippedWeaponInd.getNode());
 		this.getChildren().add(launcherInd.getNode());
+		this.getChildren().add(teamLifeInd.getNode());
 		pause = false;
 		
 		this.setBackground(new Background(new BackgroundImage(fieldPane.getImageLoader().getImageBackgrounds("Planet"), null,
@@ -145,6 +147,7 @@ public class MatchPane extends Pane {
 //			matchManager.update();
 			timerInd.draw();
 		}
+		teamLifeInd.draw();
 	}
 	
 
