@@ -1,10 +1,13 @@
 package gui.weapon;
 
+import character.Character;
 import element.weaponsManager.Weapon;
 import element.weaponsManager.weapons.SimpleMissile;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.transform.Rotate;
 
 public class GuiSimpleMissile extends AbstractGuiWeapon {
@@ -13,6 +16,7 @@ public class GuiSimpleMissile extends AbstractGuiWeapon {
 	private final static double BAZOOKA_HEIGHT = 50;
 
 	private Rotate launcherRotate;
+	private Rotate launcherRotateY;
 	private Rotate bulletRotate;
 
 	private ImageView launcherImage;
@@ -22,25 +26,27 @@ public class GuiSimpleMissile extends AbstractGuiWeapon {
 
 	private boolean finishAnimation;
 
-
 	public GuiSimpleMissile(Weapon weapon) {
 		super(weapon);
 		this.weapon = weapon;
 
 		finishAnimation = false;
 
-		bulletImage = new ImageView(new Image("file:image/weapons/bazookaBullet.png"));
+		bulletImage = new ImageView(new Image(
+				"file:image/weapons/bazookaBullet.png"));
 		bulletImage.setFitHeight(weapon.getHeight());
 		bulletImage.setFitWidth(weapon.getWidth());
 
-		launcherImage = new ImageView(new Image("file:image/weapons/bazooka1.png"));
-		
-		launcherImage.setFitHeight(BAZOOKA_HEIGHT);
-		launcherImage.setFitWidth(BAZOOKA_WIDTH);
+		launcherImage = new ImageView();
+		// //
+
 		launcherRotate = new Rotate();
+		launcherRotateY = new Rotate();
+		launcherRotateY.setAxis(Rotate.Y_AXIS);
 		launcherRotate.setAxis(Rotate.Z_AXIS);
 
 		launcherImage.getTransforms().add(launcherRotate);
+		launcherImage.getTransforms().add(launcherRotateY);
 
 		bulletRotate = new Rotate();
 		bulletRotate.setAxis(Rotate.Z_AXIS);
@@ -49,8 +55,12 @@ public class GuiSimpleMissile extends AbstractGuiWeapon {
 
 	@Override
 	public Node getWeaponLauncher() {
-		if(!launcherRoot.getChildren().contains(launcherImage))
+		if (!launcherRoot.getChildren().contains(launcherImage))
 			launcherRoot.getChildren().add(launcherImage);
+		launcherImage.setImage(characterAnimation
+				.getCharacterWeaponLauncher(weapon));
+		launcherImage.setFitWidth(characterAnimation.getWidth());
+		launcherImage.setFitHeight(characterAnimation.getHeight());
 		return launcherRoot;
 	}
 
@@ -59,7 +69,6 @@ public class GuiSimpleMissile extends AbstractGuiWeapon {
 
 		if (!bulletRoot.getChildren().contains(bulletImage)) {
 			explosion = new GuiExplosion(this);
-
 			bulletRoot.getChildren().add(bulletImage);
 			bulletRoot.getChildren().add(explosion.getExplosionNode());
 		}
@@ -69,12 +78,29 @@ public class GuiSimpleMissile extends AbstractGuiWeapon {
 	@Override
 	public void updateLauncher() {
 		super.updateLauncher();
-		
-//		launcherRotate.setAxis(Rotate.Z_AXIS);
-//		launcherRotate.setPivotX(launcherImage.getX() + BAZOOKA_WIDTH * 0.3);
-//		launcherRotate.setPivotY(launcherImage.getY() + BAZOOKA_HEIGHT * 0.5);
-//		launcherRotate.setAngle(Math.toDegrees(-character.getLauncher().getAngle()));
-		launcherImage.relocate(character.getX() - BAZOOKA_WIDTH * 0.2, character.getY());
+
+		if (currentCharacter.getCurrentDirection() == Character.RIGHT) {
+			
+			launcherRotateY.setPivotX(launcherImage.getX()+80);
+			launcherRotateY.setAngle(0);
+			
+			launcherRotate.setAxis(Rotate.Z_AXIS);
+			launcherRotate.setPivotX(launcherImage.getX() + 75);
+			launcherRotate.setPivotY(launcherImage.getY() + 85);
+			launcherRotate.setAngle(Math.toDegrees(-currentCharacter
+					.getLauncher().getAngle()));
+		} else if (currentCharacter.getCurrentDirection() == Character.LEFT) {
+			launcherRotateY.setPivotX(launcherImage.getX()+80);
+			launcherRotateY.setAngle(180);
+			launcherRotate.setAxis(Rotate.Z_AXIS);
+			launcherRotate.setPivotX(launcherImage.getX() + 75);
+			launcherRotate.setPivotY(launcherImage.getY() + 85);
+			launcherRotate.setAngle(Math.toDegrees(-currentCharacter
+					.getLauncher().getAngle())-180);
+		}
+		launcherImage.relocate(
+				currentCharacter.getX() + characterAnimation.getValueX(),
+				currentCharacter.getY() + characterAnimation.getValueY());
 	}
 
 	@Override
@@ -89,7 +115,8 @@ public class GuiSimpleMissile extends AbstractGuiWeapon {
 		if (!((SimpleMissile) weapon).isExplosed()) {
 			bulletRotate.setPivotX(launcherImage.getX());
 			bulletRotate.setPivotY(launcherImage.getY());
-			bulletRotate.setAngle(Math.toDegrees(-((SimpleMissile) weapon).getAngle()));
+			bulletRotate.setAngle(Math.toDegrees(-((SimpleMissile) weapon)
+					.getAngle()));
 
 			bulletImage.relocate(weapon.getX(), weapon.getY());
 

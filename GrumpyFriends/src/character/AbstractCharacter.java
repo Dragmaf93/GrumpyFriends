@@ -1,7 +1,5 @@
 package character;
 
-
-
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyType;
@@ -25,8 +23,6 @@ public abstract class AbstractCharacter implements Character {
 	private final static float _FORCE = 7500f;
 	private final static float JUMP = 25f;
 
-	
-	
 	protected String name;
 	protected float height;
 	protected float width;
@@ -60,9 +56,10 @@ public abstract class AbstractCharacter implements Character {
 	private boolean suffereDamage;
 	private boolean endTurn;
 	private int lastDamagePoints;
+	private boolean jumping;
 
 	public AbstractCharacter(String name, float x, float y, float height,
-			float width, Team team,World world) {
+			float width, Team team, World world) {
 
 		this.name = name;
 		this.team = team;
@@ -103,10 +100,8 @@ public abstract class AbstractCharacter implements Character {
 	@Override
 	public void setGrounded(boolean b) {
 		this.grounded = b;
-		
+		jumping=false;
 		((PhysicalCharacter) physicBody).blockWheelJoint();
-		
-		
 
 	}
 
@@ -157,8 +152,8 @@ public abstract class AbstractCharacter implements Character {
 
 	@Override
 	public void afterDeath() {
-		System.out.println("REMOVE PHYSIC OF "+ name);
-		PhysicalObjectManager.getInstance().removePhysicalObject((RemovablePhysicalObject)physicBody);
+		PhysicalObjectManager.getInstance().removePhysicalObject(
+				(RemovablePhysicalObject) physicBody);
 	}
 
 	@Override
@@ -214,7 +209,7 @@ public abstract class AbstractCharacter implements Character {
 
 	@Override
 	public void move(int direction) {
-		if (!grounded )
+		if (!grounded)
 			return;
 
 		if (currentDirection != direction && launcher.isActivated()) {
@@ -223,41 +218,49 @@ public abstract class AbstractCharacter implements Character {
 			launcher.setDirection(direction);
 		} else {
 
-			if(launcher.isActivated())
+			if (launcher.isActivated())
 				launcher.disable();
-			
+
 			Body body = physicBody.getBody();
-//			Vec2 speed = body.getLinearVelocity();
-//			force = 0;
-//			moving = true;
-//			currentDirection = direction;
-//			switch (direction) {
-//			case RIGHT:
-//				// if (speed.x < MAX_SPEED)
-//				force = _SPEED;
-//				break;
-//			case LEFT:
-//				// if (speed.x > -MAX_SPEED)
-//				force = -_SPEED;
-//				break;
-//			case STOP:
-//				force = speed.x * -10;
-//				break;
-//			}
-			
-			 Vec2 vel = body.getLinearVelocity();
-			    float force = 0;
-			    switch ( direction )
-			    {
-			      case LEFT:  if ( vel.x > -10 ) force = -_FORCE;  break;
-			      case STOP:  force = vel.x * -10; break;
-			      case RIGHT: if ( vel.x <  10 ) force =  _FORCE; break;
-			    }
-			    body.applyForce( new Vec2(force,0), body.getWorldCenter());
-			if (force != 0 && body.getLinearVelocity().y>0)
+			// Vec2 speed = body.getLinearVelocity();
+			// force = 0;
+			// currentDirection = direction;
+			// switch (direction) {
+			// case RIGHT:
+			// // if (speed.x < MAX_SPEED)
+			// force = _SPEED;
+			// break;
+			// case LEFT:
+			// // if (speed.x > -MAX_SPEED)
+			// force = -_SPEED;
+			// break;
+			// case STOP:
+			// force = speed.x * -10;
+			// break;
+			// }
+
+			Vec2 vel = body.getLinearVelocity();
+			float force = 0;
+			moving = true;
+			switch (direction) {
+			case LEFT:
+				if (vel.x > -10)
+					force = -_FORCE;
+				break;
+			case STOP:
+				force = vel.x * -10;
+				break;
+			case RIGHT:
+				if (vel.x < 10)
+					force = _FORCE;
+				break;
+			}
+			body.applyForce(new Vec2(force, 0), body.getWorldCenter());
+			if (force != 0 && body.getLinearVelocity().y > 0)
 				((PhysicalCharacter) physicBody).unblockWheelJoint();
 			// body.applyForce(new Vec2(force, 0), body.getWorldCenter());
-//			body.setLinearVelocity(new Vec2(force, speed.y));
+			// body.setLinearVelocity(new Vec2(force, speed.y));
+			currentDirection = direction;
 			launcher.setDirection(direction);
 		}
 
@@ -276,24 +279,26 @@ public abstract class AbstractCharacter implements Character {
 			launcher.activate();
 
 	}
+
 	@Override
 	public void update() {
 		double x = getX(), y = getY();
-		if(x > world.getWidth()+ World.DISTANCE_WORLDS_BORDER || x < -World.DISTANCE_WORLDS_BORDER
-				|| y > world.getHeight()+ World.DISTANCE_WORLDS_BORDER)
-			isOutWorld=true;
-			
-			
+		if (x > world.getWidth() + World.DISTANCE_WORLDS_BORDER
+				|| x < -World.DISTANCE_WORLDS_BORDER
+				|| y > world.getHeight() + World.DISTANCE_WORLDS_BORDER)
+			isOutWorld = true;
+
 	}
 
 	@Override
 	public void jump() {
 		Body body = physicBody.getBody();
 		if (grounded) {
-			if(launcher.isActivated())
-				activeLauncher=true;
-			
-				launcher.disable();
+			jumping=true;
+			if (launcher.isActivated())
+				activeLauncher = true;
+
+			launcher.disable();
 			float impulse = body.getMass() * JUMP;
 			body.applyLinearImpulse(new Vec2(0, impulse),
 					body.getWorldCenter(), true);
@@ -302,13 +307,13 @@ public abstract class AbstractCharacter implements Character {
 
 	@Override
 	public WeaponsManager getInventoryManager() {
-		// TODO Auto-generated method stub
 		return weaponsManager;
 	}
 
 	@Override
 	public void endTurn() {
 		endTurn = true;
+		launcher.disable();
 		((PhysicalCharacter) physicBody).blockWheelJoint();
 
 	}
@@ -412,5 +417,19 @@ public abstract class AbstractCharacter implements Character {
 	public boolean isOutWorld() {
 		return isOutWorld;
 	}
-
+	
+	@Override
+	public boolean isMoving() {
+		return moving;
+	}
+	@Override
+	public boolean isJumping() {
+		return jumping;
+	}
+	
+	@Override
+	public boolean isFalling() {
+		if(physicBody.getBody().getLinearVelocity().y<0 && !isGrounded()) return true;
+		return false;
+	}
 }

@@ -14,6 +14,7 @@ import javafx.scene.Camera;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -62,8 +63,9 @@ public class MatchPane extends Pane {
 		this.getChildren().add(teamLifeInd.getNode());
 		pause = false;
 		
-		this.setBackground(new Background(new BackgroundImage(fieldPane.getImageLoader().getImageBackgrounds("Planet"), null,
-				null, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
+		this.setBackground(new Background(new BackgroundImage(fieldPane.getImageLoader().getImageBackgrounds("Planet"),BackgroundRepeat.ROUND,
+				BackgroundRepeat.ROUND, BackgroundPosition.DEFAULT,
+				new BackgroundSize(100,100,true,true,true,false))));
 
 	}
 

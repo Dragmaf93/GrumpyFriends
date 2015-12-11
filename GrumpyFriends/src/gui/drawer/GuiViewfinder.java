@@ -5,6 +5,8 @@ import element.weaponsManager.Weapon;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.transform.Rotate;
 
 public class GuiViewfinder {

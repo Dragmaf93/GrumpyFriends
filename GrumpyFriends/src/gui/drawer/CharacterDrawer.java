@@ -24,11 +24,14 @@ public class CharacterDrawer {
 	private Group pane;
 
 	private Character character;
-	private ImageView imageView;
 	private WeaponDrawer weaponDrawer;
 
 	private Group root;
+	
+	
 	private Rectangle characterBody;
+	private ImageView characterImage;
+
 	private Weapon equipedWeapon;
 	private Node currentLauncherWeapon;
 	private Node currentBulletWeapon;
@@ -56,17 +59,33 @@ public class CharacterDrawer {
 
 	private boolean deathAnimationEnd;
 
+	private CharacterAnimation characterAnimation;
+	
+	private Rotate rotateImage;
+
+	private int lastDirection;
+	
 	public CharacterDrawer(Group pane, Character character, WeaponDrawer weaponDrawer,MatchManager matchManager) {
 		this.pane = pane;
 		this.character = character;
 		this.matchManager=matchManager;
 		// this.weaponDrawer = new WeaponDrawer(character);
 		this.weaponDrawer = weaponDrawer;
-
+		
 		root = new Group();
 		characterBody = new Rectangle(character.getX(), character.getY(), character.getWidth(), character.getHeight());
-		root.getChildren().add(characterBody);
-
+		characterImage = new ImageView();
+		characterAnimation = new StormtrooperAnimation();
+//		root.getChildren().add(characterBody);
+		root.getChildren().add(characterImage);
+		
+		characterImage.setFitHeight(characterAnimation.getHeight());
+		characterImage.setFitWidth(characterAnimation.getWidth());
+		
+		rotateImage = new Rotate();
+		characterImage.getTransforms().add(rotateImage);
+		lastDirection=character.getCurrentDirection();
+		
 		lifePointsText = new Text();
 		lifePointsText.setFill(Color.BLACK);
 		lifePointsText.setFont(Font.font(15));
@@ -75,7 +94,7 @@ public class CharacterDrawer {
 		damagePoint = new Text();
 		damagePoint.setFill(Color.BLACK);
 		damagePoint.setFont(Font.font(15));
-
+		
 		lifePointsRectangle = new Rectangle(50, 30);
 		lifePointsRectangle.setFill(character.getTeam().getColorTeam());
 		lifePointsRectangle.setArcHeight(10);
@@ -95,7 +114,7 @@ public class CharacterDrawer {
 
 		lifePointsPane.setCache(true);
 		lifePointsPane.setCacheHint(CacheHint.SCALE_AND_ROTATE);
-
+		
 		root.getChildren().add(lifePointsPane);
 		root.getChildren().add(damageLifePointsPane);
 		pane.getChildren().add(root);
@@ -111,27 +130,36 @@ public class CharacterDrawer {
 				canStart = true;
 			}
 			if (character == matchManager.getCurrentPlayer()) {
-//				 System.out.println("PRIMA DEL IF : ABILITA ARMA "
-//				 		+ "!root.getChildren().contains(currentLauncherWeapon)" +!root.getChildren().contains(currentLauncherWeapon)+
-//				 		" !weaponDrawer.attackEnded() "+ !weaponDrawer.attackEnded() +" !character.getLauncher().attacked() "
-//				 		+ !character.getLauncher().attacked());
+				
+				if(character.isMoving()){
+					characterImage.setImage(characterAnimation.getCharacterMoveAnimation());
+
+				}
+				
+				if(character.getCurrentDirection()!=lastDirection){
+					lastDirection = character.getCurrentDirection();
+					rotateImage.setAxis(Rotate.Y_AXIS);
+					rotateImage.setPivotX(characterImage.getX()+80);
+					if(lastDirection==Character.LEFT)
+						rotateImage.setAngle(180);
+					else if(lastDirection==Character.RIGHT)
+						rotateImage.setAngle(0);
+				}
+				if(character.isJumping()){
+					characterImage.setImage(characterAnimation.getCharacterJumpAnimation());
+					
+				}
+				
 				if (character.getLauncher().isActivated() && !root.getChildren().contains(currentLauncherWeapon)
 						&& !weaponDrawer.attackEnded() && !character.getLauncher().attacked()) {
 					equipedWeapon = character.getEquipWeapon();
-//					System.out.println("PRIMA DEL IF : ABILITA ARMA "
-//							+ "!root.getChildren().contains(currentLauncherWeapon)" +!root.getChildren().contains(currentLauncherWeapon)+
-//							" !weaponDrawer.attackEnded() "+ !weaponDrawer.attackEnded() +" !character.getLauncher().attacked() "
-//							+ !character.getLauncher().attacked());
-//					 System.out.println("DENTRO DEL IF : ABILITA ARMA" +
-//					 equipedWeapon);
-					currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon, character);
+					currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon, character,characterAnimation);
 					root.getChildren().add(currentLauncherWeapon);
+					characterImage.setImage(characterAnimation.getCharacterBodyWithWeapon(equipedWeapon));
 					entry = false;
 
 				}
-				// System.out.println("FINE DEL IF : ABILITA ARMA");
 
-				// System.out.println("PRIMA DEL IF : CAMBIA ARMA");
 				if (character.getLauncher().isActivated() && root.getChildren().contains(currentLauncherWeapon)
 						&& !weaponDrawer.attackEnded() && equipedWeapon != null && character.getEquipWeapon() != null
 						&& !character.getEquipWeapon().getName().equals(equipedWeapon.getName())) {
@@ -139,25 +167,18 @@ public class CharacterDrawer {
 					entry = false;
 					root.getChildren().remove(currentLauncherWeapon);
 					equipedWeapon = character.getEquipWeapon();
-					currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon, character);
+					currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon, character,characterAnimation);
 					root.getChildren().add(currentLauncherWeapon);
+					characterImage.setImage(characterAnimation.getCharacterBodyWithWeapon(equipedWeapon));
 				}
-				// System.out.println("FINE DEL IF : CAMBIA ARMA");
 
-				// System.out.println("PRIMA DEL IF : DISABILITA ARMA");
 				if (!character.getLauncher().isActivated() && root.getChildren().contains(currentLauncherWeapon)
 						&& !weaponDrawer.attackEnded()) {
 					root.getChildren().remove(currentLauncherWeapon);
 				}
-				// System.out.println("FINE DEL IF : DISABILITA ARMA");
-
-				// System.out.println("PRIMA DEL IF : AGGIORNA MIRA");
 				if (character.getLauncher().isActivated() && !weaponDrawer.attackEnded()) {
 					weaponDrawer.updateLauncherAim();
 				}
-				// System.out.println("FINE DEL IF : AGGIORNA MIRA");
-
-				// System.out.println("PRIMA DEL IF : INIZIO ATTACCO");
 				if (weaponDrawer.bulletLaunched() && !weaponDrawer.attackEnded()) {
 
 					character.getLauncher().disable();
@@ -167,9 +188,7 @@ public class CharacterDrawer {
 					}
 					weaponDrawer.updateBullet();
 				}
-				// System.out.println("FINE DEL IF : INIZIO ATTACCO");
-
-				// System.out.println("PRIMA DEL IF : FINE ATTACCO");
+				
 				if (weaponDrawer.attackEnded()) {
 					pane.getChildren().remove(currentBulletWeapon);
 					root.getChildren().remove(currentLauncherWeapon);
@@ -179,9 +198,7 @@ public class CharacterDrawer {
 					currentLauncherWeapon = null;
 
 				}
-				// System.out.println("FINE DEL IF : FINE ATTACCO");
-
-				// System.out.println("PRIMA DEL IF : FINE TURNO");
+				
 				if (character.finishedTurn() && !weaponDrawer.attackEnded() && !entry) {
 					entry = true;
 					pane.getChildren().remove(currentBulletWeapon);
@@ -201,8 +218,17 @@ public class CharacterDrawer {
 				// }
 				// System.out.println("FINE DEL IF : CAMBIO DIREZIONE");
 			}
+			
 			characterBody.relocate(character.getX(), character.getY());
-
+//			root.relocate(character.getX()+characterAnimation.getValueX(), character.getY()+characterAnimation.getValueY());
+			
+			lifePointsPane.relocate(
+					character.getX() + characterBody.getWidth() / 2 - lifePointsRectangle.getWidth() / 2,
+					character.getY() - 70);
+			damageLifePointsPane.relocate(
+					character.getX() + characterBody.getWidth() / 2 - lifePointsRectangle.getWidth() / 2,
+					character.getY() - 110);
+			characterImage.relocate(character.getX()+characterAnimation.getValueX(), character.getY()+characterAnimation.getValueY());
 			if (lifePointsUpdate) {
 				pointCounter += 1;
 				int lf = Integer.parseInt(lifePointsText.getText());
@@ -215,21 +241,20 @@ public class CharacterDrawer {
 					damagePoint.setText("");
 				}
 			}
+			if(character.isFalling())
+				characterImage.setImage(characterAnimation.getCharacterFallAnimation());
+			
+			if (character.isSleeping() && !character.getLauncher().isActivated()) {
+				
+				characterImage.setImage(characterAnimation.getCharacterIdleAnimation());
+//				lifePointsPane.setVisible(true);
 
-			if (character.isSleeping()) {
-
-				lifePointsPane.relocate(
-						character.getX() + characterBody.getWidth() / 2 - lifePointsRectangle.getWidth() / 2,
-						character.getY() - 70);
-				damageLifePointsPane.relocate(
-						character.getX() + characterBody.getWidth() / 2 - lifePointsRectangle.getWidth() / 2,
-						character.getY() - 110);
-				lifePointsPane.setVisible(true);
-
-			} else {
-
-				lifePointsPane.setVisible(false);
-			}
+			} 
+			
+//			else {
+//
+//				lifePointsPane.setVisible(false);
+//			}
 			
 			
 			if(character.isOutWorld()){

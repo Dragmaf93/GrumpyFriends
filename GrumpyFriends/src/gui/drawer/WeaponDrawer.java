@@ -25,13 +25,13 @@ public class WeaponDrawer {
 	}
 
 	
-	public Node getLauncherWeapon(Weapon weapon,Character character) {
+	public Node getLauncherWeapon(Weapon weapon,Character character,CharacterAnimation characterAnimation) {
 		
 		if (inventoryItemsGui.containsKey(weapon.getName())) {
 			currentWeaponGui =inventoryItemsGui.get(weapon.getName());
 			currentWeapon = weapon;
 			currentCharacter = character;
-			currentWeaponGui.setCurrentCharacter(currentCharacter);
+			currentWeaponGui.setCurrentCharacter(currentCharacter,characterAnimation);
 			currentWeaponGui.resetItem();
 			return currentWeaponGui.getWeaponLauncher();
 		} else {
@@ -45,7 +45,7 @@ public class WeaponDrawer {
 				currentWeaponGui = (WeaponGui) classDefinition.getConstructor(Weapon.class)
 						.newInstance(weapon);
 				inventoryItemsGui.put(weaponName, currentWeaponGui);
-				currentWeaponGui.setCurrentCharacter(currentCharacter);
+				currentWeaponGui.setCurrentCharacter(currentCharacter,characterAnimation);
 				return currentWeaponGui.getWeaponLauncher();
 			} catch (InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();

@@ -13,13 +13,13 @@ import javafx.scene.transform.Rotate;
 public class GuiSimpleBomb extends AbstractGuiWeapon {
 
 	private Rotate launcherRotate;
-
+	private Rotate launcherRotateY;
 	// prove
 	private GuiExplosion explosion;
 
 	private boolean finishAnimation;
 
-	private ImageView bombImage;
+	private ImageView bombLauncherImage;
 	private ImageView bullet;
 
 	public GuiSimpleBomb(Weapon weapon) {
@@ -27,28 +27,35 @@ public class GuiSimpleBomb extends AbstractGuiWeapon {
 		this.weapon = weapon;
 
 		finishAnimation = false;
-		//
-		bombImage = new ImageView(new Image("file:image/weapons/SimpleBomb.png"));
-		bombImage.setFitHeight(weapon.getHeight() * 2);
-		bombImage.setFitWidth(weapon.getWidth() * 2);
+
+		bombLauncherImage = new ImageView();
 
 		bullet = new ImageView(new Image("file:image/weapons/SimpleBomb.png"));
 		bullet.setFitHeight(weapon.getHeight() * 2);
 		bullet.setFitWidth(weapon.getWidth() * 2);
 		//
 
+		launcherRotate = new Rotate();
+		launcherRotateY = new Rotate();
+		launcherRotateY.setAxis(Rotate.Y_AXIS);
+		launcherRotate.setAxis(Rotate.Z_AXIS);
+
+		bombLauncherImage.getTransforms().add(launcherRotate);
+		bombLauncherImage.getTransforms().add(launcherRotateY);
+
 	}
 
 	@Override
 	public Node getWeaponLauncher() {
 		// aggiungere solo la prima volta
-		
-		if (!launcherRoot.getChildren().contains(bombImage)) {
-			launcherRoot.getChildren().add(bombImage);
-			launcherRotate = new Rotate();
-			launcherRotate.setAxis(Rotate.Z_AXIS);
-			bombImage.getTransforms().add(launcherRotate);
+
+		if (!launcherRoot.getChildren().contains(bombLauncherImage)) {
+			launcherRoot.getChildren().add(bombLauncherImage);
 		}
+		bombLauncherImage.setImage(characterAnimation
+				.getCharacterWeaponLauncher(weapon));
+		bombLauncherImage.setFitWidth(characterAnimation.getWidth());
+		bombLauncherImage.setFitHeight(characterAnimation.getHeight());
 		return launcherRoot;
 	}
 
@@ -75,22 +82,41 @@ public class GuiSimpleBomb extends AbstractGuiWeapon {
 	public void updateLauncher() {
 		super.updateLauncher();
 
-//		launcherRotate.setPivotX(character.getX()+character.getWidth());
-//		launcherRotate.setPivotY(character.getY()+character.getHeight()*0.2);
-//		launcherRotate.setAngle(Math.toDegrees(-character.getLauncher().getAngle()));
-		bombImage.relocate(character.getX() + character.getWidth() + 5, character.getY() + character.getHeight() * 0.2);
-		//
+		if (currentCharacter.getCurrentDirection() == Character.RIGHT) {
+
+			launcherRotateY.setPivotX(bombLauncherImage.getX() + 80);
+			launcherRotateY.setAngle(0);
+
+			launcherRotate.setAxis(Rotate.Z_AXIS);
+			launcherRotate.setPivotX(bombLauncherImage.getX() + 75);
+			launcherRotate.setPivotY(bombLauncherImage.getY() + 85);
+			launcherRotate.setAngle(Math.toDegrees(-currentCharacter
+					.getLauncher().getAngle()));
+		} else if (currentCharacter.getCurrentDirection() == Character.LEFT) {
+			launcherRotateY.setPivotX(bombLauncherImage.getX() + 80);
+			launcherRotateY.setAngle(180);
+			launcherRotate.setAxis(Rotate.Z_AXIS);
+			launcherRotate.setPivotX(bombLauncherImage.getX() + 85);
+			launcherRotate.setPivotY(bombLauncherImage.getY() + 85);
+			launcherRotate.setAngle(Math.toDegrees(-currentCharacter
+					.getLauncher().getAngle()) - 180);
+		}
+		bombLauncherImage.relocate(
+				currentCharacter.getX() + characterAnimation.getValueX(),
+				currentCharacter.getY() + characterAnimation.getValueY()); //
 	}
+
 	@Override
 	public void resetItem() {
-		finishAnimation=false;
+		finishAnimation = false;
 	}
+
 	@Override
 	public void updateBullet() {
 
 		bullet.relocate(weapon.getX(), weapon.getY());
 		weapon.update();
-		
+
 		if (((SimpleBomb) weapon).isExploded()) {
 			explosion.playExplosionAnimation();
 		}

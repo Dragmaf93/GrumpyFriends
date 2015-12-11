@@ -225,6 +225,8 @@ public class Launcher {
 
 		else if (currentDirection == Character.LEFT && val < 0 && Math.toDegrees(angle - val) < 270)
 			angle -= val;
+		
+//		System.out.println(Math.toDegrees(angle));
 	}
 
 	public double getX() {
@@ -234,8 +236,7 @@ public class Launcher {
 
 	public double getY() {
 		// return physicalLauncher.getY();
-		return Utils.yFromJbox2dToJavaFx(character.getPhysicalObject().getBody().getPosition().y
-				+ character.getPhysicalObject().getHeight() / 2);
+		return Utils.yFromJbox2dToJavaFx(character.getPhysicalObject().getBody().getPosition().y );
 	}
 
 	public void disable() {

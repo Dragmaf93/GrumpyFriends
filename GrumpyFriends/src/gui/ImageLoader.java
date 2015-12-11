@@ -19,11 +19,11 @@ public class ImageLoader {
 	private void loader() {
 //		TODO inserire immagini
 //		grounds.put("groundPlanetWidth", new Image("file:image/ground/Planet/groundWidth.png"));
-		grounds.put("groundPlanetHeight", new Image("file:image/ground/Planet/groundHeight.png"));
-		grounds.put("groundPlanetWidth", new Image("file:image/ground/Planet/groundWidth.png"));
+		grounds.put("groundPlanetHeight", new Image("file:image/ground/Planet/g.png"));
+		grounds.put("groundPlanetWidth", new Image("file:image/ground/Planet/g.png"));
 //		grounds.put("groundPlanetCurve", new Image("file:image/ground/Planet/groundCurve.png"));
 		
-		backgrounds.put("Planet", new Image("file:image/background/Planet.jpg"));
+		backgrounds.put("Planet", new Image("file:image/background/backgroundAngry.png",1000,1000,false,false));
 	}
 	
 	public Image getImageGrounds(String typeWorld, String widthOrHeight) {

@@ -6,11 +6,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import com.sun.webkit.BackForwardList;
+
 import character.Character;
 import character.Team;
 import element.Ground;
 import game.MatchManager;
 import game.TurnPhaseType;
+import gui.drawer.BackgroundPane;
 import gui.drawer.CharacterDrawer;
 import gui.drawer.DrawerObject;
 import gui.drawer.PolygonGroundDrawer;
@@ -37,6 +40,8 @@ public class FieldPane extends Pane {
 	private WeaponDrawer weaponDrawer;
 	
 	private FieldScene scene;
+	
+	private BackgroundPane background;
 
 	private Group field;
 	// private boolean addedCamerasMovement;
@@ -60,10 +65,13 @@ public class FieldPane extends Pane {
 
 		weaponDrawer = new WeaponDrawer();
 		imageLoader = new ImageLoader();
-
+		background = new BackgroundPane();
+		
 		initializeDrawers();
 		createWorld();
-
+//		this.setBackground(new Background(new BackgroundImage(getImageLoader().getImageBackgrounds("Planet"),BackgroundRepeat.ROUND,
+//				BackgroundRepeat.ROUND, BackgroundPosition.DEFAULT,
+//				new BackgroundSize(100,100,true,true,true,false))));
 		this.setStyle("-fx-background: null; -fx-background-color: null; ");
 		this.getChildren().add(field);
 

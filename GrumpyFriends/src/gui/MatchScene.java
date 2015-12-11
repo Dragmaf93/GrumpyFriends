@@ -19,6 +19,7 @@ public class MatchScene extends Scene {
 	private boolean pressedLaunchKey;
 	private float launchPower;
 
+	
 	public MatchScene(Parent parent, final MatchManager matchManager, double width, double height) {
 		super(parent, width, height);
 		this.pane = (MatchPane) parent;

@@ -71,6 +71,8 @@ public interface Character extends Element
 	public abstract void setDied(boolean bool);
 	
 	public abstract void update();
-
 	
+	public boolean isMoving();
+	public boolean isJumping();
+	public boolean isFalling();
 }

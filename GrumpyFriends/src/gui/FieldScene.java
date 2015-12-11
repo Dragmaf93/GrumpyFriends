@@ -7,6 +7,8 @@ import game.MatchManager;
 import javafx.animation.PathTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.scene.Camera;
+import javafx.scene.ParallelCamera;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.SubScene;
@@ -23,12 +25,12 @@ import utils.Vector;
 public class FieldScene extends SubScene {
 
 	private final static int MAX_ZOOM = -9000;
-	private final static int MIN_ZOOM = -5000;
-	private final static int INCR_ZOOM = 50;
+	private final static int MIN_ZOOM = -2000;
+	private final static int INCR_ZOOM = 100;
 	private final static double MAX_TIME = 100;
 
 	private MatchManager matchManager;
-	private PerspectiveCamera camera;
+	private Camera camera;
 	private FieldPane pane;
 
 	private double zoom;
@@ -64,7 +66,7 @@ public class FieldScene extends SubScene {
 		camera.setTranslateZ(zoom);
 		camera.setNearClip(0.1);
 		camera.setFarClip(MAX_ZOOM);
-		camera.setFieldOfView(35);
+		((PerspectiveCamera) camera).setFieldOfView(35);
 		setCamera(camera);
 		focusPlayer=true;
 	}
