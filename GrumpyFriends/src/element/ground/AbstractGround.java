@@ -52,7 +52,7 @@ public abstract class AbstractGround implements Ground{
 	}
 	
 	@Override
-	public List<Point> getPoint() {
+	public List<Point> getPoints() {
 		return points;
 	}
 }

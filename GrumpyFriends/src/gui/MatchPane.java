@@ -63,7 +63,7 @@ public class MatchPane extends Pane {
 		this.getChildren().add(teamLifeInd.getNode());
 		pause = false;
 		
-		this.setBackground(new Background(new BackgroundImage(fieldPane.getImageLoader().getImageBackgrounds("Planet"),BackgroundRepeat.ROUND,
+		this.setBackground(new Background(new BackgroundImage(fieldPane.getImageLoader().getImageBackgrounds(),BackgroundRepeat.ROUND,
 				BackgroundRepeat.ROUND, BackgroundPosition.DEFAULT,
 				new BackgroundSize(100,100,true,true,true,false))));
 

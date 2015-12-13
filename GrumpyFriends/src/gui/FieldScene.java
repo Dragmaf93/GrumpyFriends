@@ -62,9 +62,9 @@ public class FieldScene extends SubScene {
 		cameraPosition = new Point();
 		nextPosition = new Point();
 		
-		zoom = MIN_ZOOM;
+		zoom = MAX_ZOOM;
 		camera.setTranslateZ(zoom);
-		camera.setNearClip(0.1);
+		camera.setNearClip(0);
 		camera.setFarClip(MAX_ZOOM);
 		((PerspectiveCamera) camera).setFieldOfView(35);
 		setCamera(camera);

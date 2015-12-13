@@ -1,6 +1,8 @@
 package gui.drawer;
 
-import element.Element;
+import java.util.List;
+
+import utils.Point;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
@@ -14,7 +16,7 @@ public abstract class AbstractDrawerObject implements DrawerObject{
 	}
 	
 	@Override
-	public void draw(Element elementToDraw) {
+	public void draw(List<Point> elementToDraw) {
 		Node e = getElementToDraw(elementToDraw);
 		pane.getChildren().add(e);
 	}

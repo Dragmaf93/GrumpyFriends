@@ -1,10 +1,12 @@
 package gui.drawer;
 
-import element.Element;
+import java.util.List;
+
+import utils.Point;
 import javafx.scene.Node;
 
 public interface DrawerObject {
 
-	abstract public void draw(Element elementToDraw);
-	abstract public Node getElementToDraw(Element elementToDraw);
+	abstract public void draw(List<Point> elementToDraw);
+	abstract public Node getElementToDraw(List<Point> elementToDraw);
 }

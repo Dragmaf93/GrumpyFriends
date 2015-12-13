@@ -1,6 +1,8 @@
 package gui.drawer;
 
-import element.Element;
+import java.util.List;
+
+import utils.Point;
 import element.ground.RoundGround;
 import gui.ImageLoader;
 import javafx.scene.Group;
@@ -19,7 +21,7 @@ public class RoundGroundDrawer extends AbstractDrawerObject{
 	}
 
 	@Override
-	public Node getElementToDraw(Element elementToDraw) {
+	public Node getElementToDraw(List<Point> elementToDraw) {
 		RoundGround ground = (RoundGround) elementToDraw;
 		
 		if(ground.isABezierCurve()){

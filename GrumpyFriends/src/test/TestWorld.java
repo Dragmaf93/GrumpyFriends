@@ -118,6 +118,10 @@ public class TestWorld implements world.World{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public String getType() {
+		return null;
+	}
 	
 	
 	

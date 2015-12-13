@@ -15,4 +15,8 @@ public class Planet extends AbstractWorld {
 		super(GRAVITY, true);
 	}
 
+	@Override
+	public String getType() {
+		return "Planet";
+	}
 }

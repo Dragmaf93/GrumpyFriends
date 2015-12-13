@@ -40,5 +40,6 @@ public interface World {
 	public abstract void update();
 	
 	public abstract List<Character> getCharacatersOutOfWorld();
+	public abstract String getType();
 	
 }

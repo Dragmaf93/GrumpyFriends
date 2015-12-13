@@ -19,6 +19,7 @@ import gui.drawer.DrawerObject;
 import gui.drawer.PolygonGroundDrawer;
 import gui.drawer.RoundGroundDrawer;
 import gui.drawer.WeaponDrawer;
+import gui.drawer.WorldDrawer;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -38,6 +39,7 @@ public class FieldPane extends Pane {
 	private HashMap<String, DrawerObject> drawers;
 	private HashMap<String, CharacterDrawer> characterDrawers;
 	private WeaponDrawer weaponDrawer;
+	private WorldDrawer worldDrawer;
 	
 	private FieldScene scene;
 	
@@ -61,12 +63,13 @@ public class FieldPane extends Pane {
 		this.field = new Group();
 
 		this.setWidth(world.getWidth());
-		this.setHeight(world.getHeight());
+		this.setHeight(world.getHeight()+100);
 
 		weaponDrawer = new WeaponDrawer();
 		imageLoader = new ImageLoader();
+		imageLoader.loadImage(world);
 		background = new BackgroundPane();
-		
+		worldDrawer = new WorldDrawer(world,imageLoader);
 		initializeDrawers();
 		createWorld();
 //		this.setBackground(new Background(new BackgroundImage(getImageLoader().getImageBackgrounds("Planet"),BackgroundRepeat.ROUND,
@@ -96,10 +99,10 @@ public class FieldPane extends Pane {
 		}
 
 		this.drawers = new HashMap<>();
-		drawers.put("GenericGround", new PolygonGroundDrawer(field, imageLoader));
-		drawers.put("LinearGround", new PolygonGroundDrawer(field, imageLoader));
-		drawers.put("InclinedGround", new PolygonGroundDrawer(field, imageLoader));
-		drawers.put("RoundGround", new RoundGroundDrawer(field, imageLoader));
+//		drawers.put("GenericGround", new PolygonGroundDrawer(field, imageLoader));
+//		drawers.put("LinearGround", new PolygonGroundDrawer(field, imageLoader));
+//		drawers.put("InclinedGround", new PolygonGroundDrawer(field, imageLoader));
+//		drawers.put("RoundGround", new RoundGroundDrawer(field, imageLoader));
 
 	}
 
@@ -108,13 +111,14 @@ public class FieldPane extends Pane {
 	}
 
 	private void createWorld() {
-
-		List<Ground> grounds = world.getGrounds();
-
-		for (Ground ground : grounds) {
-			drawers.get(ground.getClass().getSimpleName()).draw(ground);
-//			new PolygonGroundDrawer(field, imageLoader).draw(ground);
-		}
+		
+		field.getChildren().add(worldDrawer.createWorld());
+//		List<Ground> grounds = world.getGrounds();
+//
+//		for (Ground ground : grounds) {
+//			drawers.get(ground.getClass().getSimpleName()).draw(ground);
+////			new PolygonGroundDrawer(field, imageLoader).draw(ground);
+//		}
 	}
 
 	public void update() {
@@ -125,11 +129,6 @@ public class FieldPane extends Pane {
 				
 				matchManager.checkCharactersOutOfWorld();
 				
-//				if (matchManager.getCurrentPlayer().getX() < 0 || matchManager.getCurrentPlayer().getX() > world.getWidth())
-//				{
-//					matchManager.setTurnPhase(TurnPhaseType.DEATH_PHASE);
-//					matchManager.getCurrentPlayer().setDied(true);
-//				}
 				
 				Collection<CharacterDrawer> collection = characterDrawers.values();
 

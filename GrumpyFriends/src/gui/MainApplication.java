@@ -54,8 +54,8 @@ public class MainApplication extends Application{
 //		teamA.addCharcter(playerA);
 //		matchManager.startTest();
 		
-		Team teamA = new Team(nameTeamA, 1, matchManager);
-		Team teamB = new Team(nameTeamB, 1, matchManager);
+		Team teamA = new Team(nameTeamA, 4, matchManager);
+		Team teamB = new Team(nameTeamB, 4, matchManager);
 		
 		teamA.setColorTeam(Color.CRIMSON);
 		teamB.setColorTeam(Color.STEELBLUE);

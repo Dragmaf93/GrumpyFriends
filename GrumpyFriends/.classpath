@@ -9,5 +9,6 @@
 			<attribute name="javadoc_location" value="file:/home/mfdrago/git/GrumpyFriends/GrumpyFriends/apidocs/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/clipper.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -2,18 +2,20 @@ package gui;
 
 import java.util.HashMap;
 
+import world.World;
 import javafx.scene.image.Image;
 
 public class ImageLoader {
 	
-	HashMap<String, Image> grounds;
-	HashMap<String, Image> backgrounds;
+	private HashMap<String, Image> grounds;
+	private HashMap<String, Image> backgrounds;
+	
+	private final static String PATH_IMAGE="file:image/World/";
+	private String lastTypeWorld;
 	
 	public ImageLoader() {
 		grounds = new HashMap<String, Image>();
 		backgrounds = new HashMap<String, Image>();
-		
-		loader();
 	}
 	
 	private void loader() {
@@ -26,12 +28,34 @@ public class ImageLoader {
 		backgrounds.put("Planet", new Image("file:image/background/backgroundAngry.png",1000,1000,false,false));
 	}
 	
+	public void loadImage(World world){
+		String path = PATH_IMAGE+world.getType();
+		lastTypeWorld = world.getType();
+		if(!grounds.containsKey(world.getType())){
+			grounds.put(world.getType(), new Image(path+"/g.png"));
+		}
+
+		if(!backgrounds.containsKey(world.getType())){
+			backgrounds.put(world.getType(), new Image(path+"/background.png"));
+		}
+	}
+	
 	public Image getImageGrounds(String typeWorld, String widthOrHeight) {
 		return grounds.get("ground"+typeWorld+widthOrHeight);
 	}
 	
+	
+	public Image getImageGrounds() {
+		return grounds.get(lastTypeWorld);
+	}
+	
+	
 	public Image getImageBackgrounds(String typeWorld) {
 		return backgrounds.get(typeWorld);
+	}
+	
+	public Image getImageBackgrounds() {
+		return backgrounds.get(lastTypeWorld);
 	}
 	
 }
