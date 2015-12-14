@@ -87,7 +87,9 @@ public class MatchPane extends Pane {
 	public boolean inventoryIsHide() {
 		return !this.getChildren().contains(inventory.getNode());
 	}
-
+	public FieldScene getFieldScene() {
+		return fieldScene;
+	}
 	public void showInventory() {
 		this.getChildren().add(inventory.getNode());
 		inventory.show();

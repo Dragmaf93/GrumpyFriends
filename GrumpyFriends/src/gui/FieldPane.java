@@ -110,6 +110,9 @@ public class FieldPane extends Pane {
 		this.scene = scene;
 	}
 
+	public FieldScene getFieldScene(){
+		return scene;
+	}
 	private void createWorld() {
 		
 		field.getChildren().add(worldDrawer.createWorld());

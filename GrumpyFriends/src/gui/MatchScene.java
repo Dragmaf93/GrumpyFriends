@@ -76,19 +76,19 @@ public class MatchScene extends Scene {
 						matchManager.getCurrentPlayer().changeAim(Character.DECREASE);
 				}
 				if (event.getCode() == KeyCode.UP) {
-					pane.getCameraPosition().set(pane.getCameraPosition().x, pane.getCameraPosition().y - VALUE_MOVE_CAMERA);
+					pane.getFieldScene().cameraMovesUP();
 					pane.focusPlayer(false);
 				}
 				if (event.getCode() == KeyCode.DOWN) {
-					pane.getCameraPosition().set(pane.getCameraPosition().x, pane.getCameraPosition().y + VALUE_MOVE_CAMERA);
+					pane.getFieldScene().cameraMovesDOWN();
 					pane.focusPlayer(false);
 				}
 				if (event.getCode() == KeyCode.LEFT) {
-					pane.getCameraPosition().set(pane.getCameraPosition().x - VALUE_MOVE_CAMERA, pane.getCameraPosition().y);
+					pane.getFieldScene().cameraMovesLEFT();
 					pane.focusPlayer(false);
 				}
 				if (event.getCode() == KeyCode.RIGHT) {
-					pane.getCameraPosition().set(pane.getCameraPosition().x + VALUE_MOVE_CAMERA, pane.getCameraPosition().y);
+					pane.getFieldScene().cameraMovesRIGTH();
 					pane.focusPlayer(false);
 				}
 				if (event.getCode() == KeyCode.F)

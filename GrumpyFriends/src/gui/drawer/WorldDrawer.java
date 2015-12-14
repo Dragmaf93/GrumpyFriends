@@ -16,6 +16,8 @@ import world.World;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
 
 
@@ -28,7 +30,7 @@ public class WorldDrawer {
 	private final static int INT_DOUBLE_MULTIPLIER = 10;
 	
 	private final static String PATH_WORLD="file:image/World/";
-	
+	private Image seaImage = new Image(PATH_WORLD+"Planet/sea.png");
 	private Image groundImage;
 	private ImageLoader imageLoader;
 	
@@ -56,8 +58,17 @@ public class WorldDrawer {
 //			
 //			root.getChildren().add(polygon);
 		}
+//		drawSea();
 		
 		return root;
+	}
+	
+	private void drawSea(){
+		
+		ImageView sea = new ImageView(seaImage);
+		sea.setY(world.getHeight());
+		sea.setX(0);
+		root.getChildren().add(sea);
 	}
 	
 	private List< List<Point> > getPolygonToDraw(List<Ground> grounds){
