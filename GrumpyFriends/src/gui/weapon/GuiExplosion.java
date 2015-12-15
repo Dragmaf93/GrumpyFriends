@@ -24,20 +24,20 @@ public class GuiExplosion {
 
 	private Weapon weapon;
 
-	private Circle explosion;
-//	private ImageView explosion;
+//	private Circle explosion;
+	private ImageView explosion;
 
 	private boolean ranning;
 
 	public GuiExplosion(final WeaponGui weaponGui) {
 
-		explosion = new Circle(INITIAL_RADIUS,Color.YELLOW);
+//		explosion = new Circle(INITIAL_RADIUS,Color.YELLOW);
 //		explosion.setFill(new ImagePattern(new Image("file:image/expl.gif")));
-//		explosion = new ImageView("file:image/expl3.gif");
+		explosion = new ImageView("file:image/explosion.gif");
 		explosion.setLayoutX(weaponGui.getWeapon().getBlastRadius() / INITIAL_RADIUS);
 		explosion.setLayoutY(weaponGui.getWeapon().getBlastRadius() / INITIAL_RADIUS);
-//		explosion.setFitWidth(INITIAL_RADIUS*3);
-//		explosion.setFitHeight(INITIAL_RADIUS*3);
+		explosion.setFitWidth(INITIAL_RADIUS*8);
+		explosion.setFitHeight(INITIAL_RADIUS*8);
 		
 		weapon = weaponGui.getWeapon();
 		transition = new ScaleTransition(Duration.millis(50), explosion);
