@@ -13,12 +13,14 @@ import element.Ground;
 import gui.ImageLoader;
 import utils.Point;
 import world.World;
+import javafx.animation.TranslateTransition;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
+import javafx.util.Duration;
 
 
 public class WorldDrawer {
@@ -48,6 +50,7 @@ public class WorldDrawer {
 		
 		List<List<Point> > polygons = getPolygonToDraw(grounds);
 		
+		drawSea(world.getHeight()-20);
 		for (List<Point> points : polygons) {
 			polygonGroundDrawer.draw(points);
 			
@@ -58,16 +61,26 @@ public class WorldDrawer {
 //			
 //			root.getChildren().add(polygon);
 		}
-//		drawSea();
+		drawSea(world.getHeight()+20);
 		
 		return root;
 	}
 	
-	private void drawSea(){
-		
-		ImageView sea = new ImageView(seaImage);
-		sea.setY(world.getHeight());
-		sea.setX(0);
+	private void drawSea(double y){
+		double widthImage = seaImage.getWidth();
+		Group sea = new Group();
+		for(double i= -widthImage;i<world.getWidth()+widthImage;i+=widthImage){
+			ImageView imageView = new ImageView(seaImage);
+			imageView.setY(y);
+			imageView.setX(i);
+			sea.getChildren().add(imageView);			
+		}
+
+		TranslateTransition transition = new TranslateTransition(Duration.millis(1500),sea);
+		transition.setByX(20);
+		transition.setCycleCount(TranslateTransition.INDEFINITE);
+		transition.setAutoReverse(true);
+		transition.play();
 		root.getChildren().add(sea);
 	}
 	

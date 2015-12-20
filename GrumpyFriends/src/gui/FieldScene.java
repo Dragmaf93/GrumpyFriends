@@ -21,6 +21,7 @@ import javafx.scene.shape.Path;
 import javafx.util.Duration;
 import utils.Point;
 import utils.Vector;
+import world.World;
 
 public class FieldScene extends SubScene {
 
@@ -31,7 +32,7 @@ public class FieldScene extends SubScene {
 
 	private final static double VALUE_MOVE_CAMERA = 20.0;
 
-	private final static double DISTANCE_FROM_BORDER = 0;
+	private final static double DISTANCE_FROM_BORDER = -300;
 
 	private MatchManager matchManager;
 	private Camera camera;
@@ -91,31 +92,14 @@ public class FieldScene extends SubScene {
 			moveCameraToNextPoint();
 		} else {
 			if (focusPlayer)
+				if(matchManager.getCurrentPlayer().getX()>-World.DISTANCE_WORLDS_BORDER && matchManager.getCurrentPlayer().getX()<+World.DISTANCE_WORLDS_BORDER+ getWidth()
+						&&matchManager.getCurrentPlayer().getY()+100<getHeight())
 				cameraPosition.set(matchManager.getCurrentPlayer().getX(),
-						matchManager.getCurrentPlayer().getY());
+						matchManager.getCurrentPlayer().getY()-140);
 
 			camera.setTranslateX(cameraPosition.x);
 			camera.setTranslateY(cameraPosition.y);
 		}
-		//
-		// if (matchManager.isTheCurrentTurnEnded() &&
-		// matchManager.allCharacterAreSpleeping()) {
-		//
-		// if (!focusPoint) {
-		// } else {
-		// time += 1;
-		// camera.setTranslateX(matchManager.getCurrentPlayer().getX() + time *
-		// vX);
-		// camera.setTranslateY(matchManager.getCurrentPlayer().getY() + time *
-		// vY);
-		// if (time >= MAX_TIME) {
-		// matchManager.startNextTurn();
-		// focusPoint = false;
-		// }
-		// }
-		// } else {
-		//
-		// }
 
 	}
 
@@ -182,7 +166,7 @@ public class FieldScene extends SubScene {
 	private void moveCameraToNextPoint() {
 		time += incrTime;
 		camera.setTranslateX(position0.x + time * vX);
-		camera.setTranslateY(position0.y + time * vY);
+		camera.setTranslateY((position0.y + time * vY )-140);
 		// System.out.println(position0);
 		// System.out.println(nextPosition);
 		// System.out.println(time + "  "+ (position0.x + time * vX)+

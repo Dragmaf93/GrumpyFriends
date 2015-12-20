@@ -97,7 +97,7 @@ public class PhysicalContactListener implements ContactListener {
 						characterContact.put(character, tmp);
 					}
 
-					if (characterContact.get(character) > 0)
+					if (characterContact.get(character) >0)
 						character.setGrounded(true);
 				}
 			}

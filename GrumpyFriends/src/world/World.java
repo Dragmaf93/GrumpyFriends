@@ -11,7 +11,7 @@ import utils.Vector;
 
 public interface World {
 
-	public static final double DISTANCE_WORLDS_BORDER=1500;
+	public static final double DISTANCE_WORLDS_BORDER=700;
 	
 	abstract public void addCharacter(Character character);
 	abstract public void addLinearGround(float x, float y, float width, float height);

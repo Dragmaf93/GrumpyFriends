@@ -222,22 +222,22 @@ public abstract class AbstractCharacter implements Character {
 				launcher.disable();
 
 			Body body = physicBody.getBody();
-			// Vec2 speed = body.getLinearVelocity();
-			// force = 0;
-			// currentDirection = direction;
-			// switch (direction) {
-			// case RIGHT:
-			// // if (speed.x < MAX_SPEED)
-			// force = _SPEED;
-			// break;
-			// case LEFT:
-			// // if (speed.x > -MAX_SPEED)
-			// force = -_SPEED;
-			// break;
-			// case STOP:
-			// force = speed.x * -10;
-			// break;
-			// }
+//			 Vec2 speed = body.getLinearVelocity();
+//			 force = 0;
+//			 currentDirection = direction;
+//			 switch (direction) {
+//			 case RIGHT:
+//			 // if (speed.x < MAX_SPEED)
+//			 force = _SPEED;
+//			 break;
+//			 case LEFT:
+//			 // if (speed.x > -MAX_SPEED)
+//			 force = -_SPEED;
+//			 break;
+//			 case STOP:
+//			 force = speed.x * -10;
+//			 break;
+//			 }
 
 			Vec2 vel = body.getLinearVelocity();
 			float force = 0;
@@ -258,8 +258,9 @@ public abstract class AbstractCharacter implements Character {
 			body.applyForce(new Vec2(force, 0), body.getWorldCenter());
 			if (force != 0 && body.getLinearVelocity().y > 0)
 				((PhysicalCharacter) physicBody).unblockWheelJoint();
-			// body.applyForce(new Vec2(force, 0), body.getWorldCenter());
-			// body.setLinearVelocity(new Vec2(force, speed.y));
+//			// body.applyForce(new Vec2(force, 0), body.getWorldCenter());
+//			 body.setLinearVelocity(new Vec2(force, speed.y));
+			moving = true;
 			currentDirection = direction;
 			launcher.setDirection(direction);
 		}
@@ -285,7 +286,7 @@ public abstract class AbstractCharacter implements Character {
 		double x = getX(), y = getY();
 		if (x > world.getWidth() + World.DISTANCE_WORLDS_BORDER
 				|| x < -World.DISTANCE_WORLDS_BORDER
-				|| y > world.getHeight() + World.DISTANCE_WORLDS_BORDER)
+				|| y > world.getHeight() + World.DISTANCE_WORLDS_BORDER/3)
 			isOutWorld = true;
 
 	}

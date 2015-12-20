@@ -23,7 +23,7 @@ public class MainApplication extends Application{
 	String nameTeamB = "TeamB";
 	ArrayList<String> namesPlayerTeamB;
 	
-	String mapChoosed="Map.xml";
+	String mapChoosed="Map2.xml";
 
 	public MainApplication() {
 	}
