@@ -65,11 +65,14 @@ public class Popup extends Group{
 		
 		questionText.setFill(Color.WHITE);
 		questionText.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,windowRectangle.getHeight()/6));
+		
 		windowBackGround = new Pane(rightButton,leftButton,windowRectangle,vertical,horizontal,questionText);
+		
 		rightButton.relocate(windowRectangle.getLayoutX()+windowRectangle.getWidth()/2+2, windowRectangle.getLayoutY()+windowRectangle.getHeight()*2/3+0.5);
 		leftButton.relocate(windowRectangle.getLayoutX()+2, windowRectangle.getLayoutY()+windowRectangle.getHeight()*2/3+0.5);
 		questionText.relocate(windowRectangle.getWidth()/2-questionText.getLayoutBounds().getWidth()/2,
 				windowRectangle.getHeight()/3-questionText.getLayoutBounds().getHeight()/2);
+		
 		window.getChildren().add(windowBackGround);
 		
 		root = new Pane();

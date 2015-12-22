@@ -1,34 +1,19 @@
 package gui;
 
-import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-
-import com.sun.webkit.BackForwardList;
-
 import character.Character;
-import character.Team;
-import element.Ground;
 import game.MatchManager;
 import game.TurnPhaseType;
 import gui.drawer.BackgroundPane;
 import gui.drawer.CharacterDrawer;
 import gui.drawer.DrawerObject;
-import gui.drawer.PolygonGroundDrawer;
-import gui.drawer.RoundGroundDrawer;
 import gui.drawer.WeaponDrawer;
 import gui.drawer.WorldDrawer;
 import javafx.scene.Group;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.ImagePattern;
 import world.World;
 
 public class FieldPane extends Pane {
@@ -67,7 +52,7 @@ public class FieldPane extends Pane {
 
 		weaponDrawer = new WeaponDrawer();
 		imageLoader = new ImageLoader();
-		imageLoader.loadImage(world);
+		imageLoader.loadImage(world.getType());
 		background = new BackgroundPane();
 		worldDrawer = new WorldDrawer(world,imageLoader);
 		initializeDrawers();

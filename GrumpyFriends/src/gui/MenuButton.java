@@ -29,7 +29,7 @@ public class MenuButton extends Group{
 		root = new StackPane();
 		
 		border = new Rectangle(width,height);
-		border.setFill(null);
+		border.setFill(Color.TRANSPARENT);
 		border.setStroke(STROKE_COLOR);
 		border.setStrokeWidth(4);
 		border.setArcHeight(height);
@@ -64,7 +64,7 @@ public class MenuButton extends Group{
 			@Override
 			public void handle(MouseEvent event) {
 				if(event.getEventType()==event.MOUSE_EXITED){
-					rectangle.setFill(null);
+					rectangle.setFill(Color.TRANSPARENT);
 //					rectangle.setStrokeWidth(4);
 //					text.setFill(STROKE_COLOR);
 				}

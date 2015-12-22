@@ -8,7 +8,6 @@ public class Utils {
 	public static void setPhysicsSize(double width, double height){
 		PHYSICS_WIDTH=(float) (width);
 		PHYSICS_HEIGHT=(float) (height);
-		System.out.println(PHYSICS_WIDTH+"    "+ PHYSICS_HEIGHT);
 	}
 	
 	public static double xFromJbox2dToJavaFx(float posX) {
@@ -27,7 +26,6 @@ public class Utils {
 	}
 	 
 	 public static float xFromJavaFxToJbox2d(double x){
-		 System.out.println(x*PHYSICS_WIDTH/javaFxWidth());
 		 return (float) (x*PHYSICS_WIDTH/javaFxWidth());
 	 }
 
