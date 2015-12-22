@@ -1,0 +1,43 @@
+
+.form2 {
+	position: absolute;
+	right: 15%;
+	top: 30%;
+    text-align: center;
+    background-color: #5e6f85;
+    border: 1px solid #000000;
+}
+
+.form2 input[type="file"] {
+    font-size: 0.9em;
+    color: #B5B6C0;
+    /* display: block; */
+    border-width: medium medium 2px;
+    border-style: none none solid;
+    border-color: -moz-use-text-color -moz-use-text-color rgba(170, 165, 165, 0.32);
+    padding: 0.3em 0.9em;
+    outline: medium none;
+    text-align: left;
+    margin-top: 5px;
+    transition: all 0.5s ease 0s;
+    background-color: #5e6f85;
+   /*  width: 85%; */
+}
+
+.form2 input[type="submit"] {
+    font-size: 1.1em;
+    color: white;
+    /* display: block; */
+    border: 1px solid rgba(158, 152, 152, 0.21);
+    padding: 0.7em 0.9em; 
+    text-align: center;
+    /* border-radius: 2px; */
+    width: 96%;
+    margin: 15px 7px 10px;
+    transition: all 0.5s ease 0s;
+    outline: medium none;
+    cursor: pointer;
+    background: #334f74 none repeat scroll 0% 0%;
+	box-shadow: 0px 2px 2px rgba(5, 5, 5, 0.21);
+    letter-spacing: 2px;
+}
