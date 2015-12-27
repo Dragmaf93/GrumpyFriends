@@ -1,19 +1,13 @@
 package mapEditor;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
-import javafx.scene.Cursor;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.QuadCurve;
 
 public class PanelForMap extends ScrollPane {
 	
@@ -30,20 +24,18 @@ public class PanelForMap extends ScrollPane {
 	private boolean movedObject;
 	private Curve draggedCurve;
 	private boolean vertexModify;
-	private boolean draggedValue;
 	
 	private double valueScroll = 0;
 	protected boolean up;
 	protected boolean moved = false;
-	private double valueScrollXInit;
 	
 	public PanelForMap(MapEditor mapEditor, double width, double height) {
 		
 		this.mapEditor = mapEditor;
 		this.realPane = new Pane();
 
-		realPane.setPrefSize(width, mapEditor.getAltezza()-14);
-		this.setPrefSize(width-2, mapEditor.getAltezza()-54);
+		realPane.setPrefSize(width, mapEditor.getHeightScreen()-14);
+		this.setPrefSize(width-2, mapEditor.getHeightScreen()-54);
 		
 	    this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 	    this.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
@@ -97,7 +89,6 @@ public class PanelForMap extends ScrollPane {
 	        @Override
 	        public void handle(MouseEvent event) {
 	        	PanelForMap.this.mapEditor.setUpper(event);
-	        	draggedValue = false;
 	        	
 	        	if (PanelForMap.this.mapEditor.isDragged())
 	        		dragged = PanelForMap.this.mapEditor.getDragged();

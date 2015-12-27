@@ -12,6 +12,7 @@ public abstract class AbstractGuiWeapon implements WeaponGui {
 	
 	protected Character currentCharacter;
 	protected CharacterAnimation characterAnimation;
+	protected CharacterAnimation characterAnimationBlack;
 	
 	protected Weapon weapon;
 

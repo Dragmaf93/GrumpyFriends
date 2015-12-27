@@ -42,6 +42,8 @@ public class MatchPane extends Pane {
 
 	private MessageNextPlayer paneForNextTurn;
 
+	private boolean winnerBoolean;
+
 	public MatchPane(MatchManager matchManager) {
 		this.matchManager = matchManager;
 
@@ -77,6 +79,15 @@ public class MatchPane extends Pane {
 				BackgroundPosition.DEFAULT, new BackgroundSize(100, 100, true,
 						true, true, false))));
 
+		this.winnerBoolean = false;
+		
+	}
+
+	public void startMenu() {
+		matchManager.startMenu();
+	}
+	public void startMainApplication() {
+		matchManager.startMainApplication();
 	}
 
 	public void pause() {
@@ -134,11 +145,12 @@ public class MatchPane extends Pane {
 				teamLifeInd.getNode().setVisible(true);
 				launcherInd.getNode().setVisible(true);
 			}
+			
 			if (matchManager.isMatchFinished()
-					&& matchManager.getCurrentTurnPhase() == TurnPhaseType.END_PHASE) {
+					&& matchManager.getCurrentTurnPhase() == TurnPhaseType.END_PHASE && !winnerBoolean) {
 				String winnerString = "";
 				if (matchManager.hasWinnerTeam())
-					winnerString = "Il vincitore è :"
+					winnerString = "Il vincitore Ã¨ :"
 							+ matchManager.getWinnerTeam().getName();
 
 				else {
@@ -147,12 +159,19 @@ public class MatchPane extends Pane {
 					if (winner == null)
 						winnerString = "Pareggio";
 					else
-						winnerString = "Il vincitore è :"
+						winnerString = "Il vincitore Ã¨ :"
 								+ matchManager.getWinnerTeam().getName();
 				}
+//				this.getChildren().add(
+//						new MessageNextPlayer(winnerString, "d95208", true));
 				this.getChildren().add(
-						new MessageNextPlayer(winnerString, "d95208", true));
-
+						new WinnerPane(this,Screen.getPrimary().getBounds()
+								.getWidth(), Screen.getPrimary().getBounds().getHeight(), winnerString,
+									"Team"+matchManager.getWinnerTeam().getId()+"Winner",
+									"Team"+matchManager.getLoserTeam().getId()+"Loser"));
+				
+				winnerBoolean = true;
+				
 			} else {
 				if (fieldScene.getMovementNextPlayer()) {
 					if (!this.getChildren().contains(paneForNextTurn)) {

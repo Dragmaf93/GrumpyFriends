@@ -140,9 +140,9 @@ public class InsertInformation extends Application {
 
 			@Override
 			public void handle(MouseEvent event) {
-				Menu menu = new Menu();
+//				Menu menu = new Menu();
 				try {
-					menu.start(primaryStage);
+//					menu.start(primaryStage);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

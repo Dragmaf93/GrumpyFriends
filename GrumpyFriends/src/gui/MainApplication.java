@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import character.Character;
 import character.Chewbacca;
 import character.Team;
+import game.GameManager;
 import game.MatchManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -25,6 +26,9 @@ public class MainApplication extends Application{
 	
 	String mapChoosed="Map2.xml";
 
+	private GameManager gameManager;
+	private Stage stage;
+	
 	public MainApplication() {
 	}
 	
@@ -36,11 +40,14 @@ public class MainApplication extends Application{
 		this.nameTeamB = nameTeamB;
 		this.namesPlayerTeamB = namesPlayerTeamB;
 		this.mapChoosed = mapChoosed;
+		
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
+		this.stage = primaryStage;
+		gameManager = GameManager.getIstance();
 		//match config
 		WorldBuilder builder = new GameWorldBuilder();
 		WorldDirector director = new WorldDirector(builder);
@@ -54,8 +61,8 @@ public class MainApplication extends Application{
 //		teamA.addCharcter(playerA);
 //		matchManager.startTest();
 		
-		Team teamA = new Team(nameTeamA, 4, matchManager);
-		Team teamB = new Team(nameTeamB, 4, matchManager);
+		Team teamA = new Team(nameTeamA, 4, matchManager,1);
+		Team teamB = new Team(nameTeamB, 4, matchManager,2);
 		
 		teamA.setColorTeam(Color.CRIMSON);
 		teamB.setColorTeam(Color.STEELBLUE);
@@ -63,11 +70,10 @@ public class MainApplication extends Application{
 		matchManager.setTeamA(teamA);
 		matchManager.setTeamB(teamB);
 		
-		
 //		
 		Character playerA1 = new Chewbacca("Player A1", 50, 100, teamA,world);
 		Character playerB1 = new Chewbacca("Player B1", 30, 100, teamB,world);
-//		
+		
 		Character playerA2 = new Chewbacca("Player A2", 90, 100, teamA, world);
 		Character playerB2 = new Chewbacca("Player B2", 130, 100, teamB, world);
 
@@ -106,11 +112,24 @@ public class MainApplication extends Application{
 		MatchScene scene = new MatchScene(matchPane, matchManager,Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight());
 //		MatchScene scene = new MatchScene(matchPane, matchManager,Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight());
 		primaryStage.setScene(scene);
-//		
-			primaryStage.show();
+		primaryStage.show();
+		
+		gameManager.setMainApplication(this);
+	}
+	
+	public void closeStage() {
+		if (stage != null)
+			stage.close();
+		stage = null;
 	}
 	
 	public static void main(String[] args) {
 		launch(args);
+	}
+
+	public Stage getStage() {
+		if (stage != null)
+			return stage;
+		return new Stage();
 	}
 }

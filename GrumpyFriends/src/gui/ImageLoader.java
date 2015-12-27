@@ -45,15 +45,15 @@ public class ImageLoader {
 		backgrounds.put("Planet", new Image("file:image/background/backgroundAngry.png",1000,1000,false,false));
 	}
 	
-	public void loadImage(String typeWolrd){
-		String path = PATH_IMAGE+typeWolrd;
-		lastTypeWorld = typeWolrd;
-		if(!grounds.containsKey(typeWolrd)){
-			grounds.put(typeWolrd, new Image(path+"/ground.png"));
+	public void loadImage(String typeWorld){
+		String path = PATH_IMAGE+typeWorld;
+		lastTypeWorld = typeWorld;
+		if(!grounds.containsKey(typeWorld)){
+			grounds.put(typeWorld, new Image(path+"/ground.png"));
 		}
 
-		if(!backgrounds.containsKey(typeWolrd)){
-			backgrounds.put(typeWolrd, new Image(path+"/background.png"));
+		if(!backgrounds.containsKey(typeWorld)){
+			backgrounds.put(typeWorld, new Image(path+"/background.png"));
 		}
 		
 	}

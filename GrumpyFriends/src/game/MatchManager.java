@@ -41,6 +41,8 @@ public class MatchManager {
 	private TurnPhaseType currentTurnPhase;
 	private boolean characterSufferedDamage;
 	
+	private GameManager gameManager;
+	
 	public MatchManager() {
 		this.battlefield = null;
 		this.teamRed = null;
@@ -106,8 +108,17 @@ public class MatchManager {
 		endTurn = false;
 
 		currentTurnPhase = TurnPhaseType.MAIN_PHASE;
+		
+		gameManager = GameManager.getIstance();
 
 		return true;
+	}
+	
+	public void startMenu() {
+		gameManager.startMenu();
+	}
+	public void startMainApplication() {
+		gameManager.startMainApplication();
 	}
 
 	public void endMainPhase() {
@@ -379,7 +390,7 @@ public class MatchManager {
 
 	public void setTurnPhase(TurnPhaseType phase) {
 		currentTurnPhase = phase;
-		System.out.println(currentTurnPhase);
+//		System.out.println(currentTurnPhase);
 	}
 
 	public Team getWinnerTeam() {
@@ -387,6 +398,14 @@ public class MatchManager {
 			return teamRed;
 		if (teamRed.isLose() && !teamBlue.isLose())
 			return teamBlue;
+		return null;
+	}
+	
+	public Team getLoserTeam() {
+		if (teamBlue.isLose() && !teamRed.isLose())
+			return teamBlue;
+		if (teamRed.isLose() && !teamBlue.isLose())
+			return teamRed;
 		return null;
 	}
 

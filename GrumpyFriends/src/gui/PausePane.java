@@ -69,9 +69,7 @@ public class PausePane extends Pane{
 			@Override
 			public void handle(MouseEvent event) {
 				if(event.getButton()==MouseButton.PRIMARY)
-				{
 					parent.restartFromPause();
-				}
 			}
 		});
 		
@@ -105,9 +103,7 @@ public class PausePane extends Pane{
 			@Override
 			public void handle(MouseEvent event) {
 				if(event.getButton()==MouseButton.PRIMARY)
-				{
-					System.out.println("REstar");
-				}
+					parent.startMainApplication();
 			}
 		});
 		restartPopup.getLeftButton().setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -127,9 +123,7 @@ public class PausePane extends Pane{
 			@Override
 			public void handle(MouseEvent event) {
 				if(event.getButton()==MouseButton.PRIMARY)
-				{
-					System.out.println("exit");
-				}
+					parent.startMenu();
 			}
 		});
 		exitPopup.getLeftButton().setOnMouseClicked(new EventHandler<MouseEvent>() {

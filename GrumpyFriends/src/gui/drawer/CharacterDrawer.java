@@ -60,6 +60,7 @@ public class CharacterDrawer {
 	private boolean deathAnimationEnd;
 
 	private CharacterAnimation characterAnimation;
+	private CharacterAnimation characterAnimationBlack;
 	
 	private Rotate rotateImage;
 
@@ -76,6 +77,7 @@ public class CharacterDrawer {
 		characterBody = new Rectangle(character.getX(), character.getY(), character.getWidth(), character.getHeight());
 		characterImage = new ImageView();
 		characterAnimation = new StormtrooperAnimation();
+		characterAnimationBlack = new StormtrooperBlackAnimation();
 //		root.getChildren().add(characterBody);
 		root.getChildren().add(characterImage);
 		
@@ -130,10 +132,13 @@ public class CharacterDrawer {
 				canStart = true;
 			}
 			if (character == matchManager.getCurrentPlayer()) {
-				
+				lifePointsRectangle.setStroke(Color.GOLD);
 				if(character.isMoving()){
-					characterImage.setImage(characterAnimation.getCharacterMoveAnimation());
-
+					if (character.getTeam().getId() == 1)
+						characterImage.setImage(characterAnimation.getCharacterMoveAnimation());
+					else
+						characterImage.setImage(characterAnimationBlack.getCharacterMoveAnimation());
+					
 				}
 				
 				if(character.getCurrentDirection()!=lastDirection){
@@ -146,16 +151,26 @@ public class CharacterDrawer {
 						rotateImage.setAngle(0);
 				}
 				if(character.isJumping()){
-					characterImage.setImage(characterAnimation.getCharacterJumpAnimation());
+					if (character.getTeam().getId() == 1)
+						characterImage.setImage(characterAnimation.getCharacterJumpAnimation());
+					else
+						characterImage.setImage(characterAnimationBlack.getCharacterJumpAnimation());
 					
 				}
 				
 				if (character.getLauncher().isActivated() && !root.getChildren().contains(currentLauncherWeapon)
 						&& !weaponDrawer.attackEnded() && !character.getLauncher().attacked()) {
 					equipedWeapon = character.getEquipWeapon();
-					currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon, character,characterAnimation);
+					if (character.getTeam().getId() == 1)
+						currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon, character,characterAnimation);
+					else
+						currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon, character,characterAnimationBlack);
+			
 					root.getChildren().add(currentLauncherWeapon);
-					characterImage.setImage(characterAnimation.getCharacterBodyWithWeapon(equipedWeapon));
+					if (character.getTeam().getId() == 1)
+						characterImage.setImage(characterAnimation.getCharacterBodyWithWeapon(equipedWeapon));
+					else
+						characterImage.setImage(characterAnimationBlack.getCharacterBodyWithWeapon(equipedWeapon));
 					entry = false;
 
 				}
@@ -167,9 +182,16 @@ public class CharacterDrawer {
 					entry = false;
 					root.getChildren().remove(currentLauncherWeapon);
 					equipedWeapon = character.getEquipWeapon();
-					currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon, character,characterAnimation);
+					if (character.getTeam().getId() == 1)
+						currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon, character,characterAnimation);
+					else
+						currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon, character,characterAnimationBlack);
+					
 					root.getChildren().add(currentLauncherWeapon);
-					characterImage.setImage(characterAnimation.getCharacterBodyWithWeapon(equipedWeapon));
+					if (character.getTeam().getId() == 1)
+						characterImage.setImage(characterAnimation.getCharacterBodyWithWeapon(equipedWeapon));
+					else
+						characterImage.setImage(characterAnimationBlack.getCharacterBodyWithWeapon(equipedWeapon));
 				}
 
 				if (!character.getLauncher().isActivated() && root.getChildren().contains(currentLauncherWeapon)
@@ -242,11 +264,17 @@ public class CharacterDrawer {
 				}
 			}
 			if(character.isFalling())
-				characterImage.setImage(characterAnimation.getCharacterFallAnimation());
+				if (character.getTeam().getId() == 1)
+					characterImage.setImage(characterAnimation.getCharacterFallAnimation());
+				else
+					characterImage.setImage(characterAnimationBlack.getCharacterFallAnimation());
 			
 			if (character.isSleeping() && !character.getLauncher().isActivated()) {
-				
-				characterImage.setImage(characterAnimation.getCharacterIdleAnimation());
+				if (character.getTeam().getId() == 1)
+					characterImage.setImage(characterAnimation.getCharacterIdleAnimation());
+				else
+					characterImage.setImage(characterAnimationBlack.getCharacterIdleAnimation());
+					
 //				lifePointsPane.setVisible(true);
 
 			} 
@@ -267,6 +295,8 @@ public class CharacterDrawer {
 				deathAnimationEnd = true;
 				root = null;
 			}
+			if (character.finishedTurn())
+				lifePointsRectangle.setStroke(Color.BLACK);
 		}
 		// System.out.println("CIAOOOOOOOOOOOOoooo");
 	}

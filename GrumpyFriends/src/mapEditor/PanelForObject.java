@@ -1,6 +1,7 @@
 package mapEditor;
 
 import java.util.ArrayList;
+
 import java.util.Optional;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -11,17 +12,10 @@ import javafx.scene.image.ImageView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
@@ -31,7 +25,6 @@ import javafx.scene.layout.Pane;
 
 public class PanelForObject extends Pane {
 	
-//	private Pane panelForDimension;
 	private Pane panelForSubmit;
 	private Pane panelForRealObject;
 	
@@ -59,7 +52,7 @@ public class PanelForObject extends Pane {
 	
 	public PanelForObject(MapEditor mapEditor) 
 	{
-		this.setPrefSize(mapEditor.getLarghezza()/5, mapEditor.getAltezza());
+		this.setPrefSize(mapEditor.getWidthScreen()/5, mapEditor.getHeightScreen());
         this.setStyle("-fx-background-color: #92a498;");
 
         this.mapEditor = mapEditor;
@@ -72,9 +65,6 @@ public class PanelForObject extends Pane {
 	
 	private void addComponent()
 	{
-//	    panelForDimension = new Pane();
-//	    panelForDimension.setPrefSize(this.getPrefWidth(), this.getPrefHeight()/4);
-		
 		panelForSubmit = new Pane();
 	    panelForSubmit.setPrefSize(this.getPrefWidth() - 10, 50);
 	    panelForSubmit.setLayoutY(this.getPrefHeight()-panelForSubmit.getPrefHeight()-50);
@@ -231,42 +221,13 @@ public class PanelForObject extends Pane {
 	    	
 	        @Override
 	        public void handle(MouseEvent event) { 
-//	        		Alert alert = new Alert(AlertType.INFORMATION);
-//	        		alert.setTitle("Information Submit");
-//	        		alert.setHeaderText(null);
-//	        		alert.setContentText("Submit saved with success");
-	        		setAlert();
-
-	        		// The Java 8 way to get the response value (with lambda expression).
-//	        		result.ifPresent(name -> System.out.println("Your name: " + name));
-	        		
-//					alert.showAndWait();
+	        	setAlert();
 	        }
 	    });
 	    
 	    
 	    panelForSubmit.getChildren().add(buttonForSubmit);
 	    panelForSubmit.getChildren().add(buttonForClear);
-	    
-//	    scrollPane = new ScrollPane(panelForRealObject);
-//	    scrollPane.setLayoutY(panelForRealObject.getLayoutY());
-//	    scrollPane.setPrefSize(panelForRealObject.getPrefWidth(), panelForRealObject.getPrefHeight());
-//        scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
-//        scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-//
-//        scrollPane.getStylesheets().add("file:styles/customScrollBarForPanelObject.css");
-////        scrollPane.setStyle("-fx-background: #92a498; -fx-background-color: null; ");
-//        scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
-//
-//			@Override
-//			public void changed(ObservableValue<? extends Number> event,
-//					Number oldValue, Number newValue) {
-//				if (oldValue.doubleValue() < newValue.doubleValue())
-//					moved = true;
-//				else
-//					moved = false;
-//			}
-//		});
 
         addListenerPanelForRealObject();
 	    
@@ -376,13 +337,7 @@ public class PanelForObject extends Pane {
 			dialog.setTitle("Information Submit");
 			dialog.setHeaderText("Submit saved with success");
 			dialog.setContentText("Please enter a name File:");
-//			dialog.getDialogPane().getButtonTypes().remove(ButtonType.OK);
-//			ButtonType okButtonType = new ButtonType("OK", ButtonData.OK_DONE);
-//			dialog.getDialogPane().getButtonTypes().add(okButtonType);
-//			okButton = dialog.getDialogPane().lookupButton(okButtonType);
-//			okButton.setDisable(false);	        		
-	
-			// Traditional way to get the response value.
+
 			Optional<String> result = dialog.showAndWait();
 			if (result.isPresent()){
 					mapEditor.saveMap(result.get());

@@ -49,8 +49,8 @@ public class TestGrumpyFriends extends TestbedTest {
 		
 		matchManager = new MatchManager(world);
 		
-		Team teamA = new Team("TEAM BLUE", 4, matchManager);
-		Team teamB = new Team("TEAM RED ", 4, matchManager);
+		Team teamA = new Team("TEAM BLUE", 4, matchManager,1);
+		Team teamB = new Team("TEAM RED ", 4, matchManager,2);
 		
 		teamA.setColorTeam(Color.CRIMSON);
 		teamB.setColorTeam(Color.STEELBLUE);

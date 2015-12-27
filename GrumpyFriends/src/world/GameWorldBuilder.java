@@ -14,13 +14,13 @@ public class GameWorldBuilder implements WorldBuilder{
 	@Override
 	public void initializes(String typeWorld) {
 
-		if (worldToCreate != null)
+//		TODO qui era worldToCreate != null..... doveva starci != ????
+		if (worldToCreate == null)
 			AbstractWorld.setInstanceNull();
 
 		AbstractWorld.initializes(typeWorld);
 		worldToCreate = (AbstractWorld) AbstractWorld.getInstance();
 		PhysicalObjectManager.getInstance().setWorld(worldToCreate);
-
 
 	}
 	@Override

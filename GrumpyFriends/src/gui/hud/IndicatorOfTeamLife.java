@@ -49,12 +49,18 @@ public class IndicatorOfTeamLife extends AbstractHudElement {
 	
 	private boolean modifyWidthBar;
 
+	private int pointTeamA;
+	private int pointTeamB;
+	
 	public IndicatorOfTeamLife(MatchManager matchManager) {
 		super(matchManager);
 
 		teamA = matchManager.getTeamA();
 		teamB = matchManager.getTeamB();
 
+		pointTeamA = teamA.getTeamLifePoint();
+		pointTeamB = teamB.getTeamLifePoint();
+		
 		barTeamA = new Rectangle(MAX_WIDTH_BAR, HEIGHT_BAR,
 				teamA.getColorTeam());
 		barTeamB = new Rectangle(MAX_WIDTH_BAR, HEIGHT_BAR,
@@ -167,7 +173,6 @@ public class IndicatorOfTeamLife extends AbstractHudElement {
 
 			teamWithMaxLifePoints = teamA;
 		}
-
 	}
 
 	@Override
@@ -178,11 +183,11 @@ public class IndicatorOfTeamLife extends AbstractHudElement {
 		root.relocate(scene.getWidth() - DISTANCE_SCREEN_RIGHT,
 				scene.getHeight() - DISTANCE_SCREEN_BOTTOM);
 
-		if (matchManager.getCurrentTurnPhase() == TurnPhaseType.DAMAGE_PHASE) {
+//		if (matchManager.getCurrentTurnPhase() == TurnPhaseType.DAMAGE_PHASE) {
+		if (teamA.getTeamLifePoint() < pointTeamA || teamB.getTeamLifePoint() < pointTeamB) {
 			
 			pointsTeamA.setText(Integer.toString(teamA.getTeamLifePoint()));
 			pointsTeamB.setText(Integer.toString(teamB.getTeamLifePoint()));
-
 			
 			barTeamA.setWidth(getWidthBar(teamA));
 			barTeamB.setWidth(getWidthBar(teamB));
@@ -193,6 +198,9 @@ public class IndicatorOfTeamLife extends AbstractHudElement {
 					- pointsTeamA.getLayoutBounds().getWidth() * 1.3, 0);
 			pointsTeamB.relocate(MAX_WIDTH_BAR
 					- pointsTeamB.getLayoutBounds().getWidth() * 1.3, 0);
+			
+			pointTeamA = teamA.getTeamLifePoint();
+			pointTeamB = teamB.getTeamLifePoint();
 		}
 	}
 

@@ -1,5 +1,7 @@
 package gui;
 
+import game.GameManager;
+
 import java.awt.Toolkit;
 
 import mapEditor.MapEditor;
@@ -15,12 +17,22 @@ import javafx.stage.Stage;
 
 public class Menu extends Application{
 
+	Stage stage;
+	private GameManager gameManager;
+	
 	private int width = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	private int height = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 	private Pane panelForBackground;
 	
+	public Menu() {
+	}
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
+		gameManager = GameManager.getIstance();
+		this.stage = primaryStage;
+		
 		panelForBackground = new Pane();
 		panelForBackground.setPrefSize(width, height);
 		panelForBackground.setStyle("-fx-background: #6b5d5d; -fx-background-color: #71b0f6; ");
@@ -42,12 +54,16 @@ public class Menu extends Application{
 			@Override
 			public void handle(Event event) {
 				
-				InsertInformation insertInformation = new InsertInformation();
-				try {
-					insertInformation.start(primaryStage);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+//				InsertInformation insertInformation = new InsertInformation();
+//				MainApplication m = new MainApplication();
+//				try {
+//					m.start(primaryStage);
+////					insertInformation.start(primaryStage);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+				
+				gameManager.startMainApplication();
 				
 //				MainApplication mainApplication = new MainApplication();
 //				try {
@@ -97,8 +113,24 @@ public class Menu extends Application{
         primaryStage.setTitle("GrumpyFriends!");
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        gameManager.setMenu(this);
+	}
+	
+	public Stage getStage() {
+		if (stage != null)
+			return stage;
+		return new Stage();
 	}
 
+	public void closeStage() {
+		if (stage != null)
+		{
+			panelForBackground.getChildren().removeAll();
+			stage.close();
+		}
+		stage = null;
+	}
 	
 	public static void main(String[] args) {
 		launch(args);

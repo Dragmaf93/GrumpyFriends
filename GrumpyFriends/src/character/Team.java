@@ -10,6 +10,9 @@ import game.MatchManager;
 import javafx.scene.paint.Color;
 
 public class Team {
+	
+	private int id;
+	
 	private String name;
 	private Color color;
 
@@ -23,7 +26,7 @@ public class Team {
 	private MatchManager matchManager;
 	private int maxTeamLifePoints;
 
-	public Team(String name, int numberOfCharacter, MatchManager matchManager) {
+	public Team(String name, int numberOfCharacter, MatchManager matchManager, int id) {
 		this.name = name;
 		this.numberOfCharacter = numberOfCharacter;
 		if (numberOfCharacter > 4 || numberOfCharacter <= 0)
@@ -33,6 +36,8 @@ public class Team {
 		this.charactersInGame = new LinkedList<>();
 		this.currentPlayer = 0;
 		this.matchManager = matchManager;
+		
+		this.id = id;
 	}
 
 	public void setColorTeam(Color color) {
@@ -98,7 +103,6 @@ public class Team {
 	}
 
 	public boolean isLose() {
-
 		return charactersInGame.size() == 0;
 	}
 
@@ -140,5 +144,8 @@ public class Team {
 		return maxTeamLifePoints;
 	}
 	
+	public int getId() {
+		return id;
+	}
 	
 }
