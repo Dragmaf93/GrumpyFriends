@@ -84,6 +84,9 @@ public class MainApplication extends Application{
 		else
 			teamB = new Team(nameTeamB, 4, matchManager,2);
 		
+//		teamA = new Team(nameTeamA, 4, matchManager,1);
+//		teamB = new Team(nameTeamB, 4, matchManager,2);
+		
 		teamA.setColorTeam(Color.CRIMSON);
 		teamB.setColorTeam(Color.STEELBLUE);
 		
