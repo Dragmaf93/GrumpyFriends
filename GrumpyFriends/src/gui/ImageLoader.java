@@ -15,7 +15,11 @@ public class ImageLoader {
 	private HashMap<String, Image> previews;
 	private HashMap<String, Image> previewsGround;
 	
+	private HashMap<String, Image> headBlack;
+	private HashMap<String, Image> headWhite;
+	
 	private final static String PATH_IMAGE="file:image/World/";
+	private final static String PATH_IMAGE_HEAD="file:image/head/";
 	private String lastTypeWorld;
 	
 	public ImageLoader() {
@@ -24,15 +28,30 @@ public class ImageLoader {
 		previews = new HashMap<String, Image>();
 		previewsGround = new HashMap<String, Image>();
 		
+		headBlack = new HashMap<String, Image>();
+		headWhite = new HashMap<String, Image>();
+		
 		File dir = new File("image/World/");
 		String[] typeWorlds = dir.list();
 
 		for (String typeWorld : typeWorlds) {
-			System.out.println(typeWorld);
+//			System.out.println(typeWorld);
 				previews.put(typeWorld, new Image(PATH_IMAGE+typeWorld+"/preview.png"));
 				previewsGround.put(typeWorld, new Image(PATH_IMAGE+typeWorld+"/groundPreview.png"));
-				
 		}
+		
+		dir = new File("image/head/Black");
+		String[] typeHeadBlack = dir.list();
+
+		for (String typeHead: typeHeadBlack)
+			headBlack.put(typeHead, new Image(PATH_IMAGE_HEAD+"Black/"+typeHead));
+		
+		dir = new File("image/head/White");
+		String[] typeHeadWhite = dir.list();
+
+		for (String typeHead: typeHeadWhite)
+			headWhite.put(typeHead, new Image(PATH_IMAGE_HEAD+"White/"+typeHead));
+		
 	}
 	
 	private void loader() {
@@ -71,6 +90,14 @@ public class ImageLoader {
 	public Image getPreview(String typeWorld){
 		return previews.get(typeWorld);
 	}
+	
+	public Image getHeadBlack(String typeHead) {
+		return headBlack.get(typeHead);
+	}
+	public Image getHeadWhite(String typeHead) {
+		return headWhite.get(typeHead);
+	}
+	
 	public Image getImageBackgrounds(String typeWorld) {
 		if(!backgrounds.containsKey(typeWorld)){
 			backgrounds.put(typeWorld, new Image(PATH_IMAGE+typeWorld+"/background.png"));

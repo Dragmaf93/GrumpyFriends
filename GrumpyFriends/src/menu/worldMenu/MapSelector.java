@@ -2,6 +2,7 @@ package menu.worldMenu;
 
 import java.io.File;
 
+import menu.AbstractPageComponent;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Orientation;
@@ -10,7 +11,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public class MapSelector extends AbstractWorldPageComponent{
+public class MapSelector extends AbstractPageComponent{
 	
 	private final static double HEIGHT_BUTTON=40;
 	

@@ -48,7 +48,7 @@ public class Team {
 		return color;
 	}
 
-	public boolean addCharcter(Character character) {
+	public boolean addCharacter(Character character) {
 
 		if (characters.size() < numberOfCharacter) {
 			characters.add(character);

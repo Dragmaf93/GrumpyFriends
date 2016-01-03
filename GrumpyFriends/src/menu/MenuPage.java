@@ -1,4 +1,4 @@
-package menu.worldMenu;
+package menu;
 
 public interface MenuPage {
 

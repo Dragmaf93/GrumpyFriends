@@ -1,4 +1,4 @@
-package gui;
+package menu;
 
 
 import javafx.event.EventHandler;

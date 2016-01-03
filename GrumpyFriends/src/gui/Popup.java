@@ -33,6 +33,8 @@ public class Popup extends Group{
 	private PopupButton leftButton;
 	
 	private Color color = new Color(32d/255d,207d/255d,208d/255d,1.0);
+
+	private Line horizontal;
 	
 	public Popup(double width, double height,String questionString,String buttonLeftText,String buttonRightText) {
 		
@@ -53,7 +55,7 @@ public class Popup extends Group{
 				windowRectangle.getLayoutY()+windowRectangle.getHeight()*2/3);
 		vertical.setStroke(color);
 		vertical.setStrokeWidth(4);
-		Line horizontal = new Line(windowRectangle.getLayoutX()+windowRectangle.getWidth()/2,
+		horizontal = new Line(windowRectangle.getLayoutX()+windowRectangle.getWidth()/2,
 				windowRectangle.getLayoutY()+windowRectangle.getHeight()*2/3+0.5,
 				windowRectangle.getLayoutX()+windowRectangle.getWidth()/2,
 				windowRectangle.getLayoutY()+windowRectangle.getHeight());
@@ -66,7 +68,7 @@ public class Popup extends Group{
 		questionText.setFill(Color.WHITE);
 		questionText.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,windowRectangle.getHeight()/6));
 		
-		windowBackGround = new Pane(rightButton,leftButton,windowRectangle,vertical,horizontal,questionText);
+		windowBackGround = new Pane(windowRectangle,rightButton,leftButton,vertical,horizontal,questionText);
 		
 		rightButton.relocate(windowRectangle.getLayoutX()+windowRectangle.getWidth()/2+2, windowRectangle.getLayoutY()+windowRectangle.getHeight()*2/3+0.5);
 		leftButton.relocate(windowRectangle.getLayoutX()+2, windowRectangle.getLayoutY()+windowRectangle.getHeight()*2/3+0.5);
@@ -95,4 +97,23 @@ public class Popup extends Group{
 		return rightButton;
 	}
 	
+	public void changeColorForMissingValue() {
+		windowRectangle.setFill(Color.CADETBLUE);
+		
+		rightButton.setDimension(windowRectangle.getWidth());
+		window.relocate(root.getPrefWidth()/3-windowRectangle.getWidth()/3, 
+				root.getPrefHeight()/3-windowRectangle.getHeight()/2);
+		
+		rightButton.relocate(windowRectangle.getLayoutX(), windowRectangle.getLayoutY()+windowRectangle.getHeight()*2/3+0.5);
+		
+		windowBackGround.getChildren().removeAll(leftButton,horizontal);
+	}
+	
+	public void changeColor() {
+		windowRectangle.setFill(Color.CADETBLUE);
+		
+		window.relocate(root.getPrefWidth()/3-windowRectangle.getWidth()/3, 
+				root.getPrefHeight()/3-windowRectangle.getHeight()/2);
+		
+	}
 }

@@ -2,6 +2,9 @@ package menu.worldMenu;
 
 import java.io.File;
 
+import menu.AbstractPageComponent;
+import menu.Orientation;
+import menu.TriangleButton;
 import gui.ImageLoader;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -11,7 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
-public class WorldTypeSelector extends AbstractWorldPageComponent {
+public class WorldTypeSelector extends AbstractPageComponent {
 
 	private Group worldType;
 

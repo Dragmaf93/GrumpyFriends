@@ -81,15 +81,15 @@ public class TestGrumpyFriends extends TestbedTest {
 		world.addCharacter(playerA4);
 		world.addCharacter(playerB4);
 //		
-		teamA.addCharcter(playerA1);
-		teamA.addCharcter(playerA2);
-		teamA.addCharcter(playerA3);
-		teamA.addCharcter(playerA4);
+		teamA.addCharacter(playerA1);
+		teamA.addCharacter(playerA2);
+		teamA.addCharacter(playerA3);
+		teamA.addCharacter(playerA4);
 		
-		teamB.addCharcter(playerB1);
-		teamB.addCharcter(playerB2);
-		teamB.addCharcter(playerB3);
-		teamB.addCharcter(playerB4);
+		teamB.addCharacter(playerB1);
+		teamB.addCharacter(playerB2);
+		teamB.addCharacter(playerB3);
+		teamB.addCharacter(playerB4);
 		builder.lastSettings();
 		
 		matchManager.startTest();

@@ -1,5 +1,6 @@
-package menu.worldMenu;
+package menu;
 
+import menu.worldMenu.WorldPage;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -9,7 +10,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-public abstract class AbstractWorldPageComponent extends Pane implements WorldPageComponent{
+public abstract class AbstractPageComponent extends Pane implements PageComponent{
 	
 	private static final double HEADER_HEIGHT = 45;
 	private static final double PADDING_WIDTH=5;
@@ -20,10 +21,10 @@ public abstract class AbstractWorldPageComponent extends Pane implements WorldPa
 	protected Rectangle rectangleBackground;
 	protected Group root;
 	
-	protected WorldPage worldPage;
+	protected MenuPage menuPage;
 	
-	public AbstractWorldPageComponent(WorldPage worldPage) {
-		this.worldPage = worldPage;
+	public AbstractPageComponent(MenuPage menuPage) {
+		this.menuPage = menuPage;
 		
 		headerText = new Text();
 		headerText.setFill(Color.WHITE);
@@ -51,5 +52,13 @@ public abstract class AbstractWorldPageComponent extends Pane implements WorldPa
 	}
 	
 	
+	public void setStroke(double stroke) {
+		headerRectangle.setStrokeWidth(stroke);
+		rectangleBackground.setStrokeWidth(stroke);
+	}
+	
+	public MenuPage getMenuPage() {
+		return menuPage;
+	}
 	
 }

@@ -24,7 +24,7 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
-public class MapEditor extends Application{
+public class MapEditor {
 
 	private Scene scene;
 	private Pane firstPane;
@@ -63,11 +63,12 @@ public class MapEditor extends Application{
 	private ObjectMapEditor objectMapEditor;
 	private ObjectForUndoRedo objectForUndoRedo;
 	
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		
+//	@Override
+//	public void start(Stage primaryStage) throws Exception {
+	
+	public MapEditor() {
 		this.primaryStage = primaryStage;
-		primaryStage.setTitle("Map Editor");        
+//		primaryStage.setTitle("Map Editor");        
 		
 		objectInMap = new ArrayList<PolygonObject>();
 		objectToSelect = new ArrayList<PolygonObject>();
@@ -106,8 +107,12 @@ public class MapEditor extends Application{
         root.setCenter(firstPane);
         
         scene = new Scene(root, widthScreen, heightScreen);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+//        primaryStage.setScene(scene);
+//        primaryStage.show();
+	}
+	
+	public Scene getScene() {
+		return scene;
 	}
 	
 	public Stage getStage() {
@@ -497,7 +502,7 @@ public class MapEditor extends Application{
 		mouseY = y;
 	}
 	
-	public static void main(String[] args) {
-		launch(args);
-	}
+//	public static void main(String[] args) {
+//		launch(args);
+//	}
 }

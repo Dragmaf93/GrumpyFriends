@@ -5,6 +5,7 @@ import gui.ImageLoader;
 import java.util.HashMap;
 import java.util.List;
 
+import menu.AbstractPageComponent;
 import utils.Point;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
@@ -14,7 +15,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
-public class PreviewWorldViewer extends AbstractWorldPageComponent {
+public class PreviewWorldViewer extends AbstractPageComponent {
 
 	private Pane previewPane;
 	private ImageLoader imageLoader;

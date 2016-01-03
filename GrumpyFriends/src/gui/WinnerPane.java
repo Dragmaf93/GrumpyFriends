@@ -1,5 +1,6 @@
 package gui;
 
+import menu.MenuButton;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;

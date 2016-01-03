@@ -18,7 +18,7 @@ public class PopupButton extends Group{
 	private Rectangle rectangle;
 	private Text text;
 	
-	private final static Color STROKE_COLOR = new Color(32d/255d,207d/255d,208d/255d,1);
+	private static Color STROKE_COLOR = new Color(32d/255d,207d/255d,208d/255d,1);
 
 	
 	public PopupButton(double width,double height,String textString) {
@@ -26,6 +26,8 @@ public class PopupButton extends Group{
 		
 		rectangle = new Rectangle(width,height);
 		rectangle.setFill(Color.TRANSPARENT);
+//		rectangle.setArcHeight(20);
+//		rectangle.setArcWidth(20);
 		
 		text = new Text();
 		text.setFill(Color.WHITE);
@@ -56,4 +58,14 @@ public class PopupButton extends Group{
 			}
 		});
 	}
+	
+//	public void changeColor(Color color) {
+//		text.setFill(color);
+////		STROKE_COLOR = Color.AQUAMARINE;
+//	}
+	
+	public void setDimension(double width) {
+		rectangle.setWidth(width);
+	}
+	
 }

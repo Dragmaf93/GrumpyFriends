@@ -1,11 +1,16 @@
 package menu.worldMenu;
 
 
+import menu.MenuButton;
+import menu.MenuManager;
+import menu.MenuPage;
 import gui.ImageLoader;
-import gui.MenuButton;
+import gui.Popup;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -35,10 +40,16 @@ public class WorldPage extends Pane implements MenuPage{
 	private MenuButton backButton;
 	
 	private Pane buttons;
-	
 	private Pane root;
+
+	private MenuManager menuManager;
+	private Scene scene;
+
+	private Popup messagePopup;
 	
 	public WorldPage(ImageLoader imageLoader) {
+		
+		menuManager = MenuManager.getIstance();
 		
 		//robe grafiche
 		this.setStyle("-fx-background: #ece6e6; -fx-background-color: rgba(25,81,81,0.6);");
@@ -66,6 +77,9 @@ public class WorldPage extends Pane implements MenuPage{
 		
 		this.getChildren().add(new StackPane(p));
 		
+		scene = new Scene(this,Screen.getPrimary().getBounds().getWidth(),
+				Screen.getPrimary().getBounds().getHeight());
+		
 //		eventi 
 		showPreviewButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
 
@@ -78,6 +92,26 @@ public class WorldPage extends Pane implements MenuPage{
 				}
 			}
 		});
+		
+		backButton.setOnMouseReleased(new EventHandler<Event>() {
+
+			@Override
+			public void handle(Event event) {
+				backPage();
+			}
+		});
+		
+		continueButton.setOnMouseReleased(new EventHandler<Event>() {
+
+			@Override
+			public void handle(Event event) {
+				nextPage();
+			}
+		});
+	}
+	
+	public String getWorldChoosed() {
+		return mapList.getMapSelected()+".xml";
 	}
 
 	@Override
@@ -88,14 +122,46 @@ public class WorldPage extends Pane implements MenuPage{
 
 	@Override
 	public void nextPage() {
-		// TODO Auto-generated method stub
+		if (mapList.getMapSelected() != null)
+		{
+			messagePopup = new Popup(300, 200, "Are you sure?", "Cancel", "Accept");
+			messagePopup.changeColor();
+			root.getChildren().add(messagePopup);
+			messagePopup.getRightButton().setOnMouseReleased(new EventHandler<Event>() {
+
+				@Override
+				public void handle(Event event) {
+					menuManager.startGame();
+					root.getChildren().remove(messagePopup);
+				}
+			});
+			messagePopup.getLeftButton().setOnMouseReleased(new EventHandler<Event>() {
+
+				@Override
+				public void handle(Event event) {
+					root.getChildren().remove(messagePopup);
+				}
+			});
+		}
+		else
+		{
+			messagePopup = new Popup(300, 200, "Choose Map", "", "Ok");
+			messagePopup.changeColorForMissingValue();
+			root.getChildren().add(messagePopup);
+			messagePopup.getRightButton().setOnMouseReleased(new EventHandler<Event>() {
+
+				@Override
+				public void handle(Event event) {
+					root.getChildren().remove(messagePopup);
+				}
+			});
+		}
 		
 	}
 
 	@Override
 	public void backPage() {
-		// TODO Auto-generated method stub
-		
+		menuManager.setSceneForChangePage(menuManager.getTeamPageBScene());
 	}
 
 }

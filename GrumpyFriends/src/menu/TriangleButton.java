@@ -1,4 +1,4 @@
-package menu.worldMenu;
+package menu;
 
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;

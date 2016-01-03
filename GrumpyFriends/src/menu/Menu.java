@@ -1,4 +1,4 @@
-package gui;
+package menu;
 
 import game.GameManager;
 
@@ -15,23 +15,26 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class Menu extends Application{
+public class Menu {
 
-	Stage stage;
 	private GameManager gameManager;
+	private MenuManager menuManager;
 	
 	private int width = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	private int height = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 	private Pane panelForBackground;
+	private Scene scene;
 	
 	public Menu() {
-	}
+//	}
 	
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		
+//	@Override
+//	public void start(Stage primaryStage) throws Exception {
+	
 		gameManager = GameManager.getIstance();
-		this.stage = primaryStage;
+		menuManager = MenuManager.getIstance();
+		
+//		this.stage = primaryStage;
 		
 		panelForBackground = new Pane();
 		panelForBackground.setPrefSize(width, height);
@@ -42,7 +45,7 @@ public class Menu extends Application{
 		panelForBackground.getChildren().add(title);
 		
 		Button play = new Button();
-		play.setStyle("-fx-background-color: null; ");
+		play.setStyle("-fx-background-color: null;");
 		ImageView imagePlay = new ImageView("file:image/play.png");
 		play.setGraphic(imagePlay);
 		play.setPrefHeight(imagePlay.getImage().getHeight());
@@ -54,23 +57,8 @@ public class Menu extends Application{
 			@Override
 			public void handle(Event event) {
 				
-//				InsertInformation insertInformation = new InsertInformation();
-//				MainApplication m = new MainApplication();
-//				try {
-//					m.start(primaryStage);
-////					insertInformation.start(primaryStage);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-				
-				gameManager.startMainApplication();
-				
-//				MainApplication mainApplication = new MainApplication();
-//				try {
-//					mainApplication.start(primaryStage);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
+				scene = menuManager.getTeamPageAScene();
+				menuManager.setSceneForChangePage(scene);
 			}
 		});
 		
@@ -88,7 +76,8 @@ public class Menu extends Application{
 			public void handle(Event event) {
 				MapEditor mapEditor = new MapEditor();
 				try {
-					mapEditor.start(primaryStage);
+					scene = mapEditor.getScene();
+					menuManager.setSceneForChangePage(scene);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -105,34 +94,14 @@ public class Menu extends Application{
 
 			@Override
 			public void handle(Event event) {
-				primaryStage.close();
+				menuManager.closeStage();
 			}
 		});
-		
-        Scene scene = new Scene(panelForBackground);        
-        primaryStage.setTitle("GrumpyFriends!");
-        primaryStage.setScene(scene);
-        primaryStage.show();
         
-        gameManager.setMenu(this);
 	}
 	
-	public Stage getStage() {
-		if (stage != null)
-			return stage;
-		return new Stage();
+	public Pane getPane() {
+		return panelForBackground;
 	}
 
-	public void closeStage() {
-		if (stage != null)
-		{
-			panelForBackground.getChildren().removeAll();
-			stage.close();
-		}
-		stage = null;
-	}
-	
-	public static void main(String[] args) {
-		launch(args);
-	}
 }

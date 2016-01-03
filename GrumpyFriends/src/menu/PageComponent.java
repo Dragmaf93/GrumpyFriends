@@ -1,8 +1,8 @@
-package menu.worldMenu;
+package menu;
 
 import javafx.scene.paint.Color;
 
-public interface WorldPageComponent {
+public interface PageComponent {
 
 	public static final Color STROKE_COLOR = new Color(32d/255d,207d/255d,208d/255d,1);
 	
