@@ -1,12 +1,12 @@
 package mapEditor;
 
 import java.util.ArrayList;
-
 import java.util.Optional;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import menu.MenuManager;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.beans.value.ChangeListener;
@@ -38,6 +38,7 @@ public class PanelForObject extends Pane {
 	private TextField insertHeight;
 	private Button buttonForSubmit;
 	private Button buttonForClear;
+	private Button buttonBack;
 	private Button buttonForRedo;
 	private Button buttonForUndo;
 	
@@ -47,11 +48,15 @@ public class PanelForObject extends Pane {
 	private boolean isInsertHeight;
 	
 	private double lastItemInserted;
-	protected boolean movedObject;
-	protected Node okButton;
+	private boolean movedObject;
+	private Node okButton;
+	
+	private MenuManager menuManager;
 	
 	public PanelForObject(MapEditor mapEditor) 
 	{
+		this.menuManager = MenuManager.getIstance();
+		
 		this.setPrefSize(mapEditor.getWidthScreen()/5, mapEditor.getHeightScreen());
         this.setStyle("-fx-background-color: #92a498;");
 
@@ -202,8 +207,8 @@ public class PanelForObject extends Pane {
 	    
 	    buttonForClear = new Button("Clear");
 	    buttonForClear.setOpacity(0.7);
-	    buttonForClear.setLayoutX(5);
-	    buttonForClear.setLayoutY(panelForSubmit.getPrefHeight()/4);
+	    buttonForClear.setLayoutX(panelForSubmit.getPrefWidth()/3 +10);
+	    buttonForClear.setLayoutY(panelForSubmit.getPrefHeight()/4 -3);
 	    buttonForClear.setOnMouseReleased(new EventHandler<MouseEvent>() {
 	    	
 	    	@Override
@@ -225,9 +230,21 @@ public class PanelForObject extends Pane {
 	        }
 	    });
 	    
+	    buttonBack = new Button("Back");
+	    buttonBack.setOpacity(0.7);
+	    buttonBack.setLayoutX(5);
+	    buttonBack.setLayoutY(buttonForClear.getLayoutY());
+	    buttonBack.setOnMouseReleased(new EventHandler<MouseEvent>() {
+	    	
+	    	@Override
+	    	public void handle(MouseEvent event) { 
+	    		menuManager.setMenuScene();
+	    	}
+	    });
 	    
 	    panelForSubmit.getChildren().add(buttonForSubmit);
 	    panelForSubmit.getChildren().add(buttonForClear);
+	    panelForSubmit.getChildren().add(buttonBack);
 
         addListenerPanelForRealObject();
 	    

@@ -48,6 +48,7 @@ public class GameManager {
 
 			mainApplication.start(mainApplication.getStage());
 			playGame.closeStage();
+			playGame.setNullMenu();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

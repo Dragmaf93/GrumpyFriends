@@ -14,6 +14,8 @@ public class PlayGame extends Application {
 	private MenuManager menuManager;
 
 	private Stage stage;
+
+	private Menu menu;
 	
 	
 	@Override
@@ -21,7 +23,7 @@ public class PlayGame extends Application {
 		
 		this.stage = primaryStage;
 		
-		Menu menu = new Menu();
+		menu = new Menu();
 		
 		gameManager = GameManager.getIstance();
 		menuManager = MenuManager.getIstance();
@@ -35,6 +37,11 @@ public class PlayGame extends Application {
 		primaryStage.setScene(sceneFirst);
 		primaryStage.show();
 		
+	}
+	
+	public void setNullMenu() {
+		menu = null;
+		menuManager.setAllNull();
 	}
 	
 	public void setScene(Scene scene) {

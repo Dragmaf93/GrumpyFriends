@@ -102,6 +102,11 @@ public class MenuManager {
 
 	
 	
+	public void setAllNull() {
+		this.teamPageA = null;
+		this.teamPageB = null;
+		this.worldPage = null;
+	}
 	
 	public void setPlayGame(PlayGame playGame) {
 		this.playGame = playGame;
