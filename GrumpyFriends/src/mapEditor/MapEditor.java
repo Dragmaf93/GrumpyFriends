@@ -1,7 +1,6 @@
 package mapEditor;
 
 import java.awt.Toolkit;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -10,7 +9,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import utils.ConverterMapToXml;
-import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -67,7 +65,7 @@ public class MapEditor {
 //	public void start(Stage primaryStage) throws Exception {
 	
 	public MapEditor() {
-		this.primaryStage = primaryStage;
+//		this.primaryStage = primaryStage;
 //		primaryStage.setTitle("Map Editor");        
 		
 		objectInMap = new ArrayList<PolygonObject>();
@@ -199,8 +197,7 @@ public class MapEditor {
 	}
 	
 	public void addObjectInListImage() {
-		if (draggedCurve != null)
-		{
+		if (draggedCurve != null) {
 			if (panelForObject.contains(draggedCurve.getX(), draggedCurve.getY()))
 				panelForObject.getChildren().remove(draggedCurve);
 			if (isInTheMap && !objectToMove)
@@ -231,20 +228,16 @@ public class MapEditor {
 		int i = 0;
 		double heiPrec = 0;
 
-		while (it.hasNext())
-		{
+		while (it.hasNext()) {
 			Map.Entry pairs = (Map.Entry)it.next();
-			if (it != null)
-			{
+			if (it != null) {
 				image = loaderImage.getImages().get(pairs.getKey());
-				if (i == 0)
-				{
+				if (i == 0) {
 					image.setLayoutX(((PanelForObject) panelForObject).getPanelForRealObject().getPrefWidth()/3);
 					image.setLayoutY(((PanelForObject) panelForObject).getLastItemInserted());
 					i++;
 				}
-				else
-				{
+				else {
 					image.setLayoutX(((PanelForObject) panelForObject).getPanelForRealObject().getPrefWidth()/3);
 					image.setLayoutY(objectToSelect.get(objectToSelect.size()-1).getLayoutY()+
 							objectToSelect.get(objectToSelect.size()-1).getHeight()+20);
@@ -367,8 +360,7 @@ public class MapEditor {
 		Point2D point = null;
 		Shape imageTmp = null;
 		
-		if (objectMoveInMapForRedo.size() > 1)
-		{
+		if (objectMoveInMapForRedo.size() > 1) {
 			imageTmp = objectMoveInMapForRedo.get(objectMoveInMapForRedo.size()-1).getValue();
 			point = objectMoveInMapForRedo.remove(objectMoveInMapForRedo.size()-1).getKey();
 			
@@ -395,14 +387,12 @@ public class MapEditor {
 	}
 
 	public void removeObject(Shape object) {
-		if (object instanceof Curve)
-		{
+		if (object instanceof Curve) {
 			((PanelForMap)panelForMap).removeCurve((Curve) object);
 			if (curveInMap.contains(object))
 				curveInMap.remove(object);
 		}
-		else
-		{
+		else {
 			((PanelForMap)panelForMap).removeObject((PolygonObject) object);
 			if (objectInMap.contains(object))
 				objectInMap.remove(object);
@@ -410,14 +400,12 @@ public class MapEditor {
 	}
 	
 	public void addObject(Shape object) {
-		if (object instanceof Curve)
-		{
+		if (object instanceof Curve) {
 			((PanelForMap)panelForMap).addCurve((Curve) object);
 			if (!curveInMap.contains((Curve) object))
 				curveInMap.add((Curve) object);
 		}
-		else
-		{
+		else {
 			((PanelForMap)panelForMap).addObject((PolygonObject) object);
 			if (!objectInMap.contains((PolygonObject) object))
 				objectInMap.add((PolygonObject) object);
@@ -425,13 +413,11 @@ public class MapEditor {
 	}
 	
 	public void removeObject() {
-		if (!curveOrPolygon)
-		{
+		if (!curveOrPolygon) {
 			if (dragged != null)
 				objectMapEditor.removePolygon((PanelForMap) panelForMap, objectToCancelled, objectMoveInMapForUndo);
 		}
-		else
-		{
+		else {
 			if (draggedCurve != null)
 				objectMapEditor.removeCurve((PanelForMap) panelForMap, objectToCancelled, objectMoveInMapForUndo, curveInMap);
 		}
