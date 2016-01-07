@@ -109,25 +109,13 @@ public class Curve extends QuadCurve {
 			else
 			{
 				if (points.get(i).getX() <= (event.getX()) && points.get(i).getY() <= event.getY())
-				{
-//					System.out.println("PRIMO: "+points.get(i));
 					newPoint = new Point2D((event.getX())-distancePoints.get(i).getX(), event.getY()-distancePoints.get(i).getY());
-				}
 				else if (points.get(i).getX() <= (event.getX()) && points.get(i).getY() >= event.getY())
-				{
-//					System.out.println("SECONDO: "+points.get(i));
 					newPoint = new Point2D((event.getX())-distancePoints.get(i).getX(), event.getY()+distancePoints.get(i).getY());
-				}
 				else if (points.get(i).getX() >= ((event.getX())) && points.get(i).getY() >= event.getY())
-				{
-//					System.out.println("TERZO: "+points.get(i));
 					newPoint = new Point2D((event.getX())+distancePoints.get(i).getX(), event.getY()+distancePoints.get(i).getY());
-				}
 				else if (points.get(i).getX() >= ((event.getX())) && points.get(i).getY() <= event.getY())
-				{
-//					System.out.println("QUARTO: "+points.get(i)+" -----------> "+ event.getY()+" "+ (event.getY()-distancePoints.get(i).getY()));
 					newPoint = new Point2D((event.getX())+distancePoints.get(i).getX(), event.getY()-distancePoints.get(i).getY());
-				}
 			}
 			if (newPoint != null) {
 					

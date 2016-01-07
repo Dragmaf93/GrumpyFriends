@@ -32,22 +32,18 @@ public class WeaponsManager {
 				Class<?> factoryClass = Class.forName(packageP + className);
 
 				Field field = factoryClass.getField(staticField);
-				System.out.println(field.getInt(null));
+//				System.out.println(field.getInt(null));
 				inventary.put(className, field.getInt(null));
 
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			} catch (NoSuchFieldException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

@@ -103,15 +103,19 @@ public class PanelForMap extends ScrollPane {
 					
 					if (PanelForMap.this.mapEditor.isDragged() && PanelForMap.this.mapEditor.getDragged() != null)
 					{
-						drawingObject = new DrawingPanel(dragged, PanelForMap.this.mapEditor);
-						realPane.getChildren().add(drawingObject);
-						insertPushed = true;
+						if (PanelForMap.this.mapEditor.getDragged().contains(new Point2D(event.getX(), event.getY()))) {
+							drawingObject = new DrawingPanel(dragged, PanelForMap.this.mapEditor);
+							realPane.getChildren().add(drawingObject);
+							insertPushed = true;
+						}
 					}
 					else if (PanelForMap.this.mapEditor.isDraggedCurve() && PanelForMap.this.mapEditor.getDraggedCurve() != null)
 					{
-						drawingCurve = new DrawingPanelForCurve(draggedCurve, PanelForMap.this.mapEditor);
-						realPane.getChildren().add(drawingCurve);
-						insertPushed = true;
+						if (PanelForMap.this.mapEditor.getDraggedCurve().contains(new Point2D(event.getX(), event.getY()))) {
+							drawingCurve = new DrawingPanelForCurve(draggedCurve, PanelForMap.this.mapEditor);
+							realPane.getChildren().add(drawingCurve);
+							insertPushed = true;
+						}
 					}
 					else
 					{

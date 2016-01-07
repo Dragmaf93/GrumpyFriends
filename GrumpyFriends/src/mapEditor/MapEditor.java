@@ -197,13 +197,13 @@ public class MapEditor {
 	}
 	
 	public void addObjectInListImage() {
-		if (draggedCurve != null) {
+		if (draggedCurve != null && curveOrPolygon) {
 			if (panelForObject.contains(draggedCurve.getX(), draggedCurve.getY()))
 				panelForObject.getChildren().remove(draggedCurve);
 			if (isInTheMap && !objectToMove)
 				objectMapEditor.addCurveRelease(draggedCurve, curveInMap, isInTheMap, objectMoveInMapForUndo, curveToMove);
 		}
-		if (dragged != null && !curveOrPolygon)
+		else if (dragged != null && !curveOrPolygon)
 			objectMapEditor.addPolygonObjectReleased(dragged, isInTheMap, objectMoveInMapForUndo, objectToMove);
 		
 		checkStatusButtonUndo();
