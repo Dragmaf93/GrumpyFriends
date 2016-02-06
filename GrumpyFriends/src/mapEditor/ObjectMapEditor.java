@@ -7,9 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.Effect;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Shape;
 import javafx.util.Pair;
-
 
 public class ObjectMapEditor {
 
@@ -17,10 +15,10 @@ public class ObjectMapEditor {
 	private Pane panelForObject;
 	private ScrollPane panelForMap;
 	
-	private ArrayList<PolygonObject> objectInMap;
+	private ArrayList<SquarePolygon> objectInMap;
 	
 	public ObjectMapEditor(MapEditor mapEditor, Pane panelForObject2, ScrollPane panelForMap2,
-			ArrayList<PolygonObject> objectInMap) {
+			ArrayList<SquarePolygon> objectInMap) {
 		this.mapEditor = mapEditor;
 		this.panelForObject = panelForObject2;
 		this.panelForMap = panelForMap2;
@@ -28,199 +26,107 @@ public class ObjectMapEditor {
 		this.objectInMap = objectInMap;
 	}
 	
-	public boolean selectObject(ArrayList<PolygonObject> objectToSelect, double x, double y, 
-			Effect borderGlow, Curve quadCurve) {
-		for (PolygonObject image : objectToSelect) {
+	public boolean selectObject(ArrayList<SquarePolygon> objectToSelect, double x, double y, 
+			Effect borderGlow) {
+		for (SquarePolygon image : objectToSelect) {
 			if (image.containsPoint(new Point2D(x, y)))
 	        {
 	            mapEditor.setMouse(x,y);
 
-	            try {
-					mapEditor.setDragged(image.clone());
-					mapEditor.getDragged().setEffect(borderGlow);
-				} catch (CloneNotSupportedException e) {
-					e.printStackTrace();
-				}
+				mapEditor.setDragged((image).clone());
+				((Node) mapEditor.getDragged()).setEffect(borderGlow);
 	        	mapEditor.getDragged().computeDistanceVertex();
 	        	return true;
 	        }
 		}
-		if (quadCurve.contains(new Point2D(x, y)))
-		{
-			mapEditor.setMouse(x, y);
-
-            try {
-				mapEditor.setDraggedCurve(quadCurve.clone());
-				
-				mapEditor.getDraggedCurve().computeDistanceVertex();
-				mapEditor.getDraggedCurve().setEffect(borderGlow);
-			} catch (CloneNotSupportedException e) {
-				e.printStackTrace();
-			}
-            return false;
-		}
 		return false;
 	}
 	
-	public boolean selectObjectToMoveInMap(double x, double y, Effect borderGlow, 
-			ArrayList<Curve> curveInMap) {
-		for (PolygonObject image : objectInMap) {
-			image.setEffect(null);
-			if (image.contains(new Point2D(x, y)))
-	        {
+	public boolean selectObjectToMoveInMap(double x, double y, Effect borderGlow) {
+		for (SquarePolygon image : objectInMap) {
+			((Node) image).setEffect(null);
+			if (((Node) image).contains(new Point2D(x, y))) {
 	            mapEditor.setMouse(x, y);
 	            
-	           	mapEditor.setDragged((PolygonObject) image);
+	           	mapEditor.setDragged(image);
 	            mapEditor.getDragged().computeDistanceVertex();
 	            
-	            mapEditor.getDragged().setEffect(borderGlow);
+	            ((Node) mapEditor.getDragged()).setEffect(borderGlow);
 	            return true;
 	        }
 		}
-		
-		for (Curve curve : curveInMap) {
-			curve.setEffect(null);
-			if (curve.contains(new Point2D(x, y)))
-			{
-				mapEditor.setMouse(x, y);
-
-				mapEditor.setDraggedCurve(curve);
-				mapEditor.getDraggedCurve().computeDistanceVertex();
-				mapEditor.getDraggedCurve().setEffect(borderGlow);
-			}
-			return false;
-		}
 		return false;
 	}
 	
-	public void moveCurveInPanelObject(PolygonObject dragged, Curve draggedCurve, double x, double y) {
-		if (draggedCurve != null)
-		{
-			draggedCurve.modifyPosition(new Point2D(x, y),0,0);
-			if (!(panelForObject.getChildren().contains(draggedCurve)))
-				panelForObject.getChildren().add(draggedCurve);
-		}
-		else if (dragged != null)
+	public void moveObjectInPanelObject(SquarePolygon dragged, double x, double y) {
+		if (dragged != null)
 		{
 			dragged.modifyAllVertex(x, y,0,0);
 			if (!(panelForObject.getChildren().contains(dragged)))
-        		panelForObject.getChildren().add(dragged);
+        		panelForObject.getChildren().add((Node) dragged);
 		}
 	}
 	
 	
-	public void moveCurveInPanelMap(PolygonObject dragged, Curve draggedCurve, double x, double y) {
-		if (draggedCurve != null) {
-			draggedCurve.modifyPosition(new Point2D(x-panelForObject.getPrefWidth(), 
+	public void moveObjectInPanelMap(SquarePolygon dragged, double x, double y) {
+		if (dragged instanceof Curve) {
+			dragged.modifyPosition(new Point2D(x-panelForObject.getPrefWidth(), 
 					y-((PanelForMap) panelForMap).getValueScroll()),panelForObject.getPrefWidth(),0);
-			
-			if (!((PanelForMap) panelForMap).containsCurve(draggedCurve))
-	    		((PanelForMap) panelForMap).addCurve(draggedCurve);
 		}
-		else if (dragged != null) {
+		else {
 			dragged.modifyAllVertex(x, y-((PanelForMap) panelForMap).getValueScroll(),
 					panelForObject.getPrefWidth(),((PanelForMap) panelForMap).getValueScroll());
-			
-			if (!((PanelForMap) panelForMap).containsObject(dragged))
-        		((PanelForMap) panelForMap).addObject(dragged);
 		}
+		if (!((PanelForMap) panelForMap).containsObject(dragged))
+			((PanelForMap) panelForMap).addObject(dragged);
 	}
 	
 	
-	public void moveObjectInMap(double x, double y, Curve draggedCurve, 
-			PolygonObject dragged, PanelForMap panelForMap) {
-		if (draggedCurve != null &&
-				panelForMap.containsPoints(new Point2D(x, y)))
-			draggedCurve.modifyPosition(new Point2D(x, y),0,0);
-		else if (dragged != null)
-		{
+	public void moveObjectInMap(double x, double y,
+		SquarePolygon dragged, PanelForMap panelForMap) {
+		if (dragged != null) {
 			if (panelForMap.getDraggedPressed() && panelForMap.containsPoints(new Point2D(x, y)))
 				dragged.modifyAllVertex(x, y,0,0);
 		}
 	}
 	
-	
-	public void addCurveRelease(Curve draggedCurve, ArrayList<Curve> curveInMap, boolean isInTheMap, 
-			ArrayList<Pair<Point2D, Shape>> objectMoveInMapForUndo, boolean curveToMove) {
-		Point2D point = new Point2D(draggedCurve.getRealPoints().get(0).getX(), draggedCurve.getRealPoints().get(0).getY());
-		
-		if (!curveInMap.contains(draggedCurve) && isInTheMap)
-		{
-			curveInMap.add(draggedCurve);
-			draggedCurve.setEffect(null);
-		}
-		if (panelForObject.contains(point) && !isInTheMap)
-		{
-			panelForObject.getChildren().remove(draggedCurve);
-			if (objectMoveInMapForUndo.size() > 1)
-				draggedCurve = (Curve) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue();
-		}
-		else
-		{
-			((PanelForMap) panelForMap).addCurve(draggedCurve);
-			try {
-				objectMoveInMapForUndo.add(new Pair(point, draggedCurve.clone()));
-				((Curve) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue()).setPointWithExistingObject(draggedCurve);
-			} catch (CloneNotSupportedException e) {
-				e.printStackTrace();
-			}
-		}
-		if (!curveToMove)
-			draggedCurve.setEffect(null);
-	}
-	
-	
-	public void addPolygonObjectReleased(PolygonObject dragged, boolean isInTheMap, 
-			ArrayList<Pair<Point2D, Shape>> objectMoveInMapForUndo, boolean objectToMove) {
+	public void addPolygonObjectReleased(SquarePolygon dragged, boolean isInTheMap, 
+			boolean objectToMove, ArrayList<Pair<Point2D, SquarePolygon>> objectMoveInMapForUndo) {
 		int id = dragged.getIdObject();
 		Point2D point = new Point2D(dragged.getPointsVertex().get(0).getX(), dragged.getPointsVertex().get(0).getY());
-		if (!objectInMap.contains(dragged) && isInTheMap)
-		{
+		
+		if (!objectInMap.contains(dragged) && isInTheMap) {
 			objectInMap.add(dragged);
-			dragged.setEffect(null);
+			((Node) dragged).setEffect(null);
 		}
-		if (panelForObject.contains(point) && !isInTheMap)
-		{
+		if (panelForObject.contains(point) && !isInTheMap) {
 			panelForObject.getChildren().remove(dragged);
 			if (objectMoveInMapForUndo.size() > 1)
-				dragged = (PolygonObject) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue();
+				dragged = (SquarePolygon) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue();
 		}
-		else
-		{
+		else {
 			((PanelForMap) panelForMap).addObject(dragged);
-			try {
-				objectMoveInMapForUndo.add(new Pair(point, dragged.clone()));
-				((PolygonObject) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue()).setIdObject(id);
-			} catch (CloneNotSupportedException e) {
-				e.printStackTrace();
-			}
+			objectMoveInMapForUndo.add(new Pair<Point2D, SquarePolygon>(point, dragged.clone()));
+			if (dragged instanceof Curve)
+				((Curve) objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue()).setPointWithExistingObject((Curve) dragged);
+			else
+				(objectMoveInMapForUndo.get(objectMoveInMapForUndo.size()-1).getValue()).setIdObject(id);
 		}
 		if (!objectToMove)
-			dragged.setEffect(null);
+			((Node) dragged).setEffect(null);
 	}
 	
-	public void removePolygon(PanelForMap panelForMap, ArrayList<Pair<Point2D, Shape>> objectToCancelled,
-			ArrayList<Pair<Point2D, Shape>> objectMoveInMapForUndo) {
+	public void removePolygon(PanelForMap panelForMap, 
+			ArrayList<Pair<Point2D, SquarePolygon>> objectToCancelled, 
+			ArrayList<Pair<Point2D, SquarePolygon>> objectMoveInMapForUndo) {
 		
 		Point2D point = new Point2D(mapEditor.getDragged().getPointsVertex().get(0).getX(), 
 				mapEditor.getDragged().getPointsVertex().get(0).getY());
-		objectToCancelled.add(new Pair<Point2D, Shape>(point, mapEditor.getDragged()));
-		objectMoveInMapForUndo.add(new Pair<Point2D, Shape>(point, mapEditor.getDragged()));
+		objectToCancelled.add(new Pair<Point2D, SquarePolygon>(point, mapEditor.getDragged()));
+		objectMoveInMapForUndo.add(new Pair<Point2D, SquarePolygon>(point, mapEditor.getDragged()));
 		
 		panelForMap.removeObject(mapEditor.getDragged());
 		objectInMap.remove(mapEditor.getDragged());
-	}
-	
-	public void removeCurve(PanelForMap panelForMap, ArrayList<Pair<Point2D, Shape>> objectToCancelled,
-			ArrayList<Pair<Point2D, Shape>> objectMoveInMapForUndo, ArrayList<Curve> curveInMap) {
-		
-		Point2D point = new Point2D(mapEditor.getDraggedCurve().getRealPoints().get(0).getX(),
-				mapEditor.getDraggedCurve().getRealPoints().get(0).getY());
-		objectToCancelled.add(new Pair<Point2D, Shape>(point, mapEditor.getDraggedCurve()));
-		objectMoveInMapForUndo.add(new Pair<Point2D, Shape>(point, mapEditor.getDraggedCurve()));
-
-		((PanelForMap)panelForMap).removeCurve(mapEditor.getDraggedCurve());
-		curveInMap.remove(mapEditor.getDraggedCurve());
 	}
 	
 }

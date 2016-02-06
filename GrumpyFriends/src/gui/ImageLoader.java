@@ -43,10 +43,10 @@ public class ImageLoader {
 		dir = new File(PATH_IMAGE_HEAD);
 		String[] typeCharacter = dir.list();
 		
-		for (String typeHead: typeCharacter){
-			System.out.println(typeHead);
+//		for (String typeHead: typeCharacter){
+//			System.out.println(typeHead);
 //			headBlack.put(typeHead, new Image(PATH_IMAGE_HEAD+"Black/"+typeHead));
-		}
+//		}
 		
 		dir = new File("image/head/White");
 		String[] typeHeadWhite = dir.list();

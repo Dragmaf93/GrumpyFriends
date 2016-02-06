@@ -1,13 +1,8 @@
 package menu;
 
+import mapEditor.MapEditor;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import javafx.stage.Screen;
-import menu.teamMenu.PlayerName;
-import menu.teamMenu.TeamPage;
-import menu.teamMenu.TeamType;
-import menu.worldMenu.WorldPage;
 import game.Game;
 import game.GrumpyFriends;
 import game.LocalGame;
@@ -15,7 +10,6 @@ import game.MatchManager;
 import game.MediaPlayerManager;
 import gui.ImageLoader;
 import gui.MatchPane;
-import gui.MainScene;
 import gui.UpdatablePane;
 
 public class MenuManager {
@@ -34,9 +28,6 @@ public class MenuManager {
 	private SequencePage currentSequence;
 
 	private static MenuManager instance;
-
-	private PlayerName playerName;
-	private TeamType teamType;
 
 	private Game currentGame;
 
@@ -128,6 +119,17 @@ public class MenuManager {
 
 	}
 
+	public void goToMapEditor() {
+		
+		root.getChildren().removeAll(menuBackground, lastAddedPane);
+		
+		MapEditor mapEditor = new MapEditor();
+		root.getChildren().add(mapEditor);
+		lastAddedPane = mapEditor;
+		mediaPlayer.stop();
+		
+	}
+	
 	public void previousPage() {
 		MenuPage page = currentSequence.prevPage();
 

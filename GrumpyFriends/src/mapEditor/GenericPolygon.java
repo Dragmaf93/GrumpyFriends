@@ -30,7 +30,7 @@ public class GenericPolygon extends PolygonObject {
 	}
 	
 	@Override
-	protected PolygonObject clone() throws CloneNotSupportedException 
+	public PolygonObject clone()
 	{
 		PolygonObject newObject = new GenericPolygon(this.mapEditor, this.nameObject, this.points.get(0), this.points.get(1), 
 				this.points.get(2),this.points.get(3), this.points.get(4));
@@ -89,6 +89,13 @@ public class GenericPolygon extends PolygonObject {
 			points.add(point);
 
 		clearAndAddPoints();
+	}
+
+	@Override
+	public boolean vertexEquals(SquarePolygon polygon) {
+		if (polygon instanceof PolygonObject)
+			return vertexEqual((PolygonObject) polygon);
+		return false;
 	}
 	
 }

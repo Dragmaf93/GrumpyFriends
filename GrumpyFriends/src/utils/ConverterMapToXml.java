@@ -25,6 +25,7 @@ import mapEditor.Curve;
 import mapEditor.MapEditor;
 import mapEditor.PanelForObject;
 import mapEditor.PolygonObject;
+import mapEditor.SquarePolygon;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -52,11 +53,6 @@ public class ConverterMapToXml {
 	
 	public void convertToXml(MapEditor mapEditor, String nameFile) throws TransformerException
 	{
-		//type element
-		Element typeWorld  = doc.createElement("type");
-		typeWorld.appendChild(doc.createTextNode(((PanelForObject) mapEditor.getPanelForObject()).getTypeWorld()));
-		rootElement.appendChild(typeWorld);
-	
 		//dimension elements
 	    Element dimension = doc.createElement("dimension");
 	    
@@ -68,7 +64,7 @@ public class ConverterMapToXml {
 	    rootElement.appendChild(dimension);
 	
 	    //objectInMap elements
-	    for (PolygonObject object : mapEditor.getObjectInMap()) {
+	    for (SquarePolygon object : mapEditor.getObjectInMap()) {
 	    	if (object.getNameObject().equals("linearGround"))
 	    	{
 		    	Element elementGround = doc.createElement("linearGround");
@@ -90,15 +86,15 @@ public class ConverterMapToXml {
 
 		    	insertPoints(object, elementGround);
 	    	}
+	    	else if (object.getNameObject().equals("curveGround"))
+	    	{
+	    		Element elementGround = doc.createElement("curveGround");
+	    		rootElement.appendChild(elementGround);
+	    		
+	    		insertPoints(object, elementGround);
+	    	}
 		}
-	
-	    for (Curve object : mapEditor.getCurveInMap()) {
-	    	Element elementGround = doc.createElement("curveGround");
-	    	rootElement.appendChild(elementGround);
 
-	    	insertPoints(object, elementGround);
-	    }
-	    
 	    //write the content into xml file
 	    TransformerFactory transformerFactory = TransformerFactory.newInstance();
 	    Transformer transformer = transformerFactory.newTransformer();
@@ -147,12 +143,12 @@ public class ConverterMapToXml {
 	    }
 	}
 	
-	private void insertPoints(Shape object, Node elementGround) {
+	private void insertPoints(SquarePolygon object, Node elementGround) {
 		if (object instanceof PolygonObject)
 		{
 			for (Point2D point : ((PolygonObject) object).getPointsVertex()) {
 	    		Element elementPoint = doc.createElement("point");
-	    		System.out.println((Utils.javaFxHeight()+"  - "+point.getY()*SCALE_VALUE + "  =  "+(Utils.javaFxHeight()-point.getY()*SCALE_VALUE)));
+//	    		System.out.println((Utils.javaFxHeight()+"  - "+point.getY()*SCALE_VALUE + "  =  "+(Utils.javaFxHeight()-point.getY()*SCALE_VALUE)));
 		    	elementPoint.setAttribute("x", Double.toString(new BigDecimal(Utils.xFromJavaFxToJbox2d(point.getX()*SCALE_VALUE)).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
 			    elementPoint.setAttribute("y", Double.toString(new BigDecimal(Utils.getJboxHeight()-Utils.yFromJavaFxToJbox2d(Utils.javaFxHeight()-point.getY()*SCALE_VALUE)).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
 			    elementGround.appendChild(elementPoint);
@@ -175,9 +171,9 @@ public class ConverterMapToXml {
 		    elementPointControl.setAttribute("y", Double.toString(new BigDecimal(Utils.getJboxHeight()-Utils.yFromJavaFxToJbox2d(Utils.javaFxHeight()-((Curve) object).getRealPoints().get(2).getY()*SCALE_VALUE)).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
 		    elementGround.appendChild(elementPointControl);
 		    
-		    System.out.println("Start: "+elementPointStart.getAttribute("y"));
-		    System.out.println("End: "+elementPointEnd.getAttribute("y"));
-		    System.out.println("Control: "+elementPointControl.getAttribute("y"));
+//		    System.out.println("Start: "+elementPointStart.getAttribute("y"));
+//		    System.out.println("End: "+elementPointEnd.getAttribute("y"));
+//		    System.out.println("Control: "+elementPointControl.getAttribute("y"));
 		    
 		}
 	}
