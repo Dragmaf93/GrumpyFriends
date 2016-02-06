@@ -5,6 +5,7 @@ import java.util.List;
 
 import element.weaponsManager.WeaponsManager;
 import game.MatchManager;
+import gui.MatchPane;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -62,8 +63,8 @@ public class Inventory extends AbstractHudElement {
 
 	private boolean hide;
 
-	public Inventory(MatchManager matchManager) {
-		super(matchManager);
+	public Inventory(MatchPane matchPane, MatchManager matchManager) {
+		super(matchPane, matchManager);
 
 		background = new Rectangle(INVENTORY_WIDTH, INVENTORY_HEIGTH, BACKGROUND_COLOR);
 
@@ -140,6 +141,8 @@ public class Inventory extends AbstractHudElement {
 		root.getTransforms().add(rotate);
 
 		setWeaponsOfInventoryItem();
+		
+		root.relocate(screenWidth - root.getLayoutBounds().getWidth(), -10);
 
 	}
 
@@ -173,11 +176,6 @@ public class Inventory extends AbstractHudElement {
 
 	@Override
 	public void draw() {
-
-		Scene scene = root.getScene();
-		if (scene != null)
-			root.relocate(scene.getWidth() - root.getLayoutBounds().getWidth(), -10);
-		
 		if(matchManager.isTheCurrentTurnEnded() && !hide)
 			hide();
 

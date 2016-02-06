@@ -16,9 +16,8 @@ import javafx.scene.text.Text;
 public class MenuButton extends Group{
 
 	private final static Color FILL_COLOR = new Color(1,1,1,0.0);
-//	private final static Color STROKE_COLOR = new Color(215d/255d,225d/255d,228d/255d,0.9);
-//	private final static Color STROKE_COLOR = new Color(43d/255d,111d/255d,137d/255d,0.8);
-	private final static Color STROKE_COLOR = new Color(32d/255d,207d/255d,208d/255d,0.9);
+//	private final static Color STROKE_COLOR = new Color(32d/255d,207d/255d,208d/255d,0.9);
+	private final static Color STROKE_COLOR =PageComponent.STROKE_COLOR;
 	
 	private Pane root;
 	private Rectangle border;

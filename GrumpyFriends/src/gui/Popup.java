@@ -1,5 +1,6 @@
 package gui;
 
+import menu.PageComponent;
 import sun.swing.BakedArrayList;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -32,7 +33,7 @@ public class Popup extends Group{
 	private PopupButton rightButton;
 	private PopupButton leftButton;
 	
-	private Color color = new Color(32d/255d,207d/255d,208d/255d,1.0);
+	private static Color STROKE_COLOR = PageComponent.STROKE_COLOR;
 
 	private Line horizontal;
 	
@@ -42,7 +43,7 @@ public class Popup extends Group{
 		windowRectangle.setFill(null);
 		windowRectangle.setArcHeight(20);
 		windowRectangle.setArcWidth(20);
-		windowRectangle.setStroke(color);
+		windowRectangle.setStroke(STROKE_COLOR);
 		windowRectangle.setStrokeWidth(4);
 		
 		questionText = new Text(questionString);
@@ -53,13 +54,13 @@ public class Popup extends Group{
 				windowRectangle.getLayoutY()+windowRectangle.getHeight()*2/3,
 				windowRectangle.getLayoutX()+windowRectangle.getWidth(),
 				windowRectangle.getLayoutY()+windowRectangle.getHeight()*2/3);
-		vertical.setStroke(color);
+		vertical.setStroke(STROKE_COLOR);
 		vertical.setStrokeWidth(4);
 		horizontal = new Line(windowRectangle.getLayoutX()+windowRectangle.getWidth()/2,
 				windowRectangle.getLayoutY()+windowRectangle.getHeight()*2/3+0.5,
 				windowRectangle.getLayoutX()+windowRectangle.getWidth()/2,
 				windowRectangle.getLayoutY()+windowRectangle.getHeight());
-		horizontal.setStroke(color);
+		horizontal.setStroke(STROKE_COLOR);
 		horizontal.setStrokeWidth(4);
 		
 		rightButton = new PopupButton(width*0.5-3, height/3-2,buttonRightText);

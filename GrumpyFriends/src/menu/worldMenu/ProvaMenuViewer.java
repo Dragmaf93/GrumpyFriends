@@ -1,7 +1,9 @@
 package menu.worldMenu;
 
+import menu.MenuBackground;
 import gui.ImageLoader;
 import javafx.application.Application;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -12,10 +14,14 @@ public class ProvaMenuViewer extends Application {
 	public void start(Stage stage) throws Exception {
 		
 		ImageLoader imageLoader = new ImageLoader();
-		WorldPage worldPage = new WorldPage(imageLoader);
+		MenuBackground b = new MenuBackground();
+
+		WorldPage worldPage = new WorldPage();
+		b.getChildren().add(worldPage);
 		
-		Scene scene = new Scene(worldPage,Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight());
+		Scene scene = new Scene(b,Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight());
 		stage.setScene(scene);
+		stage.setFullScreen(true);
 		stage.show();
 	}
 	public static void main(String[] args) {

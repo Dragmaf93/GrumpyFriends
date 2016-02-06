@@ -1,6 +1,5 @@
 package menu;
 
-import menu.worldMenu.WorldPage;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -27,7 +26,7 @@ public abstract class AbstractPageComponent extends Pane implements PageComponen
 		this.menuPage = menuPage;
 		
 		headerText = new Text();
-		headerText.setFill(Color.WHITE);
+		headerText.setFill(HEADER_TEXT_COLOR);
 		headerText.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, HEADER_HEIGHT*0.6));
 		headerText.setText(getNameComponent());
 	

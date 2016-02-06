@@ -1,5 +1,6 @@
 package gui;
 
+import menu.PageComponent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
@@ -18,7 +19,7 @@ public class PopupButton extends Group{
 	private Rectangle rectangle;
 	private Text text;
 	
-	private static Color STROKE_COLOR = new Color(32d/255d,207d/255d,208d/255d,1);
+	private static Color STROKE_COLOR = PageComponent.STROKE_COLOR;
 
 	
 	public PopupButton(double width,double height,String textString) {

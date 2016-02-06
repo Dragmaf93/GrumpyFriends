@@ -27,8 +27,6 @@ public class WorldTypeSelector extends AbstractPageComponent {
 	private TriangleButton buttonLeft;
 	private TriangleButton buttonRight;
 
-	private Text currentWorldType;
-
 	private String[] typeWorlds;
 	private ImageView[] imagesWorldType;
 
@@ -116,7 +114,12 @@ public class WorldTypeSelector extends AbstractPageComponent {
 	public double getHeightComponent() {
 		return 250;
 	}
-
+	
+	@Override
+	public void reset() {
+		
+	}
+	
 	@Override
 	public double getWidthComponent() {
 		return 450;
@@ -125,6 +128,12 @@ public class WorldTypeSelector extends AbstractPageComponent {
 	@Override
 	public String getNameComponent() {
 		return "WORLD TYPE";
+	}
+
+	@Override
+	public String[] getValues() {
+		String[] tmp = {getTypeWorld()};
+		return tmp;
 	}
 
 }

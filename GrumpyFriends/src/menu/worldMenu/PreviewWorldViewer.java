@@ -25,6 +25,7 @@ public class PreviewWorldViewer extends AbstractPageComponent {
 	private HashMap<String, HashMap<String,Pane> > previewContainer;
 	private HashMap<String, ImageView> previewBackground;
 	private ImageView imageBackground;
+	private Pane lastWorld;
 	
 	public PreviewWorldViewer(WorldPage worldPage,ImageLoader imageLoader) {
 		super(worldPage);
@@ -47,7 +48,6 @@ public class PreviewWorldViewer extends AbstractPageComponent {
 	}
 
 	public void showPreview(String map,String typeWorld) {
-		System.out.println(typeWorld);
 		imageBackground.setImage(imageLoader.getImageBackgrounds(typeWorld));		
 		
 		if (!previewContainer.containsKey(map)) {
@@ -56,7 +56,7 @@ public class PreviewWorldViewer extends AbstractPageComponent {
 
 		if(!previewContainer.get(map).containsKey(typeWorld)){
 			List<List<Point>> polygonPoints = loaderMap.getPolygonPoints(map);
-			Pane world = new Pane();
+			lastWorld = new Pane();
 			
 			for (List<Point> points : polygonPoints) {
 				Polygon shape = new Polygon();
@@ -66,10 +66,10 @@ public class PreviewWorldViewer extends AbstractPageComponent {
 				}
 				ImagePattern i = new ImagePattern(imageLoader.getGroundPreview(typeWorld),0,0,133,133,false);
 				shape.setFill(i);
-				world.getChildren().add(shape);
+				lastWorld.getChildren().add(shape);
 			}
 			
-			previewContainer.get(map).put(typeWorld, world);
+			previewContainer.get(map).put(typeWorld, lastWorld);
 			
 		}
 		
@@ -80,7 +80,13 @@ public class PreviewWorldViewer extends AbstractPageComponent {
 		}
 
 	}
-
+	
+	@Override
+	public void reset() {
+		imageBackground.setImage(null);
+		previewPane.getChildren().remove(lastWorld);
+	}
+	
 	public double getHeightComponent() {
 		return 300;
 	}
@@ -93,6 +99,11 @@ public class PreviewWorldViewer extends AbstractPageComponent {
 	@Override
 	public String getNameComponent() {
 		return "PREVIEW MAP";
+	}
+
+	@Override
+	public String[] getValues() {
+		return null;
 	}
 
 }

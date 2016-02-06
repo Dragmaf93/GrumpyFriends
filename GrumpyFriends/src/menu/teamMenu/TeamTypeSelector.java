@@ -1,11 +1,12 @@
 package menu.teamMenu;
 
-import game.GameManager;
+import gui.animation.SpriteAnimation;
 
 import java.io.File;
 
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -18,54 +19,43 @@ public class TeamTypeSelector extends AbstractPageComponent {
 
 	private Group teamType;
 
-	private final static String TEAM_PATH = "image/Team/";
-	
+	private final static String TEAM_TYPE = "image/Character/";
+
 	private final static double BUTTON_WIDTH = 45;
 	private final static double BUTTON_HEIGHT = 50;
-	
+
 	private final static double DIMENSION_IMAGE = 170;
-	
+
 	private TriangleButton buttonLeft;
 	private TriangleButton buttonRight;
 	private Pane pane;
-	
+
 	private String[] typeTeam;
-	private ImageView[] imagesTeamType;
-	
+	private ImageView imagesTeamType;
+	private static SpriteAnimation[] spriteAnimations;
+
 	private int indexCurrentType;
-	
-	private GameManager gameManager;
-	
+
 	public TeamTypeSelector(TeamPage teamPage) {
 		super(teamPage);
-		
-		gameManager = GameManager.getIstance();
-		
-		File dir = new File(TEAM_PATH);
-		typeTeam = dir.list();
 
-		imagesTeamType = new ImageView[typeTeam.length];
-
-		int i = 0;
-		for (String team : typeTeam) {
-			imagesTeamType[i] = new ImageView("file:"+TEAM_PATH+team);
-			imagesTeamType[i].setFitWidth(DIMENSION_IMAGE * 2);
-			imagesTeamType[i].setFitHeight(DIMENSION_IMAGE * 2);
-			i++;
-		}
+		loadFileImage();
+		imagesTeamType = new ImageView();
+		imagesTeamType.setFitWidth(DIMENSION_IMAGE * 2);
+		imagesTeamType.setFitHeight(DIMENSION_IMAGE * 2);
 
 		indexCurrentType = 0;
-		
-		teamType = new Group(imagesTeamType[indexCurrentType]);
+
+		teamType = new Group(imagesTeamType);
 
 		teamType.relocate(rectangleBackground.getWidth() / 2 - DIMENSION_IMAGE,
-				rectangleBackground.getHeight() / 2 - DIMENSION_IMAGE +30);
-		
+				rectangleBackground.getHeight() / 2 - DIMENSION_IMAGE + 30);
+
 		buttonLeft = new TriangleButton(BUTTON_WIDTH, BUTTON_HEIGHT,
 				Orientation.LEFT);
 		buttonRight = new TriangleButton(BUTTON_WIDTH, BUTTON_HEIGHT,
 				Orientation.RIGHT);
-		
+
 		pane = new Pane(buttonLeft, buttonRight, teamType);
 
 		buttonLeft.relocate(rectangleBackground.getX() + 15,
@@ -77,21 +67,16 @@ public class TeamTypeSelector extends AbstractPageComponent {
 						+ rectangleBackground.getHeight() / 2 - BUTTON_HEIGHT
 						/ 2);
 		root.getChildren().add(pane);
-		
-		((TeamPage) getMenuPage()).getMenuManager().setTeamType(typeTeam[indexCurrentType]);
-		
+
 		buttonLeft.setOnMouseReleased(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent event) {
 				if (event.getButton() == MouseButton.PRIMARY) {
-					teamType.getChildren().remove(
-							imagesTeamType[indexCurrentType]);
+
 					indexCurrentType = Math.abs((indexCurrentType - 1)
 							% typeTeam.length);
-					teamType.getChildren().add(
-							imagesTeamType[indexCurrentType]);
-					((TeamPage) getMenuPage()).getMenuManager().setTeamTypeAfter(typeTeam[indexCurrentType]);
+					teamPage.changeHeadType(typeTeam[indexCurrentType]);
 				}
 			}
 
@@ -103,22 +88,34 @@ public class TeamTypeSelector extends AbstractPageComponent {
 			public void handle(MouseEvent event) {
 				if (event.getButton() == MouseButton.PRIMARY) {
 
-					teamType.getChildren().remove(
-							imagesTeamType[indexCurrentType]);
-					indexCurrentType = (indexCurrentType + 1)
-							% typeTeam.length;
-					teamType.getChildren().add(
-							imagesTeamType[indexCurrentType]);
-					((TeamPage) getMenuPage()).getMenuManager().setTeamTypeAfter(typeTeam[indexCurrentType]);
+					indexCurrentType = (indexCurrentType + 1) % typeTeam.length;
+					teamPage.changeHeadType(typeTeam[indexCurrentType]);
 				}
 			}
 		});
 	}
-	
+
+	private void loadFileImage() {
+
+		File dir = new File(TEAM_TYPE);
+		typeTeam = dir.list();
+
+		spriteAnimations = new SpriteAnimation[typeTeam.length];
+
+		for (int i = 0; i < typeTeam.length; i++) {
+			String fileString = "file:" + TEAM_TYPE + typeTeam[i] + "/Idle";
+			System.out.println(fileString);
+
+			Image[] frames = { new Image(fileString + "/frame1.png"),
+					new Image(fileString + "/frame2.png"),
+					new Image(fileString + "/frame3.png"),
+					new Image(fileString + "/frame4.png") };
+			spriteAnimations[i] = new SpriteAnimation(frames, 100);
+		}
+	}
+
 	public String getType() {
-		if (typeTeam[indexCurrentType].equals("teamA"))
-			return "WHITE";
-		return "BLACK";
+		return typeTeam[indexCurrentType];
 	}
 
 	@Override
@@ -134,6 +131,23 @@ public class TeamTypeSelector extends AbstractPageComponent {
 	@Override
 	public String getNameComponent() {
 		return "TEAM TYPE";
+	}
+
+	@Override
+	public void reset() {
+		indexCurrentType=0;
+		((TeamPage) menuPage).changeHeadType(typeTeam[indexCurrentType]);
+
+	}
+
+	@Override
+	public String[] getValues() {
+		String[] tmp = { getType() };
+		return tmp;
+	}
+
+	public void update() {
+		imagesTeamType.setImage(spriteAnimations[indexCurrentType].nextFrame());
 	}
 
 }

@@ -55,7 +55,7 @@ public class PanelForObject extends Pane {
 	
 	public PanelForObject(MapEditor mapEditor) 
 	{
-		this.menuManager = MenuManager.getIstance();
+		this.menuManager = MenuManager.getInstance();
 		
 		this.setPrefSize(mapEditor.getWidthScreen()/5, mapEditor.getHeightScreen());
         this.setStyle("-fx-background-color: #92a498;");
@@ -238,7 +238,7 @@ public class PanelForObject extends Pane {
 	    	
 	    	@Override
 	    	public void handle(MouseEvent event) { 
-	    		menuManager.setMenuScene();
+//	    		menuManager.setMenuScene();
 	    	}
 	    });
 	    

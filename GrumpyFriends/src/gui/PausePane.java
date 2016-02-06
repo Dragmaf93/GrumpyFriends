@@ -1,7 +1,10 @@
 package gui;
 
 
+import game.MatchManager;
+import gui.hud.AbstractHudElement;
 import menu.MenuButton;
+import menu.MenuManager;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseButton;
@@ -12,15 +15,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 
-public class PausePane extends Pane{
+public class PausePane extends AbstractHudElement{
 
 	private final static double BUTTON_WIDTH=318;
 	private final static double BUTTON_HEIGHT=65;
-	
-	private MatchPane parent;
-	
-	private Group root;
 	
 	private Text textGamePaused;
 	
@@ -36,10 +36,16 @@ public class PausePane extends Pane{
 	
 	private Popup restartPopup;
 	private Popup exitPopup;
+
+	private double width;
+	private double height;
 	
-	public PausePane(MatchPane pane, double width,double height){
-		root = new Group();
-		parent = pane;
+	
+	
+	public PausePane(MatchPane matchPane, MatchManager matchManager){
+		super(matchPane, matchManager);
+		this.width = Screen.getPrimary().getBounds().getWidth();
+		this.height=Screen.getPrimary().getBounds().getHeight();
 		this.setPrefSize(width,height);
 		this.setStyle("-fx-background: #ece6e6; -fx-background-color: rgba(25,81,81,0.6);");
 
@@ -60,7 +66,6 @@ public class PausePane extends Pane{
 		
 		root.getChildren().addAll(textGamePaused,pauseButtons);
 		
-		this.getChildren().add(root);
 
 		restartPopup = new Popup(300, 200, "Are you sure?", "Cancel", "Accept");
 		exitPopup = new Popup(300, 200, "Are you sure?", "Cancel", "Accept");
@@ -70,7 +75,7 @@ public class PausePane extends Pane{
 			@Override
 			public void handle(MouseEvent event) {
 				if(event.getButton()==MouseButton.PRIMARY)
-					parent.restartFromPause();
+					matchPane.restartFromPause();
 			}
 		});
 		
@@ -103,8 +108,11 @@ public class PausePane extends Pane{
 
 			@Override
 			public void handle(MouseEvent event) {
-				if(event.getButton()==MouseButton.PRIMARY)
-					parent.startMainApplication();
+				if(event.getButton()==MouseButton.PRIMARY){
+					root.getChildren().remove(restartPopup);
+					pauseButtons.setVisible(true);
+					matchPane.restartMatch();
+				}
 			}
 		});
 		restartPopup.getLeftButton().setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -124,7 +132,7 @@ public class PausePane extends Pane{
 			@Override
 			public void handle(MouseEvent event) {
 				if(event.getButton()==MouseButton.PRIMARY)
-					parent.startMenu();
+					MenuManager.getInstance().goToMainMenu();
 			}
 		});
 		exitPopup.getLeftButton().setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -138,6 +146,11 @@ public class PausePane extends Pane{
 				}
 			}
 		});
+		
+	}
+
+	@Override
+	public void draw() {
 		
 	}
 	

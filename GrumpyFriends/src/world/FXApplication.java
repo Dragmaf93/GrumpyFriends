@@ -22,7 +22,7 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 
 import character.AbstractCharacter;
-import character.Chewbacca;
+import character.WhiteStormtrooper;
 import javafx.event.ActionEvent;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
@@ -41,7 +41,7 @@ public class FXApplication extends Application
 	int larghezza = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	int altezza = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 	
-	Chewbacca character;
+	WhiteStormtrooper character;
 	ImageView view;
 	Pane pane;
 	final ScrollPane scrollPane = new ScrollPane();

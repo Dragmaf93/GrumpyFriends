@@ -10,9 +10,10 @@ import javafx.scene.shape.Polygon;
 public class TriangleButton extends Group{
 
 	
-	private final static Color STROKE_COLOR = new Color(32d / 255d,
-			207d / 255d, 208d / 255d, 1.0);
-	
+//	private final static Color STROKE_COLOR = new Color(32d / 255d,
+//			207d / 255d, 208d / 255d, 1.0);
+	private final static Color STROKE_COLOR = PageComponent.STROKE_COLOR;
+
 	private Polygon polygon;
 	private Orientation orientation;
 
@@ -24,7 +25,7 @@ public class TriangleButton extends Group{
 		this.height=height;
 		polygon = new Polygon();
 		polygon.setStroke(STROKE_COLOR);
-		polygon.setStrokeWidth(2);
+		polygon.setStrokeWidth(4);
 		polygon.setFill(Color.TRANSPARENT);
 		
 		switch (orientation) {

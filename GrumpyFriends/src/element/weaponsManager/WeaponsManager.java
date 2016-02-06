@@ -68,10 +68,8 @@ public class WeaponsManager {
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
-
 		}
 		return null;
-
 	}
 
 	public void addAmmunition(String weaponName, int number) {

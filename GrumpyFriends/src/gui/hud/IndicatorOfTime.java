@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 
 import game.MatchManager;
 import game.MatchTimer;
+import gui.MatchPane;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -30,8 +31,8 @@ public class IndicatorOfTime extends AbstractHudElement{
 	
 	private Circle clock;
 	
-	public IndicatorOfTime(MatchManager matchManager) {
-		super(matchManager);
+	public IndicatorOfTime(MatchPane matchPane,MatchManager matchManager) {
+		super(matchPane,matchManager);
 		
 		timer = matchManager.getMatchTimer();
 		
@@ -58,14 +59,13 @@ public class IndicatorOfTime extends AbstractHudElement{
 		root.getChildren().add(clock);
 		root.getChildren().add(turnTimer);
 		root.getChildren().add(matchTimer);
+		
+		root.relocate(DISTANCE_SCREEN_LEFT, DISTANCE_SCREEN_TOP);
 	}
 	
 	
 	@Override
 	public void draw() {
-		Scene scene = root.getScene();
-		root.relocate(DISTANCE_SCREEN_LEFT, DISTANCE_SCREEN_TOP);
-		
 		if(!timer.isTurnTimerStopped()){
 			turnTimer.setText(timer.turnTimerStringFormat());
 			

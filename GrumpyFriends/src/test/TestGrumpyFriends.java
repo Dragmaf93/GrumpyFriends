@@ -7,7 +7,7 @@ import org.jbox2d.testbed.framework.TestbedSettings;
 import org.jbox2d.testbed.framework.TestbedTest;
 
 import character.Character;
-import character.Chewbacca;
+import character.WhiteStormtrooper;
 import character.Team;
 import element.weaponsManager.Weapon;
 import game.MatchManager;
@@ -43,14 +43,14 @@ public class TestGrumpyFriends extends TestbedTest {
 
 		WorldBuilder builder = new TestWorldBuilder();
 		WorldDirector director = new WorldDirector(builder);
-		director.createWorld("worldXML/Map.xml");
+		director.createWorld("worldXML/Map.xml","Planet");
 		world = builder.getWorld();
 		
 		
 		matchManager = new MatchManager(world);
 		
-		Team teamA = new Team("TEAM BLUE", 4, matchManager,1);
-		Team teamB = new Team("TEAM RED ", 4, matchManager,2);
+		Team teamA = new Team("TEAM BLUE", 4, matchManager);
+		Team teamB = new Team("TEAM RED ", 4, matchManager);
 		
 		teamA.setColorTeam(Color.CRIMSON);
 		teamB.setColorTeam(Color.STEELBLUE);
@@ -60,17 +60,17 @@ public class TestGrumpyFriends extends TestbedTest {
 		
 		
 //		
-		Character playerA1 = new Chewbacca("Player A1", 50, 100, teamA,world);
-		Character playerB1 = new Chewbacca("Player B1", 30, 100, teamB,world);
+		Character playerA1 = new WhiteStormtrooper("Player A1", 50, 100, teamA,world);
+		Character playerB1 = new WhiteStormtrooper("Player B1", 30, 100, teamB,world);
 		
-		Character playerA2 = new Chewbacca("Player A2", 90, 100, teamA, world);
-		Character playerB2 = new Chewbacca("Player B2", 130, 100, teamB, world);
+		Character playerA2 = new WhiteStormtrooper("Player A2", 90, 100, teamA, world);
+		Character playerB2 = new WhiteStormtrooper("Player B2", 130, 100, teamB, world);
 
-		Character playerA3 = new Chewbacca("Player A3", 120, 100, teamA,world);
-		Character playerB3 = new Chewbacca("Player B3", 90, 100, teamB,world);
+		Character playerA3 = new WhiteStormtrooper("Player A3", 120, 100, teamA,world);
+		Character playerB3 = new WhiteStormtrooper("Player B3", 90, 100, teamB,world);
 		
-		Character playerA4 = new Chewbacca("Player A4", 160, 100, teamA,world);
-		Character playerB4 = new Chewbacca("Player B4", 150, 100, teamB,world);
+		Character playerA4 = new WhiteStormtrooper("Player A4", 160, 100, teamA,world);
+		Character playerB4 = new WhiteStormtrooper("Player B4", 150, 100, teamB,world);
 		
 		world.addCharacter(playerA1);
 		world.addCharacter(playerB1);

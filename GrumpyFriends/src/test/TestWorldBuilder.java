@@ -3,7 +3,7 @@ package test;
 
 import java.util.List;
 
-import character.Chewbacca;
+import character.WhiteStormtrooper;
 import physic.PhysicalObjectManager;
 import utils.Point;
 import utils.Vector;
@@ -38,7 +38,7 @@ public class TestWorldBuilder implements WorldBuilder {
 
 	@Override
 	public void addCharacter(String name, float x, float y) {
-		world.addCharacter(new Chewbacca(name, x, y,null,world));
+		world.addCharacter(new WhiteStormtrooper(name, x, y,null,world));
 	}
 
 	@Override

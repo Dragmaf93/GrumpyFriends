@@ -11,9 +11,9 @@ import javafx.scene.paint.Color;
 
 public class Team {
 	
-	private int id;
-	
 	private String name;
+	private String type;
+	
 	private Color color;
 
 	private int numberOfCharacter;
@@ -25,8 +25,17 @@ public class Team {
 
 	private MatchManager matchManager;
 	private int maxTeamLifePoints;
+	
+	
+	public Team(){
+		this.characters = new LinkedList<>();
+		this.charactersInGame = new LinkedList<>();
+		this.currentPlayer = 0;
+		numberOfCharacter=1;
 
-	public Team(String name, int numberOfCharacter, MatchManager matchManager, int id) {
+	}
+	
+	public Team(String name, int numberOfCharacter, MatchManager matchManager) {
 		this.name = name;
 		this.numberOfCharacter = numberOfCharacter;
 		if (numberOfCharacter > 4 || numberOfCharacter <= 0)
@@ -36,8 +45,6 @@ public class Team {
 		this.charactersInGame = new LinkedList<>();
 		this.currentPlayer = 0;
 		this.matchManager = matchManager;
-		
-		this.id = id;
 	}
 
 	public void setColorTeam(Color color) {
@@ -49,6 +56,8 @@ public class Team {
 	}
 
 	public boolean addCharacter(Character character) {
+		
+		type = character.getClass().getSimpleName();
 
 		if (characters.size() < numberOfCharacter) {
 			characters.add(character);
@@ -73,6 +82,7 @@ public class Team {
 	}
 
 	public void setUpForTheMatch() {
+		
 		for (Character character : characters) {
 			charactersInGame.add(character);
 		}
@@ -144,8 +154,21 @@ public class Team {
 		return maxTeamLifePoints;
 	}
 	
-	public int getId() {
-		return id;
+
+	public void reset() {
+		charactersInGame.clear();
+		
+		for (Character character : characters) {
+			charactersInGame.add(character);
+			
+		}
+		Collections.shuffle(charactersInGame);
+		currentPlayer = 0;
+	}
+
+	public String getType() {
+		
+		return type;
 	}
 	
 }

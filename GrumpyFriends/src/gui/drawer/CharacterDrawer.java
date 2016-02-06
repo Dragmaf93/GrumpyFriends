@@ -1,18 +1,15 @@
 package gui.drawer;
 
-import java.awt.PointerInfo;
-
 import character.Character;
+import character.WhiteStormtrooper;
 import element.weaponsManager.Weapon;
 import game.MatchManager;
-import gui.FieldPane;
+import gui.animation.CharacterAnimation;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -21,14 +18,15 @@ import javafx.scene.transform.Rotate;
 
 public class CharacterDrawer {
 
+	private final static String PATH_PACKAGE = "gui.animation.";
+
 	private Group pane;
 
 	private Character character;
 	private WeaponDrawer weaponDrawer;
 
 	private Group root;
-	
-	
+
 	private Rectangle characterBody;
 	private ImageView characterImage;
 
@@ -50,7 +48,7 @@ public class CharacterDrawer {
 	private int pointCounter;
 
 	private MatchManager matchManager;
-	
+
 	private boolean canStart = true;
 
 	private int turn;
@@ -60,34 +58,35 @@ public class CharacterDrawer {
 	private boolean deathAnimationEnd;
 
 	private CharacterAnimation characterAnimation;
-	private CharacterAnimation characterAnimationBlack;
-	
+
 	private Rotate rotateImage;
 
 	private int lastDirection;
-	
-	public CharacterDrawer(Group pane, Character character, WeaponDrawer weaponDrawer,MatchManager matchManager) {
+
+	public CharacterDrawer(Group pane, Character character,
+			WeaponDrawer weaponDrawer, MatchManager matchManager) {
 		this.pane = pane;
 		this.character = character;
-		this.matchManager=matchManager;
+		this.matchManager = matchManager;
 		// this.weaponDrawer = new WeaponDrawer(character);
 		this.weaponDrawer = weaponDrawer;
-		
+
 		root = new Group();
-		characterBody = new Rectangle(character.getX(), character.getY(), character.getWidth(), character.getHeight());
+		characterBody = new Rectangle(character.getX(), character.getY(),
+				character.getWidth(), character.getHeight());
 		characterImage = new ImageView();
-		characterAnimation = new StormtrooperAnimation();
-		characterAnimationBlack = new StormtrooperBlackAnimation();
-//		root.getChildren().add(characterBody);
+		characterAnimation = loadCharacterAnimation(character);
+		// new StormtrooperAnimation();
+		// root.getChildren().add(characterBody);
 		root.getChildren().add(characterImage);
-		
+
 		characterImage.setFitHeight(characterAnimation.getHeight());
 		characterImage.setFitWidth(characterAnimation.getWidth());
-		
+
 		rotateImage = new Rotate();
 		characterImage.getTransforms().add(rotateImage);
-		lastDirection=character.getCurrentDirection();
-		
+		lastDirection = character.getCurrentDirection();
+
 		lifePointsText = new Text();
 		lifePointsText.setFill(Color.BLACK);
 		lifePointsText.setFont(Font.font(15));
@@ -96,7 +95,7 @@ public class CharacterDrawer {
 		damagePoint = new Text();
 		damagePoint.setFill(Color.BLACK);
 		damagePoint.setFont(Font.font(15));
-		
+
 		lifePointsRectangle = new Rectangle(50, 30);
 		lifePointsRectangle.setFill(character.getTeam().getColorTeam());
 		lifePointsRectangle.setArcHeight(10);
@@ -109,14 +108,15 @@ public class CharacterDrawer {
 		lifePointsPane.getChildren().add(lifePointsText);
 
 		damageLifePointsPane = new StackPane();
-		damageLifePointsPane.getChildren().add(new Rectangle(50, 30, Color.TRANSPARENT));
+		damageLifePointsPane.getChildren().add(
+				new Rectangle(50, 30, Color.TRANSPARENT));
 		damageLifePointsPane.getChildren().add(damagePoint);
 		damageLifePointsPane.setCache(true);
 		damageLifePointsPane.setCacheHint(CacheHint.SCALE_AND_ROTATE);
 
 		lifePointsPane.setCache(true);
 		lifePointsPane.setCacheHint(CacheHint.SCALE_AND_ROTATE);
-		
+
 		root.getChildren().add(lifePointsPane);
 		root.getChildren().add(damageLifePointsPane);
 		pane.getChildren().add(root);
@@ -124,84 +124,108 @@ public class CharacterDrawer {
 
 	}
 
+	public void reset(){
+		equipedWeapon=null;
+		currentLauncherWeapon=null;
+		currentBulletWeapon=null;
+		lifePointsText.setText(Integer.toString(character.getLifePoints()));
+		lifePointsRectangle.setStroke(Color.BLACK);
+		
+		pane.getChildren().remove(root);
+		
+		root = new Group(characterImage,lifePointsPane,damageLifePointsPane);
+		pane.getChildren().add(root);
+	}
+	
+	protected CharacterAnimation loadCharacterAnimation(Character character) {
+		String name = PATH_PACKAGE + character.getClass().getSimpleName()
+				+ "Animation";
+		Class<?> classDefinition;
+		try {
+			classDefinition = Class.forName(name);
+			return (CharacterAnimation) classDefinition.newInstance();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public void draw() {
 		if (root != null) {
-			// System.out.println("CIAO");
 			if (turn < character.getTeam().getMatchManager().getTurn()) {
 				turn = character.getTeam().getMatchManager().getTurn();
 				canStart = true;
 			}
 			if (character == matchManager.getCurrentPlayer()) {
 				lifePointsRectangle.setStroke(Color.GOLD);
-				if(character.isMoving()){
-					if (character.getTeam().getId() == 1)
-						characterImage.setImage(characterAnimation.getCharacterMoveAnimation());
-					else
-						characterImage.setImage(characterAnimationBlack.getCharacterMoveAnimation());
-					
-				}
-				
-				if(character.getCurrentDirection()!=lastDirection){
+				if (character.isMoving())
+					characterImage.setImage(characterAnimation
+							.getCharacterMoveAnimation());
+
+				if (character.getCurrentDirection() != lastDirection) {
 					lastDirection = character.getCurrentDirection();
 					rotateImage.setAxis(Rotate.Y_AXIS);
-					rotateImage.setPivotX(characterImage.getX()+80);
-					if(lastDirection==Character.LEFT)
+					rotateImage.setPivotX(characterImage.getX() + 80);
+					if (lastDirection == Character.LEFT)
 						rotateImage.setAngle(180);
-					else if(lastDirection==Character.RIGHT)
+					else if (lastDirection == Character.RIGHT)
 						rotateImage.setAngle(0);
 				}
-				if(character.isJumping()){
-					if (character.getTeam().getId() == 1)
-						characterImage.setImage(characterAnimation.getCharacterJumpAnimation());
-					else
-						characterImage.setImage(characterAnimationBlack.getCharacterJumpAnimation());
-					
-				}
-				
-				if (character.getLauncher().isActivated() && !root.getChildren().contains(currentLauncherWeapon)
-						&& !weaponDrawer.attackEnded() && !character.getLauncher().attacked()) {
+				if (character.isJumping())
+					characterImage.setImage(characterAnimation
+							.getCharacterJumpAnimation());
+
+				if (character.getLauncher().isActivated()
+						&& !root.getChildren().contains(currentLauncherWeapon)
+						&& !weaponDrawer.attackEnded()
+						&& !character.getLauncher().attacked()) {
 					equipedWeapon = character.getEquipWeapon();
-					if (character.getTeam().getId() == 1)
-						currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon, character,characterAnimation);
-					else
-						currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon, character,characterAnimationBlack);
-			
+					currentLauncherWeapon = weaponDrawer.getLauncherWeapon(
+							equipedWeapon, character, characterAnimation);
+
 					root.getChildren().add(currentLauncherWeapon);
-					if (character.getTeam().getId() == 1)
-						characterImage.setImage(characterAnimation.getCharacterBodyWithWeapon(equipedWeapon));
-					else
-						characterImage.setImage(characterAnimationBlack.getCharacterBodyWithWeapon(equipedWeapon));
+					characterImage.setImage(characterAnimation
+							.getCharacterBodyWithWeapon(equipedWeapon));
 					entry = false;
 
 				}
 
-				if (character.getLauncher().isActivated() && root.getChildren().contains(currentLauncherWeapon)
-						&& !weaponDrawer.attackEnded() && equipedWeapon != null && character.getEquipWeapon() != null
-						&& !character.getEquipWeapon().getName().equals(equipedWeapon.getName())) {
+				if (character.getLauncher().isActivated()
+						&& root.getChildren().contains(currentLauncherWeapon)
+						&& !weaponDrawer.attackEnded()
+						&& equipedWeapon != null
+						&& character.getEquipWeapon() != null
+						&& !character.getEquipWeapon().getName()
+								.equals(equipedWeapon.getName())) {
 
 					entry = false;
 					root.getChildren().remove(currentLauncherWeapon);
 					equipedWeapon = character.getEquipWeapon();
-					if (character.getTeam().getId() == 1)
-						currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon, character,characterAnimation);
-					else
-						currentLauncherWeapon = weaponDrawer.getLauncherWeapon(equipedWeapon, character,characterAnimationBlack);
-					
+					currentLauncherWeapon = weaponDrawer.getLauncherWeapon(
+							equipedWeapon, character, characterAnimation);
+
 					root.getChildren().add(currentLauncherWeapon);
-					if (character.getTeam().getId() == 1)
-						characterImage.setImage(characterAnimation.getCharacterBodyWithWeapon(equipedWeapon));
-					else
-						characterImage.setImage(characterAnimationBlack.getCharacterBodyWithWeapon(equipedWeapon));
+					characterImage.setImage(characterAnimation
+							.getCharacterBodyWithWeapon(equipedWeapon));
 				}
 
-				if (!character.getLauncher().isActivated() && root.getChildren().contains(currentLauncherWeapon)
+				if (!character.getLauncher().isActivated()
+						&& root.getChildren().contains(currentLauncherWeapon)
 						&& !weaponDrawer.attackEnded()) {
 					root.getChildren().remove(currentLauncherWeapon);
 				}
-				if (character.getLauncher().isActivated() && !weaponDrawer.attackEnded()) {
+
+				if (character.getLauncher().isActivated()
+						&& !weaponDrawer.attackEnded()) {
 					weaponDrawer.updateLauncherAim();
 				}
-				if (weaponDrawer.bulletLaunched() && !weaponDrawer.attackEnded()) {
+
+				if (weaponDrawer.bulletLaunched()
+						&& !weaponDrawer.attackEnded()) {
 
 					character.getLauncher().disable();
 					if (currentBulletWeapon == null) {
@@ -210,7 +234,7 @@ public class CharacterDrawer {
 					}
 					weaponDrawer.updateBullet();
 				}
-				
+
 				if (weaponDrawer.attackEnded()) {
 					pane.getChildren().remove(currentBulletWeapon);
 					root.getChildren().remove(currentLauncherWeapon);
@@ -220,37 +244,35 @@ public class CharacterDrawer {
 					currentLauncherWeapon = null;
 
 				}
-				
-				if (character.finishedTurn() && !weaponDrawer.attackEnded() && !entry) {
+
+				if (character.finishedTurn() && !weaponDrawer.attackEnded()
+						&& !entry) {
 					entry = true;
 					pane.getChildren().remove(currentBulletWeapon);
-					
+
 					root.getChildren().remove(currentLauncherWeapon);
 					weaponDrawer.resetDrawer();
 					currentBulletWeapon = null;
 					equipedWeapon = null;
 					currentLauncherWeapon = null;
 				}
-				// System.out.println("FINE DEL IF : FINE TURNO");
-
-				// System.out.println("PRIMA DEL IF : CAMBIO DIREZIONE");
-				// if (currentPlayerDirection !=
-				// character.getCurrentDirection()) {
-				// currentPlayerDirection = character.getCurrentDirection();
-				// }
-				// System.out.println("FINE DEL IF : CAMBIO DIREZIONE");
 			}
-			
+
 			characterBody.relocate(character.getX(), character.getY());
-//			root.relocate(character.getX()+characterAnimation.getValueX(), character.getY()+characterAnimation.getValueY());
-			
-			lifePointsPane.relocate(
-					character.getX() + characterBody.getWidth() / 2 - lifePointsRectangle.getWidth() / 2,
+			// root.relocate(character.getX()+characterAnimation.getValueX(),
+			// character.getY()+characterAnimation.getValueY());
+
+			lifePointsPane.relocate(character.getX() + characterBody.getWidth()
+					/ 2 - lifePointsRectangle.getWidth() / 2,
 					character.getY() - 70);
 			damageLifePointsPane.relocate(
-					character.getX() + characterBody.getWidth() / 2 - lifePointsRectangle.getWidth() / 2,
+					character.getX() + characterBody.getWidth() / 2
+							- lifePointsRectangle.getWidth() / 2,
 					character.getY() - 110);
-			characterImage.relocate(character.getX()+characterAnimation.getValueX(), character.getY()+characterAnimation.getValueY());
+			characterImage.relocate(
+					character.getX() + characterAnimation.getValueX(),
+					character.getY() + characterAnimation.getValueY());
+
 			if (lifePointsUpdate) {
 				pointCounter += 1;
 				int lf = Integer.parseInt(lifePointsText.getText());
@@ -259,42 +281,31 @@ public class CharacterDrawer {
 				if (pointCounter >= character.getLastDamagePoints()) {
 					finishedLifePointsUpdate = true;
 					lifePointsUpdate = false;
-					lifePointsText.setText(Integer.toString(character.getLifePoints()));
+					lifePointsText.setText(Integer.toString(character
+							.getLifePoints()));
 					damagePoint.setText("");
 				}
 			}
-			if(character.isFalling())
-				if (character.getTeam().getId() == 1)
-					characterImage.setImage(characterAnimation.getCharacterFallAnimation());
-				else
-					characterImage.setImage(characterAnimationBlack.getCharacterFallAnimation());
-			
-			if (character.isSleeping() && !character.getLauncher().isActivated()) {
-				if (character.getTeam().getId() == 1)
-					characterImage.setImage(characterAnimation.getCharacterIdleAnimation());
-				else
-					characterImage.setImage(characterAnimationBlack.getCharacterIdleAnimation());
-					
-//				lifePointsPane.setVisible(true);
+			if (character.isFalling())
+				characterImage.setImage(characterAnimation
+						.getCharacterFallAnimation());
 
-			} 
-			
-//			else {
-//
-//				lifePointsPane.setVisible(false);
-//			}
-			
-			
-			if(character.isOutWorld()){
-				pane.getChildren().remove(root);
-				root=null;
+			if (character.isSleeping()
+					&& !character.getLauncher().isActivated()) {
+				characterImage.setImage(characterAnimation
+						.getCharacterIdleAnimation());
 			}
-			else if (deathAnimation) {
+
+			if (character.isOutWorld()) {
+				pane.getChildren().remove(root);
+				root = null;
+			} else if (deathAnimation) {
 				pane.getChildren().remove(root);
 				deathAnimation = false;
 				deathAnimationEnd = true;
 				root = null;
 			}
+
 			if (character.finishedTurn())
 				lifePointsRectangle.setStroke(Color.BLACK);
 		}
@@ -326,5 +337,4 @@ public class CharacterDrawer {
 	public boolean isDeathAnimationFinished() {
 		return deathAnimation;
 	}
-
 }

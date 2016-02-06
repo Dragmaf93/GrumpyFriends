@@ -41,8 +41,6 @@ public class MatchManager {
 	private TurnPhaseType currentTurnPhase;
 	private boolean characterSufferedDamage;
 	
-	private GameManager gameManager;
-	
 	public MatchManager() {
 		this.battlefield = null;
 		this.teamRed = null;
@@ -86,12 +84,14 @@ public class MatchManager {
 		damagedCharacters = new ArrayList<Character>();
 		diedCharactersOfTheCurrentTurn = new ArrayList<Character>();
 	}
-
+	
 	public boolean startMatch() {
 		if (started || teamRed == null || teamBlue == null
 				|| battlefield == null)
 			return false;
-
+		
+		
+		
 		currentTeam = getFirstTeam();
 
 		teamRed.setUpForTheMatch();
@@ -109,16 +109,7 @@ public class MatchManager {
 
 		currentTurnPhase = TurnPhaseType.MAIN_PHASE;
 		
-		gameManager = GameManager.getIstance();
-
 		return true;
-	}
-	
-	public void startMenu() {
-		gameManager.startMenu();
-	}
-	public void startMainApplication() {
-		gameManager.startMainApplication();
 	}
 
 	public void endMainPhase() {
@@ -203,7 +194,25 @@ public class MatchManager {
 	}
 
 	public void restartMatch() {
-		timer.restartTimers();
+		
+		teamRed.reset();
+		teamBlue.reset();
+		battlefield.reset();
+		
+		currentTeam = getFirstTeam();
+
+		currentPlayer = currentTeam.nextPlayer();
+		
+		turn = 1;
+
+		timer.startMatchTimer();
+		timer.startTurnTimer();
+
+		started = true;
+		endTurn = false;
+		pause=false;
+
+		currentTurnPhase = TurnPhaseType.MAIN_PHASE;
 	}
 
 	public Character getCurrentPlayer() {
@@ -417,10 +426,11 @@ public class MatchManager {
 		List<Character> charactersOutOfWorld = battlefield.getCharacatersOutOfWorld();
 		
 		for (Character character : charactersOutOfWorld) {
-			if(character.getTeam()==teamBlue)
-				teamBlue.removeCharacterInGame(character);
-			else if(character.getTeam()==teamRed)
-				teamRed.removeCharacterInGame(character);
+			character.getTeam().removeCharacterInGame(character);
+//			if(character.getTeam()==teamBlue)
+//				teamBlue.removeCharacterInGame(character);
+//			else if(character.getTeam()==teamRed)
+//				teamRed.removeCharacterInGame(character);
 		}
 		charactersOutOfWorld.clear();
 	}

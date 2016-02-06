@@ -2,7 +2,7 @@ package gui.weapon;
 
 import character.Character;
 import element.weaponsManager.Weapon;
-import gui.drawer.CharacterAnimation;
+import gui.animation.CharacterAnimation;
 import javafx.scene.Node;
 
 public interface WeaponGui {

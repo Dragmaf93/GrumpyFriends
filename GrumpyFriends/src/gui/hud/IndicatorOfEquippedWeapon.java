@@ -2,6 +2,7 @@ package gui.hud;
 
 
 import game.MatchManager;
+import gui.MatchPane;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
@@ -33,14 +34,13 @@ public class IndicatorOfEquippedWeapon extends AbstractHudElement {
 	private Text nameText;
 
 	private String nameWeapon;
-	private int lastAmmunition;
 
 	private DropShadow shadow;
 	private Rectangle nameContainerShadow;
 	private Circle ammunitionContainerShadow;
 	
-	public IndicatorOfEquippedWeapon(final MatchManager matchManager) {
-		super(matchManager);
+	public IndicatorOfEquippedWeapon(MatchPane matchPane, final MatchManager matchManager) {
+		super(matchPane,matchManager);
 
 		ammunitionContainer = new Circle();
 		iconContainer = new Circle();
@@ -101,8 +101,6 @@ public class IndicatorOfEquippedWeapon extends AbstractHudElement {
 				if (event.getButton() != MouseButton.SECONDARY) {
 //					if (iconContainer.contains(event.getX(), event.getY()) || nameContainer.contains(event.getX(), event.getY())
 //							|| ammunitionContainer.contains(event.getX(), event.getY()))
-					
-					System.out.println(nameText.getText());
 						if (nameText.getText() != null && !nameText.getText().equals(""))
 							matchManager.getCurrentPlayer().equipWeapon(nameText.getText());
 				}
@@ -120,13 +118,19 @@ public class IndicatorOfEquippedWeapon extends AbstractHudElement {
 		nameContainerShadow.setEffect(shadow);
 		
 		ammunitionContainerShadow.setEffect(shadow);
-		
+		root.relocate(screenWidth - DISTANCE_SCREEN_RIGHT, +DISTANCE_SCREEN_TOP);
 	}
-
+	
+	@Override
+	public void reset() {
+		nameText.setText("");
+		ammunitionText.setText("");
+	}
+	
 	@Override
 	public void draw() {
-		Scene scene = root.getScene();
-		root.relocate(scene.getWidth() - DISTANCE_SCREEN_RIGHT, +DISTANCE_SCREEN_TOP);
+//		Scene scene = root.getScene();
+//		root.relocate(scene.getWidth() - DISTANCE_SCREEN_RIGHT, +DISTANCE_SCREEN_TOP);
 		if (matchManager.getCurrentPlayer().getLastEquippedWeapon() != null) {
 //			if (!matchManager.getCurrentPlayer().getLastEquippedWeapon().equals(nameWeapon)) {
 				
@@ -134,7 +138,7 @@ public class IndicatorOfEquippedWeapon extends AbstractHudElement {
 //			}
 //			if (lastAmmunition != matchManager.getCurrentPlayer().getInventoryManager()
 //					.getNumberOfAmmunition(nameWeapon))
-				ammunitionText.setText(Integer.toString(lastAmmunition = matchManager.getCurrentPlayer()
+				ammunitionText.setText(Integer.toString(matchManager.getCurrentPlayer()
 						.getInventoryManager().getNumberOfAmmunition(nameWeapon)));
 		} else {
 			nameText.setText("");

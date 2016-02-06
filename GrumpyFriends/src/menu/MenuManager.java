@@ -1,116 +1,151 @@
 package menu;
 
-
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.stage.Screen;
 import menu.teamMenu.PlayerName;
 import menu.teamMenu.TeamPage;
 import menu.teamMenu.TeamType;
 import menu.worldMenu.WorldPage;
-import game.GameManager;
-import game.PlayGame;
+import game.Game;
+import game.GrumpyFriends;
+import game.LocalGame;
+import game.MatchManager;
+import game.MediaPlayerManager;
 import gui.ImageLoader;
+import gui.MatchPane;
+import gui.MainScene;
+import gui.UpdatablePane;
 
 public class MenuManager {
 
-	private static MenuManager instance;
-	
-	private TeamPage teamPageA;
-	private TeamPage teamPageB;
-	private WorldPage worldPage;
-	
+	private GrumpyFriends grumpyFriends;
+
+	private Pane root;
+	private Pane lastAddedPane;
+	private UpdatablePane currentUpdatablePane;
+
+	private Menu menu;
+	private MenuBackground menuBackground;
+
 	private ImageLoader imageLoader;
-	
+
+	private SequencePage currentSequence;
+
+	private static MenuManager instance;
+
 	private PlayerName playerName;
 	private TeamType teamType;
-	
-	private GameManager gameManager;
 
-	private PlayGame playGame;
-	
-	public static MenuManager getIstance(){
-    	if(instance == null)
-    		instance = new MenuManager();
-    	return instance;
-    }
-	
+	private Game currentGame;
+
+	private Game localGame;
+
+	private MediaPlayerManager mediaPlayer;
+
+	public Pane getRoot() {
+		return root;
+	}
+
+	public static MenuManager getInstance() {
+		if (instance == null)
+			instance = new MenuManager();
+		return instance;
+	}
+
 	private MenuManager() {
+	}
+
+	public void initialize(GrumpyFriends grumpyFriends) {
+		this.grumpyFriends = grumpyFriends;
+
+		mediaPlayer = new MediaPlayerManager();
+		mediaPlayer.play();
 		imageLoader = new ImageLoader();
-		gameManager = GameManager.getIstance();
+		menu = new Menu();
+		menuBackground = new MenuBackground();
+		localGame = new LocalGame();
+
+		lastAddedPane = menu;
+		currentUpdatablePane = menu;
+
+		root = new Pane(menuBackground, menu);
 	}
 
-	public Scene getTeamPageAScene() {
-		if (teamPageA == null)
-			teamPageA = new TeamPage(true);
-		
-		return teamPageA.getScene();
-	}
-	
-	public Scene getTeamPageBScene() {
-		if (teamPageB == null)
-			teamPageB = new TeamPage(false);
-		
-		return teamPageB.getScene();
+	public void closeGame() {
+
+		grumpyFriends.closeStage();
 	}
 
-	public void setMenuScene() {
-		playGame.setFirstScene();
+	public ImageLoader getImageLoader() {
+		return imageLoader;
 	}
 
-	public void setSceneForChangePage(Scene scene) {
-		playGame.setScene(scene);
-	}
-	
-	public void closeStage() {
-		playGame.closeStage();
-	}
-	
-	public Scene getWorldScene() {
-		if (worldPage == null)
-			worldPage = new WorldPage(imageLoader);
-		
-		return worldPage.getScene();
-	}
-	
-	
-	public void startGame() {
-		gameManager.startMainApplication(teamPageA.getTeamName().getName(), teamPageA.getPlayerName().getPlayerName(),
-				teamPageA.getTeamType().getType(),
-				teamPageB.getTeamName().getName(), teamPageB.getPlayerName().getPlayerName(),
-				teamPageB.getTeamType().getType(),
-				worldPage.getWorldChoosed());
-	}
-	
-	
-	public void setTeamType(String teamType) {
-		if (teamType.equals("teamA"))
-			this.teamType = TeamType.WHITE;
-		else
-			this.teamType = TeamType.BLACK;
-		
-	}
-	public void setTeamTypeAfter(String teamType) {
-		setTeamType(teamType);
-		playerName.remove();
-	}
-	public TeamType getTeamType() {
-		return teamType;
+	public void localGamePressed() {
+
+		if (currentGame == localGame) {
+			currentSequence.restartSequence();
+		} else {
+
+			currentGame = localGame;
+			currentSequence = currentGame.getSequencePages();
+		}
 	}
 
-	public void setPlayerName(PlayerName playerName) {
-		this.playerName = playerName;
+	public void goToMainMenu() {
+		root.getChildren().remove(lastAddedPane);
+		root.getChildren().addAll(menuBackground, menu);
+		mediaPlayer.play();
+		lastAddedPane = menu;
+		currentUpdatablePane = menu;
+		grumpyFriends.getScene().setEventHandler(lastAddedPane);
 	}
 
-	
-	
-	public void setAllNull() {
-		this.teamPageA = null;
-		this.teamPageB = null;
-		this.worldPage = null;
+	public void nextPage() {
+
+		MenuPage page = currentSequence.nextPage();
+
+		if (page != null) {
+			root.getChildren().remove(lastAddedPane);
+			root.getChildren().add((Node) page);
+			lastAddedPane = (Pane) page;
+			currentUpdatablePane = page;
+		} else {
+			currentGame.startGame();
+			MatchManager matchManager = currentGame.getMatchManager();
+			MatchPane matchPane = new MatchPane(matchManager);
+			// MainScene scene = new
+			// MainScene(matchPane,Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight());
+			root.getChildren().removeAll(menuBackground, lastAddedPane);
+			root.getChildren().add(matchPane);
+			currentUpdatablePane = matchPane;
+			lastAddedPane = matchPane;
+			mediaPlayer.stop();
+			// grumpyFriends.setScene(scene);
+		}
+		grumpyFriends.getScene().setEventHandler(lastAddedPane);
+
 	}
-	
-	public void setPlayGame(PlayGame playGame) {
-		this.playGame = playGame;
-		gameManager.setPlayGame(playGame);
+
+	public void previousPage() {
+		MenuPage page = currentSequence.prevPage();
+
+		if (page != null) {
+			root.getChildren().remove(lastAddedPane);
+			root.getChildren().add((Node) page);
+			lastAddedPane = (Pane) page;
+			currentUpdatablePane = page;
+		} else {
+			root.getChildren().remove(lastAddedPane);
+			root.getChildren().add(menu);
+			lastAddedPane = menu;
+			currentUpdatablePane = menu;
+		}
+		grumpyFriends.getScene().setEventHandler(lastAddedPane);
 	}
-	
+
+	public void update() {
+		currentUpdatablePane.update();
+	}
 }

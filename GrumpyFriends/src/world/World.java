@@ -38,6 +38,7 @@ public interface World {
 	public abstract List<Character> getAllCharacters();
 	
 	public abstract void update();
+	public abstract void reset();
 	
 	public abstract List<Character> getCharacatersOutOfWorld();
 	public abstract String getType();

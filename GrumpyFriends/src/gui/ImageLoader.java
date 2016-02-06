@@ -19,7 +19,7 @@ public class ImageLoader {
 	private HashMap<String, Image> headWhite;
 	
 	private final static String PATH_IMAGE="file:image/World/";
-	private final static String PATH_IMAGE_HEAD="file:image/head/";
+	private final static String PATH_IMAGE_HEAD="image/character";
 	private String lastTypeWorld;
 	
 	public ImageLoader() {
@@ -40,17 +40,19 @@ public class ImageLoader {
 				previewsGround.put(typeWorld, new Image(PATH_IMAGE+typeWorld+"/groundPreview.png"));
 		}
 		
-		dir = new File("image/head/Black");
-		String[] typeHeadBlack = dir.list();
-
-		for (String typeHead: typeHeadBlack)
-			headBlack.put(typeHead, new Image(PATH_IMAGE_HEAD+"Black/"+typeHead));
+		dir = new File(PATH_IMAGE_HEAD);
+		String[] typeCharacter = dir.list();
+		
+		for (String typeHead: typeCharacter){
+			System.out.println(typeHead);
+//			headBlack.put(typeHead, new Image(PATH_IMAGE_HEAD+"Black/"+typeHead));
+		}
 		
 		dir = new File("image/head/White");
 		String[] typeHeadWhite = dir.list();
 
-		for (String typeHead: typeHeadWhite)
-			headWhite.put(typeHead, new Image(PATH_IMAGE_HEAD+"White/"+typeHead));
+//		for (String typeHead: typeHeadWhite)
+//			headWhite.put(typeHead, new Image(PATH_IMAGE_HEAD+"White/"+typeHead));
 		
 	}
 	
@@ -83,19 +85,13 @@ public class ImageLoader {
 	public Image getGroundPreview(String world){
 		return previewsGround.get(world);
 	}
+	
 	public Image getImageGrounds() {
 		return grounds.get(lastTypeWorld);
 	}
 	
 	public Image getPreview(String typeWorld){
 		return previews.get(typeWorld);
-	}
-	
-	public Image getHeadBlack(String typeHead) {
-		return headBlack.get(typeHead);
-	}
-	public Image getHeadWhite(String typeHead) {
-		return headWhite.get(typeHead);
 	}
 	
 	public Image getImageBackgrounds(String typeWorld) {
@@ -108,5 +104,16 @@ public class ImageLoader {
 	public Image getImageBackgrounds() {
 		return backgrounds.get(lastTypeWorld);
 	}
-	
+	public static void main(String[] args) {
+		File dir = new File(PATH_IMAGE_HEAD);
+		String[] typeCharacter = dir.list();
+		
+		
+		for (String character: typeCharacter){
+			System.out.println(character);
+			
+			System.out.println("file:"+PATH_IMAGE_HEAD+"/"+character+"Head/left.png");
+			System.out.println("file:"+PATH_IMAGE_HEAD+"/"+character+"Head/right.png");
+		}
+	}
 }

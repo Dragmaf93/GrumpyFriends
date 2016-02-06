@@ -21,21 +21,22 @@ import utils.Point;
 import utils.Utils;
 import utils.Vector;
 
-public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements world.World {
+public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
+		world.World {
 
 	protected float height, width;
 
 	protected HashMap<String, Character> characterContainer;
-	
+
 	protected List<Ground> grounds;
 
 	private List<Character> characters;
-		
+
 	protected static World instanceSon;
-	
+
 	protected List<Character> charactersOutOfWorld;
 	protected HashMap<String, Boolean> charactersAlreadyOutWorld;
-	
+
 	public AbstractWorld(Vec2 gravity, boolean doSleep) {
 		super(gravity);
 		characterContainer = new HashMap<>();
@@ -61,24 +62,39 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	}
 
 	@Override
+	public void reset() {
+		
+		charactersOutOfWorld.clear();
+		
+		for (Character character : characters) {
+			charactersAlreadyOutWorld.put(character.getName(), false);
+			character.reset();
+		}
+		
+		PhysicalObjectManager.getInstance().destroyBodies();
+
+	}
+
+	@Override
 	public World getPhysicWorld() {
 		return this;
 	}
+
 	@Override
 	public Character getCharacter(String name) {
 		return characterContainer.get(name);
 	}
-	
+
 	@Override
 	public void addLinearGround(List<Point> points) {
 		grounds.add(new LinearGround(points));
 	}
-	
+
 	@Override
 	public HashMap<String, Float> getHitCharacter() {
 		return PhysicalObjectManager.getInstance().getHitCharacters();
 	}
-	
+
 	public static World getInstance() {
 		return instanceSon;
 	}
@@ -90,7 +106,7 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	public String[] getCharacterName() {
 		return (String[]) characterContainer.keySet().toArray();
 	}
-	
+
 	public Ground getGround(int x, int y) {
 		for (Ground ground : grounds) {
 			if (ground.getX() == x && ground.getY() == y)
@@ -98,10 +114,12 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 		}
 		return null;
 	}
+
 	@Override
 	public List<Character> getAllCharacters() {
 		return characters;
 	}
+
 	@Override
 	public void addCharacter(Character character) {
 		characterContainer.put(character.getName(), character);
@@ -120,7 +138,8 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	}
 
 	@Override
-	public void addInclinedGround(float x, float y, float width, float height, int angleRotation) {
+	public void addInclinedGround(float x, float y, float width, float height,
+			int angleRotation) {
 		grounds.add(new InclinedGround(x, y, width, height, angleRotation));
 	}
 
@@ -134,28 +153,29 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 		this.width = (float) Utils.widthFromJbox2dToJavaFx(width);
 		this.height = (float) Utils.heightFromJbox2dToJavaFx(height);
 	}
-	
+
 	@Override
 	public List<Ground> getGrounds() {
 		return grounds;
 	}
-	
+
 	@Override
 	public void update() {
-		super.step(1.0f/30, 6, 3);  
-		
-		
-		
+		super.step(1.0f / 30, 6, 3);
+
 		for (Character character : characters) {
-			
+
 			character.update();
-			
-			if(character.isOutWorld() && !charactersAlreadyOutWorld.get(character.getName())){
+
+			if (character.isOutWorld()
+					&& !charactersAlreadyOutWorld.get(character.getName())) {
 				character.afterDeath();
 				charactersOutOfWorld.add(character);
 				charactersAlreadyOutWorld.put(character.getName(), true);
-		}	}
-		
+				System.out.println("CADUTOOOOOOOOOoooo");
+			}
+		}
+
 		PhysicalObjectManager.getInstance().destroyBodies();
 
 	}
@@ -168,20 +188,21 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	public void addInclinedGround(List<Point> points) {
 		grounds.add(new InclinedGround(points));
 	}
-	
+
 	@Override
 	public List<Character> getCharacatersOutOfWorld() {
 		return charactersOutOfWorld;
 	}
+
 	public void addGenericGround(List<Point> points) {
 		grounds.add(new GenericGround(points));
 	}
-	
+
 	@Override
 	public void addRoundGround(List<Point> points) {
-		
+
 	}
-	
+
 	@Override
 	public void addRoundGround(Point start, Point end, Point control) {
 		grounds.add(new RoundGround(start, end, control));

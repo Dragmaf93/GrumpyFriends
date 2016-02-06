@@ -1,5 +1,6 @@
 package menu.worldMenu;
 
+import menu.PageComponent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
@@ -15,8 +16,9 @@ import javafx.scene.text.Text;
 
 public class MapSelectorButton extends Group {
 
-	private final static Color STROKE_COLOR = new Color(32d / 255d,
-			207d / 255d, 208d / 255d, 1.0);
+//	private final static Color STROKE_COLOR = new Color(32d / 255d,
+//			207d / 255d, 208d / 255d, 1.0);
+	private final static Color STROKE_COLOR = PageComponent.STROKE_COLOR;
 
 	public static MapSelectorButton lastCliccked;
 	
@@ -86,5 +88,10 @@ public class MapSelectorButton extends Group {
 		}
 		
 		return null;
+	}
+
+	public void reset() {
+		rectangle.setFill(Color.TRANSPARENT);
+		lastCliccked=null;
 	}
 }

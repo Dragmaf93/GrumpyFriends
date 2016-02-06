@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import character.Character;
 import element.weaponsManager.Weapon;
+import gui.animation.CharacterAnimation;
 import gui.hud.InventoryItem;
 import gui.weapon.WeaponGui;
 import javafx.scene.Node;
@@ -23,11 +24,11 @@ public class WeaponDrawer {
 	public WeaponDrawer() {
 		this.inventoryItemsGui = new HashMap<>();
 	}
-
 	
 	public Node getLauncherWeapon(Weapon weapon,Character character,CharacterAnimation characterAnimation) {
 		
 		if (inventoryItemsGui.containsKey(weapon.getName())) {
+			System.out.println("DENTRO PRIMO IF");
 			currentWeaponGui =inventoryItemsGui.get(weapon.getName());
 			currentWeapon = weapon;
 			currentCharacter = character;
@@ -37,6 +38,7 @@ public class WeaponDrawer {
 		} else {
 
 			try {
+				System.out.println("DENTRO ELSE ");
 				currentWeapon = weapon;
 				String weaponName = weapon.getName();
 				String guiWeaponName = "Gui" + weaponName;

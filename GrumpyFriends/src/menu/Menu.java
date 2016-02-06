@@ -1,107 +1,121 @@
 package menu;
 
-import game.GameManager;
-
-import java.awt.Toolkit;
-
-import mapEditor.MapEditor;
-import javafx.application.Application;
+import gui.UpdatablePane;
+import gui.animation.SpriteAnimation;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
+import javafx.scene.transform.Rotate;
+import javafx.stage.Screen;
 
-public class Menu {
+public class Menu extends Pane implements UpdatablePane {
 
-	private GameManager gameManager;
-	private MenuManager menuManager;
-	
-	private int width = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-	private int height = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-	private Pane panelForBackground;
-	private Scene scene;
-	
+	private static final String PATH_FRAME = "file:image/Menu/Cantina/";
+	private static final String TITLE_PATH = "file:image/Menu/title.png";
+
+	private final static Image[] MOVE_FRAMES = {
+			new Image(PATH_FRAME + "frame1.png"),
+			new Image(PATH_FRAME + "frame2.png"),
+			new Image(PATH_FRAME + "frame3.png"),
+			new Image(PATH_FRAME + "frame4.png"),
+			new Image(PATH_FRAME + "frame5.png"),
+			new Image(PATH_FRAME + "frame6.png"),
+			new Image(PATH_FRAME + "frame7.png"),
+			new Image(PATH_FRAME + "frame8.png"),
+			new Image(PATH_FRAME + "frame9.png"),
+			new Image(PATH_FRAME + "frame10.png"),
+			new Image(PATH_FRAME + "frame11.png"),
+			new Image(PATH_FRAME + "frame12.png"),
+			new Image(PATH_FRAME + "frame13.png") };
+
+	private final static double WIDTH_BUTTON = 320;
+	private final static double HEIGHT_BUTTON = 70;
+
+	private Pane root;
+	private SpriteAnimation animationCantinaBand;
+
+	private MenuButton localGameButton;
+	private MenuButton networkGameButton;
+	private MenuButton mapEditorButton;
+	private MenuButton exitButton;
+
+	private double screenHeight, screenWidth;
+
+	private ImageView leftCantinaBand;
+	private ImageView rightCantinaBand;
+	private ImageView titleMenu;
+
 	public Menu() {
-//	}
-	
-//	@Override
-//	public void start(Stage primaryStage) throws Exception {
-	
-		gameManager = GameManager.getIstance();
-		menuManager = MenuManager.getIstance();
-		
-//		this.stage = primaryStage;
-		
-		panelForBackground = new Pane();
-		panelForBackground.setPrefSize(width, height);
-		panelForBackground.setStyle("-fx-background: #6b5d5d; -fx-background-color: #71b0f6; ");
-		
-		ImageView title = new ImageView("file:image/title.png");
-		title.setX(panelForBackground.getPrefWidth()/4);
-		panelForBackground.getChildren().add(title);
-		
-		Button play = new Button();
-		play.setStyle("-fx-background-color: null;");
-		ImageView imagePlay = new ImageView("file:image/play.png");
-		play.setGraphic(imagePlay);
-		play.setPrefHeight(imagePlay.getImage().getHeight());
-		play.setLayoutX(panelForBackground.getPrefWidth()/2-50);
-		play.setLayoutY(title.getImage().getHeight()+title.getImage().getHeight()/9);
-		panelForBackground.getChildren().add(play);
-		play.setOnMouseReleased(new EventHandler<Event>() {
+
+		screenWidth = Screen.getPrimary().getBounds().getWidth();
+		screenHeight = Screen.getPrimary().getBounds().getHeight();
+
+		localGameButton = new MenuButton(WIDTH_BUTTON, HEIGHT_BUTTON,
+				"Local Game");
+		networkGameButton = new MenuButton(WIDTH_BUTTON, HEIGHT_BUTTON,
+				"Network Game");
+		mapEditorButton = new MenuButton(WIDTH_BUTTON, HEIGHT_BUTTON,
+				"Map Editor");
+		exitButton = new MenuButton(WIDTH_BUTTON, HEIGHT_BUTTON, "Exit");
+
+		VBox buttons = new VBox(30);
+		buttons.getChildren().addAll(localGameButton, networkGameButton,
+				mapEditorButton, exitButton);
+		buttons.relocate(screenWidth / 2 - WIDTH_BUTTON / 2, 150
+				+ HEIGHT_BUTTON * 2 + buttons.getSpacing());
+
+		titleMenu = new ImageView(TITLE_PATH);
+
+		titleMenu.relocate(screenWidth / 2
+				- titleMenu.getLayoutBounds().getWidth() / 2, titleMenu
+				.getLayoutBounds().getHeight() * 0.5);
+
+		animationCantinaBand = new SpriteAnimation(MOVE_FRAMES, 53);
+
+		leftCantinaBand = new ImageView();
+		leftCantinaBand.setFitWidth(240 * 1.65);
+		leftCantinaBand.setFitHeight(200 * 1.65);
+
+		rightCantinaBand = new ImageView();
+		rightCantinaBand.setFitWidth(240 * 1.65);
+		rightCantinaBand.setFitHeight(200 * 1.65);
+		rightCantinaBand.setRotationAxis(Rotate.Y_AXIS);
+		rightCantinaBand.setRotate(180);
+
+		root = new Pane(titleMenu, buttons, leftCantinaBand, rightCantinaBand);
+		leftCantinaBand.relocate(0,
+				screenHeight - leftCantinaBand.getFitHeight() + 20);
+		rightCantinaBand.relocate(screenWidth - rightCantinaBand.getFitWidth(),
+				screenHeight - leftCantinaBand.getFitHeight() + 20);
+		this.getChildren().add(root);
+
+		exitButton.setOnMouseReleased(new EventHandler<Event>() {
 
 			@Override
 			public void handle(Event event) {
-				
-				scene = menuManager.getTeamPageAScene();
-				menuManager.setSceneForChangePage(scene);
+				MenuManager.getInstance().closeGame();
 			}
 		});
-		
-		Button mapEditor = new Button();
-		mapEditor.setStyle(play.getStyle());
-		ImageView imageMapEditor = new ImageView("file:image/mapEditor.png");
-		mapEditor.setGraphic(imageMapEditor);
-		mapEditor.setPrefHeight(imageMapEditor.getImage().getHeight());
-		mapEditor.setLayoutX(play.getLayoutX());
-		mapEditor.setLayoutY(play.getLayoutY()+play.getPrefHeight()+20);
-		panelForBackground.getChildren().add(mapEditor);
-		mapEditor.setOnMouseReleased(new EventHandler<Event>() {
+
+		localGameButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
 
 			@Override
-			public void handle(Event event) {
-				MapEditor mapEditor = new MapEditor();
-				try {
-					scene = mapEditor.getScene();
-					menuManager.setSceneForChangePage(scene);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+			public void handle(MouseEvent event) {
+				if (event.getButton() == MouseButton.PRIMARY)
+					MenuManager.getInstance().localGamePressed();
+				MenuManager.getInstance().nextPage();
 			}
-		});
-		
-		Button exit = new Button();
-		exit.setStyle(play.getStyle());
-		exit.setGraphic(new ImageView("file:image/exit.png"));
-		exit.setLayoutX(play.getLayoutX());
-		exit.setLayoutY(mapEditor.getLayoutY()+mapEditor.getPrefHeight()+20);
-		panelForBackground.getChildren().add(exit);
-		exit.setOnMouseReleased(new EventHandler<Event>() {
 
-			@Override
-			public void handle(Event event) {
-				menuManager.closeStage();
-			}
 		});
-        
-	}
-	
-	public Pane getPane() {
-		return panelForBackground;
 	}
 
+	public void update() {
+		leftCantinaBand.setImage(animationCantinaBand.nextFrame());
+		rightCantinaBand.setImage(animationCantinaBand.nextFrame());
+	}
 }

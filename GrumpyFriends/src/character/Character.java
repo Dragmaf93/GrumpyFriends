@@ -2,14 +2,13 @@ package character;
 
 
 
-import org.jbox2d.common.Vec2;
-
 import element.Element;
 import element.weaponsManager.Launcher;
 import element.weaponsManager.Weapon;
 import element.weaponsManager.WeaponsManager;
 import physic.PhysicalObject;
 import utils.Vector;
+import world.World;
 
 public interface Character extends Element
 {
@@ -67,6 +66,7 @@ public interface Character extends Element
 	
 	public abstract void afterDeath();
 
+	public abstract void setStartedPosition(float x, float y);
 
 	public abstract void setDied(boolean bool);
 	
@@ -75,4 +75,6 @@ public interface Character extends Element
 	public boolean isMoving();
 	public boolean isJumping();
 	public boolean isFalling();
+	public abstract void setWorld(World battlefield);
+	public abstract void reset();
 }

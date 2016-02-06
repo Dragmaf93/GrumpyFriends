@@ -29,7 +29,7 @@ public class WorldDirector {
 		PhysicalObjectManager.getInstance();
 	}
 
-	public void createWorld(String pathXMLFile) {
+	public void createWorld(String pathXMLFile,String type) {
 
 		try {
 			Document document = loadDocument(pathXMLFile);
@@ -41,8 +41,7 @@ public class WorldDirector {
 					Node item = childNodes.item(i);
 					switch (item.getNodeName()) {
 					case "type":
-
-						builder.initializes(item.getTextContent());
+						builder.initializes(type);
 						break;
 					case "dimension": {
 						NamedNodeMap attributes = item.getAttributes();

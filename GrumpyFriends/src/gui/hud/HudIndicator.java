@@ -9,4 +9,5 @@ public interface HudIndicator {
 	public abstract Color getThemeColor();
 	public abstract void setThemeColor(Color themeColor);
 	public abstract void draw();
+	public abstract void reset();
 }

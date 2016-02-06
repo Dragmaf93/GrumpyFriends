@@ -1,27 +1,18 @@
 package gui.hud;
 
-import org.jbox2d.common.Rot;
-
 import character.Team;
-
-import com.sun.glass.ui.Screen;
-
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import game.MatchManager;
-import game.TurnPhaseType;
+import gui.MatchPane;
 
 public class IndicatorOfTeamLife extends AbstractHudElement {
 
@@ -45,22 +36,18 @@ public class IndicatorOfTeamLife extends AbstractHudElement {
 
 	private Team teamWithMaxLifePoints;
 
-	private int maxLifePointTeam;
-	
-	private boolean modifyWidthBar;
+	private int lifepointTeamA;
+	private int lifepointTeamB;
 
-	private int pointTeamA;
-	private int pointTeamB;
-	
-	public IndicatorOfTeamLife(MatchManager matchManager) {
-		super(matchManager);
+	public IndicatorOfTeamLife(MatchPane matchPane, MatchManager matchManager) {
+		super(matchPane, matchManager);
 
 		teamA = matchManager.getTeamA();
 		teamB = matchManager.getTeamB();
 
-		pointTeamA = teamA.getTeamLifePoint();
-		pointTeamB = teamB.getTeamLifePoint();
-		
+		lifepointTeamA = teamA.getTeamLifePoint();
+		lifepointTeamB = teamB.getTeamLifePoint();
+
 		barTeamA = new Rectangle(MAX_WIDTH_BAR, HEIGHT_BAR,
 				teamA.getColorTeam());
 		barTeamB = new Rectangle(MAX_WIDTH_BAR, HEIGHT_BAR,
@@ -75,8 +62,6 @@ public class IndicatorOfTeamLife extends AbstractHudElement {
 
 		pointsTeamA.setFont(Font.font(20));
 		pointsTeamB.setFont(Font.font(20));
-
-		maxLifePointTeam = teamA.getTeamLifePoint();
 
 		pointsTeamA.setText(Integer.toString(teamA.getTeamLifePoint()));
 		pointsTeamB.setText(Integer.toString(teamB.getTeamLifePoint()));
@@ -111,17 +96,35 @@ public class IndicatorOfTeamLife extends AbstractHudElement {
 		barTeamA.relocate(MAX_WIDTH_BAR, 0);
 		barTeamB.relocate(MAX_WIDTH_BAR, 0);
 		
+		root.relocate(screenWidth - DISTANCE_SCREEN_RIGHT,	screenHeight - DISTANCE_SCREEN_BOTTOM);
 		
-
 	}
 
 	private double getWidthBar(Team team) {
 		double tmp = (MAX_WIDTH_BAR - HEIGHT_BAR) * team.getTeamLifePoint()
 				/ team.getMaxLifePoints();
-
 		if (tmp < 25)
 			return 25;
 		return tmp;
+	}
+
+	@Override
+	public void reset() {
+		
+		lifepointTeamA = teamA.getTeamLifePoint();
+		lifepointTeamB = teamB.getTeamLifePoint();
+		
+		pointsTeamA.setText(Integer.toString(teamA.getTeamLifePoint()));
+		pointsTeamB.setText(Integer.toString(teamB.getTeamLifePoint()));
+		
+		barTeamA.setWidth(getWidthBar(teamA));
+		barTeamB.setWidth(getWidthBar(teamB));
+		
+		pointsTeamA.relocate(MAX_WIDTH_BAR
+				- pointsTeamA.getLayoutBounds().getWidth() * 1.3, 0);
+		pointsTeamB.relocate(MAX_WIDTH_BAR
+				- pointsTeamB.getLayoutBounds().getWidth() * 1.3, 0);
+		
 	}
 
 	private void translateAnimation() {
@@ -133,23 +136,22 @@ public class IndicatorOfTeamLife extends AbstractHudElement {
 			TranslateTransition translateTransitionB = new TranslateTransition(
 					Duration.seconds(1), paneTeamB);
 			translateTransitionB.setToY(50);
-		
 
 			ParallelTransition pt = new ParallelTransition(
 					translateTransitionA, translateTransitionB);
-//			pt.setOnFinished(new EventHandler<ActionEvent>() {
-//				
-//				@Override
-//				public void handle(ActionEvent arg0) {
-//					paneTeamA.relocate(0, 50);
-//					paneTeamB.relocate(0, 0);
-//				}
-//			});
-//			
+			// pt.setOnFinished(new EventHandler<ActionEvent>() {
+			//
+			// @Override
+			// public void handle(ActionEvent arg0) {
+			// paneTeamA.relocate(0, 50);
+			// paneTeamB.relocate(0, 0);
+			// }
+			// });
+			//
 			pt.play();
-			
+
 			teamWithMaxLifePoints = teamB;
-		
+
 		} else if (teamB.getTeamLifePoint() < teamA.getTeamLifePoint()
 				&& teamWithMaxLifePoints == teamB) {
 			TranslateTransition translateTransitionA = new TranslateTransition(
@@ -161,14 +163,14 @@ public class IndicatorOfTeamLife extends AbstractHudElement {
 
 			ParallelTransition pt = new ParallelTransition(
 					translateTransitionA, translateTransitionB);
-//			pt.setOnFinished(new EventHandler<ActionEvent>() {
-//				
-//				@Override
-//				public void handle(ActionEvent arg0) {
-//					paneTeamB.relocate(0, 50);
-//					paneTeamA.relocate(0, 0);
-//				}
-//			});
+			// pt.setOnFinished(new EventHandler<ActionEvent>() {
+			//
+			// @Override
+			// public void handle(ActionEvent arg0) {
+			// paneTeamB.relocate(0, 50);
+			// paneTeamA.relocate(0, 0);
+			// }
+			// });
 			pt.play();
 
 			teamWithMaxLifePoints = teamA;
@@ -177,18 +179,12 @@ public class IndicatorOfTeamLife extends AbstractHudElement {
 
 	@Override
 	public void draw() {
-		Scene scene = root.getScene();
-		// root.relocate(scene.getWidth()-DISTANCE_SCREEN_RIGHT,
-		// scene.getHeight()-DISTANCE_SCREEN_BOTTOM);
-		root.relocate(scene.getWidth() - DISTANCE_SCREEN_RIGHT,
-				scene.getHeight() - DISTANCE_SCREEN_BOTTOM);
+		if (teamA.getTeamLifePoint() < lifepointTeamA
+				|| teamB.getTeamLifePoint() < lifepointTeamB) {
 
-//		if (matchManager.getCurrentTurnPhase() == TurnPhaseType.DAMAGE_PHASE) {
-		if (teamA.getTeamLifePoint() < pointTeamA || teamB.getTeamLifePoint() < pointTeamB) {
-			
 			pointsTeamA.setText(Integer.toString(teamA.getTeamLifePoint()));
 			pointsTeamB.setText(Integer.toString(teamB.getTeamLifePoint()));
-			
+
 			barTeamA.setWidth(getWidthBar(teamA));
 			barTeamB.setWidth(getWidthBar(teamB));
 
@@ -198,9 +194,9 @@ public class IndicatorOfTeamLife extends AbstractHudElement {
 					- pointsTeamA.getLayoutBounds().getWidth() * 1.3, 0);
 			pointsTeamB.relocate(MAX_WIDTH_BAR
 					- pointsTeamB.getLayoutBounds().getWidth() * 1.3, 0);
-			
-			pointTeamA = teamA.getTeamLifePoint();
-			pointTeamB = teamB.getTeamLifePoint();
+
+			lifepointTeamA = teamA.getTeamLifePoint();
+			lifepointTeamB = teamB.getTeamLifePoint();
 		}
 	}
 

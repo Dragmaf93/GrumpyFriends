@@ -38,7 +38,11 @@ public class TestWorld implements world.World{
 	public void addLinearGround(float x, float y, float width, float height) {
 		new LinearGround(x, y, width, height);
 	}
-
+@Override
+public void reset() {
+	// TODO Auto-generated method stub
+	
+}
 	@Override
 	public void addInclinedGround(float x, float y, float width, float height, int angleRotation) {
 		new InclinedGround(x, y, width, height, angleRotation);

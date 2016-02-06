@@ -1,48 +1,50 @@
 package gui;
 
-import character.Team;
 import utils.Point;
 import game.MatchManager;
 import game.TurnPhaseType;
+import gui.drawer.BackgroundPane;
+import gui.event.KeyboardPressedEventHandler;
+import gui.event.KeyboardReleaseEventHandler;
 import gui.hud.IndicatorOfEquippedWeapon;
 import gui.hud.IndicatorOfLauncher;
 import gui.hud.IndicatorOfTeamLife;
 import gui.hud.IndicatorOfTime;
 import gui.hud.Inventory;
 import gui.hud.MessageNextPlayer;
+import javafx.event.EventHandler;
 import javafx.scene.Camera;
+import javafx.scene.SubScene;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 
-public class MatchPane extends Pane {
-
-	private final static Color BACKGROUND_COLOR = new Color(30d / 255d,
-			127d / 255d, 169d / 255d, 0.9d);
+public class MatchPane extends Pane implements UpdatablePane{
 
 	private IndicatorOfTime timerInd;
-	private IndicatorOfLauncher launcherInd;
+	private IndicatorOfLauncher launcherIndicator;
 	private IndicatorOfEquippedWeapon equippedWeaponInd;
-	private IndicatorOfTeamLife teamLifeInd;
+	private IndicatorOfTeamLife teamLifePointsIndicator;
 	private Inventory inventory;
 
 	private PausePane pausePane;
+	private WinnerPane winnerPane;
 
 	private MatchManager matchManager;
 
 	private FieldPane fieldPane;
 	private FieldScene fieldScene;
+	
+	private BackgroundPane backgroundPane;
 
 	private boolean pause;
 
 	private MessageNextPlayer paneForNextTurn;
-
-	private boolean winnerBoolean;
 
 	public MatchPane(MatchManager matchManager) {
 		this.matchManager = matchManager;
@@ -50,44 +52,79 @@ public class MatchPane extends Pane {
 		this.fieldPane = new FieldPane(matchManager);
 		this.fieldScene = new FieldScene(fieldPane, matchManager,
 				fieldPane.getWidth(), fieldPane.getHeight());
-		// this.fieldScene = new FieldScene(fieldPane, matchManager,
-		// Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight());
 		this.fieldScene.setLayoutX(Screen.getPrimary().getBounds().getWidth()
 				/ 2 - fieldPane.getWidth() / 2);
 		this.fieldScene.setLayoutY(Screen.getPrimary().getBounds().getHeight()
 				/ 2 - fieldPane.getHeight() / 2);
-		this.timerInd = new IndicatorOfTime(matchManager);
-		this.inventory = new Inventory(matchManager);
-		this.equippedWeaponInd = new IndicatorOfEquippedWeapon(matchManager);
-		this.launcherInd = new IndicatorOfLauncher(matchManager);
-		this.teamLifeInd = new IndicatorOfTeamLife(matchManager);
-		this.pausePane = new PausePane(this,Screen.getPrimary().getBounds()
-				.getWidth(), Screen.getPrimary().getBounds().getHeight());
+
+		this.timerInd = new IndicatorOfTime(this, matchManager);
+		this.inventory = new Inventory(this, matchManager);
+		this.equippedWeaponInd = new IndicatorOfEquippedWeapon(this,
+				matchManager);
+		this.launcherIndicator = new IndicatorOfLauncher(this, matchManager);
+		this.teamLifePointsIndicator = new IndicatorOfTeamLife(this,
+				matchManager);
+		this.pausePane = new PausePane(this, matchManager);
+		this.winnerPane = new WinnerPane(this, matchManager);
 
 		fieldPane.setScene(fieldScene);
-
+		
+		backgroundPane = new BackgroundPane(fieldPane.getImageLoader());
+//		SubScene sub = new SubScene(backgroundPane, fieldPane.getWidth(),fieldPane.getHeight());
+		
+		this.getChildren().add(backgroundPane);
 		this.getChildren().add(fieldScene);
 		this.getChildren().add(timerInd.getNode());
 		this.getChildren().add(equippedWeaponInd.getNode());
-		this.getChildren().add(launcherInd.getNode());
-		this.getChildren().add(teamLifeInd.getNode());
+		this.getChildren().add(launcherIndicator.getNode());
+		this.getChildren().add(teamLifePointsIndicator.getNode());
+
 		pause = false;
 
-		this.setBackground(new Background(new BackgroundImage(fieldPane
-				.getImageLoader().getImageBackgrounds(),
-				BackgroundRepeat.ROUND, BackgroundRepeat.ROUND,
-				BackgroundPosition.DEFAULT, new BackgroundSize(100, 100, true,
-						true, true, false))));
-
-		this.winnerBoolean = false;
+//		this.setBackground(new Background(new BackgroundImage(fieldPane
+//				.getImageLoader().getImageBackgrounds(),
+//				BackgroundRepeat.ROUND, BackgroundRepeat.ROUND,
+//				BackgroundPosition.DEFAULT, new BackgroundSize(100, 100, true,
+//						true, true, false))));
 		
+		
+		
+		setOnKeyPressed(new KeyboardPressedEventHandler(this,matchManager));
+		setOnKeyReleased(new KeyboardReleaseEventHandler(this, matchManager));
+		setOnScroll(new EventHandler<ScrollEvent>() {
+			@Override
+			public void handle(ScrollEvent event) {
+				if (!matchManager.isPaused()) {
+					if (event.getDeltaY() > 0) {
+						MatchPane.this.setZoomOutCamera(true);
+						MatchPane.this.getCamera().setTranslateZ(MatchPane.this.getZoomCamera());
+					}
+					if (event.getDeltaY() < 0) {
+						MatchPane.this.setZoomOutCamera(false);
+						MatchPane.this.getCamera().setTranslateZ(MatchPane.this.getZoomCamera());
+					}
+				}
+			}
+		});
 	}
 
-	public void startMenu() {
-		matchManager.startMenu();
-	}
-	public void startMainApplication() {
-		matchManager.startMainApplication();
+	public void restartMatch() {
+		if (this.getChildren().contains(pausePane)) {
+			this.getChildren().remove(pausePane);
+			timerInd.getNode().setVisible(true);
+			equippedWeaponInd.getNode().setVisible(true);
+			teamLifePointsIndicator.getNode().setVisible(true);
+			launcherIndicator.getNode().setVisible(true);
+		}
+		if (this.getChildren().contains(winnerPane))
+			this.getChildren().remove(winnerPane);
+		inventory.hide();
+		pause = false;
+		matchManager.restartMatch();
+		fieldPane.reset();
+		winnerPane.reset();
+		equippedWeaponInd.reset();
+		teamLifePointsIndicator.reset();
 	}
 
 	public void pause() {
@@ -123,55 +160,32 @@ public class MatchPane extends Pane {
 		inventory.hide();
 
 	}
-
+	
+	@Override
 	public void update() {
 		if (pause) {
 			if (!this.getChildren().contains(pausePane)) {
-				// paneForNextTurn = new MessageNextPlayer("Pause","d95208",
-				// true);
 				this.getChildren().add(pausePane);
 				timerInd.getNode().setVisible(false);
 				equippedWeaponInd.getNode().setVisible(false);
-				teamLifeInd.getNode().setVisible(false);
-				launcherInd.getNode().setVisible(false);
+				teamLifePointsIndicator.getNode().setVisible(false);
+				launcherIndicator.getNode().setVisible(false);
 			}
 		} else {
 			if (this.getChildren().contains(pausePane)) {
-				// paneForNextTurn = new MessageNextPlayer("Pause","d95208",
-				// true);
 				this.getChildren().remove(pausePane);
 				timerInd.getNode().setVisible(true);
 				equippedWeaponInd.getNode().setVisible(true);
-				teamLifeInd.getNode().setVisible(true);
-				launcherInd.getNode().setVisible(true);
+				teamLifePointsIndicator.getNode().setVisible(true);
+				launcherIndicator.getNode().setVisible(true);
 			}
-			
+
 			if (matchManager.isMatchFinished()
-					&& matchManager.getCurrentTurnPhase() == TurnPhaseType.END_PHASE && !winnerBoolean) {
-				String winnerString = "";
-				if (matchManager.hasWinnerTeam())
-					winnerString = "Il vincitore è :"
-							+ matchManager.getWinnerTeam().getName();
+					&& matchManager.getCurrentTurnPhase() == TurnPhaseType.END_PHASE
+					&& !this.getChildren().contains(winnerPane)) {
+				winnerPane.draw();
+				this.getChildren().add(winnerPane);
 
-				else {
-					Team winner = matchManager.getTeamWithMaxLifePoints();
-
-					if (winner == null)
-						winnerString = "Pareggio";
-					else
-						winnerString = "Il vincitore è :"
-								+ matchManager.getWinnerTeam().getName();
-				}
-//				this.getChildren().add(
-//						new MessageNextPlayer(winnerString, "d95208", true));
-				this.getChildren().add(
-						new WinnerPane(this,Screen.getPrimary().getBounds()
-								.getWidth(), Screen.getPrimary().getBounds().getHeight(), winnerString,
-									"Team"+matchManager.getWinnerTeam().getId()+"Winner",
-									"Team"+matchManager.getLoserTeam().getId()+"Loser"));
-				
-				winnerBoolean = true;
-				
 			} else {
 				if (fieldScene.getMovementNextPlayer()) {
 					if (!this.getChildren().contains(paneForNextTurn)) {
@@ -183,7 +197,7 @@ public class MatchPane extends Pane {
 				} else {
 					fieldScene.update();
 					inventory.draw();
-					launcherInd.draw();
+					launcherIndicator.draw();
 					if (inventory.isHidden() && !inventoryIsHide())
 						hideInventory();
 
@@ -195,19 +209,21 @@ public class MatchPane extends Pane {
 				// matchManager.update();
 				timerInd.draw();
 			}
-			teamLifeInd.draw();
+			teamLifePointsIndicator.draw();
 		}
 	}
 
 	public void setLauncherPower(float launchPower) {
-		launcherInd.setLauncherPower(launchPower);
+		launcherIndicator.setLauncherPower(launchPower);
 	}
 
 	public void launchKeyPressed() {
 		if (matchManager.getCurrentPlayer().getLauncher().isActivated())
-			launcherInd.launchKeyPressed();
+			launcherIndicator.launchKeyPressed();
+		
 	}
-
+	
+	
 	public Point getCameraPosition() {
 		return fieldScene.getCameraPosition();
 	}
@@ -215,7 +231,9 @@ public class MatchPane extends Pane {
 	public void focusPlayer(boolean focus) {
 		fieldScene.setFocusPlayer(focus);
 	}
-
+	
+	
+	
 	public Camera getCamera() {
 		return fieldScene.getCamera();
 	}
