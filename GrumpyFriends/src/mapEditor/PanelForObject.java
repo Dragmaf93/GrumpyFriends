@@ -1,37 +1,34 @@
 package mapEditor;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import menu.MenuManager;
-import javafx.scene.Node;
 import javafx.scene.image.ImageView;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
+import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class PanelForObject extends Pane {
 	
 	private Pane panelForSubmit;
 	private Pane panelForRealObject;
 	
-	private Label choiseTypeWorld;
-	private ChoiceBox<String> choiceType;
-	private ArrayList<String> typeWorld;
-	private int typeWorldChoise;
 	private Label choiseWidth;
 	private TextField insertWidth;
 	private Label choiseHeight;
@@ -39,7 +36,6 @@ public class PanelForObject extends Pane {
 	private Button buttonForSubmit;
 	private Button buttonForClear;
 	private Button buttonBack;
-	private Button buttonForRedo;
 	private Button buttonForUndo;
 	
 	private MapEditor mapEditor;
@@ -49,30 +45,27 @@ public class PanelForObject extends Pane {
 	
 	private double lastItemInserted;
 	private boolean movedObject;
-	private Node okButton;
+//	private Node okButton;
 	
-	private MenuManager menuManager;
+	Font font = Font.font("Comic Sans MS", FontWeight.BOLD, 15);
+	Insets insets = new Insets(5, 20, 5, 20);
+//	private MenuManager menuManager;
 	
-	public PanelForObject(MapEditor mapEditor) 
-	{
-		this.menuManager = MenuManager.getInstance();
+	public PanelForObject(MapEditor mapEditor) {
+//		this.menuManager = MenuManager.getIstance();
 		
 		this.setPrefSize(mapEditor.getWidthScreen()/5, mapEditor.getHeightScreen());
         this.setStyle("-fx-background-color: #92a498;");
 
         this.mapEditor = mapEditor;
-        typeWorld = new ArrayList<String>();
-        typeWorld.add("Planet");
-        
         addComponent();
         
 	}
 	
-	private void addComponent()
-	{
-		panelForSubmit = new Pane();
+	private void addComponent() {
+		panelForSubmit = new HBox(10);
 	    panelForSubmit.setPrefSize(this.getPrefWidth() - 10, 50);
-	    panelForSubmit.setLayoutY(this.getPrefHeight()-panelForSubmit.getPrefHeight()-50);
+	    panelForSubmit.setLayoutY(this.getPrefHeight()-panelForSubmit.getPrefHeight()-60);
 	    
 	    panelForRealObject = new Pane();
 	    panelForRealObject.setPrefSize(this.getPrefWidth(), this.getPrefHeight()-panelForSubmit.getPrefHeight()-50);
@@ -95,59 +88,18 @@ public class PanelForObject extends Pane {
 	        @Override
 	        public void handle(MouseEvent event) { 
 	        	PanelForObject.this.mapEditor.undo();
-	        	buttonForRedo.setDisable(false);
 	        }
 	    });
-	    
-	    
-	    buttonForRedo = new Button();
-	    ImageView image = new ImageView("file:image/imageButtonMapEditor/redo.png");
-	    image.setFitHeight(20);
-	    image.setFitWidth(20);
-	    buttonForRedo.setGraphic(image);
-	    buttonForRedo.setLayoutX(buttonForUndo.getPrefWidth()*3);
-	    buttonForRedo.setLayoutY(5);
-	    buttonForRedo.setPrefSize(10, 10);
-	    buttonForRedo.setBackground(null);
-	    buttonForRedo.setDisable(true);
-	    panelForRealObject.getChildren().add(buttonForRedo);
-	    
-	    buttonForRedo.setOnMouseReleased(new EventHandler<MouseEvent>() {
-	    	
-	        @Override
-	        public void handle(MouseEvent event) { 
-	        	PanelForObject.this.mapEditor.redo();
-	        	buttonForUndo.setDisable(false);
-	        }
-	    });
-	    
-	    choiseTypeWorld = new Label("Type World");
-	    choiseTypeWorld.setLayoutX(buttonForUndo.getLayoutX());
-	    choiseTypeWorld.setLayoutY(buttonForRedo.getLayoutY()+buttonForRedo.getPrefHeight()+20);
-	    panelForRealObject.getChildren().add(choiseTypeWorld);
-	    
-	    choiceType = new ChoiceBox<String>(FXCollections.observableArrayList(typeWorld));
-	    choiceType.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> arg0, Number oldValue, Number newValue) {
-				typeWorldChoise = newValue.intValue();
-			}
-		});
-	    
-	    choiceType.setLayoutX(buttonForUndo.getLayoutX());
-	    choiceType.setLayoutY(choiseTypeWorld.getLayoutY()+choiseTypeWorld.getPrefHeight()+20);
-	    choiceType.setOpacity(0.7);
-	    panelForRealObject.getChildren().add(choiceType);
 	    
 		choiseWidth = new Label("Width");
+		choiseWidth.setFont(font);
 	    choiseWidth.setLayoutX(buttonForUndo.getLayoutX());
-	    choiseWidth.setLayoutY(choiceType.getLayoutY()+choiceType.getPrefHeight()+30);
+	    choiseWidth.setLayoutY(buttonForUndo.getLayoutY()+buttonForUndo.getPrefHeight()+30);
 	    panelForRealObject.getChildren().add(choiseWidth);
 	    
 	    insertWidth = new TextField();
 	    insertWidth.setLayoutX(choiseWidth.getLayoutX());
-	    insertWidth.setLayoutY(choiseWidth.getLayoutY()+20);
+	    insertWidth.setLayoutY(choiseWidth.getLayoutY()+22);
 	    panelForRealObject.getChildren().add(insertWidth);
 	    
 	    insertWidth.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -172,20 +124,20 @@ public class PanelForObject extends Pane {
 		});
 	    
 	    choiseHeight = new Label("Height");
+	    choiseHeight.setFont(font);
 	    choiseHeight.setLayoutX(insertWidth.getLayoutX());
-	    choiseHeight.setLayoutY(insertWidth.getLayoutY()+25);
+	    choiseHeight.setLayoutY(insertWidth.getLayoutY()+32);
 	    panelForRealObject.getChildren().add(choiseHeight);
 	    
 	    insertHeight = new TextField();
 	    insertHeight.setLayoutX(choiseHeight.getLayoutX());
-	    insertHeight.setLayoutY(choiseHeight.getLayoutY()+20);
+	    insertHeight.setLayoutY(choiseHeight.getLayoutY()+26);
 	    
 	    lastItemInserted = insertHeight.getLayoutY()+50;
 	    
 	    panelForRealObject.getChildren().add(insertHeight);
 	    
 	    insertHeight.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
 			@Override
 			public void handle(KeyEvent event) {
 				if (event.getCode().equals(KeyCode.ENTER) || event.getCode().equals(KeyCode.TAB)) {
@@ -206,11 +158,8 @@ public class PanelForObject extends Pane {
 		});
 	    
 	    buttonForClear = new Button("Clear");
-	    buttonForClear.setOpacity(0.7);
-	    buttonForClear.setLayoutX(panelForSubmit.getPrefWidth()/3 +10);
-	    buttonForClear.setLayoutY(panelForSubmit.getPrefHeight()/4 -3);
+		customizeButton(buttonForClear);
 	    buttonForClear.setOnMouseReleased(new EventHandler<MouseEvent>() {
-	    	
 	    	@Override
 	    	public void handle(MouseEvent event) { 
 	        	PanelForObject.this.mapEditor.clearMap();
@@ -218,10 +167,7 @@ public class PanelForObject extends Pane {
 	    });
 	    
 	    buttonForSubmit = new Button("Submit");
-	    buttonForSubmit.setOpacity(0.7);
-	    buttonForSubmit.setPrefWidth(buttonForSubmit.getText().length()*12);
-	    buttonForSubmit.setLayoutX(panelForSubmit.getPrefWidth()-buttonForSubmit.getPrefWidth());
-	    buttonForSubmit.setLayoutY(buttonForClear.getLayoutY());
+	    customizeButton(buttonForSubmit);
 	    buttonForSubmit.setOnMouseReleased(new EventHandler<MouseEvent>() {
 	    	
 	        @Override
@@ -231,20 +177,19 @@ public class PanelForObject extends Pane {
 	    });
 	    
 	    buttonBack = new Button("Back");
-	    buttonBack.setOpacity(0.7);
-	    buttonBack.setLayoutX(5);
-	    buttonBack.setLayoutY(buttonForClear.getLayoutY());
+	    customizeButton(buttonBack);
 	    buttonBack.setOnMouseReleased(new EventHandler<MouseEvent>() {
 	    	
 	    	@Override
 	    	public void handle(MouseEvent event) { 
-//	    		menuManager.setMenuScene();
+	    		if (event.getButton() == MouseButton.PRIMARY)
+					MenuManager.getInstance().goToMainMenu();
 	    	}
 	    });
 	    
-	    panelForSubmit.getChildren().add(buttonForSubmit);
-	    panelForSubmit.getChildren().add(buttonForClear);
 	    panelForSubmit.getChildren().add(buttonBack);
+	    panelForSubmit.getChildren().add(buttonForClear);
+	    panelForSubmit.getChildren().add(buttonForSubmit);
 
         addListenerPanelForRealObject();
 	    
@@ -252,8 +197,30 @@ public class PanelForObject extends Pane {
 	    this.getChildren().add(panelForRealObject);
 	}
 	
-	private void addListenerPanelForRealObject()
-	{
+	private void customizeButton(Button button) {
+		button.setStyle("-fx-background-color: transparent;");
+		button.setFont(font);
+		button.setPadding(insets);
+		button.setTextFill(Color.web("#323232"));
+		
+		button.setOnMouseEntered(new EventHandler<Event>() {
+
+			@Override
+			public void handle(Event event) {
+				button.setTextFill(Color.web("#0076a3"));
+			}
+		});
+		
+		button.setOnMouseExited(new EventHandler<Event>() {
+
+			@Override
+			public void handle(Event event) {
+				button.setTextFill(Color.web("#323232"));
+			}
+		});
+	}
+	
+	private void addListenerPanelForRealObject() {
 	  panelForRealObject.setOnMousePressed(new EventHandler<MouseEvent>() {
 	
 	        @Override
@@ -299,10 +266,7 @@ public class PanelForObject extends Pane {
 	}
 	
 	public void changePolicyButton(int i, boolean bool) {
-		if (i == 0)
-			buttonForRedo.setDisable(bool);
-		else
-			buttonForUndo.setDisable(bool);
+		buttonForUndo.setDisable(bool);
 	}
 	
 	public boolean scrolledUsed() {
@@ -315,10 +279,6 @@ public class PanelForObject extends Pane {
 		
 		isInsertHeight = false;
 		isInsertWidth = false;
-	}
-	
-	public String getTypeWorld() {
-		return typeWorld.get(typeWorldChoise);
 	}
 
 	public double getHeightToInsert() {
@@ -334,14 +294,12 @@ public class PanelForObject extends Pane {
 	}
 	
 	private void setDimensionStandard(boolean widthOrHeight) {
-		if (widthOrHeight)
-		{
+		if (widthOrHeight) {
 			isInsertWidth = false;
 			insertWidth.clear();
 			mapEditor.setDimensionStandardPanelMap(widthOrHeight);
 		}
-		else
-		{
+		else {
 			isInsertHeight = false;
 			insertHeight.clear();
 			mapEditor.setDimensionStandardPanelMap(widthOrHeight);

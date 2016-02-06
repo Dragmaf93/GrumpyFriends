@@ -26,11 +26,18 @@ public class Square extends PolygonObject {
 	}
 	
 	@Override
-	protected PolygonObject clone() throws CloneNotSupportedException 
+	public PolygonObject clone()
 	{
 		PolygonObject newImage = new Square(this.mapEditor, this.nameObject, this.points.get(0), this.points.get(1), 
 				this.points.get(2), this.points.get(3));
 		
 		return newImage;
+	}
+
+	@Override
+	public boolean vertexEquals(SquarePolygon polygon) {
+		if (polygon instanceof PolygonObject)
+			return vertexEqual((PolygonObject) polygon);
+		return false;
 	}
 }

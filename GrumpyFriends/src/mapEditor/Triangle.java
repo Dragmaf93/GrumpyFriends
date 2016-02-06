@@ -1,13 +1,12 @@
 package mapEditor;
 
 import javafx.geometry.Point2D;
-import javafx.scene.input.MouseEvent;
 
 public class Triangle extends PolygonObject {
 
-	double angleBetweenUpLeftAndBottLeft;
-	double angleBetweenBottRightAndUpLeft;
-	double angleBetweenBottLeftAndBottRight;
+//	double angleBetweenUpLeftAndBottLeft;
+//	double angleBetweenBottRightAndUpLeft;
+//	double angleBetweenBottLeftAndBottRight;
 	
 	public Triangle(MapEditor mapEditor, String nameObject, Point2D point1, Point2D point2, Point2D point3) {
 		super(mapEditor, nameObject);
@@ -25,11 +24,11 @@ public class Triangle extends PolygonObject {
 		height = point2.getY()-point1.getY();
 		
 		computeDistanceVertex();
-		computeAngles();
+//		computeAngles();
 	}
 	
 	@Override
-	protected PolygonObject clone() throws CloneNotSupportedException 
+	public PolygonObject clone() 
 	{
 		PolygonObject newImage = new Triangle(this.mapEditor, this.nameObject, this.points.get(0), this.points.get(1), 
 				this.points.get(2));
@@ -45,23 +44,26 @@ public class Triangle extends PolygonObject {
 	}
 	
 	@Override
-	protected void modifyAllVertex(double eventX, double eventY, double x, double y) {
+	public void modifyAllVertex(double eventX, double eventY, double x, double y) {
 		super.modifyAllVertex(eventX, eventY, x, y);
-		computeAngles();
+//		computeAngles();
 	}
 	
-	private void computeAngles() {
-		double firstSide = Math.hypot(points.get(1).getX()-points.get(0).getX(), points.get(1).getY()-points.get(0).getY());
-		double secondSide = Math.hypot(points.get(2).getX()-points.get(1).getX(), points.get(2).getY()-points.get(1).getY());
-		double hipotenuse = Math.hypot(points.get(2).getX()-points.get(0).getX(), points.get(2).getY()-points.get(0).getY());
-		
-		angleBetweenUpLeftAndBottLeft = Math.toDegrees(secondSide/hipotenuse);
-		angleBetweenBottRightAndUpLeft = Math.toDegrees(firstSide/hipotenuse);
-		angleBetweenBottLeftAndBottRight = 180 -(angleBetweenBottRightAndUpLeft+angleBetweenUpLeftAndBottLeft);
-	
-//		System.out.println(angleBetweenBottLeftAndBottRight+" "+angleBetweenBottRightAndUpLeft+" "+angleBetweenUpLeftAndBottLeft);
-	
-//		TODO Rivede calcolo degli angoli, sono errati... con (secondSide(hipotenuse) si trova il coseno
+//	private void computeAngles() {
+//		double firstSide = Math.hypot(points.get(1).getX()-points.get(0).getX(), points.get(1).getY()-points.get(0).getY());
+//		double secondSide = Math.hypot(points.get(2).getX()-points.get(1).getX(), points.get(2).getY()-points.get(1).getY());
+//		double hipotenuse = Math.hypot(points.get(2).getX()-points.get(0).getX(), points.get(2).getY()-points.get(0).getY());
+//		
+//		angleBetweenUpLeftAndBottLeft = Math.toDegrees(secondSide/hipotenuse);
+//		angleBetweenBottRightAndUpLeft = Math.toDegrees(firstSide/hipotenuse);
+//		angleBetweenBottLeftAndBottRight = 180 -(angleBetweenBottRightAndUpLeft+angleBetweenUpLeftAndBottLeft);
+//	}
+
+	@Override
+	public boolean vertexEquals(SquarePolygon polygon) {
+		if (polygon instanceof PolygonObject)
+			return vertexEqual((PolygonObject) polygon);
+		return false;
 	}
 	
 }

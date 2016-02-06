@@ -9,7 +9,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.QuadCurve;
 
-public class Curve extends QuadCurve {
+public class Curve extends QuadCurve implements SquarePolygon {
 
 	private double width;
 	private double height;
@@ -28,6 +28,7 @@ public class Curve extends QuadCurve {
 	private static int id = 0;
 	private int realId;
 	
+	@SuppressWarnings("static-access")
 	public Curve(MapEditor mapEditor, String nameObject, Point2D start, Point2D end) {
 		
 		distancePoints = new ArrayList<Point2D>();
@@ -168,19 +169,19 @@ public class Curve extends QuadCurve {
 		return x;
 	}
 	
-	protected void computeDistanceVertex() {
+	public void computeDistanceVertex() {
 		distancePoints.clear();
 		
 		for (Point2D point : points)
 			distancePoints.add(computeDistance(point.getX(), point.getY()));
 	}
 	
-	protected Point2D computeDistance(double x, double y) {
+	public Point2D computeDistance(double x, double y) {
 		return new Point2D(Math.abs(x - mapEditor.getMouseX()), Math.abs(y - mapEditor.getMouseY()));
 	}
 	
 	@Override
-	protected Curve clone() throws CloneNotSupportedException {
+	public Curve clone()  {
 		Curve curve = new Curve(mapEditor, nameObject, start, end);
 		
 		curve.setStartX(start.getX());
@@ -268,11 +269,100 @@ public class Curve extends QuadCurve {
 		this.setControlY(curve.getControlY());
 	}
 
-	public boolean vertexEquals(Curve dragged) {
-		if (this.getStartX() == dragged.getStartX() && this.getStartY() == dragged.getStartY() &&
-				this.getControlX() == dragged.getControlX() && this.getControlY() == dragged.getControlY() &&
-						this.getEndX() == dragged.getEndX() && this.getEndY() == dragged.getEndY())
-			return true;
+//	public boolean vertexEquals(Curve dragged) {
+//		if (this.getStartX() == dragged.getStartX() && this.getStartY() == dragged.getStartY() &&
+//				this.getControlX() == dragged.getControlX() && this.getControlY() == dragged.getControlY() &&
+//						this.getEndX() == dragged.getEndX() && this.getEndY() == dragged.getEndY())
+//			return true;
+//		return false;
+//	}
+
+	@Override
+	public String getNameObject() {
+		return "Curve";
+	}
+
+	@Override
+	public String getAngleRotation() {
+		return null;
+	}
+
+	@Override
+	public void addVertex(Point2D newVertex) {
+		
+	}
+
+	@Override
+	public void modifyPositionFirst(Point2D point, double width, double height) {
+//		setStartX(point.getX());
+//		setStartY(point.getY()+height);
+//		setEndX(point.getX()+width);
+//		setEndY(point.getY()+height);
+//		
+//		setControlX(point.getX()+width/2);
+//		setControlY(point.getY());
+
+		start = new Point2D(point.getX(), point.getY()+height);
+		end = new Point2D(point.getX()+width, point.getY()+height);
+		
+		points.clear();
+		
+		points.add(0,start);
+		points.add(1,end);
+		points.add(2,new Point2D(point.getX()+width/2, point.getY()));
+		
+//		System.out.println(points);
+	}
+
+	@Override
+	public void clearAndAddPoints() {
+		
+	}
+
+	@Override
+	public void setWidth(double width) {
+		
+	}
+
+	@Override
+	public void setHeight(double height) {
+		
+	}
+
+	@Override
+	public ArrayList<Point2D> getPointsVertex() {
+		return points;
+	}
+
+	@Override
+	public boolean containsPoint(Point2D test) {
+		int i;
+		int j;
+		boolean result = false;
+		for (i = 0, j = points.size() - 1; i < points.size(); j = i++) {
+			if ((points.get(i).getY() > test.getY()) != (points.get(j).getY() > test.getY()) && 
+					(test.getX() < (points.get(j).getX() - points.get(i).getX()) * (test.getY() - points.get(i).getY()) / (points.get(j).getY()-points.get(i).getY()) + points.get(i).getX())) {
+				result = !result;
+			}
+		}
+
+		return result;
+	}
+
+	@Override
+	public void modifyAllVertex(double eventX, double eventY, double x, double y) {
+
+		modifyPosition(new Point2D(eventX, eventY), x, y);
+	}
+
+	@Override
+	public boolean vertexEquals(SquarePolygon dragged) {
+		if(dragged instanceof Curve) {
+			if (this.getStartX() == ((Curve) dragged).getStartX() && this.getStartY() == ((Curve) dragged).getStartY() &&
+					this.getControlX() == ((Curve) dragged).getControlX() && this.getControlY() == ((Curve) dragged).getControlY() &&
+							this.getEndX() == ((Curve) dragged).getEndX() && this.getEndY() == ((Curve) dragged).getEndY())
+				return true;
+		}
 		return false;
 	}
 }

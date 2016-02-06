@@ -1,14 +1,13 @@
 package mapEditor;
+
 import java.util.ArrayList;
 
 import javafx.geometry.Point2D;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.QuadCurve;
 
-public abstract class PolygonObject extends Polygon {
+public abstract class PolygonObject extends Polygon implements SquarePolygon {
 
 	protected String nameObject;
 	protected MapEditor mapEditor;
@@ -28,6 +27,7 @@ public abstract class PolygonObject extends Polygon {
 	private static int id = 0;
 	private int realId;
 	
+	@SuppressWarnings("static-access")
 	public PolygonObject(MapEditor mapEditor, String nameObject) 
 	{
 		this.mapEditor = mapEditor;
@@ -51,7 +51,7 @@ public abstract class PolygonObject extends Polygon {
 	}
 	
 	@Override
-	protected PolygonObject clone() throws CloneNotSupportedException 
+	public PolygonObject clone()
 	{
 		PolygonObject newObject = new Square(this.mapEditor, this.nameObject, this.points.get(0), this.points.get(1), 
 				this.points.get(2),this.points.get(3));
@@ -89,7 +89,7 @@ public abstract class PolygonObject extends Polygon {
 		points.add(3,new Point2D(point.getX()+width, point.getY()));
 	}
 	
-	protected void clearAndAddPoints() {
+	public void clearAndAddPoints() {
 		this.getPoints().clear();
 		for (Point2D point : points)
 			getPoints().addAll(new Double[]{point.getX(),point.getY()});
@@ -146,24 +146,26 @@ public abstract class PolygonObject extends Polygon {
 	      int j;
 	      boolean result = false;
 	      for (i = 0, j = points.size() - 1; i < points.size(); j = i++) {
-	        if ((points.get(i).getY() > test.getY()) != (points.get(j).getY() > test.getY()) && (test.getX() < (points.get(j).getX() - points.get(i).getX()) * (test.getY() - points.get(i).getY()) / (points.get(j).getY()-points.get(i).getY()) + points.get(i).getX())) {
+	        if ((points.get(i).getY() > test.getY()) != (points.get(j).getY() > test.getY()) && 
+	        		(test.getX() < (points.get(j).getX() - points.get(i).getX()) * (test.getY() - points.get(i).getY()) / (points.get(j).getY()-points.get(i).getY()) + points.get(i).getX())) {
 	          result = !result;
 	         }
 	      }
+	      
 	      return result;
     }
 	
-	protected void computeDistanceVertex() {
+	public void computeDistanceVertex() {
 		distancePoints.clear();
 		for (Point2D point : points)
 			distancePoints.add(computeDistance(point.getX(), point.getY()));
 	}
 	
-	protected Point2D computeDistance(double x, double y) {
+	public Point2D computeDistance(double x, double y) {
 		return new Point2D(Math.abs(x - mapEditor.getMouseX()), Math.abs(y - mapEditor.getMouseY()));
 	}
 	
-	protected void modifyAllVertex(double eventX, double eventY, double x, double y) {
+	public void modifyAllVertex(double eventX, double eventY, double x, double y) {
 		if (x != 0.0)
 			xMagg++;
 		for (int i = 0; i < points.size(); i++) {
@@ -199,7 +201,7 @@ public abstract class PolygonObject extends Polygon {
 		return distancePoints;
 	}
 	
-	public boolean vertexEquals(PolygonObject polygon) {
+	public boolean vertexEqual(PolygonObject polygon) {
 		
 		int contVertexEquals = 0;
 		for (Point2D point : this.points) {
