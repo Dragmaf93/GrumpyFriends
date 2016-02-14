@@ -16,8 +16,8 @@ public interface Character extends Element
 	public final static int LEFT = -1;
 	
 	public final static int STOP = 0;
-	public final static int INCREASE =1;
-	public final static int DECREASE =-1;
+	public final static int INCREASE_AIM =1;
+	public final static int DECREASE_AIM =-1;
 	public final static int MAX_HEIGHT=5;
 	
 	public abstract boolean isDead();

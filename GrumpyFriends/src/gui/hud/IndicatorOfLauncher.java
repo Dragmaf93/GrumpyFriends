@@ -2,6 +2,7 @@ package gui.hud;
 
 import character.Character;
 import element.weaponsManager.Launcher;
+import game.AbstractMatchManager;
 import game.MatchManager;
 import gui.MatchPane;
 import javafx.geometry.Rectangle2D;
@@ -170,7 +171,7 @@ public class IndicatorOfLauncher extends AbstractHudElement {
 				bar.setHeight(BAR_HEIGHT);
 			}
 		}else if(readyAttack){
-			matchManager.getCurrentPlayer().attack(launcherPower);
+			matchManager.attackCurrentPlayer(launcherPower);
 			readyAttack=false;
 			bar.setHeight(BAR_HEIGHT);
 			coloredPowerBar.setVisible(false);

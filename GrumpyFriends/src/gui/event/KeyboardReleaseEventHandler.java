@@ -1,6 +1,7 @@
 package gui.event;
 
 import character.Character;
+import game.AbstractMatchManager;
 import game.MatchManager;
 import gui.MatchPane;
 import javafx.event.EventHandler;
@@ -23,19 +24,19 @@ public class KeyboardReleaseEventHandler implements EventHandler<KeyEvent> {
 		if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
 				&& pane.inventoryIsHide()) {
 			if (event.getCode() == KeyCode.D) {
-				matchManager.getCurrentPlayer().stopToMove();
+				matchManager.stopToMoveCurrentPlayer();
 			}
 			if (event.getCode() == KeyCode.ALT) {
 					pane.launchKeyPressed();
 			}
 			if (event.getCode() == KeyCode.A) {
-				matchManager.getCurrentPlayer().stopToMove();
+				matchManager.stopToMoveCurrentPlayer();
 			}
 			if (event.getCode() == KeyCode.W) {
-				matchManager.getCurrentPlayer().changeAim(Character.STOP);
+				matchManager.changeAimCurrentPlayer(Character.STOP);
 			}
 			if (event.getCode() == KeyCode.S) {
-				matchManager.getCurrentPlayer().changeAim(Character.STOP);
+				matchManager.changeAimCurrentPlayer(Character.STOP);
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 package gui;
 
 import utils.Point;
+import game.AbstractMatchManager;
 import game.MatchManager;
 import game.TurnPhaseType;
 import gui.drawer.BackgroundPane;

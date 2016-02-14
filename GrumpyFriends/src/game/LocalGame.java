@@ -26,7 +26,7 @@ public class LocalGame extends AbtractGame{
 			 extractData(menuPage.getGameBeans());
 		}
 		
-		matchManager = new MatchManager(battlefield);
+		matchManager = new LocalMatchManager(battlefield);
 		teams.get(0).setMatchManager(matchManager);
 		teams.get(0).setColorTeam(Color.CRIMSON);
 		teams.get(1).setMatchManager(matchManager);

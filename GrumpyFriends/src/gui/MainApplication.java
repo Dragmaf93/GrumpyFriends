@@ -6,6 +6,8 @@ import character.BlackStormtrooper;
 import character.Character;
 import character.WhiteStormtrooper;
 import character.Team;
+import game.AbstractMatchManager;
+import game.LocalMatchManager;
 import game.MatchManager;
 import gui.event.KeyboardPressedEventHandler;
 import gui.event.KeyboardReleaseEventHandler;
@@ -68,7 +70,7 @@ public class MainApplication extends Application{
 		WorldDirector director = new WorldDirector(builder);
 		director.createWorld("worldXML/"+mapChoosed,"Planet");
 		World world = builder.getWorld();
-		MatchManager matchManager = new MatchManager(world);
+		MatchManager matchManager = new LocalMatchManager(world);
 //		Team teamA = new Team("TeamA", 1, matchManager);
 //		matchManager.setTeamA(teamA);
 //		Character playerA = new Chewbacca("PlayerA", 100, 20, teamA);

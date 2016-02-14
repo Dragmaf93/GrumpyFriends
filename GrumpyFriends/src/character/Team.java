@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import game.AbstractMatchManager;
 import game.MatchManager;
 import javafx.scene.paint.Color;
 
@@ -86,7 +87,7 @@ public class Team {
 		for (Character character : characters) {
 			charactersInGame.add(character);
 		}
-		Collections.shuffle(charactersInGame);
+//		Collections.shuffle(charactersInGame);
 		currentPlayer = 0;
 	}
 

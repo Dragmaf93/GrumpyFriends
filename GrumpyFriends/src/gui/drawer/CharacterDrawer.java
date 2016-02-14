@@ -3,6 +3,7 @@ package gui.drawer;
 import character.Character;
 import character.WhiteStormtrooper;
 import element.weaponsManager.Weapon;
+import game.AbstractMatchManager;
 import game.MatchManager;
 import gui.animation.CharacterAnimation;
 import javafx.scene.CacheHint;

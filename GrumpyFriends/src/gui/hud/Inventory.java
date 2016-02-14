@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import element.weaponsManager.WeaponsManager;
+import game.AbstractMatchManager;
 import game.MatchManager;
 import gui.MatchPane;
 import javafx.collections.ObservableList;
@@ -170,7 +171,7 @@ public class Inventory extends AbstractHudElement {
 	}
 
 	public void itemToEquipe(String name) {
-		matchManager.getCurrentPlayer().equipWeapon(name);
+		matchManager.equipWeaponCurrentPlayer(name);
 		hide=true;
 	}
 

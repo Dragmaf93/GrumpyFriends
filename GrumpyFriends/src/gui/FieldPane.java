@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import character.Character;
+import game.AbstractMatchManager;
 import game.MatchManager;
 import game.TurnPhaseType;
 import gui.drawer.BackgroundPane;

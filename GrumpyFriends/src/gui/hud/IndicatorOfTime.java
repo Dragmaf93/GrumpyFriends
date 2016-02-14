@@ -3,6 +3,7 @@ package gui.hud;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import game.AbstractMatchManager;
 import game.MatchManager;
 import game.MatchTimer;
 import gui.MatchPane;

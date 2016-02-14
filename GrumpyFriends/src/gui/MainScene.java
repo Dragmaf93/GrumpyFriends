@@ -3,7 +3,7 @@ package gui;
 import menu.MenuManager;
 import character.Character;
 import element.weaponsManager.Launcher;
-import game.MatchManager;
+import game.AbstractMatchManager;
 import gui.event.KeyboardPressedEventHandler;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;

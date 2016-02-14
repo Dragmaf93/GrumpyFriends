@@ -3,7 +3,7 @@ package gui.hud;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import game.MatchManager;
+import game.AbstractMatchManager;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;

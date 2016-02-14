@@ -3,6 +3,7 @@ package gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import game.AbstractMatchManager;
 import game.MatchManager;
 import javafx.animation.PathTransition;
 import javafx.event.EventHandler;
@@ -56,11 +57,11 @@ public class FieldScene extends SubScene {
 
 	private boolean focusPlayer;
 
-	public FieldScene(Parent parent, final MatchManager matchManager,
+	public FieldScene(Parent parent, final MatchManager matchManager2,
 			double width, double height) {
 		super(parent, width, height);
 		this.pane = (FieldPane) parent;
-		this.matchManager = matchManager;
+		this.matchManager = matchManager2;
 		this.camera = new PerspectiveCamera(true);
 
 		movementOfCamera = new ArrayList<Point>();

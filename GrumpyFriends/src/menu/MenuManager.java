@@ -6,6 +6,7 @@ import javafx.scene.layout.Pane;
 import game.Game;
 import game.GrumpyFriends;
 import game.LocalGame;
+import game.AbstractMatchManager;
 import game.MatchManager;
 import game.MediaPlayerManager;
 import gui.ImageLoader;

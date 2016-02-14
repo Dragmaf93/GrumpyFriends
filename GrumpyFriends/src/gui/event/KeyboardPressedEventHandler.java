@@ -1,5 +1,6 @@
 package gui.event;
 
+import game.AbstractMatchManager;
 import game.MatchManager;
 import gui.MatchPane;
 import character.Character;
@@ -22,23 +23,21 @@ public class KeyboardPressedEventHandler implements EventHandler<KeyEvent> {
 		if (event.getCode() == KeyCode.D) {
 			if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
 					&& pane.inventoryIsHide())
-				matchManager.getCurrentPlayer().move(Character.RIGHT);
+				matchManager.moveCurrentPlayer(Character.RIGHT);
 		}
 		if (event.getCode() == KeyCode.A) {
 			if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
 					&& pane.inventoryIsHide())
-				matchManager.getCurrentPlayer().move(Character.LEFT);
+				matchManager.moveCurrentPlayer(Character.LEFT);
 		}
 		if (event.getCode() == KeyCode.SPACE) {
 			if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
 					&& pane.inventoryIsHide())
-				matchManager.getCurrentPlayer().jump();
+				matchManager.jumpCurrentPlayer();
 		}
 		if (event.getCode() == KeyCode.ALT) {
 			if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
 					&& pane.inventoryIsHide()) {
-//				launchPower = 5f;
-//				pressedLaunchKey = true;
 				pane.launchKeyPressed();
 			}
 		}
@@ -59,12 +58,12 @@ public class KeyboardPressedEventHandler implements EventHandler<KeyEvent> {
 		if (event.getCode() == KeyCode.W) {
 			if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
 					&& pane.inventoryIsHide())
-				matchManager.getCurrentPlayer().changeAim(Character.INCREASE);
+				matchManager.changeAimCurrentPlayer(Character.INCREASE_AIM);
 		}
 		if (event.getCode() == KeyCode.S) {
 			if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
 					&& pane.inventoryIsHide())
-				matchManager.getCurrentPlayer().changeAim(Character.DECREASE);
+				matchManager.changeAimCurrentPlayer(Character.DECREASE_AIM);
 		}
 		if (event.getCode() == KeyCode.UP) {
 			pane.getFieldScene().cameraMovesUP();

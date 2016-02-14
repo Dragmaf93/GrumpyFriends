@@ -1,6 +1,7 @@
 package gui.hud;
 
 
+import game.AbstractMatchManager;
 import game.MatchManager;
 import gui.MatchPane;
 import javafx.event.EventHandler;

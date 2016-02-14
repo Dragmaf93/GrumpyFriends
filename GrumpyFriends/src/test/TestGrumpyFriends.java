@@ -10,6 +10,8 @@ import character.Character;
 import character.WhiteStormtrooper;
 import character.Team;
 import element.weaponsManager.Weapon;
+import game.AbstractMatchManager;
+import game.LocalMatchManager;
 import game.MatchManager;
 import physic.PhysicalObjectManager;
 import world.WorldBuilder;
@@ -47,10 +49,10 @@ public class TestGrumpyFriends extends TestbedTest {
 		world = builder.getWorld();
 		
 		
-		matchManager = new MatchManager(world);
+		matchManager = new LocalMatchManager(world);
 		
-		Team teamA = new Team("TEAM BLUE", 4, matchManager);
-		Team teamB = new Team("TEAM RED ", 4, matchManager);
+		Team teamA = new Team();
+		Team teamB = new Team();
 		
 		teamA.setColorTeam(Color.CRIMSON);
 		teamB.setColorTeam(Color.STEELBLUE);
@@ -132,10 +134,10 @@ public class TestGrumpyFriends extends TestbedTest {
 			speed-=0.5f;
 			break;
 		case '6':
-			matchManager.getCurrentPlayer().changeAim(Character.DECREASE);
+			matchManager.getCurrentPlayer().changeAim(Character.DECREASE_AIM);
 			break;
 		case '4':
-			matchManager.getCurrentPlayer().changeAim(Character.INCREASE);
+			matchManager.getCurrentPlayer().changeAim(Character.INCREASE_AIM);
 			break;
 		default:
 			break;
