@@ -114,7 +114,7 @@ public class MenuManager {
 			currentUpdatablePane = matchPane;
 			lastAddedPane = matchPane;
 			mediaPlayer.stop();
-			// grumpyFriends.setScene(scene);
+//			 grumpyFriends.setScene(scene);
 		}
 		grumpyFriends.getScene().setEventHandler(lastAddedPane);
 
