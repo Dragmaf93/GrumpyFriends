@@ -1,24 +1,25 @@
-package multiplayer;
+package network;
 
-import gui.MatchPane;
-import gui.event.KeyboardPressedEventHandler;
-import gui.event.KeyboardReleaseEventHandler;
+import character.BlackStormtrooper;
+import character.Character;
+import character.Team;
+import character.WhiteStormtrooper;
+import world.GameWorldBuilder;
+import world.World;
+import world.WorldBuilder;
+import world.WorldDirector;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import world.GameWorldBuilder;
-import world.World;
-import world.WorldBuilder;
-import world.WorldDirector;
-import character.BlackStormtrooper;
-import character.Character;
-import character.Team;
-import character.WhiteStormtrooper;
+import game.MatchManager;
+import gui.MatchPane;
+import gui.event.KeyboardPressedEventHandler;
+import gui.event.KeyboardReleaseEventHandler;
 
-public class AlexProva extends Application {
+public class BrittiProva extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
@@ -59,25 +60,23 @@ public class AlexProva extends Application {
 		
 		world.addCharacter(playerA);
 		world.addCharacter(playerB);
-
 		
 		builder.lastSettings();
 		playerA.setStartedPosition(100,100);
 		playerB.setStartedPosition(110,100);
 		// ui
-		Multiplayer multiplayer = matchManager.getMultiplayer();
-		multiplayer.createMatch();
-		
 		
 		primaryStage.setTitle("Grumpy Friends");
 		
-//		
+		Multiplayer multiplayer= matchManager.getMultiplayer();
+		multiplayer.joinToMatch();
+
 		MatchPane matchPane = new MatchPane(matchManager);
 		
 		Scene scene = new Scene(matchPane,Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight());
 		primaryStage.setScene(scene);
-		scene.setOnKeyPressed(new KeyboardPressedEventHandler(matchPane, matchManager));
-		scene.setOnKeyReleased(new KeyboardReleaseEventHandler(matchPane, matchManager));
+//		scene.setOnKeyPressed(new KeyboardPressedEventHandler(matchPane, matchManager));
+//		scene.setOnKeyReleased(new KeyboardReleaseEventHandler(matchPane, matchManager));
 		
 		primaryStage.show();
 		
@@ -92,5 +91,8 @@ public class AlexProva extends Application {
 		
 //		p1.start();
 		
+		
+		
 	}
+
 }
