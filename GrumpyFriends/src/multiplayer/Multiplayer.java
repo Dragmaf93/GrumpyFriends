@@ -18,6 +18,7 @@ public class Multiplayer {
 	public final static String OP_MOVE_RIGHT = "R";
 	public final static String OP_STOP_MOVE = "S";
 	public final static String OP_JUMP = "J";
+	private int left,right,stop;
 
 	public final static String OP_EQUIP_WEAPON = "E";
 	public final static String OP_INCREASE_AIM = "IA";
@@ -42,7 +43,7 @@ public class Multiplayer {
 
 	public void joinToMatch() {
 		try {
-			socket = new Socket("127.0.0.1", portNumber);
+			socket = new Socket("192.168.43.113", portNumber);
 			portNumber++;
 			inFromServer = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
@@ -82,7 +83,7 @@ public class Multiplayer {
 
 	protected void connectToServer() {
 		try {
-			socket = new Socket("127.0.0.1", portNumber);
+			socket = new Socket("192.168.43.113", portNumber);
 			inFromServer = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
 			outputStream = new DataOutputStream(socket.getOutputStream());
@@ -112,10 +113,12 @@ public class Multiplayer {
 		case OP_MOVE_LEFT:
 			System.out.println("SINISTRA");
 			matchManager.getCurrentPlayer().move(Character.LEFT);
+			left++;
 			break;
 		case OP_MOVE_RIGHT:
 			System.out.println("DESTRA");
 			matchManager.getCurrentPlayer().move(Character.RIGHT);
+			right++;
 			break;
 		case OP_JUMP:
 			System.out.println("JUMP");
@@ -124,6 +127,7 @@ public class Multiplayer {
 		case OP_STOP_MOVE:
 			System.out.println("STOP_MOVE");
 			matchManager.getCurrentPlayer().stopToMove();
+			stop++;
 			break;
 		case OP_EQUIP_WEAPON:
 			System.out.println("EQUIP_WEAPON");
@@ -146,7 +150,9 @@ public class Multiplayer {
 			break;
 		default:
 			break;
+			
 		}
+		System.out.println(left+"    "+ right+"      "+stop);
 	}
 
 	public void closeConnection() {

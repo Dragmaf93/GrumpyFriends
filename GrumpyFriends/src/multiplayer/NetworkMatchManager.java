@@ -7,7 +7,7 @@ import game.AbstractMatchManager;
 public class NetworkMatchManager extends AbstractMatchManager {
 
 	private Multiplayer multiplayer;
-
+	private int left,right,stop;
 	public NetworkMatchManager(World battlefield) {
 		super(battlefield);
 		this.multiplayer = new Multiplayer(this);
@@ -21,9 +21,11 @@ public class NetworkMatchManager extends AbstractMatchManager {
 	public void moveCurrentPlayer(int direction) {
 		currentPlayer.move(direction);
 
-		if (direction == Character.LEFT)
+		if (direction == Character.LEFT){
 			multiplayer.sendOperationMessage(Multiplayer.OP_MOVE_LEFT, null);
+		}
 		else
+			
 			multiplayer.sendOperationMessage(Multiplayer.OP_MOVE_RIGHT, null);
 
 	}
