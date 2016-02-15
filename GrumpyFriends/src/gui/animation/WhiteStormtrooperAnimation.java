@@ -9,7 +9,7 @@ import javafx.scene.image.Image;
 
 public class WhiteStormtrooperAnimation implements CharacterAnimation {
 
-	private final static String PATH_FRAME = "file:image/character/WhiteStormtrooper";
+	private final static String PATH_FRAME = "file:image/Character/WhiteStormtrooper";
 	
 	private final static Image[] MOVE_FRAMES = {
 			new Image(PATH_FRAME + "/Movement/frame1.png"),

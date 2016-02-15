@@ -8,7 +8,7 @@ import element.weaponsManager.Weapon;
 
 public class BlackStormtrooperAnimation implements CharacterAnimation {
 
-	private final static String PATH_FRAME = "file:image/character/BlackStormtrooper";
+	private final static String PATH_FRAME = "file:image/Character/BlackStormtrooper";
 	
 	private final static Image[] MOVE_FRAMES = {
 			new Image(PATH_FRAME + "/Movement/frame1.png"),
