@@ -53,4 +53,19 @@ public class LocalGame extends AbtractGame{
 		teams.clear();
 		characters.clear();
 	}
+
+	@Override
+	public void setUpGame() {
+		
+	}
+
+	@Override
+	public MenuPage nextPage() {
+		return sequencePages.nextPage();
+	}
+
+	@Override
+	public MenuPage prevPage() {
+		return sequencePages.prevPage();
+	}
 }

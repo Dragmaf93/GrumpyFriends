@@ -112,13 +112,25 @@ public class Menu extends Pane implements UpdatablePane {
 			}
 
 		});
-		
+
 		mapEditorButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent event) {
 				if (event.getButton() == MouseButton.PRIMARY)
 					MenuManager.getInstance().goToMapEditor();
+			}
+
+		});
+
+		networkGameButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				if (event.getButton() == MouseButton.PRIMARY) {
+					MenuManager.getInstance().networkGamePressed();
+					MenuManager.getInstance().nextPage();
+				}
 			}
 
 		});

@@ -9,7 +9,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class TextFieldMenu extends Pane {
-
+	private TextField textField;
+	
 	public TextFieldMenu(double width, double height) {
 		Pane rootPane = new StackPane();
 
@@ -25,7 +26,7 @@ public class TextFieldMenu extends Pane {
 		rectangle.setArcHeight(20);
 		rectangle.setArcWidth(20);
 
-		TextField textField = new TextField();
+		textField = new TextField();
 		textField.setPrefWidth(width - 20);
 		textField.setPrefHeight(height - 20);
 
@@ -36,6 +37,10 @@ public class TextFieldMenu extends Pane {
 		
 		this.getChildren().add(rootPane);
 		
+	}
+	
+	public String getText(){
+		return textField.getText();
 	}
 	
 }

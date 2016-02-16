@@ -40,6 +40,12 @@ public class SequencePage {
 			currentPage = -1;
 	}
 
+	public MenuPage currentPage(){
+		if(currentPage<0) return null;
+		
+		return pages.get(currentPage);
+	}
+	
 	public MenuPage prevPage() {
 
 		if (currentPage - 1 < 0)

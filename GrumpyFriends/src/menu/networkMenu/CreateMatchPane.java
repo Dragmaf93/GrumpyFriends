@@ -1,6 +1,5 @@
 package menu.networkMenu;
 
-
 import javafx.collections.FXCollections;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -10,6 +9,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -28,6 +29,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Callback;
 import menu.AbstractPageComponent;
 import menu.MenuButton;
+import menu.MenuManager;
 import menu.MenuPage;
 import menu.PageComponent;
 import menu.TextFieldMenu;
@@ -38,68 +40,86 @@ public class CreateMatchPane extends AbstractPageComponent {
 	private final static double PADDING_HEIGHT = 15;
 	private static final double TEXT_HEIGHT = 45;
 
-	private Font font = Font.font("Comic Sans MS", FontWeight.BOLD, TEXT_HEIGHT*0.6);
-	
+	private Font font = Font.font("Comic Sans MS", FontWeight.BOLD,
+			TEXT_HEIGHT * 0.6);
+
 	private double width = this.getWidthComponent() - 80;
 	private double height = this.getHeightComponent() / 9;
-	
-	private TextFieldMenu textField;
-	
+
+	private TextFieldMenu matchNameTextField;
+	private ComboBox<String> choiseNumberPlayer;
+	private CheckBox check;
+	private TextFieldMenu password;
+
 	public CreateMatchPane(NetworkPage networkPage) {
 		super(networkPage);
-		
-		
+
 		Text matchName = new Text("Match Name");
 		matchName.setFont(font);
 		matchName.setFill(PageComponent.HEADER_TEXT_COLOR);
-		
-		textField = new TextFieldMenu(width, height);
-		VBox matchNamePane = new VBox(1,matchName, textField);
-		
+
+		matchNameTextField = new TextFieldMenu(width, height);
+		VBox matchNamePane = new VBox(1, matchName, matchNameTextField);
+
 		Text numberPlayer = new Text("Number Player");
 		numberPlayer.setFont(font);
 		numberPlayer.setFill(PageComponent.HEADER_TEXT_COLOR);
-		
-		ComboBox<String> choiseNumberPlayer = new ComboBox<String>(
-				FXCollections.observableArrayList("1","2","3","4","5"));
+
+		choiseNumberPlayer = new ComboBox<String>(
+				FXCollections.observableArrayList("1", "2", "3", "4", "5"));
 		choiseNumberPlayer.setPrefWidth(width * 0.3);
-//		choiseNumberPlayer.setValue(1);
-//		choiseNumberPlayer.setStyle("-fx-background-color: null");
-		choiseNumberPlayer.setPrefHeight(numberPlayer.getLayoutBounds().getHeight());
+		 choiseNumberPlayer.setValue("1");
+		// choiseNumberPlayer.setStyle("-fx-background-color: null");
+		choiseNumberPlayer.setPrefHeight(numberPlayer.getLayoutBounds()
+				.getHeight());
 		choiseNumberPlayer.backgroundProperty().set(null);
-		choiseNumberPlayer.borderProperty().set(new Border(new BorderStroke
-				(PageComponent.STROKE_COLOR, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2))));
-		
+		choiseNumberPlayer.borderProperty().set(
+				new Border(new BorderStroke(PageComponent.STROKE_COLOR,
+						BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+						new BorderWidths(2))));
+
 		choiseNumberPlayer.getStyleClass().add("styles/comboBox.css");
-		
-		HBox numberPlayerPane = new HBox(138,numberPlayer,choiseNumberPlayer);
+
+		HBox numberPlayerPane = new HBox(138, numberPlayer, choiseNumberPlayer);
 
 		Text privateCheck = new Text("Private");
 		privateCheck.setFont(font);
 		privateCheck.setFill(PageComponent.HEADER_TEXT_COLOR);
-		
-		CheckBox check = new CheckBox();
-		
-		HBox checkPrivate = new HBox(360,privateCheck, check);
-		
+
+		check = new CheckBox();
+
+		HBox checkPrivate = new HBox(360, privateCheck, check);
+
 		Text passwordText = new Text("Password");
 		passwordText.setFont(font);
 		passwordText.setFill(PageComponent.HEADER_TEXT_COLOR);
-		TextFieldMenu password = new TextFieldMenu(width, height);
-		
-		VBox pass = new VBox(1,passwordText, password);
-		
-		
-		MenuButton createMatch = new MenuButton(this.getWidthComponent()/3,
+		password = new TextFieldMenu(width, height);
+
+		VBox pass = new VBox(1, passwordText, password);
+
+		MenuButton createMatch = new MenuButton(this.getWidthComponent() / 3,
 				50, "Create Match");
-		createMatch.relocate(this.getWidthComponent()-createMatch.getLayoutBounds().getWidth(), 
-				0);
-		
-		VBox rootBox = new VBox(25,matchNamePane, numberPlayerPane, checkPrivate, pass, createMatch);
-		rootBox.relocate(this.getWidthComponent()/2-width/2, PADDING_HEIGHT);
+		createMatch.relocate(this.getWidthComponent()
+				- createMatch.getLayoutBounds().getWidth(), 0);
+
+		VBox rootBox = new VBox(25, matchNamePane, numberPlayerPane,
+				checkPrivate, pass, createMatch);
+		rootBox.relocate(this.getWidthComponent() / 2 - width / 2,
+				PADDING_HEIGHT);
 
 		root.getChildren().addAll(rootBox);
-		
+
+		createMatch.setOnMouseReleased(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				if (event.getButton() == MouseButton.PRIMARY) {
+					MenuManager.getInstance().setClientType(false);
+					networkPage.nextPage();
+				}
+			}
+
+		});
 	}
 
 	@Override
@@ -119,12 +139,18 @@ public class CreateMatchPane extends AbstractPageComponent {
 
 	@Override
 	public void reset() {
-		
+
 	}
 
 	@Override
 	public String[] getValues() {
-		return null;
+
+		String[] values = new String[4];
+		values[0] = matchNameTextField.getText();
+		values[1] = choiseNumberPlayer.getValue();
+		values[2] = Boolean.toString(check.isSelected());
+		values[3] = password.getText();
+		return values;
 	}
 
 }

@@ -1,5 +1,8 @@
 package menu;
 
+import java.io.IOException;
+
+import network.NetworkGame;
 import mapEditor.MapEditor;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
@@ -26,12 +29,13 @@ public class MenuManager {
 
 	private ImageLoader imageLoader;
 
-	private SequencePage currentSequence;
+	// private SequencePage currentSequence;
 
 	private static MenuManager instance;
 
 	private Game currentGame;
 
+	private Game networkGame;
 	private Game localGame;
 
 	private MediaPlayerManager mediaPlayer;
@@ -58,7 +62,7 @@ public class MenuManager {
 		menu = new Menu();
 		menuBackground = new MenuBackground();
 		localGame = new LocalGame();
-
+		networkGame = new NetworkGame();
 		lastAddedPane = menu;
 		currentUpdatablePane = menu;
 
@@ -74,15 +78,21 @@ public class MenuManager {
 		return imageLoader;
 	}
 
+	public void networkGamePressed() {
+		currentGame = networkGame;
+		currentGame.getSequencePages().restartSequence();
+		try {
+			((NetworkGame) networkGame).connectToServer();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public void localGamePressed() {
 
-		if (currentGame == localGame) {
-			currentSequence.restartSequence();
-		} else {
-
-			currentGame = localGame;
-			currentSequence = currentGame.getSequencePages();
-		}
+		currentGame = localGame;
+		currentGame.getSequencePages().restartSequence();
 	}
 
 	public void goToMainMenu() {
@@ -94,9 +104,13 @@ public class MenuManager {
 		grumpyFriends.getScene().setEventHandler(lastAddedPane);
 	}
 
+	public void setClientType(boolean chooser) {
+		((NetworkGame) networkGame).setClientType(chooser);
+	}
+
 	public void nextPage() {
 
-		MenuPage page = currentSequence.nextPage();
+		MenuPage page = currentGame.nextPage();
 
 		if (page != null) {
 			root.getChildren().remove(lastAddedPane);
@@ -104,6 +118,7 @@ public class MenuManager {
 			lastAddedPane = (Pane) page;
 			currentUpdatablePane = page;
 		} else {
+			currentGame.setUpGame();
 			currentGame.startGame();
 			MatchManager matchManager = currentGame.getMatchManager();
 			MatchPane matchPane = new MatchPane(matchManager);
@@ -114,25 +129,25 @@ public class MenuManager {
 			currentUpdatablePane = matchPane;
 			lastAddedPane = matchPane;
 			mediaPlayer.stop();
-//			 grumpyFriends.setScene(scene);
+			// grumpyFriends.setScene(scene);
 		}
 		grumpyFriends.getScene().setEventHandler(lastAddedPane);
 
 	}
 
 	public void goToMapEditor() {
-		
+
 		root.getChildren().removeAll(menuBackground, lastAddedPane);
-		
+
 		MapEditor mapEditor = new MapEditor();
 		root.getChildren().add(mapEditor);
 		lastAddedPane = mapEditor;
 		mediaPlayer.stop();
-		
+
 	}
-	
+
 	public void previousPage() {
-		MenuPage page = currentSequence.prevPage();
+		MenuPage page = currentGame.prevPage();
 
 		if (page != null) {
 			root.getChildren().remove(lastAddedPane);

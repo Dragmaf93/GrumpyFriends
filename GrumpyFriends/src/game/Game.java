@@ -1,5 +1,8 @@
 package game;
 
+import java.io.IOException;
+
+import menu.MenuPage;
 import menu.SequencePage;
 
 public interface Game {
@@ -10,5 +13,9 @@ public interface Game {
 	abstract public void startGame();
 	abstract public void reset();
 	
+	public abstract void setUpGame();
+	
 	public abstract MatchManager getMatchManager();
+	public abstract MenuPage nextPage();
+	public abstract MenuPage prevPage();
 }
