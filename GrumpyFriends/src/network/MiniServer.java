@@ -75,11 +75,13 @@ public class MiniServer extends Thread {
 				System.out.println("SELECT MATCH");
 				InfoMatch match = server.getInfoMatch(Integer.parseInt(operation[1]));
 				if (match.getStatusMatch() == StatusMatch.WAITING) {
-					outToClient.writeBytes(Message.OP_CONFIRM+'\n');
+					outToClient.writeBytes(Message.OP_CONFIRM+";"+server.getIpCreator(match.getId())+'\n');
 					match.setStatusMatch(StatusMatch.BUILDING);
+					MiniServer miniServer = server.getMiniServer(server.getIpCreator(match.getId()));
+					miniServer.sendMessagePlayerFound(socket.getInetAddress().getHostAddress());
 				}
 				else
-					outToClient.writeBytes(Message.OP_ERROR+'\n');
+					outToClient.writeBytes(Message.OP_ERROR+";null\n");
 			}
 			finally {
 				server.releaseLock();
@@ -95,7 +97,8 @@ public class MiniServer extends Thread {
 				System.out.println(operation[1]);
 				JsonNode matchJson = mapper.readTree(operation[1]);
 				InfoMatch match = InfoMatch.jsonToInfoMatch(matchJson);
-				server.addMatch(match);
+				server.addMatch(match,socket.getInetAddress().getHostAddress());
+				
 				
 				outToClient.writeBytes(Message.OP_CONFIRM+'\n');
 			}
@@ -114,6 +117,9 @@ public class MiniServer extends Thread {
 		}
 	}
 	
+	public void sendMessagePlayerFound(String ip) throws IOException{
+		outToClient.writeBytes(Message.OP_SEND_PLAYER_FOUND+";"+ip+'\n');
+	}
 	
 	private String toJSON(Object matches) {
 		try {

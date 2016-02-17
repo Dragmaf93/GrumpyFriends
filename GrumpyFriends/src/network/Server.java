@@ -13,16 +13,36 @@ public class Server {
 	
 	private static int contId = 0;
 	private HashMap<Integer, InfoMatch> matchesList;
+	private HashMap<Integer, String> ipCreator;
+	private HashMap<String, MiniServer> miniServerList;
 	
 	private Lock lock = new ReentrantLock();
 	
 	public Server() {
 		matchesList = new HashMap<Integer, InfoMatch>();
+		ipCreator = new HashMap<Integer, String>();
+		miniServerList = new HashMap<String, MiniServer>();
 	}
 	
-	public void addMatch(InfoMatch match) {
+	public void addMiniServer(Socket socket){
+		
+		MiniServer mini = new MiniServer(socket, this);
+		miniServerList.put(socket.getInetAddress().getHostAddress(), mini);
+		mini.start();
+	}
+	
+	public void addMatch(InfoMatch match,String addressCreator) {
 		match.setId(contId);
+		ipCreator.put(contId, addressCreator);
 		matchesList.put(contId++, match);
+	}
+	
+	public String getIpCreator(int id){
+		return ipCreator.get(id);
+	}
+	
+	public MiniServer getMiniServer(String ip){
+		return miniServerList.get(ip);
 	}
 	
 	public List<InfoMatch> getMatchesList() {
@@ -45,9 +65,9 @@ public class Server {
 		
 		Server server = new Server();
 		
-		server.addMatch(new InfoMatch("a", "a", 2, true, "a"));
-		server.addMatch(new InfoMatch("b", "b", 2, true, "b"));
-		server.addMatch(new InfoMatch("c", "c", 2, true, "c"));
+		server.addMatch(new InfoMatch("a", "a", 2, true, "a"),null);
+		server.addMatch(new InfoMatch("b", "b", 2, true, "b"),null);
+		server.addMatch(new InfoMatch("c", "c", 2, true, "c"),null);
 
 		
 		for (InfoMatch info : server.getMatchesList()) {
@@ -67,8 +87,7 @@ public class Server {
 		
 		while(listeningSocket) {
 			Socket clientSocket = serverSocket.accept();
-			MiniServer mini = new MiniServer(clientSocket, server);
-			mini.start();
+			server.addMiniServer(clientSocket);
 		}
 		serverSocket.close();
 	}

@@ -10,6 +10,7 @@ public abstract class Message {
 	public final static String OP_SEND_INFO_TEAM = "ST";
 	public final static String OP_CREATE_MATCH = "CM";
 	
+	public final static String OP_SEND_PLAYER_FOUND = "PF";
 	public final static String OP_SEND_LIST = "SL";
 	public final static String OP_SEND_INFO_MATCH = "SIM";
 	public final static String OP_SEND_INFO_WORLD = "SW";

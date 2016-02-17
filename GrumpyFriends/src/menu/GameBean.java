@@ -1,8 +1,13 @@
 package menu;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class GameBean {
 
@@ -60,11 +65,40 @@ public class GameBean {
 		ptr=-1;
 	}
 	
-	public Object toJSON() {
-		return null;
+	public String toJSON() {
+		String jSon = "[{";
+		
+		for (int i=0;i<names.size();i++){
+			jSon+="\""+names.get(i)+"\":\""+values.get(i)+"\",";
+		}
+		jSon = jSon.substring(0,jSon.length()-1);
+		jSon+="}]";
+		System.out.println(jSon);
+		return jSon;
 	}
 
 	public HashMap<String, String> getData() {
 		return data;
+	}
+	
+	public static void main(String[] args) {
+		GameBean gameBean=new GameBean("Team");
+		gameBean.addData("CIA","CAIO");
+		gameBean.addData("C","CAIO");
+		gameBean.addData("IA","CAIO");
+		gameBean.addData("A","CAIO");
+		gameBean.addData("CsIA","CAIO");
+		gameBean.toJSON();
+		
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			JsonNode arrayMatch = mapper.readTree(gameBean.toJSON());
+			System.out.println(arrayMatch.get(0).get("C").asText());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 }

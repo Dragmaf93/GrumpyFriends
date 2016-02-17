@@ -15,12 +15,12 @@ public class ProvaDetailMatch extends Application {
 	
 	@Override
 	public void start(Stage stage) throws Exception {
-		InfoMatch match = new InfoMatch("ciao", "ciao", 2, true, "Planet");
-		match.setStatusMatch(StatusMatch.WAITING);
-		DetailMatch d = new DetailMatch(match);
-		Scene scene = new Scene(d,Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight());
-		stage.setScene(scene);
-		stage.show();
+//		InfoMatch match = new InfoMatch("ciao", "ciao", 2, true, "Planet");
+//		match.setStatusMatch(StatusMatch.WAITING);
+////		DetailMatch d = new DetailMatch(match);
+//		Scene scene = new Scene(d,Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight());
+//		stage.setScene(scene);
+//		stage.show();
 	}
 
 }

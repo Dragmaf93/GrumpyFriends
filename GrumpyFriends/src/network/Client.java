@@ -22,6 +22,9 @@ public class Client {
 	private BufferedReader inFromServer;
 	private ObjectMapper mapper;
 
+	private String ipCreator;
+	private String ipChooser;
+	
 	public Client() {
 		mapper = new ObjectMapper();
 	}
@@ -60,14 +63,17 @@ public class Client {
 				+ matchChoosed.getId() + "\n");
 
 		String response = inFromServer.readLine();
-
-		if (response.equals(Message.OP_CONFIRM))
+		String[] resp = response.split(";");
+		
+		if (resp[0].equals(Message.OP_CONFIRM)){
+			ipCreator=resp[1];
 			return true;
+		}
 		return false;
 	}
 
-	public void sendInfoTeam(Team team) throws IOException {
-		outToServer.writeBytes(Message.OP_SEND_INFO_TEAM);
+	public void sendInfoTeam(GameBean gameBean) throws IOException {
+		outToServer.writeBytes(Message.OP_SEND_INFO_TEAM+";"+gameBean.toJSON()+"\n");
 	}
 
 	public GameBean requestInfoTeam() throws IOException {
@@ -91,8 +97,15 @@ public class Client {
 
 		String response = inFromServer.readLine();
 
-		if (response.equals(Message.OP_CONFIRM))
-			return true;
+		if (response.equals(Message.OP_CONFIRM)){
+			
+			response =inFromServer.readLine();
+			String[] resp = response.split(";");
+			if(resp[0].equals(Message.OP_SEND_PLAYER_FOUND)){
+				ipChooser=resp[1];
+				return true;
+			}
+		}
 		return false;
 	}
 

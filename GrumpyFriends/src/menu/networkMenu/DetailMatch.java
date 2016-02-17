@@ -1,7 +1,10 @@
 package menu.networkMenu;
 
 import network.InfoMatch;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -13,6 +16,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import menu.MenuButton;
+import menu.MenuManager;
 import menu.PageComponent;
 import menu.TextFieldMenu;
 
@@ -27,17 +31,16 @@ public class DetailMatch extends Pane {
 	private static Font fontValue = Font.font("Comic Sans MS", FontWeight.NORMAL,
 			TEXT_HEIGHT * 0.7);
 	
-	private InfoMatch infoMatch;
-	
 	protected Pane root;
 	protected Rectangle rectangleBackground;
 	private VBox realValue;
 	private VBox label;
+	private MenuButton backButton ;
+	private MenuButton connectButton;
+	private InfoMatch infoMatch; 
 	
-	public DetailMatch(InfoMatch infoMatch) {
+	public DetailMatch() {
 		
-		this.infoMatch = infoMatch;
-			
 		root = new Pane();
 		root.setPrefSize(Screen.getPrimary().getBounds().getWidth()-PADDING_WIDTH*5, Screen.getPrimary().getBounds().getHeight()-PADDING_HEIGHT*4.5);
 		
@@ -52,14 +55,30 @@ public class DetailMatch extends Pane {
 		p.setPadding(new Insets(PADDING_HEIGHT-20,PADDING_WIDTH,PADDING_HEIGHT,PADDING_WIDTH));
 		
 		this.getChildren().addAll(new StackPane(rectangleBackground,p));
+		backButton = new MenuButton(130, 40, "Back");
+		connectButton = new MenuButton(130, 40, "Connect");
 		
-		
-		insertInfo();
+		backButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				if(event.getButton()==MouseButton.PRIMARY)
+				setVisible(false);
+			}
+		});
+		connectButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				if(event.getButton()==MouseButton.PRIMARY){
+					MenuManager.getInstance().setClientType(true);
+				}
+					
+			}
+		});
 	}
 	
 	
-	public void insertInfo() {
-		
+	public void insertInfo(InfoMatch infoMatch) {
+		this.infoMatch=infoMatch;
 		Text nameMatch = new Text("Match Name:");
 		setFontAndColor(nameMatch);
 		Text name = new Text(infoMatch.getMatchName());
@@ -107,8 +126,6 @@ public class DetailMatch extends Pane {
 		}
 
 		
-		MenuButton backButton = new MenuButton(130, 40, "Back");
-		MenuButton connectButton = new MenuButton(130, 40, "Connect");
 		
 		HBox valueBox = new HBox(130, label, realValue);
 		HBox buttonBox = new HBox(20, backButton, connectButton);
@@ -127,6 +144,11 @@ public class DetailMatch extends Pane {
 	private void setFontAndColorValue(Text text) {
 		text.setFont(fontValue);
 		text.setFill(PageComponent.HEADER_TEXT_COLOR);
+	}
+
+
+	public InfoMatch getInfoMatch() {
+		return infoMatch;
 	}
 	
 }
