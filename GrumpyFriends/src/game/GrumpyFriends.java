@@ -23,7 +23,7 @@ public class GrumpyFriends extends Application {
 
 		primaryStage.setTitle("Grumpy Friends");
 		primaryStage.setScene(mainScene);
-//		primaryStage.setFullScreen(true);
+		primaryStage.setFullScreen(true);
 		primaryStage.show();
 		
 	}

@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 
 public class WinnerPane extends AbstractHudElement {
@@ -50,15 +51,15 @@ public class WinnerPane extends AbstractHudElement {
 		this.width = Screen.getPrimary().getBounds().getWidth();
 		this.height = Screen.getPrimary().getBounds().getHeight();
 		this.setPrefSize(width, height);
-		this.setStyle("-fx-background: #ece6e6; -fx-background-color: rgba(25,81,81,0.1);");
+		this.setStyle("-fx-background: #ece6e6; -fx-background-color: rgba(25,81,81,0.8);");
 
 		winnerButtons = new VBox(40);
 
 		textGameWinner = new Text();
 		textGameWinner.setFill(Color.WHITE);
 		textGameWinner.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 70));
-		textGameWinner.relocate(width / 2
-				- textGameWinner.getLayoutBounds().getWidth() / 2, 150);
+		textGameWinner.relocate(this.getPrefWidth() / 2
+				- textGameWinner.getLayoutBounds().getWidth(), 150);
 
 		restartButton = new MenuButton(BUTTON_WIDTH, BUTTON_HEIGHT, "RESTART");
 		exitButton = new MenuButton(BUTTON_WIDTH, BUTTON_HEIGHT, "EXIT GAME");
@@ -161,7 +162,7 @@ public class WinnerPane extends AbstractHudElement {
 	public void draw() {
 
 		if (matchManager.hasWinnerTeam()) {
-			textGameWinner.setText("Il vincitore è : "
+			textGameWinner.setText("Il vincitore Ã¨ : "
 					+ matchManager.getWinnerTeam().getName());
 			teamWinner.setImage(new Image(PATH_IMAGES
 					+ matchManager.getWinnerTeam().getType() + PATH_LOSER));
@@ -174,6 +175,8 @@ public class WinnerPane extends AbstractHudElement {
 			teamLoser.setImage(new Image(PATH_IMAGES
 					+ matchManager.getTeamB().getType() + PATH_LOSER));
 		}
+		textGameWinner.relocate(this.getPrefWidth() / 2
+				- textGameWinner.getLayoutBounds().getWidth() / 2, 150);
 	}
 
 }

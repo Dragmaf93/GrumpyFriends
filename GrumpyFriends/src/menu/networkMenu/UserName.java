@@ -63,5 +63,11 @@ public class UserName extends AbstractPageComponent {
 	public void reset() {
 		textField.setText("");
 	}
+	
+	public boolean isInsertUserName() {
+		if (textField.getText().equals(""))
+			return false;
+		return true;
+	}
 
 }

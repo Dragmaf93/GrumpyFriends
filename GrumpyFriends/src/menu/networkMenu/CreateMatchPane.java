@@ -39,6 +39,8 @@ public class CreateMatchPane extends AbstractPageComponent {
 	private final static double PADDING_WIDHT = 5;
 	private final static double PADDING_HEIGHT = 15;
 	private static final double TEXT_HEIGHT = 45;
+	
+	private final static String initValueComboBox = "1";
 
 	private Font font = Font.font("Comic Sans MS", FontWeight.BOLD,
 			TEXT_HEIGHT * 0.6);
@@ -68,7 +70,7 @@ public class CreateMatchPane extends AbstractPageComponent {
 		choiseNumberPlayer = new ComboBox<String>(
 				FXCollections.observableArrayList("1", "2", "3", "4", "5"));
 		choiseNumberPlayer.setPrefWidth(width * 0.3);
-		 choiseNumberPlayer.setValue("1");
+		 choiseNumberPlayer.setValue(initValueComboBox);
 		// choiseNumberPlayer.setStyle("-fx-background-color: null");
 		choiseNumberPlayer.setPrefHeight(numberPlayer.getLayoutBounds()
 				.getHeight());
@@ -97,34 +99,34 @@ public class CreateMatchPane extends AbstractPageComponent {
 
 		VBox pass = new VBox(1, passwordText, password);
 
-		MenuButton createMatch = new MenuButton(this.getWidthComponent() / 3,
-				50, "Create Match");
-		createMatch.relocate(this.getWidthComponent()
-				- createMatch.getLayoutBounds().getWidth(), 0);
+//		MenuButton createMatch = new MenuButton(this.getWidthComponent() / 3,
+//				50, "Create Match");
+//		createMatch.relocate(this.getWidthComponent()
+//				- createMatch.getLayoutBounds().getWidth(), 0);
 
 		VBox rootBox = new VBox(25, matchNamePane, numberPlayerPane,
-				checkPrivate, pass, createMatch);
+				checkPrivate, pass);
 		rootBox.relocate(this.getWidthComponent() / 2 - width / 2,
 				PADDING_HEIGHT);
 
 		root.getChildren().addAll(rootBox);
 
-		createMatch.setOnMouseReleased(new EventHandler<MouseEvent>() {
-
-			@Override
-			public void handle(MouseEvent event) {
-				if (event.getButton() == MouseButton.PRIMARY) {
-					MenuManager.getInstance().setClientType(false);
-					networkPage.nextPage();
-				}
-			}
-
-		});
+//		createMatch.setOnMouseReleased(new EventHandler<MouseEvent>() {
+//
+//			@Override
+//			public void handle(MouseEvent event) {
+//				if (event.getButton() == MouseButton.PRIMARY) {
+//					MenuManager.getInstance().setClientType(false);
+//					networkPage.nextPage();
+//				}
+//			}
+//
+//		});
 	}
 
 	@Override
 	public double getHeightComponent() {
-		return 500;
+		return 450;
 	}
 
 	@Override
@@ -139,7 +141,10 @@ public class CreateMatchPane extends AbstractPageComponent {
 
 	@Override
 	public void reset() {
-
+		matchNameTextField.resetTextField();
+		choiseNumberPlayer.setValue(initValueComboBox);
+		check.setSelected(false);
+		password.resetTextField();
 	}
 
 	@Override
@@ -153,4 +158,21 @@ public class CreateMatchPane extends AbstractPageComponent {
 		return values;
 	}
 
+	
+	public boolean isAllInsert() {
+		
+		String[] value = getValues();
+		
+		if (!value[0].equals("") || value[0] == null) {
+			if (value[2].equals("false"))
+					return true;
+			else if (value[2].equals("true"))
+				if (!value[3].equals(""))
+					return true;
+			return false;
+		}
+		return false;
+	}
+	
+	
 }

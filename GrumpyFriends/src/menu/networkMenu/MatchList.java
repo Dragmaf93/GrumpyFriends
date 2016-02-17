@@ -72,7 +72,8 @@ public class MatchList extends AbstractPageComponent {
 
 	@Override
 	public void reset() {
-		
+		infoMatches.clear();
+		vbox.getChildren().clear();
 	}
 
 	@Override
