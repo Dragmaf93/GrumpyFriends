@@ -5,12 +5,14 @@ import java.net.UnknownHostException;
 import java.util.List;
 
 import menu.GameBean;
+import menu.MenuManager;
 import menu.MenuPage;
 import menu.SequencePage;
 import menu.networkMenu.NetworkPage;
 import menu.teamMenu.TeamPage;
 import menu.worldMenu.WorldPage;
 import game.AbtractGame;
+import game.MatchManager;
 
 public class NetworkGame extends AbtractGame {
 
@@ -23,8 +25,8 @@ public class NetworkGame extends AbtractGame {
 
 	public NetworkGame() {
 		client = new Client();
-		
-		teamPage=new TeamPage();
+
+		teamPage = new TeamPage();
 		networkPage = new NetworkPage();
 
 		creatorSequence = new SequencePage(networkPage, new WorldPage(),
@@ -48,6 +50,7 @@ public class NetworkGame extends AbtractGame {
 
 	@Override
 	public void setUpGame() {
+		
 		List<MenuPage> menuPages = sequencePages.getMenuPages();
 		InfoMatch match = beanToInfoMatch(menuPages.get(0).getGameBeans());
 		match.setWorldType(menuPages.get(1).getGameBeans()
@@ -77,10 +80,24 @@ public class NetworkGame extends AbtractGame {
 	}
 
 	public void setClientType(boolean chooser) {
-		if (chooser && sequencePages != chooserSequence) {
-			sequencePages = chooserSequence;
-			sequencePages.nextPage();
-		} else if(!chooser && sequencePages!=creatorSequence){
+		if (chooser) {
+			boolean flag=false;
+			try {
+				if(client.chooseMatch(((NetworkPage) networkPage).getDetailMatch().getInfoMatch()))
+					flag=true;
+					
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			if (sequencePages != chooserSequence) {
+				sequencePages = chooserSequence;
+				sequencePages.nextPage();
+			}
+			
+			if(flag) MenuManager.getInstance().nextPage();
+			
+		} else if (!chooser && sequencePages != creatorSequence) {
 			sequencePages = creatorSequence;
 			sequencePages.nextPage();
 		}
@@ -90,22 +107,26 @@ public class NetworkGame extends AbtractGame {
 	@Override
 	public MenuPage nextPage() {
 		MenuPage page = sequencePages.currentPage();
-		
-		if(page==null){
+
+		if (page == null) {
 			List<InfoMatch> matches;
 			try {
 				matches = client.requestMatchList();
-				for (InfoMatch infoMatch : matches) {
-					System.out.println(infoMatch.getMatchName());
-				}
-				
+				((NetworkPage) networkPage).setList(matches);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(page == teamPage){
+			try {
+				client.sendInfoTeam(teamPage.getGameBeans());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-				
 		}
-		
+
 		return sequencePages.nextPage();
 	}
 

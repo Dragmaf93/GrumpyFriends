@@ -1,5 +1,8 @@
 package menu.networkMenu;
 
+import java.util.List;
+
+import network.InfoMatch;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -13,12 +16,14 @@ public class NetworkPage extends AbstractMenuPage {
 	private UserName userName;
 	private MatchList matchList;
 	private CreateMatchPane createMatchPane;
+	private DetailMatch detailMatch;
 	
 	public NetworkPage() {
 		
 		userName = new UserName(this);
 		matchList = new MatchList(this);
 		createMatchPane = new CreateMatchPane(this);
+		detailMatch = new DetailMatch();
 		
 		createMatchPane.relocate(root.getPrefWidth()-createMatchPane.getWidthComponent(), 
 				createMatchPane.getLayoutY());
@@ -38,17 +43,23 @@ public class NetworkPage extends AbstractMenuPage {
 				}
 			}
 		});
-		root.getChildren().addAll(userName, matchList, createMatchPane,backButton);
-		
+		root.getChildren().addAll(userName, matchList, createMatchPane,backButton,detailMatch);
+		detailMatch.setVisible(false);
 		
 		
 	}
-	
+	public void setList(List<InfoMatch> i){
+		matchList.setInfoMatchesList(i);
+	}
 	@Override
 	public void nextPage() {
 		MenuManager.getInstance().nextPage();
 	}
-
+	
+	public DetailMatch getDetailMatch() {
+		return detailMatch;
+	}
+	
 	@Override
 	public void backPage() {
 		MenuManager.getInstance().previousPage();
