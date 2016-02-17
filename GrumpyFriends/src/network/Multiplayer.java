@@ -19,6 +19,7 @@ import menu.GameBean;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 import character.Character;
 
@@ -104,10 +105,12 @@ public class Multiplayer {
 
 	private void connectToChooser() {
 		try {
+			System.out.println(outputStream);
 			socket = new Socket(ipChooser, portNumber);
 			inFromServer = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
 			outputStream = new DataOutputStream(socket.getOutputStream());
+			System.out.println(outputStream);
 
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -118,6 +121,7 @@ public class Multiplayer {
 
 	public void sendOperationMessage(String ope, String proprieta) {
 		try {
+			System.out.println("Operazione"+ope+" "+proprieta+" "+outputStream);
 			outputStream.writeBytes(ope + ";" + proprieta + '\n');
 		} catch (IOException e) {
 			e.printStackTrace();

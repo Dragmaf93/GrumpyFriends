@@ -10,13 +10,15 @@ public class NetworkMatchManager extends AbstractMatchManager {
 	private int left,right,stop;
 	public NetworkMatchManager(World battlefield) {
 		super(battlefield);
-		this.multiplayer = new Multiplayer(this);
 	}
 
 	public Multiplayer getMultiplayer() {
 		return multiplayer;
 	}
-
+	
+	public void setMultiplayer(Multiplayer multiplayer) {
+		this.multiplayer = multiplayer;
+	}
 	@Override
 	public void moveCurrentPlayer(int direction) {
 		currentPlayer.move(direction);

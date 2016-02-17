@@ -144,7 +144,7 @@ public class TeamPage extends AbstractMenuPage {
 		}
 		
 		bean.addData("TypeTeam", teamTypeSelector.getValues()[0]);
-		
+		System.out.println("TEAM PAGE "+bean.toJSON());
 		return bean;
 	}
 

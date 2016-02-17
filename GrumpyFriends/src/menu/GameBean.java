@@ -77,7 +77,6 @@ public class GameBean {
 		}
 		jSon = jSon.substring(0,jSon.length()-1);
 		jSon+="}]";
-		System.out.println(jSon);
 		return jSon;
 	}
 

@@ -93,10 +93,10 @@ public class Client {
 		this.imAChooser = imAChooser;
 	}
 
-	public void sendInfoTeam(GameBean gameBean) throws IOException {
-		outToServer.writeBytes(Message.OP_SEND_INFO_TEAM + ";"
-				+ gameBean.toJSON() + "\n");
-	}
+//	public void sendInfoTeam(GameBean gameBean) throws IOException {
+//		outToServer.writeBytes(Message.OP_SEND_INFO_TEAM + ";"
+//				+ gameBean.toJSON() + "\n");
+//	}
 
 	public GameBean requestInfoTeam() throws IOException {
 		outToServer.writeBytes(Message.OP_REQUEST_INFO_TEAM);

@@ -58,7 +58,7 @@ public class MiniServer extends Thread {
     }
 
 	private void doOperation(String message) throws IOException {
-		System.out.println(message);
+		System.out.println("MESSAGE ARRIVA"+message);
 		String [] operation = message.split(";");
 		
 		switch (operation[0]) {

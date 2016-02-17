@@ -46,6 +46,7 @@ public class NetworkGame extends AbtractGame {
 		if(client.imAChooser()){
 			multiplayer.joinToMatch();
 			GameBean teamInfo = teamPage.getGameBean();
+			System.out.println("CHOOSER "+teamInfo.toJSON());
 			multiplayer.sendOperationMessage(Message.OP_SEND_INFO_TEAM, teamInfo.toJSON());
 			
 			gamebeans = multiplayer.getGameBean();
@@ -58,6 +59,7 @@ public class NetworkGame extends AbtractGame {
 			multiplayer.sendOperationMessage(Message.OP_SEND_INFO_WORLD, worldInfo.toJSON());
 			
 			GameBean teamInfo = teamPage.getGameBean();
+			System.out.println("CREATOR "+teamInfo.toJSON());
 			multiplayer.sendOperationMessage(Message.OP_SEND_INFO_TEAM, teamInfo.toJSON());
 			
 			gamebeans = multiplayer.getGameBean();
@@ -73,7 +75,9 @@ public class NetworkGame extends AbtractGame {
 		}
 		
 		matchManager = new NetworkMatchManager(battlefield);
+		
 		multiplayer.setMatchManager(matchManager);
+		((NetworkMatchManager)matchManager).setMultiplayer(multiplayer);
 		teams.get(0).setMatchManager(matchManager);
 		teams.get(0).setColorTeam(Color.CRIMSON);
 		teams.get(1).setMatchManager(matchManager);
@@ -175,14 +179,14 @@ public class NetworkGame extends AbtractGame {
 			}
 		}
 
-		else if (page == teamPage) {
-			try {
-				client.sendInfoTeam(teamPage.getGameBean());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+//		else if (page == teamPage) {
+//			try {
+//				client.sendInfoTeam(teamPage.getGameBean());
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 
 		return sequencePages.nextPage();
 	}
