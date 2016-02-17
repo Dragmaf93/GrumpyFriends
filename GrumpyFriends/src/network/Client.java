@@ -98,7 +98,7 @@ public class Client {
 
 	public static void main(String[] args) throws IOException {
 		Client client = new Client();
-
+		
 		InfoMatch match = new InfoMatch("d", "D", 2, true, "d");
 		match.setStatusMatch(StatusMatch.WAITING);
 		System.out.println(client.createMatch(match));
