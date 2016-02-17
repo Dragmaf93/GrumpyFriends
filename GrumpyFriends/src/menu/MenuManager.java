@@ -56,8 +56,8 @@ public class MenuManager {
 	public void initialize(GrumpyFriends grumpyFriends) {
 		this.grumpyFriends = grumpyFriends;
 
-		mediaPlayer = new MediaPlayerManager();
-		mediaPlayer.play();
+//		mediaPlayer = new MediaPlayerManager();
+//		mediaPlayer.play();
 		imageLoader = new ImageLoader();
 		menu = new Menu();
 		menuBackground = new MenuBackground();

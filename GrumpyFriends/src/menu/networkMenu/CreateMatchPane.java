@@ -80,7 +80,7 @@ public class CreateMatchPane extends AbstractPageComponent {
 						BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
 						new BorderWidths(2))));
 
-		choiseNumberPlayer.getStyleClass().add("styles/comboBox.css");
+		choiseNumberPlayer.getStylesheets().add("file:styles/comboBox.css");
 
 		HBox numberPlayerPane = new HBox(138, numberPlayer, choiseNumberPlayer);
 
