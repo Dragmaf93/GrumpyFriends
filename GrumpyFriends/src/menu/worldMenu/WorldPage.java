@@ -181,7 +181,7 @@ public class WorldPage extends AbstractMenuPage implements MenuPage {
 	}
 
 	@Override
-	public GameBean getGameBeans() {
+	public GameBean getGameBean() {
 		GameBean bean = new GameBean("World");
 		
 		bean.addData("WorldType", worldTypeSelector.getValues()[0]);

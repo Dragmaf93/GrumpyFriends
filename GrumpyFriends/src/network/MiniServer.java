@@ -20,6 +20,7 @@ public class MiniServer extends Thread {
 	private String message;
 	
 	private Server server;
+	private String ipClient;
 	
 	ObjectMapper mapper;
 
@@ -32,7 +33,7 @@ public class MiniServer extends Thread {
         try {
 			inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			outToClient = new DataOutputStream(socket.getOutputStream()); 
-    
+			ipClient = socket.getInetAddress().getHostAddress();
         } catch (IOException e) {
         	e.printStackTrace();
         } 
@@ -42,7 +43,7 @@ public class MiniServer extends Thread {
 
     public void run() {
     	  
-        while(true) { 
+        while(!socket.isClosed()) { 
     
         	try {
         		if (inFromClient.ready())
@@ -51,8 +52,8 @@ public class MiniServer extends Thread {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-        	
         } 
+        server.removeMiniServer(ipClient);
     	
     }
 

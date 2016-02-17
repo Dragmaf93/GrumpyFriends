@@ -71,7 +71,7 @@ public class NetworkPage extends AbstractMenuPage {
 	}
 
 	@Override
-	public GameBean getGameBeans() {
+	public GameBean getGameBean() {
 		GameBean bean = new GameBean("Network");
 		
 		bean.addData("MatchName",createMatchPane.getValues()[0]);

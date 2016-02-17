@@ -8,5 +8,5 @@ public interface MenuPage extends UpdatablePane{
 	public void backPage();
 	public void reset();
 	
-	public GameBean getGameBeans();
+	public GameBean getGameBean();
 }

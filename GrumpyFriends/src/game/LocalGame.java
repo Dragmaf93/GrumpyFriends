@@ -23,7 +23,7 @@ public class LocalGame extends AbtractGame{
 		List<MenuPage> menuPages = sequencePages.getMenuPages();
 		
 		for (MenuPage menuPage : menuPages) {
-			 extractData(menuPage.getGameBeans());
+			 extractData(menuPage.getGameBean());
 		}
 		
 		matchManager = new LocalMatchManager(battlefield);

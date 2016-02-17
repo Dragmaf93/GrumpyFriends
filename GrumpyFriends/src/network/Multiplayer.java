@@ -9,23 +9,17 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+
+import menu.GameBean;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import character.Character;
 
 public class Multiplayer {
-
-	public final static String OP_MOVE_LEFT = "L";
-	public final static String OP_MOVE_RIGHT = "R";
-	public final static String OP_STOP_MOVE = "S";
-	public final static String OP_JUMP = "J";
-	private int left,right,stop;
-
-	public final static String OP_EQUIP_WEAPON = "E";
-	public final static String OP_INCREASE_AIM = "IA";
-	public final static String OP_DECREASE_AIM = "DA";
-	public final static String OP_ATTACK = "A";
-
-	private final static String SERVER_READY = "SR";
 
 	private Socket socket;
 	private ServerSocket welcomeSocket;
@@ -36,14 +30,29 @@ public class Multiplayer {
 
 	private int portNumber = 6789;
 
+	private String ipChooser;
+	private String ipCreator;
+	
+	private ObjectMapper mapper;
+	private List<GameBean> gameBeans;
+
 	public Multiplayer(MatchManager matchManager) {
 
+		this.matchManager = matchManager;
+		this.mapper = new ObjectMapper();
+		gameBeans = new ArrayList<GameBean>();
+	}
+
+	public Multiplayer() {
+	}
+
+	public void setMatchManager(MatchManager matchManager) {
 		this.matchManager = matchManager;
 	}
 
 	public void joinToMatch() {
 		try {
-			socket = new Socket("192.168.43.113", portNumber);
+			socket = new Socket(ipCreator, portNumber);
 			portNumber++;
 			inFromServer = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
@@ -71,9 +80,9 @@ public class Multiplayer {
 				}
 			}).start();
 
-			sendOperationMessage(SERVER_READY, null);
+			sendOperationMessage(Message.SERVER_READY, null);
 			matchManager.startMatch();
-			
+
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -81,9 +90,14 @@ public class Multiplayer {
 		}
 	}
 
-	protected void connectToServer() {
+	public void setIps(String chooser, String creator) {
+		ipChooser = chooser;
+		ipCreator = creator;
+	}
+
+	private void connectToChooser() {
 		try {
-			socket = new Socket("192.168.43.113", portNumber);
+			socket = new Socket(ipChooser, portNumber);
 			inFromServer = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
 			outputStream = new DataOutputStream(socket.getOutputStream());
@@ -104,55 +118,57 @@ public class Multiplayer {
 		}
 
 	}
-
+	public List<GameBean> getGameBean(){
+		return gameBeans;
+	}
 	private void doOperation(String operazione) {
 
 		String[] op = operazione.split(",");
 
 		switch (op[0]) {
-		case OP_MOVE_LEFT:
+		case Message.OP_MOVE_LEFT:
 			System.out.println("SINISTRA");
 			matchManager.getCurrentPlayer().move(Character.LEFT);
-			left++;
 			break;
-		case OP_MOVE_RIGHT:
+		case Message.OP_MOVE_RIGHT:
 			System.out.println("DESTRA");
 			matchManager.getCurrentPlayer().move(Character.RIGHT);
-			right++;
 			break;
-		case OP_JUMP:
+		case Message.OP_JUMP:
 			System.out.println("JUMP");
 			matchManager.getCurrentPlayer().jump();
 			break;
-		case OP_STOP_MOVE:
+		case Message.OP_STOP_MOVE:
 			System.out.println("STOP_MOVE");
 			matchManager.getCurrentPlayer().stopToMove();
-			stop++;
 			break;
-		case OP_EQUIP_WEAPON:
+		case Message.OP_EQUIP_WEAPON:
 			System.out.println("EQUIP_WEAPON");
 			matchManager.getCurrentPlayer().equipWeapon(op[1]);
 			break;
-		case OP_ATTACK:
+		case Message.OP_ATTACK:
 			System.out.println("ATTACK");
 			matchManager.getCurrentPlayer().attack(Float.parseFloat(op[1]));
 			break;
-		case OP_INCREASE_AIM:
+		case Message.OP_INCREASE_AIM:
 			System.out.println("INCREASE AIM");
 			matchManager.getCurrentPlayer().changeAim(Character.INCREASE_AIM);
 			break;
-		case OP_DECREASE_AIM:
+		case Message.OP_DECREASE_AIM:
 			System.out.println("DECREASE AIM");
 			matchManager.getCurrentPlayer().changeAim(Character.DECREASE_AIM);
 			break;
-		case SERVER_READY:
-			connectToServer();
+		case Message.SERVER_READY:
+			connectToChooser();
+			break;
+		case Message.OP_SEND_INFO_TEAM:
+		case Message.OP_SEND_INFO_WORLD:
+			gameBeans.add(GameBean.jSonToGameBean(op[1]));
 			break;
 		default:
 			break;
-			
+
 		}
-		System.out.println(left+"    "+ right+"      "+stop);
 	}
 
 	public void closeConnection() {

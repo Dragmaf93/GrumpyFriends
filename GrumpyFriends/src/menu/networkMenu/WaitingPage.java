@@ -24,7 +24,7 @@ public class WaitingPage extends AbstractMenuPage {
 	}
 
 	@Override
-	public GameBean getGameBeans() {
+	public GameBean getGameBean() {
 		// TODO Auto-generated method stub
 		return null;
 	}

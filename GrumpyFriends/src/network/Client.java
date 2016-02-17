@@ -17,24 +17,28 @@ import character.Team;
 
 public class Client {
 
-	private Socket clientSocket;
+	private final static String IP_SERVER = "127.0.0.1";
+
+	private Socket socket;
 	private DataOutputStream outToServer;
 	private BufferedReader inFromServer;
 	private ObjectMapper mapper;
 
 	private String ipCreator;
 	private String ipChooser;
-	
+
+	private boolean imAChooser;
+
 	public Client() {
 		mapper = new ObjectMapper();
 	}
 
 	public void connectToServer() throws UnknownHostException, IOException {
-		clientSocket = new Socket("127.0.0.1", 2343);
+		socket = new Socket(IP_SERVER, 2343);
 
-		outToServer = new DataOutputStream(clientSocket.getOutputStream());
+		outToServer = new DataOutputStream(socket.getOutputStream());
 		inFromServer = new BufferedReader(new InputStreamReader(
-				clientSocket.getInputStream()));
+				socket.getInputStream()));
 
 	}
 
@@ -58,22 +62,40 @@ public class Client {
 		return null;
 	}
 
+	public String getIpChooser() {
+		return ipChooser;
+	}
+
+	public String getIpCreator() {
+		return ipCreator;
+	}
+
+	public boolean imAChooser() {
+		return imAChooser;
+	}
+
 	public boolean chooseMatch(InfoMatch matchChoosed) throws IOException {
 		outToServer.writeBytes(Message.OP_SELECT_MATCH + ";"
 				+ matchChoosed.getId() + "\n");
 
 		String response = inFromServer.readLine();
 		String[] resp = response.split(";");
-		
-		if (resp[0].equals(Message.OP_CONFIRM)){
-			ipCreator=resp[1];
+
+		if (resp[0].equals(Message.OP_CONFIRM)) {
+			ipCreator = resp[1];
+			socket.close();
 			return true;
 		}
 		return false;
 	}
 
+	public void setImAChooser(boolean imAChooser) {
+		this.imAChooser = imAChooser;
+	}
+
 	public void sendInfoTeam(GameBean gameBean) throws IOException {
-		outToServer.writeBytes(Message.OP_SEND_INFO_TEAM+";"+gameBean.toJSON()+"\n");
+		outToServer.writeBytes(Message.OP_SEND_INFO_TEAM + ";"
+				+ gameBean.toJSON() + "\n");
 	}
 
 	public GameBean requestInfoTeam() throws IOException {
@@ -87,7 +109,7 @@ public class Client {
 	}
 
 	public void closeConnection() throws IOException {
-		clientSocket.close();
+		socket.close();
 	}
 
 	public boolean createMatch(InfoMatch match) throws IOException {
@@ -97,12 +119,13 @@ public class Client {
 
 		String response = inFromServer.readLine();
 
-		if (response.equals(Message.OP_CONFIRM)){
-			
-			response =inFromServer.readLine();
+		if (response.equals(Message.OP_CONFIRM)) {
+
+			response = inFromServer.readLine();
 			String[] resp = response.split(";");
-			if(resp[0].equals(Message.OP_SEND_PLAYER_FOUND)){
-				ipChooser=resp[1];
+			if (resp[0].equals(Message.OP_SEND_PLAYER_FOUND)) {
+				ipChooser = resp[1];
+				socket.close();
 				return true;
 			}
 		}
@@ -111,7 +134,7 @@ public class Client {
 
 	public static void main(String[] args) throws IOException {
 		Client client = new Client();
-		
+
 		InfoMatch match = new InfoMatch("d", "D", 2, true, "d");
 		match.setStatusMatch(StatusMatch.WAITING);
 		System.out.println(client.createMatch(match));

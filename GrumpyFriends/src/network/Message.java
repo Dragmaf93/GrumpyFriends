@@ -17,4 +17,16 @@ public abstract class Message {
 	public final static String OP_CONFIRM = "OK";
 	public final static String OP_ERROR = "ERR";
 	
+	public final static String OP_MOVE_LEFT = "L";
+	public final static String OP_MOVE_RIGHT = "R";
+	public final static String OP_STOP_MOVE = "S";
+	public final static String OP_JUMP = "J";
+
+	public final static String OP_EQUIP_WEAPON = "E";
+	public final static String OP_INCREASE_AIM = "IA";
+	public final static String OP_DECREASE_AIM = "DA";
+	public final static String OP_ATTACK = "A";
+
+	public final static String SERVER_READY = "SR";
+	
 }

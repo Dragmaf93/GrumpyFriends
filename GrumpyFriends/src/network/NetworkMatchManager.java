@@ -22,30 +22,30 @@ public class NetworkMatchManager extends AbstractMatchManager {
 		currentPlayer.move(direction);
 
 		if (direction == Character.LEFT){
-			multiplayer.sendOperationMessage(Multiplayer.OP_MOVE_LEFT, null);
+			multiplayer.sendOperationMessage(Message.OP_MOVE_LEFT, null);
 		}
 		else
 			
-			multiplayer.sendOperationMessage(Multiplayer.OP_MOVE_RIGHT, null);
+			multiplayer.sendOperationMessage(Message.OP_MOVE_RIGHT, null);
 
 	}
 
 	@Override
 	public void stopToMoveCurrentPlayer() {
 		currentPlayer.stopToMove();
-		multiplayer.sendOperationMessage(Multiplayer.OP_STOP_MOVE, null);
+		multiplayer.sendOperationMessage(Message.OP_STOP_MOVE, null);
 	}
 
 	@Override
 	public void jumpCurrentPlayer() {
 		currentPlayer.jump();
-		multiplayer.sendOperationMessage(Multiplayer.OP_JUMP, null);
+		multiplayer.sendOperationMessage(Message.OP_JUMP, null);
 	}
 
 	@Override
 	public void equipWeaponCurrentPlayer(String weaponName) {
 		currentPlayer.equipWeapon(weaponName);
-		multiplayer.sendOperationMessage(Multiplayer.OP_EQUIP_WEAPON,
+		multiplayer.sendOperationMessage(Message.OP_EQUIP_WEAPON,
 				weaponName);
 	}
 
@@ -54,16 +54,16 @@ public class NetworkMatchManager extends AbstractMatchManager {
 		currentPlayer.changeAim(direction);
 
 		if (direction == Character.INCREASE_AIM)
-			multiplayer.sendOperationMessage(Multiplayer.OP_INCREASE_AIM, null);
+			multiplayer.sendOperationMessage(Message.OP_INCREASE_AIM, null);
 		else
-			multiplayer.sendOperationMessage(Multiplayer.OP_DECREASE_AIM, null);
+			multiplayer.sendOperationMessage(Message.OP_DECREASE_AIM, null);
 	}
 
 	@Override
 	public void attackCurrentPlayer(float power) {
 		currentPlayer.attack(power);
 
-		multiplayer.sendOperationMessage(Multiplayer.OP_ATTACK,
+		multiplayer.sendOperationMessage(Message.OP_ATTACK,
 				Float.toString(power));
 
 	}

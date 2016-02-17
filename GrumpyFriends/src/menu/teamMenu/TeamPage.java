@@ -132,7 +132,7 @@ public class TeamPage extends AbstractMenuPage {
 	}
 	
 	@Override
-	public GameBean getGameBeans() {
+	public GameBean getGameBean() {
 	
 		GameBean bean = new GameBean("Team");
 		

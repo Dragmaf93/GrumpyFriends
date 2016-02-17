@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import javafx.scene.paint.Color;
+import character.Character;
 import menu.GameBean;
 import menu.MenuManager;
 import menu.MenuPage;
@@ -12,6 +14,7 @@ import menu.networkMenu.NetworkPage;
 import menu.teamMenu.TeamPage;
 import menu.worldMenu.WorldPage;
 import game.AbtractGame;
+import game.LocalMatchManager;
 import game.MatchManager;
 
 public class NetworkGame extends AbtractGame {
@@ -38,8 +41,54 @@ public class NetworkGame extends AbtractGame {
 
 	@Override
 	public void startGame() {
-		// TODO Auto-generated method stub
+		Multiplayer multiplayer = new Multiplayer();
+		multiplayer.setIps(client.getIpChooser(), client.getIpCreator());
+		List<GameBean> gamebeans=null;
+		if(client.imAChooser()){
+			multiplayer.joinToMatch();
+			GameBean teamInfo = teamPage.getGameBean();
+			multiplayer.sendOperationMessage(Message.OP_SEND_INFO_TEAM, teamInfo.toJSON());
+			
+			gamebeans = multiplayer.getGameBean();
+			gamebeans.add(teamInfo);
+			
+		}else{
+			multiplayer.createMatch();
 
+			GameBean worldInfo = creatorSequence.getMenuPages().get(1).getGameBean();
+			multiplayer.sendOperationMessage(Message.OP_SEND_INFO_WORLD, worldInfo.toJSON());
+			
+			GameBean teamInfo = teamPage.getGameBean();
+			multiplayer.sendOperationMessage(Message.OP_SEND_INFO_TEAM, teamInfo.toJSON());
+			
+			gamebeans = multiplayer.getGameBean();
+			gamebeans.add(worldInfo);
+			gamebeans.add(teamInfo);
+			
+		}
+		
+		for (GameBean gameBean : gamebeans) {
+			extractData(gameBean);
+		}
+		
+		matchManager = new NetworkMatchManager(battlefield);
+		teams.get(0).setMatchManager(matchManager);
+		teams.get(0).setColorTeam(Color.CRIMSON);
+		teams.get(1).setMatchManager(matchManager);
+		teams.get(1).setColorTeam(Color.STEELBLUE);
+	
+		matchManager.setTeamA(teams.get(0));
+		matchManager.setTeamB(teams.get(1));
+		
+		for (Character character :characters) {
+			character.setWorld(battlefield);
+			battlefield.addCharacter(character);
+		}
+		
+		
+		positionCharacter();
+		
+		matchManager.startMatch();
 	}
 
 	@Override
@@ -50,16 +99,19 @@ public class NetworkGame extends AbtractGame {
 
 	@Override
 	public void setUpGame() {
-		
-		List<MenuPage> menuPages = sequencePages.getMenuPages();
-		InfoMatch match = beanToInfoMatch(menuPages.get(0).getGameBeans());
-		match.setWorldType(menuPages.get(1).getGameBeans()
-				.getFirstValue("WorldType"));
 
-		try {
-			client.createMatch(match);
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (!client.imAChooser()) {
+			
+			List<MenuPage> menuPages = sequencePages.getMenuPages();
+			InfoMatch match = beanToInfoMatch(menuPages.get(0).getGameBean());
+			match.setWorldType(menuPages.get(1).getGameBean()
+					.getFirstValue("WorldType"));
+
+			try {
+				client.createMatch(match);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -80,23 +132,26 @@ public class NetworkGame extends AbtractGame {
 	}
 
 	public void setClientType(boolean chooser) {
+		client.setImAChooser(chooser);
 		if (chooser) {
-			boolean flag=false;
+			boolean flag = false;
 			try {
-				if(client.chooseMatch(((NetworkPage) networkPage).getDetailMatch().getInfoMatch()))
-					flag=true;
-					
+				if (client.chooseMatch(((NetworkPage) networkPage)
+						.getDetailMatch().getInfoMatch()))
+					flag = true;
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+
 			if (sequencePages != chooserSequence) {
 				sequencePages = chooserSequence;
 				sequencePages.nextPage();
 			}
-			
-			if(flag) MenuManager.getInstance().nextPage();
-			
+
+			if (flag)
+				MenuManager.getInstance().nextPage();
+
 		} else if (!chooser && sequencePages != creatorSequence) {
 			sequencePages = creatorSequence;
 			sequencePages.nextPage();
@@ -117,10 +172,10 @@ public class NetworkGame extends AbtractGame {
 				e.printStackTrace();
 			}
 		}
-		
-		else if(page == teamPage){
+
+		else if (page == teamPage) {
 			try {
-				client.sendInfoTeam(teamPage.getGameBeans());
+				client.sendInfoTeam(teamPage.getGameBean());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

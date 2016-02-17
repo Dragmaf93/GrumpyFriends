@@ -52,7 +52,9 @@ public class Server {
 	public InfoMatch getInfoMatch(int id) {
 		return matchesList.get(id);
 	}
-	
+	public void removeMiniServer(String ipClient){
+		miniServerList.remove(ipClient);
+	}
 	public void takeLock() {
 		lock.lock();
 	}

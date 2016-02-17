@@ -3,6 +3,7 @@ package menu;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -10,6 +11,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class GameBean {
+
+	private static final ObjectMapper MAPPER= new ObjectMapper();
 
 	private HashMap<String, String> data;
 	private String beanName;
@@ -66,7 +69,7 @@ public class GameBean {
 	}
 	
 	public String toJSON() {
-		String jSon = "[{";
+		String jSon = "[{\"Name\":\""+beanName+"\",";
 		
 		for (int i=0;i<names.size();i++){
 			jSon+="\""+names.get(i)+"\":\""+values.get(i)+"\",";
@@ -81,6 +84,25 @@ public class GameBean {
 		return data;
 	}
 	
+	public static GameBean jSonToGameBean(String jSon){
+		try {
+			JsonNode node=MAPPER.readTree(jSon).get(0);
+			
+			Iterator<String> i = node.fieldNames();
+			GameBean gameBean= new GameBean(node.get(i.next()).asText());
+			while(i.hasNext()) {
+				String fieldName=i.next();
+				gameBean.addData(fieldName, node.get(fieldName).asText());
+				
+			}
+			
+			return gameBean;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;		
+	}
+	
 	public static void main(String[] args) {
 		GameBean gameBean=new GameBean("Team");
 		gameBean.addData("CIA","CAIO");
@@ -88,17 +110,9 @@ public class GameBean {
 		gameBean.addData("IA","CAIO");
 		gameBean.addData("A","CAIO");
 		gameBean.addData("CsIA","CAIO");
-		gameBean.toJSON();
+		GameBean game = GameBean.jSonToGameBean(gameBean.toJSON());
 		
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			JsonNode arrayMatch = mapper.readTree(gameBean.toJSON());
-			System.out.println(arrayMatch.get(0).get("C").asText());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		System.out.println(game.toJSON());
 		
 	}
 }
