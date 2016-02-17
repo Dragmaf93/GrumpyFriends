@@ -72,6 +72,7 @@ public class NetworkGame extends AbtractGame {
 		}
 		
 		matchManager = new NetworkMatchManager(battlefield);
+		multiplayer.setMatchManager(matchManager);
 		teams.get(0).setMatchManager(matchManager);
 		teams.get(0).setColorTeam(Color.CRIMSON);
 		teams.get(1).setMatchManager(matchManager);
