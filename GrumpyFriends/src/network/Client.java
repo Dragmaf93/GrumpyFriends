@@ -83,7 +83,7 @@ public class Client {
 
 		if (resp[0].equals(Message.OP_CONFIRM)) {
 			ipCreator = resp[1];
-			socket.close();
+//			socket.close();
 			return true;
 		}
 		return false;
@@ -125,7 +125,7 @@ public class Client {
 			String[] resp = response.split(";");
 			if (resp[0].equals(Message.OP_SEND_PLAYER_FOUND)) {
 				ipChooser = resp[1];
-				socket.close();
+//				socket.close();
 				return true;
 			}
 		}

@@ -20,7 +20,6 @@ import game.MatchManager;
 public class NetworkGame extends AbtractGame {
 
 	private Client client;
-
 	private SequencePage creatorSequence;
 	private SequencePage chooserSequence;
 	private MenuPage networkPage;
@@ -67,8 +66,10 @@ public class NetworkGame extends AbtractGame {
 			
 		}
 		
-		for (GameBean gameBean : gamebeans) {
-			extractData(gameBean);
+		multiplayer.readyToStart();
+		
+		for (int i = 0; i< gamebeans.size();i++) {
+			extractData(gamebeans.get(i));
 		}
 		
 		matchManager = new NetworkMatchManager(battlefield);

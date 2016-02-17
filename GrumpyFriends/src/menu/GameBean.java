@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -87,13 +88,11 @@ public class GameBean {
 	public static GameBean jSonToGameBean(String jSon){
 		try {
 			JsonNode node=MAPPER.readTree(jSon).get(0);
-			
-			Iterator<String> i = node.fieldNames();
-			GameBean gameBean= new GameBean(node.get(i.next()).asText());
+			Iterator<Entry<String, JsonNode>> i = node.fields();
+			GameBean gameBean= new GameBean(node.get(i.next().getKey()).asText());
 			while(i.hasNext()) {
-				String fieldName=i.next();
-				gameBean.addData(fieldName, node.get(fieldName).asText());
-				
+				Entry<String, JsonNode> fieldName=i.next();
+				gameBean.addData(fieldName.getKey(), fieldName.getValue().asText());
 			}
 			
 			return gameBean;
@@ -106,10 +105,10 @@ public class GameBean {
 	public static void main(String[] args) {
 		GameBean gameBean=new GameBean("Team");
 		gameBean.addData("CIA","CAIO");
-		gameBean.addData("C","CAIO");
-		gameBean.addData("IA","CAIO");
-		gameBean.addData("A","CAIO");
-		gameBean.addData("CsIA","CAIO");
+		gameBean.addData("CIA","CAO");
+		gameBean.addData("CIA","CAIO");
+		gameBean.addData("CIA","CAIO");
+		gameBean.addData("CIA","CAIO");
 		GameBean game = GameBean.jSonToGameBean(gameBean.toJSON());
 		
 		System.out.println(game.toJSON());

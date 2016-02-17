@@ -11,6 +11,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import menu.GameBean;
 
@@ -24,6 +27,9 @@ public class Multiplayer {
 	private Socket socket;
 	private ServerSocket welcomeSocket;
 
+	private Lock lock=new ReentrantLock();
+	private Condition condition = lock.newCondition();
+	
 	private BufferedReader inFromServer;
 	private DataOutputStream outputStream;
 	private MatchManager matchManager;
@@ -32,7 +38,7 @@ public class Multiplayer {
 
 	private String ipChooser;
 	private String ipCreator;
-	
+
 	private ObjectMapper mapper;
 	private List<GameBean> gameBeans;
 
@@ -43,7 +49,9 @@ public class Multiplayer {
 		gameBeans = new ArrayList<GameBean>();
 	}
 
-	public Multiplayer() {
+	public Multiplayer() {	
+		this.mapper = new ObjectMapper();
+	gameBeans = new ArrayList<GameBean>();
 	}
 
 	public void setMatchManager(MatchManager matchManager) {
@@ -81,7 +89,6 @@ public class Multiplayer {
 			}).start();
 
 			sendOperationMessage(Message.SERVER_READY, null);
-			matchManager.startMatch();
 
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -101,7 +108,6 @@ public class Multiplayer {
 			inFromServer = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
 			outputStream = new DataOutputStream(socket.getOutputStream());
-			matchManager.startMatch();
 
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -112,18 +118,35 @@ public class Multiplayer {
 
 	public void sendOperationMessage(String ope, String proprieta) {
 		try {
-			outputStream.writeBytes(ope + "," + proprieta + '\n');
+			outputStream.writeBytes(ope + ";" + proprieta + '\n');
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 	}
-	public List<GameBean> getGameBean(){
+
+	public List<GameBean> getGameBean() {
 		return gameBeans;
 	}
+	
+	public void readyToStart(){
+		try{
+			lock.lock();
+			
+			while (gameBeans.size()<3) {
+				condition.await();
+			}
+			
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}finally{
+			lock.unlock();
+		}
+	}
+	
 	private void doOperation(String operazione) {
-
-		String[] op = operazione.split(",");
+		System.out.println(operazione);
+		String[] op = operazione.split(";");
 
 		switch (op[0]) {
 		case Message.OP_MOVE_LEFT:
@@ -163,14 +186,23 @@ public class Multiplayer {
 			break;
 		case Message.OP_SEND_INFO_TEAM:
 		case Message.OP_SEND_INFO_WORLD:
-			gameBeans.add(GameBean.jSonToGameBean(op[1]));
+			addBean(GameBean.jSonToGameBean(op[1]));
 			break;
 		default:
 			break;
 
 		}
 	}
-
+	private void addBean(GameBean bean){
+		lock.lock();
+		try{
+			gameBeans.add(bean);
+			if(gameBeans.size()>=3)
+				condition.signal();
+		}finally{
+			lock.unlock();
+		}
+	}
 	public void closeConnection() {
 		try {
 			socket.close();
@@ -182,27 +214,35 @@ public class Multiplayer {
 	}
 
 	public void createMatch() {
-		new Thread(new Runnable() {
 
-			@Override
-			public void run() {
-				try {
-					welcomeSocket = new ServerSocket(portNumber);
-					portNumber++;
-					Socket connectionSocket = welcomeSocket.accept();
+		try {
+			welcomeSocket = new ServerSocket(portNumber);
+			portNumber++;
+			Socket connectionSocket = welcomeSocket.accept();
 
-					BufferedReader inFromClient = new BufferedReader(
-							new InputStreamReader(
-									connectionSocket.getInputStream()));
+			BufferedReader inFromClient = new BufferedReader(
+					new InputStreamReader(connectionSocket.getInputStream()));
+			doOperation(inFromClient.readLine());
 
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
 					while (true) {
-						if (inFromClient.ready())
-							doOperation(inFromClient.readLine());
+						try {
+							if (inFromClient.ready())
+								doOperation(inFromClient.readLine());
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
 				}
-			}
-		}).start();
+			}).start();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 	}
 }

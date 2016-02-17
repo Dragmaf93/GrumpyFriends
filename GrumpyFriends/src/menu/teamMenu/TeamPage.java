@@ -140,7 +140,7 @@ public class TeamPage extends AbstractMenuPage {
 		
 		String[] playersName = playerName.getValues();
 		for (int i = 0; i <playersName.length;i++) {
-			bean.addData("PlayerName", playersName[i]);
+			bean.addData("PlayerName"+i, playersName[i]);
 		}
 		
 		bean.addData("TypeTeam", teamTypeSelector.getValues()[0]);

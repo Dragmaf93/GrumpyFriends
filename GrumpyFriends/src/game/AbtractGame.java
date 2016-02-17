@@ -61,7 +61,7 @@ public abstract class AbtractGame implements Game {
 			String typePlayer = bean.getFirstValue("TypeTeam");
 			
 			while (bean.hasNext()) {
-				if (bean.getNextNameData().equals("PlayerName")) {
+				if (bean.getNextNameData().contains("PlayerName")) {
 					Character character = createCharacter(bean.getNextValue(),
 							typePlayer, team);
 					team.addCharacter(character);
