@@ -12,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import game.Game;
+import game.GameTask;
 import game.GrumpyFriends;
 import game.LocalGame;
 import game.AbstractMatchManager;
@@ -125,7 +126,7 @@ public class MenuManager {
 		mediaPlayer.play();
 		lastAddedPane = menu;
 		currentUpdatablePane = menu;
-		matchPane=null;
+		matchPane = null;
 		grumpyFriends.getScene().setEventHandler(lastAddedPane);
 	}
 
@@ -146,17 +147,35 @@ public class MenuManager {
 	}
 
 	private void createMatchPane() {
-//		if (matchPane!=null) {
-			currentGame.setUpGame();
-			currentGame.startGame();
-			MatchManager matchManager = currentGame.getMatchManager();
-			matchPane = new MatchPane(matchManager);
-			root.getChildren().removeAll(menuBackground, lastAddedPane);
-			root.getChildren().add(matchPane);
-			currentUpdatablePane = matchPane;
-			lastAddedPane = matchPane;
-			mediaPlayer.stop();
-//		}
+		// if (matchPane!=null) {
+
+		root.getChildren().remove(lastAddedPane);
+		lastAddedPane = waitingPage;
+		waitingPage.setText("Creazione partita...");
+		root.getChildren().add(waitingPage);
+		GameTask task = new GameTask() {
+
+			@Override
+			protected void work() {
+				currentGame.setUpGame();
+				currentGame.startGame();
+				MatchManager matchManager = currentGame.getMatchManager();
+				matchPane = new MatchPane(matchManager);
+
+			}
+
+			@Override
+			protected void afterWork() {
+				root.getChildren().removeAll(menuBackground, lastAddedPane);
+				root.getChildren().add(matchPane);
+				currentUpdatablePane = matchPane;
+				lastAddedPane = matchPane;
+				mediaPlayer.stop();
+				// TODO Auto-generated method stub
+
+			}
+		};
+		task.startToWork();
 	}
 
 	public void goToMapEditor() {
