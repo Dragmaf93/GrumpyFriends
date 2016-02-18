@@ -28,5 +28,6 @@ public abstract class Message {
 	public final static String OP_ATTACK = "A";
 
 	public final static String SERVER_READY = "SR";
+	public final static String CLOSE ="CL";
 	
 }

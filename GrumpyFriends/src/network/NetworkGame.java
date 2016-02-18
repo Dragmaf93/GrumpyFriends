@@ -175,7 +175,6 @@ public class NetworkGame extends AbtractGame {
 //				matches = client.requestMatchList();
 //				((NetworkPage) networkPage).setList(matches);
 //			} catch (IOException e) {
-//				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
 //		}
@@ -185,8 +184,17 @@ public class NetworkGame extends AbtractGame {
 
 	@Override
 	public MenuPage prevPage() {
-		MenuPage page = sequencePages.prevPage();
-		return page;
+		MenuPage page = sequencePages.currentPage();
+		
+//		if(page == networkPage){
+//			try {
+//				client.closeConnection();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+		return sequencePages.prevPage();
 	}
 
 	public void connectToServer() throws UnknownHostException, IOException {

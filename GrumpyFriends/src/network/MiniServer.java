@@ -22,11 +22,16 @@ public class MiniServer extends Thread {
 	private Server server;
 	private String ipClient;
 	
+	private boolean closed;
+	private long time0;
+	private long maxTime=5000;
+	
 	ObjectMapper mapper;
 
     public MiniServer(Socket socket, Server server) {
 
         super("MiniServer");
+        System.out.println("Mi creo "+ipClient);
         this.socket = socket;
         this.server = server;
 
@@ -48,6 +53,10 @@ public class MiniServer extends Thread {
         	try {
         		if (inFromClient.ready())
         			doOperation(inFromClient.readLine());
+
+        		if(closed && System.currentTimeMillis() > time0+maxTime){
+        			socket.close();
+        		}
         		
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -113,6 +122,10 @@ public class MiniServer extends Thread {
 		case Message.OP_REQUEST_INFO_WORLD:
 			System.out.println("REQUEST INFO WORLD");
 			break;
+		case Message.CLOSE:
+			outToClient.writeBytes(Message.CLOSE+'\n');
+			closed=true;
+			time0=System.currentTimeMillis();
 		default:
 			break;
 		}

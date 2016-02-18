@@ -18,7 +18,7 @@ import character.Team;
 
 public class Client {
 
-	private final static String IP_SERVER = "192.168.43.148";
+	private final static String IP_SERVER = "127.0.0.1";
 
 	private Socket socket;
 	private DataOutputStream outToServer;
