@@ -26,13 +26,8 @@ public class PhysicalCurveObject implements PhysicalObject {
 			this.points[i]=new Vec2((float)Utils.xFromJavaFxToJbox2d(points.get(i).x),
 					(float) Utils.yFromJavaFxToJbox2d( points.get(i).y));
 		}
-		
-
-		
 		bodyDef = new BodyDef();
 
-			
-		
 	}
 
 	@Override
@@ -40,7 +35,6 @@ public class PhysicalCurveObject implements PhysicalObject {
 		body = world.createBody(bodyDef);
 		
 		for (int i = 1; i < points.length;i++) {
-//			System.out.println("disegna edge dal punto "+points[i-1]+"   al punto "+ points[i]);
 			EdgeShape shape = new EdgeShape();
 			shape.set(points[i-1],points[i]);
 			body.createFixture(shape, 1.0f);
@@ -53,31 +47,26 @@ public class PhysicalCurveObject implements PhysicalObject {
 
 	@Override
 	public Body getBody() {
-		// TODO Auto-generated method stub
 		return body;
 	}
 
 	@Override
 	public float getX() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public float getY() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public float getHeight() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public float getWidth() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

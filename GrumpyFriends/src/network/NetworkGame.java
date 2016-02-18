@@ -23,6 +23,7 @@ import game.AbtractGame;
 import game.GameTask;
 import game.LocalMatchManager;
 import game.MatchManager;
+import gui.Popup;
 
 public class NetworkGame extends AbtractGame {
 
@@ -51,144 +52,72 @@ public class NetworkGame extends AbtractGame {
 
 	@Override
 	public void startGame() {
-		Multiplayer multiplayer = new Multiplayer();
-		multiplayer.setIps(client.getIpChooser(), client.getIpCreator());
+		try {
+			Multiplayer multiplayer = new Multiplayer();
+			multiplayer.setIps(client.getIpChooser(), client.getIpCreator());
 
-		if (client.imAChooser()) {
-			multiplayer.joinToMatch();
-			GameBean teamInfo = teamPage.getGameBean();
-//			MenuManager.getInstance().getWaitingPage()
-//					.setText("Creazione partita ...");
+			if (client.imAChooser()) {
+				multiplayer.joinToMatch();
+				GameBean teamInfo = teamPage.getGameBean();
+				// MenuManager.getInstance().getWaitingPage()
+				// .setText("Creazione partita ...");
 
-			multiplayer.sendOperationMessage(Message.OP_SEND_INFO_TEAM,
-					teamInfo.toJSON());
-			gamebeans = multiplayer.getGameBean();
-			gamebeans.add(teamInfo);
-		} else {
-			multiplayer.createMatch();
+				multiplayer.sendOperationMessage(Message.OP_SEND_INFO_TEAM,
+						teamInfo.toJSON());
+				gamebeans = multiplayer.getGameBean();
+				gamebeans.add(teamInfo);
+			} else {
+				multiplayer.createMatch();
 
-			GameBean worldInfo = creatorSequence.getMenuPages().get(1)
-					.getGameBean();
-			multiplayer.sendOperationMessage(Message.OP_SEND_INFO_WORLD,
-					worldInfo.toJSON());
+				GameBean worldInfo = creatorSequence.getMenuPages().get(1)
+						.getGameBean();
+				multiplayer.sendOperationMessage(Message.OP_SEND_INFO_WORLD,
+						worldInfo.toJSON());
 
-			GameBean teamInfo = teamPage.getGameBean();
-			System.out.println("CREATOR " + teamInfo.toJSON());
-			multiplayer.sendOperationMessage(Message.OP_SEND_INFO_TEAM,
-					teamInfo.toJSON());
+				GameBean teamInfo = teamPage.getGameBean();
+				System.out.println("CREATOR " + teamInfo.toJSON());
+				multiplayer.sendOperationMessage(Message.OP_SEND_INFO_TEAM,
+						teamInfo.toJSON());
 
-			gamebeans = multiplayer.getGameBean();
-			gamebeans.add(worldInfo);
-			gamebeans.add(teamInfo);
+				gamebeans = multiplayer.getGameBean();
+				gamebeans.add(worldInfo);
+				gamebeans.add(teamInfo);
 
+			}
+			multiplayer.readyToStart();
+
+			for (int i = 0; i < gamebeans.size(); i++) {
+				extractData(gamebeans.get(i));
+			}
+
+			matchManager = new NetworkMatchManager(battlefield);
+
+			multiplayer.setMatchManager(matchManager);
+			((NetworkMatchManager) matchManager).setMultiplayer(multiplayer);
+			teams.get(0).setMatchManager(matchManager);
+			teams.get(0).setColorTeam(Color.CRIMSON);
+			teams.get(1).setMatchManager(matchManager);
+			teams.get(1).setColorTeam(Color.STEELBLUE);
+
+			matchManager.setTeamA(teams.get(0));
+			matchManager.setTeamB(teams.get(1));
+
+			for (Character character : characters) {
+				character.setWorld(battlefield);
+				battlefield.addCharacter(character);
+			}
+
+			positionCharacter();
+
+			matchManager.startMatch();
+		} catch (IOException e) {
+			// TODO errore di connes...
+			e.printStackTrace();
 		}
-		multiplayer.readyToStart();
-
-		for (int i = 0; i < gamebeans.size(); i++) {
-			extractData(gamebeans.get(i));
-		}
-
-		matchManager = new NetworkMatchManager(battlefield);
-
-		multiplayer.setMatchManager(matchManager);
-		((NetworkMatchManager) matchManager).setMultiplayer(multiplayer);
-		teams.get(0).setMatchManager(matchManager);
-		teams.get(0).setColorTeam(Color.CRIMSON);
-		teams.get(1).setMatchManager(matchManager);
-		teams.get(1).setColorTeam(Color.STEELBLUE);
-
-		matchManager.setTeamA(teams.get(0));
-		matchManager.setTeamB(teams.get(1));
-
-		for (Character character : characters) {
-			character.setWorld(battlefield);
-			battlefield.addCharacter(character);
-		}
-
-		positionCharacter();
-
-		matchManager.startMatch();
-//		Multiplayer multiplayer = new Multiplayer();
-//		multiplayer.setIps(client.getIpChooser(), client.getIpCreator());
-//
-//		GameTask task = new GameTask() {
-//
-//			@Override
-//			protected void work() {
-//				System.out.println("AVVIA WORK");
-//				if (client.imAChooser()) {
-//					multiplayer.joinToMatch();
-//					GameBean teamInfo = teamPage.getGameBean();
-//					MenuManager.getInstance().getWaitingPage()
-//							.setText("Creazione partita ...");
-//
-//					multiplayer.sendOperationMessage(Message.OP_SEND_INFO_TEAM,
-//							teamInfo.toJSON());
-//					gamebeans = multiplayer.getGameBean();
-//					gamebeans.add(teamInfo);
-//				} else {
-//					multiplayer.createMatch();
-//
-//					GameBean worldInfo = creatorSequence.getMenuPages().get(1)
-//							.getGameBean();
-//					multiplayer.sendOperationMessage(
-//							Message.OP_SEND_INFO_WORLD, worldInfo.toJSON());
-//
-//					GameBean teamInfo = teamPage.getGameBean();
-//					System.out.println("CREATOR " + teamInfo.toJSON());
-//					multiplayer.sendOperationMessage(Message.OP_SEND_INFO_TEAM,
-//							teamInfo.toJSON());
-//
-//					gamebeans = multiplayer.getGameBean();
-//					gamebeans.add(worldInfo);
-//					gamebeans.add(teamInfo);
-//
-//				}
-//			}
-//
-//			@Override
-//			protected void afterWork() {
-//				System.out.println("CIAOOOOOOOOOOOOOOOOOOOOOooooo");
-//				multiplayer.readyToStart();
-//
-//				for (int i = 0; i < gamebeans.size(); i++) {
-//					extractData(gamebeans.get(i));
-//				}
-//
-//				matchManager = new NetworkMatchManager(battlefield);
-//
-//				multiplayer.setMatchManager(matchManager);
-//				((NetworkMatchManager) matchManager)
-//						.setMultiplayer(multiplayer);
-//				teams.get(0).setMatchManager(matchManager);
-//				teams.get(0).setColorTeam(Color.CRIMSON);
-//				teams.get(1).setMatchManager(matchManager);
-//				teams.get(1).setColorTeam(Color.STEELBLUE);
-//
-//				matchManager.setTeamA(teams.get(0));
-//				matchManager.setTeamB(teams.get(1));
-//
-//				for (Character character : characters) {
-//					character.setWorld(battlefield);
-//					battlefield.addCharacter(character);
-//				}
-//
-//				positionCharacter();
-//
-//				matchManager.startMatch();
-//				System.out.println("AVVIA WORK");
-//				MenuManager.getInstance().hideLoadingPane();
-//			}
-//		};
-//		task.startToWork();
-//
-//		MenuManager.getInstance().viewLoadingPane("Avversario trovato...");
 	}
 
 	@Override
 	public void reset() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -218,10 +147,12 @@ public class NetworkGame extends AbtractGame {
 			try {
 
 				if (client.chooseMatch(((NetworkPage) networkPage)
-						.getDetailMatch().getInfoMatch()))
+						.getDetailMatch().getInfoMatch())) {
 					flag = true;
-				state = StateNetworkGame.CHOOSED_MATCH;
+					state = StateNetworkGame.CHOOSED_MATCH;
+				}
 			} catch (IOException e) {
+				// TODO server non ragg
 				e.printStackTrace();
 			}
 
@@ -251,13 +182,10 @@ public class NetworkGame extends AbtractGame {
 					try {
 						client.connectToServer();
 						List<InfoMatch> matches;
-						try {
-							matches = client.requestMatchList();
-							((NetworkPage) networkPage).setList(matches);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+						matches = client.requestMatchList();
+						((NetworkPage) networkPage).setList(matches);
 					} catch (IOException e) {
+						//TODO server non raggiungibile
 						e.printStackTrace();
 					}
 				}
@@ -269,7 +197,7 @@ public class NetworkGame extends AbtractGame {
 				}
 			};
 			task.startToWork();
-
+			
 			MenuManager.getInstance().getWaitingPage()
 					.setText("Caricamento...");
 			return MenuManager.getInstance().getWaitingPage();
@@ -317,7 +245,6 @@ public class NetworkGame extends AbtractGame {
 			try {
 				client.closeConnection();
 			} catch (IOException e) {
-				e.printStackTrace();
 			}
 			state = StateNetworkGame.DISCONNECTED;
 		}
@@ -333,11 +260,12 @@ public class NetworkGame extends AbtractGame {
 	}
 
 	public void updateListMatch() {
-		List<InfoMatch> matches;
 		try {
+			List<InfoMatch> matches;
 			matches = client.requestMatchList();
 			((NetworkPage) networkPage).setList(matches);
 		} catch (IOException e) {
+			//TODO server irr...
 			e.printStackTrace();
 		}
 	}

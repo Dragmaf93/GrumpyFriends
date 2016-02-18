@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import character.Character;
 import element.weaponsManager.Weapon;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 
 public class WhiteStormtrooperAnimation implements CharacterAnimation {
@@ -107,13 +106,11 @@ public class WhiteStormtrooperAnimation implements CharacterAnimation {
 
 	@Override
 	public double getValueX() {
-		// TODO Auto-generated method stub
 		return -60;
 	}
 
 	@Override
 	public double getValueY() {
-		// TODO Auto-generated method stubv
 		return -35;
 	}
 

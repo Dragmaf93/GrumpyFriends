@@ -28,9 +28,9 @@ public class Multiplayer {
 	private Socket socket;
 	private ServerSocket welcomeSocket;
 
-	private Lock lock=new ReentrantLock();
+	private Lock lock = new ReentrantLock();
 	private Condition condition = lock.newCondition();
-	
+
 	private BufferedReader inFromServer;
 	private DataOutputStream outputStream;
 	private MatchManager matchManager;
@@ -50,17 +50,17 @@ public class Multiplayer {
 		gameBeans = new ArrayList<GameBean>();
 	}
 
-	public Multiplayer() {	
+	public Multiplayer() {
 		this.mapper = new ObjectMapper();
-	gameBeans = new ArrayList<GameBean>();
+		gameBeans = new ArrayList<GameBean>();
 	}
 
 	public void setMatchManager(MatchManager matchManager) {
 		this.matchManager = matchManager;
 	}
 
-	public void joinToMatch() {
-		try {
+	public void joinToMatch() throws UnknownHostException, IOException {
+		
 			socket = new Socket(ipCreator, portNumber);
 			portNumber++;
 			inFromServer = new BufferedReader(new InputStreamReader(
@@ -90,12 +90,6 @@ public class Multiplayer {
 			}).start();
 
 			sendOperationMessage(Message.SERVER_READY, null);
-
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void setIps(String chooser, String creator) {
@@ -103,25 +97,18 @@ public class Multiplayer {
 		ipCreator = creator;
 	}
 
-	private void connectToChooser() {
-		try {
-			System.out.println(outputStream);
+	private void connectToChooser() throws UnknownHostException, IOException {
 			socket = new Socket(ipChooser, portNumber);
 			inFromServer = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
 			outputStream = new DataOutputStream(socket.getOutputStream());
 			System.out.println(outputStream);
-
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void sendOperationMessage(String ope, String proprieta) {
 		try {
-			System.out.println("Operazione"+ope+" "+proprieta+" "+outputStream);
+			System.out.println("Operazione" + ope + " " + proprieta + " "
+					+ outputStream);
 			outputStream.writeBytes(ope + ";" + proprieta + '\n');
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -132,23 +119,23 @@ public class Multiplayer {
 	public List<GameBean> getGameBean() {
 		return gameBeans;
 	}
-	
-	public void readyToStart(){
-		try{
+
+	public void readyToStart() {
+		try {
 			lock.lock();
-			
-			while (gameBeans.size()<3) {
+
+			while (gameBeans.size() < 3) {
 				condition.await();
 			}
-			
+
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			lock.unlock();
 		}
 	}
-	
-	private void doOperation(String operazione) {
+
+	private void doOperation(String operazione) throws UnknownHostException, IOException {
 		System.out.println(operazione);
 		String[] op = operazione.split(";");
 
@@ -197,30 +184,26 @@ public class Multiplayer {
 
 		}
 	}
-	private void addBean(GameBean bean){
+
+	private void addBean(GameBean bean) {
 		lock.lock();
-		try{
+		try {
 			gameBeans.add(bean);
-			if(gameBeans.size()>=3)
+			if (gameBeans.size() >= 3)
 				condition.signal();
-		}finally{
+		} finally {
 			lock.unlock();
 		}
 	}
-	public void closeConnection() {
-		try {
+
+	public void closeConnection() throws IOException {
 			socket.close();
 			welcomeSocket.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
-	public void createMatch() {
+	public void createMatch() throws IOException {
 
-		try {
-			System.out.println("ansasddddddddddddddddddddddddddddddddddd");
+	
 			welcomeSocket = new ServerSocket(portNumber);
 			portNumber++;
 			Socket connectionSocket = welcomeSocket.accept();
@@ -244,10 +227,7 @@ public class Multiplayer {
 					}
 				}
 			}).start();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		
 
 	}
 }

@@ -105,13 +105,11 @@ public class BlackStormtrooperAnimation implements CharacterAnimation {
 
 	@Override
 	public double getValueX() {
-		// TODO Auto-generated method stub
 		return -60;
 	}
 
 	@Override
 	public double getValueY() {
-		// TODO Auto-generated method stubv
 		return -35;
 	}
 

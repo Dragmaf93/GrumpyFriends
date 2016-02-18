@@ -48,8 +48,6 @@ public class WaitingPage extends AbstractMenuPage {
 
 	@Override
 	public void reset() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -59,7 +57,6 @@ public class WaitingPage extends AbstractMenuPage {
 
 	@Override
 	public void update() {
-
 	}
 
 }

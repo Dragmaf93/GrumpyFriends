@@ -125,12 +125,10 @@ public class Client {
 		if (response1.equals(Message.OP_CONFIRM)) {
 
 			String response2 = inFromServer.readLine();
-			System.out.println(response2);
-			System.out.println("ciao");
 			String[] resp = response2.split(";");
 			if (resp[0].equals(Message.OP_SEND_PLAYER_FOUND)) {
 				ipChooser = resp[1];
-				socket.close();
+//				socket.close();
 				return true;
 			}
 		}

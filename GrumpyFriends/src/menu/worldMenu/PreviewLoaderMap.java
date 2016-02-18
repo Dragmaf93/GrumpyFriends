@@ -88,7 +88,6 @@ public class PreviewLoaderMap {
 			}
 
 		} catch (SAXException | IOException | ParserConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -177,7 +177,6 @@ public class WorldPage extends AbstractMenuPage implements MenuPage {
 	@Override
 	public void backPage() {
 		MenuManager.getInstance().previousPage();
-		// menuManager.setSceneForChangePage(menuManager.getTeamPageBScene());
 	}
 
 	@Override
@@ -192,7 +191,6 @@ public class WorldPage extends AbstractMenuPage implements MenuPage {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
 		
 	}
 

@@ -1,7 +1,5 @@
 package game;
 
-import java.io.IOException;
-
 import menu.MenuPage;
 import menu.SequencePage;
 

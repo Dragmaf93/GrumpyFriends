@@ -171,8 +171,6 @@ public class MenuManager {
 				currentUpdatablePane = matchPane;
 				lastAddedPane = matchPane;
 				mediaPlayer.stop();
-				// TODO Auto-generated method stub
-
 			}
 		};
 		task.startToWork();

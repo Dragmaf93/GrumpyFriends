@@ -14,7 +14,6 @@ public class GameWorldBuilder implements WorldBuilder{
 	@Override
 	public void initializes(String typeWorld) {
 
-//		TODO qui era worldToCreate != null..... doveva starci != ????
 		if (worldToCreate == null)
 			AbstractWorld.setInstanceNull();
 
@@ -70,7 +69,6 @@ public class GameWorldBuilder implements WorldBuilder{
 	}
 	@Override
 	public void addRoundGround(List<Point> points) {
-		// TODO Auto-generated method stub
 		
 	}
 	@Override

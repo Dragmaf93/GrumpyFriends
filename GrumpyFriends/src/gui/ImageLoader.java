@@ -3,9 +3,7 @@ package gui;
 import java.io.File;
 import java.util.HashMap;
 
-import world.World;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class ImageLoader {
 	
@@ -15,11 +13,7 @@ public class ImageLoader {
 	private HashMap<String, Image> previews;
 	private HashMap<String, Image> previewsGround;
 	
-	private HashMap<String, Image> headBlack;
-	private HashMap<String, Image> headWhite;
-	
 	private final static String PATH_IMAGE="file:image/World/";
-	private final static String PATH_IMAGE_HEAD="image/character";
 	private String lastTypeWorld;
 	
 	public ImageLoader() {
@@ -27,9 +21,6 @@ public class ImageLoader {
 		backgrounds = new HashMap<String, Image>();
 		previews = new HashMap<String, Image>();
 		previewsGround = new HashMap<String, Image>();
-		
-		headBlack = new HashMap<String, Image>();
-		headWhite = new HashMap<String, Image>();
 		
 		File dir = new File("image/World/");
 		String[] typeWorlds = dir.list();
@@ -40,31 +31,15 @@ public class ImageLoader {
 				previewsGround.put(typeWorld, new Image(PATH_IMAGE+typeWorld+"/groundPreview.png"));
 		}
 		
-		dir = new File(PATH_IMAGE_HEAD);
-		String[] typeCharacter = dir.list();
-		
-//		for (String typeHead: typeCharacter){
-//			System.out.println(typeHead);
-//			headBlack.put(typeHead, new Image(PATH_IMAGE_HEAD+"Black/"+typeHead));
-//		}
-		
-		dir = new File("image/head/White");
-		String[] typeHeadWhite = dir.list();
-
-//		for (String typeHead: typeHeadWhite)
-//			headWhite.put(typeHead, new Image(PATH_IMAGE_HEAD+"White/"+typeHead));
-		
-	}
-	
-	private void loader() {
-//		TODO inserire immagini
-//		grounds.put("groundPlanetWidth", new Image("file:image/ground/Planet/groundWidth.png"));
-		grounds.put("groundPlanetHeight", new Image("file:image/ground/Planet/g.png"));
-		grounds.put("groundPlanetWidth", new Image("file:image/ground/Planet/g.png"));
-//		grounds.put("groundPlanetCurve", new Image("file:image/ground/Planet/groundCurve.png"));
-		
-		backgrounds.put("Planet", new Image("file:image/background/backgroundAngry.png",1000,1000,false,false));
-	}
+	}	
+//	private void loader() {
+////		grounds.put("groundPlanetWidth", new Image("file:image/ground/Planet/groundWidth.png"));
+//		grounds.put("groundPlanetHeight", new Image("file:image/ground/Planet/g.png"));
+//		grounds.put("groundPlanetWidth", new Image("file:image/ground/Planet/g.png"));
+////		grounds.put("groundPlanetCurve", new Image("file:image/ground/Planet/groundCurve.png"));
+//		
+//		backgrounds.put("Planet", new Image("file:image/background/backgroundAngry.png",1000,1000,false,false));
+//	}
 	
 	public void loadImage(String typeWorld){
 		String path = PATH_IMAGE+typeWorld;
@@ -103,17 +78,5 @@ public class ImageLoader {
 	
 	public Image getImageBackgrounds() {
 		return backgrounds.get(lastTypeWorld);
-	}
-	public static void main(String[] args) {
-		File dir = new File(PATH_IMAGE_HEAD);
-		String[] typeCharacter = dir.list();
-		
-		
-		for (String character: typeCharacter){
-			System.out.println(character);
-			
-			System.out.println("file:"+PATH_IMAGE_HEAD+"/"+character+"Head/left.png");
-			System.out.println("file:"+PATH_IMAGE_HEAD+"/"+character+"Head/right.png");
-		}
 	}
 }

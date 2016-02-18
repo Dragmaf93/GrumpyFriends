@@ -54,8 +54,6 @@ public class MatchTimer {
 	}
 
 	public void restartTimers() {
-		// TODO Auto-generated method stub
-
 	}
 	
 	public void startAttackTimer(){

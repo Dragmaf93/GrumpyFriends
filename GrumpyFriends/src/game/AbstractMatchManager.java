@@ -325,8 +325,6 @@ public abstract class AbstractMatchManager implements MatchManager{
 	}
 
 	protected void endMatch() {
-		// TODO Auto-generated method stub
-
 	}
 
 	public boolean isAppliedDamage() {
