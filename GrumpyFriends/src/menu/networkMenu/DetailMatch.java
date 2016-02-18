@@ -1,6 +1,8 @@
 package menu.networkMenu;
 
+import game.Game;
 import network.InfoMatch;
+import network.NetworkGame;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.input.MouseButton;
@@ -85,7 +87,8 @@ public class DetailMatch extends Pane {
 			public void handle(MouseEvent event) {
 				if (event.getButton() == MouseButton.PRIMARY) {
 					if (networkPage.isUsernameInsert()) {
-						MenuManager.getInstance().setClientType(true);
+						Game game = MenuManager.getInstance().getCurrentGame();
+						((NetworkGame)game).setClientType(true);
 					}
 					else {
 						networkPage.insertPopupUsernameMissing();

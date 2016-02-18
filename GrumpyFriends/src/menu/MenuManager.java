@@ -126,10 +126,6 @@ public class MenuManager {
 		grumpyFriends.getScene().setEventHandler(lastAddedPane);
 	}
 
-	public void setClientType(boolean chooser) {
-		((NetworkGame) networkGame).setClientType(chooser);
-	}
-
 	public void nextPage() {
 		
 		MenuPage page = currentGame.nextPage();
@@ -190,7 +186,8 @@ public class MenuManager {
 		currentUpdatablePane.update();
 	}
 	
-	public void requestUpdateListMatch() {
-		((NetworkGame)networkGame).updateListMatch();
+	public Game getCurrentGame(){
+		return currentGame;
 	}
+	
 }

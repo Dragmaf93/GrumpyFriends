@@ -1,10 +1,12 @@
 package menu.networkMenu;
 
+import game.Game;
 import gui.Popup;
 
 import java.util.List;
 
 import network.InfoMatch;
+import network.NetworkGame;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
@@ -64,7 +66,8 @@ public class NetworkPage extends AbstractMenuPage {
 			public void handle(MouseEvent event) {
 				if (event.getButton() == MouseButton.PRIMARY) {
 					if (isAllInsert()) {
-						MenuManager.getInstance().setClientType(false);
+						Game game = MenuManager.getInstance().getCurrentGame();
+						((NetworkGame)game).setClientType(false);
 						NetworkPage.this.nextPage();
 					}
 				}
@@ -172,7 +175,8 @@ public class NetworkPage extends AbstractMenuPage {
 
 	
 	public void updateListMatch() {
-		MenuManager.getInstance().requestUpdateListMatch();
+		Game game = MenuManager.getInstance().getCurrentGame();
+		((NetworkGame)game).updateListMatch();
 	}
 	
 }
