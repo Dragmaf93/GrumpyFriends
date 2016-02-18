@@ -1,6 +1,7 @@
 /bin/
+.project
+.settings
 .classpath
-.settings/
+.metadata
 .directory
-.gradle/
 /worldXML/
