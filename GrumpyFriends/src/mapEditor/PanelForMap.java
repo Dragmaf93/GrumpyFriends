@@ -67,7 +67,7 @@ public class PanelForMap extends ScrollPane {
 							if (drawingObject.getIsChange())
 								PanelForMap.this.mapEditor.addObjectInListImage();
 							removePanelInsert();
-							PanelForMap.this.mapEditor.setDragged(PanelForMap.this.mapEditor.getDragged());
+//							PanelForMap.this.mapEditor.setDragged(PanelForMap.this.mapEditor.getDragged());
 						}
 					}
 //					vertexModify = false;
@@ -93,7 +93,7 @@ public class PanelForMap extends ScrollPane {
 	        public void handle(MouseEvent event) { 
 	        	if (event.getButton().equals(MouseButton.SECONDARY)) {
 	        		PanelForMap.this.mapEditor.getDragged().addVertex(new Point2D(event.getX(), event.getY()));
-	        		PanelForMap.this.mapEditor.setDragged(PanelForMap.this.mapEditor.getDragged());
+//	        		PanelForMap.this.mapEditor.setDragged(PanelForMap.this.mapEditor.getDragged());
 	        		dragged = PanelForMap.this.mapEditor.getDragged();
 	        		removePanelInsert();
 	        		
@@ -120,7 +120,7 @@ public class PanelForMap extends ScrollPane {
 					if (drawingObject.getIsChange())
 						PanelForMap.this.mapEditor.addObjectInListImage();
 					removePanelInsert();
-					PanelForMap.this.mapEditor.setDragged(PanelForMap.this.mapEditor.getDragged());
+//					PanelForMap.this.mapEditor.setDragged(PanelForMap.this.mapEditor.getDragged());
 				}
 			}
 		});

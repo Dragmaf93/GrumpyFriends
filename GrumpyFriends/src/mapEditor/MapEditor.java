@@ -146,6 +146,7 @@ public class MapEditor extends Pane {
 		isInTheMap = false;
 
 		checkStatusButtonUndo();
+		dragged = null;
 	}
 	
 	public SquarePolygon getDragged() {
