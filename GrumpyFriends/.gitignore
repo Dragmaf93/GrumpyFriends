@@ -1,7 +1,5 @@
-/bin/
-/.project
-.settings
 /.classpath
-.metadata
-/.directory
+/.project
+/bin/
+/.settings/
 /worldXML/
