@@ -42,11 +42,24 @@ public class DetailMatch extends Pane {
 	private InfoMatch infoMatch;
 
 	private NetworkPage networkPage;
-	
+	private Text name;
+	private Text nameMatch;
+	private Text nameUserText;
+	private Text nameUser;
+	private Text numberPlayerText;
+	private Text numberPlayer;
+	private Text worldTypeText;
+	private Text worldType;
+	private Text statusText;
+	private Text status;
+	private Text securityTypeText;
+	private Text securityType;
+	private TextFieldMenu password;
+
 	public DetailMatch(NetworkPage networkPage) {
 
 		this.networkPage = networkPage;
-		
+
 		root = new Pane();
 		root.setPrefSize(Screen.getPrimary().getBounds().getWidth()
 				- PADDING_WIDTH * 5, Screen.getPrimary().getBounds()
@@ -56,8 +69,8 @@ public class DetailMatch extends Pane {
 		rectangleBackground = new Rectangle(
 				root.getPrefWidth() + PADDING_WIDTH, root.getPrefHeight()
 						+ PADDING_HEIGHT);
-		rectangleBackground.setFill(new Color(25d / 255d, 25d / 255d, 34d / 255d,
-				0.9));
+		rectangleBackground.setFill(new Color(25d / 255d, 25d / 255d,
+				34d / 255d, 0.9));
 		rectangleBackground.setStrokeWidth(5);
 		rectangleBackground.setStroke(PageComponent.STROKE_COLOR);
 		rectangleBackground.setArcWidth(20);
@@ -68,8 +81,7 @@ public class DetailMatch extends Pane {
 				PADDING_HEIGHT, PADDING_WIDTH));
 
 		StackPane pa = new StackPane(rectangleBackground, p);
-		pa.setPadding(new Insets(10, PADDING_WIDTH-20, PADDING_HEIGHT,
-				75));
+		pa.setPadding(new Insets(10, PADDING_WIDTH - 20, PADDING_HEIGHT, 75));
 
 		this.getChildren().add(pa);
 		backButton = new MenuButton(130, 40, "Back");
@@ -87,51 +99,71 @@ public class DetailMatch extends Pane {
 			public void handle(MouseEvent event) {
 				if (event.getButton() == MouseButton.PRIMARY) {
 					if (networkPage.isUsernameInsert()) {
-						Game game = MenuManager.getInstance().getCurrentGame();
-						((NetworkGame)game).setClientType(true);
-					}
-					else {
+						if (password.getText().equals(infoMatch.getPassword())) {
+							Game game = MenuManager.getInstance().getCurrentGame();
+							((NetworkGame) game).setClientType(true);
+						}
+						else
+							networkPage.insertPopupWrongPassword();
+						
+					} else {
 						networkPage.insertPopupUsernameMissing();
 					}
 				}
 
 			}
 		});
+
+		inizializeText();
+	}
+
+	private void inizializeText() {
+		nameMatch = new Text("Match Name:");
+		setFontAndColor(nameMatch);
+		name = new Text();
+		setFontAndColorValue(name);
+
+		nameUserText = new Text("Username:");
+		setFontAndColor(nameUserText);
+		nameUser = new Text();
+		setFontAndColorValue(nameUser);
+
+		numberPlayerText = new Text("Number Character:");
+		setFontAndColor(numberPlayerText);
+		numberPlayer = new Text();
+		setFontAndColorValue(numberPlayer);
+
+		worldTypeText = new Text("World Type:");
+		setFontAndColor(worldTypeText);
+		worldType = new Text();
+		setFontAndColorValue(worldType);
+
+		statusText = new Text("Status:");
+		setFontAndColor(statusText);
+		status = new Text();
+		setFontAndColorValue(status);
+
+		securityTypeText = new Text("Security:");
+		setFontAndColor(securityTypeText);
+		securityType = new Text();
+		setFontAndColorValue(securityType);
+		
+		password = new TextFieldMenu(
+				root.getPrefWidth() * 0.4, root.getPrefHeight() * 0.1);
 	}
 
 	public void insertInfo(InfoMatch infoMatch) {
+
 		this.infoMatch = infoMatch;
-		Text nameMatch = new Text("Match Name:");
-		setFontAndColor(nameMatch);
-		Text name = new Text(infoMatch.getMatchName());
-		setFontAndColorValue(name);
+		password.resetTextField();
 
-		Text nameUserText = new Text("Username:");
-		setFontAndColor(nameUserText);
-		Text nameUser = new Text(infoMatch.getUserName());
-		setFontAndColorValue(nameUser);
-
-		Text numberPlayerText = new Text("Number Character:");
-		setFontAndColor(numberPlayerText);
-		Text numberPlayer = new Text(Integer.toString(infoMatch
-				.getCharacterTeamNumber()));
-		setFontAndColorValue(numberPlayer);
-
-		Text worldTypeText = new Text("World Type:");
-		setFontAndColor(worldTypeText);
-		Text worldType = new Text(infoMatch.getWorldType());
-		setFontAndColorValue(worldType);
-
-		Text statusText = new Text("Status:");
-		setFontAndColor(statusText);
-		Text status = new Text(infoMatch.getStatusMatch().toString());
-		setFontAndColorValue(status);
-
-		Text securityTypeText = new Text("Security:");
-		setFontAndColor(securityTypeText);
-		Text securityType = new Text("Public");
-		setFontAndColorValue(securityType);
-
+		name.setText(infoMatch.getMatchName());
+		nameUser.setText(infoMatch.getUserName());
+		numberPlayer.setText(Integer.toString(infoMatch.getCharacterTeamNumber()));
+		worldType.setText(infoMatch.getWorldType());
+		status.setText(infoMatch.getStatusMatch().toString());
+		securityType.setText("Public");
+		
 		label = new VBox(4, nameMatch, nameUserText, numberPlayerText,
 				worldTypeText, statusText, securityTypeText);
 		realValue = new VBox(4, name, nameUser, numberPlayer, worldType,
@@ -147,8 +179,6 @@ public class DetailMatch extends Pane {
 					- PADDING_HEIGHT * 3.6);
 			rectangleBackground
 					.setHeight(root.getPrefHeight() + PADDING_HEIGHT);
-			TextFieldMenu password = new TextFieldMenu(
-					root.getPrefWidth() * 0.4, root.getPrefHeight() * 0.1);
 			label.getChildren().addAll(pass, password);
 		}
 

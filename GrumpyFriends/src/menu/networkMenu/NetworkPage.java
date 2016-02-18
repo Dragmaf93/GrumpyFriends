@@ -127,6 +127,21 @@ public class NetworkPage extends AbstractMenuPage {
 			});
 	}
 
+	public void insertPopupWrongPassword() {
+		messagePopup = new Popup(350, 200, "Wrong Password", "",
+				"Ok");
+		messagePopup.changeColorForNetwork();
+		root.getChildren().add(messagePopup);
+		messagePopup.getRightButton().setOnMouseReleased(
+			new EventHandler<Event>() {
+
+				@Override
+				public void handle(Event event) {
+					root.getChildren().remove(messagePopup);
+				}
+			});
+	}
+	
 	public boolean isUsernameInsert() {
 		if (!userName.isInsertUserName())
 			return false;
