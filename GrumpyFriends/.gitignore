@@ -2,4 +2,5 @@
 .classpath
 .settings/
 .directory
+.gradle/
 /worldXML/
