@@ -1,5 +1,5 @@
 /bin/
-/.classpath
-/.settings/
-/.directory
+.classpath
+.settings/
+.directory
 /worldXML/
