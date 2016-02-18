@@ -120,12 +120,13 @@ public class Client {
 		outToServer
 				.writeBytes(Message.OP_CREATE_MATCH + ";" + matchJson + '\n');
 
-		String response = inFromServer.readLine();
+		String response1 = inFromServer.readLine();
+		if (response1.equals(Message.OP_CONFIRM)) {
 
-		if (response.equals(Message.OP_CONFIRM)) {
-
-			response = inFromServer.readLine();
-			String[] resp = response.split(";");
+			String response2 = inFromServer.readLine();
+			System.out.println(response2);
+			System.out.println("ciao");
+			String[] resp = response2.split(";");
 			if (resp[0].equals(Message.OP_SEND_PLAYER_FOUND)) {
 				ipChooser = resp[1];
 //				socket.close();
