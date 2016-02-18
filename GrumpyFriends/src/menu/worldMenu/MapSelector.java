@@ -8,6 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Orientation;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
@@ -33,7 +34,14 @@ public class MapSelector extends AbstractPageComponent {
 							file.length() - 4)));
 		}
 
-		root.getChildren().addAll(vBox);
+		ScrollPane scrollPane = new ScrollPane();
+		scrollPane.setPrefSize(getWidthComponent(), getHeightComponent()*0.8);
+		scrollPane.getStylesheets().add("file:styles/scrollBar.css");
+		scrollPane.setContent(vBox);
+		scrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
+		scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+		
+		root.getChildren().addAll(scrollPane);
 		vBox.relocate(0, 2.6);
 	}
 
