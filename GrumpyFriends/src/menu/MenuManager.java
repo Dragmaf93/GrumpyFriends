@@ -31,11 +31,11 @@ public class MenuManager {
 
 	private Menu menu;
 	private MenuBackground menuBackground;
-	
+
 	private WaitingPage waitingPage;
 
 	private ImageLoader imageLoader;
-
+	private MatchPane matchPane;
 	// private SequencePage currentSequence;
 
 	private static MenuManager instance;
@@ -50,7 +50,7 @@ public class MenuManager {
 	public Pane getRoot() {
 		return root;
 	}
-	
+
 	public static MenuManager getInstance() {
 		if (instance == null)
 			instance = new MenuManager();
@@ -63,8 +63,8 @@ public class MenuManager {
 	public void initialize(GrumpyFriends grumpyFriends) {
 		this.grumpyFriends = grumpyFriends;
 
-//		mediaPlayer = new MediaPlayerManager();
-//		mediaPlayer.play();
+		// mediaPlayer = new MediaPlayerManager();
+		// mediaPlayer.play();
 		imageLoader = new ImageLoader();
 		menu = new Menu();
 		menuBackground = new MenuBackground();
@@ -73,7 +73,7 @@ public class MenuManager {
 		lastAddedPane = menu;
 		waitingPage = new WaitingPage();
 		currentUpdatablePane = menu;
-		
+
 		root = new Pane(menuBackground, menu);
 	}
 
@@ -89,28 +89,30 @@ public class MenuManager {
 	public void networkGamePressed() {
 		currentGame = networkGame;
 		currentGame.getSequencePages().restartSequence();
-		
+
 	}
-	
-	public void viewLoadingPane(String string){
+
+	public void viewLoadingPane(String string) {
 		waitingPage.setText(string);
 		root.getChildren().remove(lastAddedPane);
 		root.getChildren().add(waitingPage);
-		
+
 	}
-	
-	public void hideLoadingPane(){
+
+	public void hideLoadingPane() {
 		root.getChildren().remove(waitingPage);
-//		lastAddedPane =  (Pane) currentGame.getSequencePages().currentPage();
-		lastAddedPane =  (Pane) currentGame.nextPage();
-		if(lastAddedPane==null) createMatchPane();
-		else
+		// lastAddedPane = (Pane) currentGame.getSequencePages().currentPage();
+		lastAddedPane = (Pane) currentGame.nextPage();
+		if (lastAddedPane == null) {
+			createMatchPane();
+		} else
 			root.getChildren().add(lastAddedPane);
-//		nextPage();
 	}
+
 	public WaitingPage getWaitingPage() {
 		return waitingPage;
 	}
+
 	public void localGamePressed() {
 
 		currentGame = localGame;
@@ -123,11 +125,12 @@ public class MenuManager {
 		mediaPlayer.play();
 		lastAddedPane = menu;
 		currentUpdatablePane = menu;
+		matchPane=null;
 		grumpyFriends.getScene().setEventHandler(lastAddedPane);
 	}
 
 	public void nextPage() {
-		
+
 		MenuPage page = currentGame.nextPage();
 
 		if (page != null) {
@@ -142,18 +145,20 @@ public class MenuManager {
 
 	}
 
-	private void createMatchPane(){
-		currentGame.setUpGame();
-		currentGame.startGame();
-		MatchManager matchManager = currentGame.getMatchManager();
-		MatchPane matchPane = new MatchPane(matchManager);
-		root.getChildren().removeAll(menuBackground, lastAddedPane);
-		root.getChildren().add(matchPane);
-		currentUpdatablePane = matchPane;
-		lastAddedPane = matchPane;
-		mediaPlayer.stop();
-		
+	private void createMatchPane() {
+//		if (matchPane!=null) {
+			currentGame.setUpGame();
+			currentGame.startGame();
+			MatchManager matchManager = currentGame.getMatchManager();
+			matchPane = new MatchPane(matchManager);
+			root.getChildren().removeAll(menuBackground, lastAddedPane);
+			root.getChildren().add(matchPane);
+			currentUpdatablePane = matchPane;
+			lastAddedPane = matchPane;
+			mediaPlayer.stop();
+//		}
 	}
+
 	public void goToMapEditor() {
 
 		root.getChildren().removeAll(menuBackground, lastAddedPane);
@@ -185,9 +190,9 @@ public class MenuManager {
 	public void update() {
 		currentUpdatablePane.update();
 	}
-	
-	public Game getCurrentGame(){
+
+	public Game getCurrentGame() {
 		return currentGame;
 	}
-	
+
 }

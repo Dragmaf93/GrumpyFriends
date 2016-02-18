@@ -18,7 +18,8 @@ import character.Team;
 
 public class Client {
 
-	private final static String IP_SERVER = "127.0.0.1";
+//	private final static String IP_SERVER = "127.0.0.1";
+	private final static String IP_SERVER = "192.168.43.57";
 
 	private Socket socket;
 	private DataOutputStream outToServer;
@@ -129,7 +130,7 @@ public class Client {
 			String[] resp = response2.split(";");
 			if (resp[0].equals(Message.OP_SEND_PLAYER_FOUND)) {
 				ipChooser = resp[1];
-//				socket.close();
+				socket.close();
 				return true;
 			}
 		}
