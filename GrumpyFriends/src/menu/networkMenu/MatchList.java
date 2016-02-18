@@ -4,57 +4,75 @@ import java.util.List;
 
 import network.InfoMatch;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import menu.AbstractPageComponent;
 
 public class MatchList extends AbstractPageComponent {
 
+	private final static int position = 40;
+
 	private List<InfoMatch> infoMatches;
-	private VBox vbox; 
-	
+	private VBox vbox;
+	private Button buttonRefresh;
+
 	public MatchList(NetworkPage networkPage) {
 		super(networkPage);
-		
+
 		vbox = new VBox(10);
-//		root.getChildren().add(new StackPane(vbox));
+		// root.getChildren().add(new StackPane(vbox));
 		vbox.relocate(5, 10);
-		
+
+		buttonRefresh = new Button();
+		buttonRefresh.setStyle("-fx-background-color:transparent");
+		buttonRefresh.setGraphic(new ImageView(new Image(
+				"file:image/Network/refresh.png", 25, 25, false, false)));
+		buttonRefresh.relocate(this.getWidthComponent() - position, -position);
+
+		buttonRefresh.setOnMouseReleased(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				reset();
+				networkPage.updateListMatch();
+			}
+		});
+
 		ScrollPane scrollPane = new ScrollPane();
-		scrollPane.setPrefSize(getWidthComponent(), getHeightComponent()*0.9);
-//		scrollPane.setStyle("-fx-backgroud: transparent; -fx-background-color:transparent;");
+		scrollPane.setPrefSize(getWidthComponent(), getHeightComponent() * 0.9);
+		// scrollPane.setStyle("-fx-backgroud: transparent; -fx-background-color:transparent;");
 		scrollPane.getStylesheets().add("file:styles/scrollBar.css");
 		scrollPane.setContent(vbox);
 		scrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
-		root.getChildren().add(scrollPane);
-	
+		root.getChildren().addAll(buttonRefresh, scrollPane);
+
 	}
 
-	public void setInfoMatchesList(List<InfoMatch> infoMatches){
-		this.infoMatches=infoMatches;
-		
+	public void setInfoMatchesList(List<InfoMatch> infoMatches) {
+		this.infoMatches = infoMatches;
+
 		vbox.getChildren().removeAll();
-		
+
 		for (InfoMatch infoMatch : infoMatches) {
-			MatchListElement m =new MatchListElement(infoMatch);
+			MatchListElement m = new MatchListElement(infoMatch);
 			m.setOnMouseReleased(new EventHandler<MouseEvent>() {
 
 				@Override
 				public void handle(MouseEvent event) {
-					((NetworkPage) menuPage).getDetailMatch().insertInfo(infoMatch);
+					((NetworkPage) menuPage).getDetailMatch().insertInfo(
+							infoMatch);
 					((NetworkPage) menuPage).getDetailMatch().setVisible(true);
 				}
 			});
 			vbox.getChildren().add(m);
-		}	
+		}
 	}
-	
+
 	@Override
 	public double getHeightComponent() {
 		return 440;
@@ -72,7 +90,8 @@ public class MatchList extends AbstractPageComponent {
 
 	@Override
 	public void reset() {
-		infoMatches.clear();
+		if (infoMatches != null)
+			infoMatches.clear();
 		vbox.getChildren().clear();
 	}
 

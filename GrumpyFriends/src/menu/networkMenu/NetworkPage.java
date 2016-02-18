@@ -170,4 +170,9 @@ public class NetworkPage extends AbstractMenuPage {
 
 	}
 
+	
+	public void updateListMatch() {
+		MenuManager.getInstance().requestUpdateListMatch();
+	}
+	
 }

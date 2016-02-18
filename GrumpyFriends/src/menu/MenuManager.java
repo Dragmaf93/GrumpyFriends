@@ -181,4 +181,8 @@ public class MenuManager {
 	public void update() {
 		currentUpdatablePane.update();
 	}
+	
+	public void requestUpdateListMatch() {
+		((NetworkGame)networkGame).updateListMatch();
+	}
 }

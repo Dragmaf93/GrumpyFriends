@@ -232,4 +232,14 @@ public class NetworkGame extends AbtractGame {
 	public void disconnetToServer() throws IOException {
 		client.closeConnection();
 	}
+	
+	public void updateListMatch() {
+		List<InfoMatch> matches;
+		try {
+			matches = client.requestMatchList();
+			((NetworkPage) networkPage).setList(matches);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

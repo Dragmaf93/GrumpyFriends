@@ -68,7 +68,7 @@ public class Server {
 		Server server = new Server();
 		
 		server.addMatch(new InfoMatch("a", "a", 2, true, "a"),null);
-		server.addMatch(new InfoMatch("b", "b", 2, true, "b"),null);
+		server.addMatch(new InfoMatch("b", "b", 2, false, "b"),null);
 		server.addMatch(new InfoMatch("c", "c", 2, true, "c"),null);
 
 		
