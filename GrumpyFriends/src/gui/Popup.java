@@ -110,6 +110,19 @@ public class Popup extends Group{
 		windowBackGround.getChildren().removeAll(leftButton,horizontal);
 	}
 	
+	public void changeColorForNetwork() {
+		windowRectangle.setFill(new Color(0d / 255d, 0d / 255d, 0d / 255d,
+				0.9));
+		
+		rightButton.setDimension(windowRectangle.getWidth());
+		window.relocate(root.getPrefWidth()/3-windowRectangle.getWidth()/3, 
+				root.getPrefHeight()/3-windowRectangle.getHeight()/2);
+		
+		rightButton.relocate(windowRectangle.getLayoutX(), windowRectangle.getLayoutY()+windowRectangle.getHeight()*2/3+0.5);
+		
+		windowBackGround.getChildren().removeAll(leftButton,horizontal);
+	}
+	
 	public void changeColor() {
 		windowRectangle.setFill(Color.CADETBLUE);
 		

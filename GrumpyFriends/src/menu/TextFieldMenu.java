@@ -39,8 +39,11 @@ public class TextFieldMenu extends Pane {
 		
 	}
 	
-	public String getText(){
+	public String getText() {
 		return textField.getText();
 	}
 	
+	public void resetTextField() {
+		textField.clear();
+	}
 }
