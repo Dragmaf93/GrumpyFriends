@@ -40,13 +40,10 @@ public class WaitingPage extends AbstractMenuPage {
 	}
 	@Override
 	public void nextPage() {
-		
 	}
 
 	@Override
 	public void backPage() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

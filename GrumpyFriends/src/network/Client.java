@@ -44,7 +44,7 @@ public class Client {
 	}
 
 	public List<InfoMatch> requestMatchList() throws IOException {
-		System.out.println("HO RICHIESTO LA LISTA MATCH");
+//		System.out.println("HO RICHIESTO LA LISTA MATCH");
 		outToServer.writeBytes(Message.OP_REQUEST_LIST + '\n');
 
 		List<InfoMatch> listMatch = new ArrayList<InfoMatch>();
@@ -110,7 +110,6 @@ public class Client {
 	}
 
 	public void closeConnection() throws IOException {
-		System.out.println("Chiudo socket");
 		outToServer.writeBytes(Message.CLOSE+'\n');
 		if(inFromServer.readLine().equals(Message.CLOSE))
 			socket.close();

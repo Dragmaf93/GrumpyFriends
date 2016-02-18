@@ -31,7 +31,6 @@ public class MiniServer extends Thread {
     public MiniServer(Socket socket, Server server) {
 
         super("MiniServer");
-        System.out.println("Mi creo "+ipClient);
         this.socket = socket;
         this.server = server;
 
@@ -49,8 +48,6 @@ public class MiniServer extends Thread {
     public void run() {
     	  
         while(!socket.isClosed()) { 
-        	System.out.println("Attendo");
-
         		try {
         			
         		if (inFromClient.ready())
@@ -64,6 +61,7 @@ public class MiniServer extends Thread {
 				e.printStackTrace();
 			}
         } 
+        System.out.println("CHIUDI MINI SERVER");
         server.removeMiniServer(ipClient);
     	
     }

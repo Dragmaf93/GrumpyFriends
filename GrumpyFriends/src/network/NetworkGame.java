@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import com.sun.glass.ui.Menu;
+
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.scene.paint.Color;
 import character.Character;
 import menu.GameBean;
@@ -11,9 +16,11 @@ import menu.MenuManager;
 import menu.MenuPage;
 import menu.SequencePage;
 import menu.networkMenu.NetworkPage;
+import menu.networkMenu.WaitingPage;
 import menu.teamMenu.TeamPage;
 import menu.worldMenu.WorldPage;
 import game.AbtractGame;
+import game.GameTask;
 import game.LocalMatchManager;
 import game.MatchManager;
 
@@ -24,6 +31,8 @@ public class NetworkGame extends AbtractGame {
 	private SequencePage chooserSequence;
 	private MenuPage networkPage;
 	private TeamPage teamPage;
+	
+	private StateNetworkGame state;
 
 	public NetworkGame() {
 		client = new Client();
@@ -36,6 +45,7 @@ public class NetworkGame extends AbtractGame {
 		chooserSequence = new SequencePage(networkPage, teamPage);
 
 		sequencePages = chooserSequence;
+		state = StateNetworkGame.DISCONNECTED;
 	}
 
 	@Override
@@ -167,33 +177,51 @@ public class NetworkGame extends AbtractGame {
 
 	@Override
 	public MenuPage nextPage() {
-		MenuPage page = sequencePages.currentPage();
 
-//		if (page == null) {
-//			List<InfoMatch> matches;
-//			try {
-//				matches = client.requestMatchList();
-//				((NetworkPage) networkPage).setList(matches);
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
+		if (state == StateNetworkGame.DISCONNECTED) {
+			GameTask task = new GameTask() {
+				
+				@Override
+				protected void work() {
+					try {
+						client.connectToServer();
+						List<InfoMatch> matches;
+						try {
+							matches = client.requestMatchList();
+							((NetworkPage) networkPage).setList(matches);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				@Override
+				protected void afterWork() {
+					MenuManager.getInstance().hideLoadingPane();
+					state=StateNetworkGame.CONNECT;
+				}
+			};
+			task.startToWork();
 
+		MenuManager.getInstance().getWaitingPage().setText("Caricamento");
+		return MenuManager.getInstance().getWaitingPage();
+		}
 		return sequencePages.nextPage();
 	}
 
 	@Override
 	public MenuPage prevPage() {
 		MenuPage page = sequencePages.currentPage();
-		
-//		if(page == networkPage){
-//			try {
-//				client.closeConnection();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
+		if(state == StateNetworkGame.CONNECT && page==networkPage){
+			try {
+				client.closeConnection();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			state = StateNetworkGame.DISCONNECTED;
+		}
 		return sequencePages.prevPage();
 	}
 

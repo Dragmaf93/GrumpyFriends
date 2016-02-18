@@ -89,32 +89,11 @@ public class MenuManager {
 	public void networkGamePressed() {
 		currentGame = networkGame;
 		currentGame.getSequencePages().restartSequence();
-//		Task<Void> task = new Task<Void>() {
-//			
-//			@Override
-//			protected Void call() throws Exception {
-//				try {
-//					((NetworkGame) networkGame).connectToServer();
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//				return null;
-//			}			
-//		};
-//		task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-//			
-//			@Override
-//			public void handle(WorkerStateEvent arg0) {
-//				System.out.println("connesso");
-//			}
-//		});
-//		new Thread(task).start();
 		
 	}
 	
 	public void viewLoadingPane(String string){
 		waitingPage.setText(string);
-		System.out.println(lastAddedPane+"  "+ waitingPage);
 		root.getChildren().remove(lastAddedPane);
 		root.getChildren().add(waitingPage);
 		
@@ -122,9 +101,12 @@ public class MenuManager {
 	
 	public void hideLoadingPane(){
 		root.getChildren().remove(waitingPage);
+		lastAddedPane =  (Pane) currentGame.nextPage();
 		root.getChildren().add(lastAddedPane);
 	}
-	
+	public WaitingPage getWaitingPage() {
+		return waitingPage;
+	}
 	public void localGamePressed() {
 
 		currentGame = localGame;
@@ -158,14 +140,11 @@ public class MenuManager {
 			currentGame.startGame();
 			MatchManager matchManager = currentGame.getMatchManager();
 			MatchPane matchPane = new MatchPane(matchManager);
-			// MainScene scene = new
-			// MainScene(matchPane,Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight());
 			root.getChildren().removeAll(menuBackground, lastAddedPane);
 			root.getChildren().add(matchPane);
 			currentUpdatablePane = matchPane;
 			lastAddedPane = matchPane;
 			mediaPlayer.stop();
-			// grumpyFriends.setScene(scene);
 		}
 		grumpyFriends.getScene().setEventHandler(lastAddedPane);
 
