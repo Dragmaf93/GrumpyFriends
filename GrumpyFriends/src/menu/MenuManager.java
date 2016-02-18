@@ -4,6 +4,11 @@ import java.io.IOException;
 
 import network.NetworkGame;
 import mapEditor.MapEditor;
+import menu.networkMenu.WaitingPage;
+import menu.worldMenu.WorldPage;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import game.Game;
@@ -26,6 +31,8 @@ public class MenuManager {
 
 	private Menu menu;
 	private MenuBackground menuBackground;
+	
+	private WaitingPage waitingPage;
 
 	private ImageLoader imageLoader;
 
@@ -43,7 +50,7 @@ public class MenuManager {
 	public Pane getRoot() {
 		return root;
 	}
-
+	
 	public static MenuManager getInstance() {
 		if (instance == null)
 			instance = new MenuManager();
@@ -64,8 +71,9 @@ public class MenuManager {
 		localGame = new LocalGame();
 		networkGame = new NetworkGame();
 		lastAddedPane = menu;
+		waitingPage = new WaitingPage();
 		currentUpdatablePane = menu;
-
+		
 		root = new Pane(menuBackground, menu);
 	}
 

@@ -169,19 +169,11 @@ public class NetworkGame extends AbtractGame {
 	public MenuPage nextPage() {
 		MenuPage page = sequencePages.currentPage();
 
-		if (page == null) {
-			List<InfoMatch> matches;
-			try {
-				matches = client.requestMatchList();
-				((NetworkPage) networkPage).setList(matches);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-//		else if (page == teamPage) {
+//		if (page == null) {
+//			List<InfoMatch> matches;
 //			try {
-//				client.sendInfoTeam(teamPage.getGameBean());
+//				matches = client.requestMatchList();
+//				((NetworkPage) networkPage).setList(matches);
 //			} catch (IOException e) {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();

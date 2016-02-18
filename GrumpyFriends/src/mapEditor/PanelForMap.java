@@ -55,7 +55,7 @@ public class PanelForMap extends ScrollPane {
 	        	movedObject = false;
 	        	
 	        	if (event.getClickCount() == 2) {
-//					removePanelInsert();
+					removePanelInsert();
 					
 					if (PanelForMap.this.mapEditor.getDragged() != null) {
 						if (((Node) PanelForMap.this.mapEditor.getDragged()).contains(new Point2D(event.getX(), event.getY()))) {
