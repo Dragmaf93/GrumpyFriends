@@ -115,20 +115,6 @@ public class NetworkGame extends AbtractGame {
 
 	@Override
 	public void setUpGame() {
-
-		if (!client.imAChooser()) {
-			
-			List<MenuPage> menuPages = sequencePages.getMenuPages();
-			InfoMatch match = beanToInfoMatch(menuPages.get(0).getGameBean());
-			match.setWorldType(menuPages.get(1).getGameBean()
-					.getFirstValue("WorldType"));
-
-			try {
-				client.createMatch(match);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	private InfoMatch beanToInfoMatch(GameBean bean) {
@@ -155,7 +141,7 @@ public class NetworkGame extends AbtractGame {
 				if (client.chooseMatch(((NetworkPage) networkPage)
 						.getDetailMatch().getInfoMatch()))
 					flag = true;
-
+				state=StateNetworkGame.CHOOSED_MATCH;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -169,6 +155,7 @@ public class NetworkGame extends AbtractGame {
 				MenuManager.getInstance().nextPage();
 
 		} else if (!chooser && sequencePages != creatorSequence) {
+			state=StateNetworkGame.CREATED_MATCH;
 			sequencePages = creatorSequence;
 			sequencePages.nextPage();
 		}
@@ -177,10 +164,9 @@ public class NetworkGame extends AbtractGame {
 
 	@Override
 	public MenuPage nextPage() {
-
+		MenuPage page = sequencePages.currentPage();
 		if (state == StateNetworkGame.DISCONNECTED) {
 			GameTask task = new GameTask() {
-				
 				@Override
 				protected void work() {
 					try {
@@ -199,15 +185,48 @@ public class NetworkGame extends AbtractGame {
 				
 				@Override
 				protected void afterWork() {
-					MenuManager.getInstance().hideLoadingPane();
 					state=StateNetworkGame.CONNECT;
+					MenuManager.getInstance().hideLoadingPane();
 				}
 			};
 			task.startToWork();
 
-		MenuManager.getInstance().getWaitingPage().setText("Caricamento");
-		return MenuManager.getInstance().getWaitingPage();
+			MenuManager.getInstance().getWaitingPage().setText("Caricamento...");
+			return MenuManager.getInstance().getWaitingPage();
 		}
+		else if(state == StateNetworkGame.CREATED_MATCH &&
+				page == teamPage){
+			System.out.println("MATCH CREATOO");
+			GameTask task = new GameTask() {
+				
+				@Override
+				protected void work() {
+					try {
+						List<MenuPage> menuPages = sequencePages.getMenuPages();
+						InfoMatch match = beanToInfoMatch(menuPages.get(0).getGameBean());
+						match.setWorldType(menuPages.get(1).getGameBean()
+								.getFirstValue("WorldType"));
+						client.createMatch(match);
+						System.out.println("ciao");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				@Override
+				protected void afterWork() {					
+					System.out.println("FINE MATCH CREATOO");
+					state = StateNetworkGame.WAITING_OPPONENT;
+					MenuManager.getInstance().hideLoadingPane();
+				}
+			};
+			
+			task.startToWork();
+
+			MenuManager.getInstance().getWaitingPage().setText("In attesa di un avversario...");
+			return MenuManager.getInstance().getWaitingPage();
+		}
+		
 		return sequencePages.nextPage();
 	}
 

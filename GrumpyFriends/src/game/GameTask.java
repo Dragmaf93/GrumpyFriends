@@ -21,7 +21,7 @@ public abstract class GameTask{
 			}
 		};
 		
-		task.setOnScheduled(new EventHandler<WorkerStateEvent>() {
+		task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 			
 			@Override
 			public void handle(WorkerStateEvent arg0) {
