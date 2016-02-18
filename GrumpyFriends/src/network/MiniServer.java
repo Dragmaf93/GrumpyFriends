@@ -49,8 +49,10 @@ public class MiniServer extends Thread {
     public void run() {
     	  
         while(!socket.isClosed()) { 
-    
-        	try {
+        	System.out.println("Attendo");
+
+        		try {
+        			
         		if (inFromClient.ready())
         			doOperation(inFromClient.readLine());
 

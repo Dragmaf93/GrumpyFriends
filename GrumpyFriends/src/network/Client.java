@@ -110,7 +110,10 @@ public class Client {
 	}
 
 	public void closeConnection() throws IOException {
-		socket.close();
+		System.out.println("Chiudo socket");
+		outToServer.writeBytes(Message.CLOSE+'\n');
+		if(inFromServer.readLine().equals(Message.CLOSE))
+			socket.close();
 	}
 
 	public boolean createMatch(InfoMatch match) throws IOException {
