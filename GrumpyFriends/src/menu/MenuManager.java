@@ -27,6 +27,47 @@ import gui.UpdatablePane;
 
 public class MenuManager {
 
+	private final class CreateMatchPaneTask extends GameTask {
+		@Override
+		protected void work() throws IOException {
+			currentGame.startGame();
+			MatchManager matchManager = currentGame.getMatchManager();
+			matchPane = new MatchPane(matchManager);
+
+		}
+
+		@Override
+		protected void afterWork() {
+			root.getChildren().removeAll(menuBackground, lastAddedPane);
+			root.getChildren().add(matchPane);
+			currentUpdatablePane = matchPane;
+			lastAddedPane = matchPane;
+			grumpyFriends.getScene().setEventHandler(lastAddedPane);
+
+//				mediaPlayer.stop();
+		}
+
+		@Override
+		protected void handleException() {
+			MenuManager.getInstance().addExceptionPopup(exceptionPopup);
+			exceptionPopup.getRightButton().setOnMouseReleased(
+				new EventHandler<MouseEvent>() {
+
+					@Override
+					public void handle(MouseEvent event) {
+						if (event.getButton() == MouseButton.PRIMARY) {
+							MenuManager.getInstance().previousPage();
+							MenuManager.getInstance().previousPage();
+							MenuManager.getInstance().previousPage();
+							MenuManager.getInstance()
+									.removeExceptionPopup(
+											exceptionPopup);
+						}
+					}
+				});
+		}
+	}
+
 	private GrumpyFriends grumpyFriends;
 
 	private Pane root;
@@ -171,48 +212,7 @@ public class MenuManager {
 		lastAddedPane = waitingPage;
 		waitingPage.setText("Creazione partita...");
 		root.getChildren().add(waitingPage);
-		GameTask task = new GameTask() {
-
-
-			@Override
-			protected void work() throws IOException {
-				currentGame.startGame();
-				MatchManager matchManager = currentGame.getMatchManager();
-				matchPane = new MatchPane(matchManager);
-
-			}
-
-			@Override
-			protected void afterWork() {
-				root.getChildren().removeAll(menuBackground, lastAddedPane);
-				root.getChildren().add(matchPane);
-				currentUpdatablePane = matchPane;
-				lastAddedPane = matchPane;
-				grumpyFriends.getScene().setEventHandler(lastAddedPane);
-
-//				mediaPlayer.stop();
-			}
-
-			@Override
-			protected void handleException() {
-				MenuManager.getInstance().addExceptionPopup(exceptionPopup);
-				exceptionPopup.getRightButton().setOnMouseReleased(
-					new EventHandler<MouseEvent>() {
-
-						@Override
-						public void handle(MouseEvent event) {
-							if (event.getButton() == MouseButton.PRIMARY) {
-								MenuManager.getInstance().previousPage();
-								MenuManager.getInstance().previousPage();
-								MenuManager.getInstance().previousPage();
-								MenuManager.getInstance()
-										.removeExceptionPopup(
-												exceptionPopup);
-							}
-						}
-					});
-			}
-		};
+		GameTask task = new CreateMatchPaneTask();
 		task.startToWork();
 	}
 

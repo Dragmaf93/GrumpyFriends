@@ -29,6 +29,85 @@ import gui.Popup;
 
 public class NetworkGame extends AbtractGame {
 
+	private final class ConnectionTask extends GameTask {
+		@Override
+		protected void work() throws IOException {
+
+			client.connectToServer();
+			List<InfoMatch> matches;
+			matches = client.requestMatchList();
+			((NetworkPage) networkPage).setList(matches);
+		}
+
+		@Override
+		protected void afterWork() {
+			state = StateNetworkGame.CONNECT;
+			MenuManager.getInstance().hideLoadingPane();
+		}
+
+		@Override
+		protected void handleException() {
+			MenuManager.getInstance()
+					.addExceptionPopup(exceptionServer);
+			exceptionServer.getRightButton().setOnMouseReleased(
+					new EventHandler<MouseEvent>() {
+
+						@Override
+						public void handle(MouseEvent event) {
+							if (event.getButton() == MouseButton.PRIMARY) {
+								MenuManager.getInstance()
+										.previousPage();
+								MenuManager.getInstance()
+										.removeExceptionPopup(
+												exceptionServer);
+							}
+						}
+					});
+		}
+	}
+
+	private final class CreateMatchTask extends GameTask {
+		@Override
+		protected void work() throws IOException {
+			List<MenuPage> menuPages = sequencePages.getMenuPages();
+			InfoMatch match = beanToInfoMatch(menuPages.get(0)
+					.getGameBean());
+			match.setWorldType(menuPages.get(1).getGameBean()
+					.getFirstValue("WorldType"));
+			client.createMatch(match);
+		}
+
+		@Override
+		protected void afterWork() {
+			state = StateNetworkGame.WAITING_OPPONENT;
+			MenuManager.getInstance().hideLoadingPane();
+		}
+
+		@Override
+		protected void handleException() {
+			MenuManager.getInstance()
+					.addExceptionPopup(exceptionServer);
+			exceptionServer.getRightButton().setOnMouseReleased(
+					new EventHandler<MouseEvent>() {
+
+						@Override
+						public void handle(MouseEvent event) {
+							if (event.getButton() == MouseButton.PRIMARY) {
+								MenuManager.getInstance()
+										.previousPage();
+								MenuManager.getInstance()
+										.previousPage();
+								MenuManager.getInstance()
+										.previousPage();
+								MenuManager.getInstance()
+										.removeExceptionPopup(
+												exceptionServer);
+							}
+						}
+					});
+		}
+	}
+
 	private Client client;
 	private SequencePage creatorSequence;
 	private SequencePage chooserSequence;
@@ -191,90 +270,14 @@ public class NetworkGame extends AbtractGame {
 	public MenuPage nextPage() {
 		MenuPage page = sequencePages.currentPage();
 		if (!client.isConnected() && page==null) {
-			GameTask task = new GameTask() {
-				@Override
-				protected void work() throws IOException {
-
-					client.connectToServer();
-					List<InfoMatch> matches;
-					matches = client.requestMatchList();
-					((NetworkPage) networkPage).setList(matches);
-				}
-
-				@Override
-				protected void afterWork() {
-					state = StateNetworkGame.CONNECT;
-					MenuManager.getInstance().hideLoadingPane();
-				}
-
-				@Override
-				protected void handleException() {
-					MenuManager.getInstance()
-							.addExceptionPopup(exceptionServer);
-					exceptionServer.getRightButton().setOnMouseReleased(
-							new EventHandler<MouseEvent>() {
-
-								@Override
-								public void handle(MouseEvent event) {
-									if (event.getButton() == MouseButton.PRIMARY) {
-										MenuManager.getInstance()
-												.previousPage();
-										MenuManager.getInstance()
-												.removeExceptionPopup(
-														exceptionServer);
-									}
-								}
-							});
-				}
-			};
+			GameTask task = new ConnectionTask();
 
 			task.startToWork();
 			MenuManager.getInstance().getWaitingPage()
 					.setText("Connection...");
 			return MenuManager.getInstance().getWaitingPage();
 		} else if (state == StateNetworkGame.CREATED_MATCH && page == teamPage) {
-			GameTask task = new GameTask() {
-
-				@Override
-				protected void work() throws IOException {
-					List<MenuPage> menuPages = sequencePages.getMenuPages();
-					InfoMatch match = beanToInfoMatch(menuPages.get(0)
-							.getGameBean());
-					match.setWorldType(menuPages.get(1).getGameBean()
-							.getFirstValue("WorldType"));
-					client.createMatch(match);
-				}
-
-				@Override
-				protected void afterWork() {
-					state = StateNetworkGame.WAITING_OPPONENT;
-					MenuManager.getInstance().hideLoadingPane();
-				}
-
-				@Override
-				protected void handleException() {
-					MenuManager.getInstance()
-							.addExceptionPopup(exceptionServer);
-					exceptionServer.getRightButton().setOnMouseReleased(
-							new EventHandler<MouseEvent>() {
-
-								@Override
-								public void handle(MouseEvent event) {
-									if (event.getButton() == MouseButton.PRIMARY) {
-										MenuManager.getInstance()
-												.previousPage();
-										MenuManager.getInstance()
-												.previousPage();
-										MenuManager.getInstance()
-												.previousPage();
-										MenuManager.getInstance()
-												.removeExceptionPopup(
-														exceptionServer);
-									}
-								}
-							});
-				}
-			};
+			GameTask task = new CreateMatchTask();
 
 			task.startToWork();
 

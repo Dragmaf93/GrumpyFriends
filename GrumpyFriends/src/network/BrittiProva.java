@@ -68,7 +68,10 @@ public class BrittiProva extends Application {
 		
 		primaryStage.setTitle("Grumpy Friends");
 		
-		Multiplayer multiplayer= matchManager.getMultiplayer();
+		Multiplayer multiplayer=new Multiplayer();		
+		matchManager.setMultiplayer(multiplayer);
+		multiplayer.setMatchManager(matchManager);
+		multiplayer.setIps("127.0.0.1", "127.0.0.1");
 		multiplayer.joinToMatch();
 
 		MatchPane matchPane = new MatchPane(matchManager);

@@ -107,7 +107,6 @@ public class MiniServer extends Thread {
 				InfoMatch match = InfoMatch.jsonToInfoMatch(matchJson);
 				server.addMatch(match,socket.getInetAddress().getHostAddress());
 				
-				
 				outToClient.writeBytes(Message.OP_CONFIRM+'\n');
 			}
 			finally {

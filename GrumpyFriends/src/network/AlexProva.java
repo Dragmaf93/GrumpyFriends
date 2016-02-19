@@ -65,9 +65,12 @@ public class AlexProva extends Application {
 		playerA.setStartedPosition(100,100);
 		playerB.setStartedPosition(110,100);
 		// ui
-		Multiplayer multiplayer = matchManager.getMultiplayer();
+		Multiplayer multiplayer = new Multiplayer();
+		matchManager.setMultiplayer(multiplayer);
+		multiplayer.setMatchManager(matchManager);
+		multiplayer.setIps("127.0.0.1", "127.0.0.1");
 		multiplayer.createMatch();
-		
+
 		
 		primaryStage.setTitle("Grumpy Friends");
 		
