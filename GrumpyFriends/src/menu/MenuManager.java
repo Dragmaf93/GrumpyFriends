@@ -10,6 +10,8 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import game.Game;
 import game.GameTask;
@@ -137,7 +139,7 @@ public class MenuManager {
 	public void goToMainMenu() {
 		root.getChildren().remove(lastAddedPane);
 		root.getChildren().addAll(menuBackground, menu);
-		mediaPlayer.play();
+//		mediaPlayer.play();
 		lastAddedPane = menu;
 		currentUpdatablePane = menu;
 		matchPane = null;
@@ -170,7 +172,7 @@ public class MenuManager {
 		GameTask task = new GameTask() {
 
 			@Override
-			protected void work() {
+			protected void work() throws IOException {
 				currentGame.setUpGame();
 				currentGame.startGame();
 				MatchManager matchManager = currentGame.getMatchManager();
@@ -184,12 +186,30 @@ public class MenuManager {
 				root.getChildren().add(matchPane);
 				currentUpdatablePane = matchPane;
 				lastAddedPane = matchPane;
-				mediaPlayer.stop();
+				grumpyFriends.getScene().setEventHandler(lastAddedPane);
+
+//				mediaPlayer.stop();
 			}
 
 			@Override
 			protected void handleException() {
-
+				System.out.println("CECE");
+//				MenuManager.getInstance().addExceptionPopup(exceptionOpponentConnection);
+//				exceptionOpponentConnection.getRightButton().setOnMouseReleased(
+//					new EventHandler<MouseEvent>() {
+//
+//						@Override
+//						public void handle(MouseEvent event) {
+//							if (event.getButton() == MouseButton.PRIMARY) {
+//								MenuManager.getInstance().previousPage();
+//								MenuManager.getInstance().previousPage();
+//								MenuManager.getInstance().previousPage();
+//								MenuManager.getInstance()
+//										.removeExceptionPopup(
+//												exceptionOpponentConnection);
+//							}
+//						}
+//					});
 			}
 		};
 		task.startToWork();

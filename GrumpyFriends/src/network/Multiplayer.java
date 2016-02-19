@@ -1,6 +1,7 @@
 package network;
 
 import game.MatchManager;
+import gui.Popup;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -15,10 +16,19 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+
+
+
+
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import menu.GameBean;
+import menu.MenuManager;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.glass.ui.Menu;
 import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 import character.Character;
@@ -34,7 +44,9 @@ public class Multiplayer {
 	private BufferedReader inFromServer;
 	private DataOutputStream outputStream;
 	private MatchManager matchManager;
-
+	
+	private Popup exception;
+	
 	private int portNumber = 6789;
 
 	private String ipChooser;
@@ -53,6 +65,19 @@ public class Multiplayer {
 	public Multiplayer() {
 		this.mapper = new ObjectMapper();
 		gameBeans = new ArrayList<GameBean>();
+		exception = new Popup(400, 180, "Connection refused", null, "OK");
+		exception.getRightButton().setOnMouseReleased(
+				new EventHandler<MouseEvent>() {
+
+					@Override
+					public void handle(MouseEvent event) {
+						if (event.getButton() == MouseButton.PRIMARY) {
+							MenuManager.getInstance().goToMainMenu();
+							MenuManager.getInstance().removeExceptionPopup(
+									exception);
+						}
+					}
+				});
 	}
 
 	public void setMatchManager(MatchManager matchManager) {
@@ -84,7 +109,8 @@ public class Multiplayer {
 								doOperation(inFromClient.readLine());
 						}
 					} catch (IOException e) {
-						e.printStackTrace();
+						matchManager.pauseMatch();
+						MenuManager.getInstance().addExceptionPopup(exception);
 					}
 				}
 			}).start();
@@ -105,14 +131,14 @@ public class Multiplayer {
 			System.out.println(outputStream);
 	}
 
-	public void sendOperationMessage(String ope, String proprieta) {
-		try {
-			System.out.println("Operazione" + ope + " " + proprieta + " "
-					+ outputStream);
-			outputStream.writeBytes(ope + ";" + proprieta + '\n');
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void sendOperationMessage(String ope, String proprieta){
+		
+			try {
+				outputStream.writeBytes(ope + ";" + proprieta + '\n');
+			} catch (IOException e) {
+				matchManager.pauseMatch();
+				MenuManager.getInstance().addExceptionPopup(exception);
+			}
 
 	}
 
@@ -136,7 +162,6 @@ public class Multiplayer {
 	}
 
 	private void doOperation(String operazione) throws UnknownHostException, IOException {
-		System.out.println(operazione);
 		String[] op = operazione.split(";");
 
 		switch (op[0]) {
@@ -221,7 +246,8 @@ public class Multiplayer {
 							if (inFromClient.ready())
 								doOperation(inFromClient.readLine());
 						} catch (IOException e) {
-							e.printStackTrace();
+							matchManager.pauseMatch();
+							MenuManager.getInstance().addExceptionPopup(exception);
 						}
 
 					}

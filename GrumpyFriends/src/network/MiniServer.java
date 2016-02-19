@@ -39,7 +39,6 @@ public class MiniServer extends Thread {
 			outToClient = new DataOutputStream(socket.getOutputStream()); 
 			ipClient = socket.getInetAddress().getHostAddress();
         } catch (IOException e) {
-        	e.printStackTrace();
         } 
         
         mapper = new ObjectMapper();
@@ -58,7 +57,6 @@ public class MiniServer extends Thread {
         		}
         		
 			} catch (IOException e) {
-				e.printStackTrace();
 			}
         } 
         System.out.println("CHIUDI MINI SERVER");
@@ -67,7 +65,7 @@ public class MiniServer extends Thread {
     }
 
 	private void doOperation(String message) throws IOException {
-		System.out.println("MESSAGE ARRIVA"+message);
+//		System.out.println("MESSAGE ARRIVA"+message);
 		String [] operation = message.split(";");
 		
 		switch (operation[0]) {
@@ -139,7 +137,6 @@ public class MiniServer extends Thread {
 		try {
 			return mapper.writeValueAsString(matches);
 		} catch (JsonProcessingException e) {
-			e.printStackTrace();
 		}
 		return null;
 	}

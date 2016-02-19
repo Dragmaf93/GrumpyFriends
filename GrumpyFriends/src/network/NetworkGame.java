@@ -61,8 +61,7 @@ public class NetworkGame extends AbtractGame {
 	}
 
 	@Override
-	public void startGame() {
-		try {
+	public void startGame() throws IOException {
 			Multiplayer multiplayer = new Multiplayer();
 			multiplayer.setIps(client.getIpChooser(), client.getIpCreator());
 
@@ -117,24 +116,7 @@ public class NetworkGame extends AbtractGame {
 			positionCharacter();
 
 			matchManager.startMatch();
-		} catch (IOException e) {
-			MenuManager.getInstance().addExceptionPopup(exceptionOpponentConnection);
-			exceptionOpponentConnection.getRightButton().setOnMouseReleased(
-				new EventHandler<MouseEvent>() {
-
-					@Override
-					public void handle(MouseEvent event) {
-						if (event.getButton() == MouseButton.PRIMARY) {
-							MenuManager.getInstance().previousPage();
-							MenuManager.getInstance().previousPage();
-							MenuManager.getInstance().previousPage();
-							MenuManager.getInstance()
-									.removeExceptionPopup(
-											exceptionOpponentConnection);
-						}
-					}
-				});
-		}
+			
 	}
 
 	@Override

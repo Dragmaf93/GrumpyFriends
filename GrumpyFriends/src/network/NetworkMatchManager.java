@@ -1,5 +1,7 @@
 package network;
 
+import java.io.IOException;
+
 import character.Character;
 import world.World;
 import game.AbstractMatchManager;
@@ -23,9 +25,8 @@ public class NetworkMatchManager extends AbstractMatchManager {
 	public void moveCurrentPlayer(int direction) {
 		currentPlayer.move(direction);
 
-		if (direction == Character.LEFT){
-			multiplayer.sendOperationMessage(Message.OP_MOVE_LEFT, null);
-		}
+		if (direction == Character.LEFT)
+				multiplayer.sendOperationMessage(Message.OP_MOVE_LEFT, null);
 		else
 			
 			multiplayer.sendOperationMessage(Message.OP_MOVE_RIGHT, null);

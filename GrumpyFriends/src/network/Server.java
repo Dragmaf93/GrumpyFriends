@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -53,7 +54,21 @@ public class Server {
 		return matchesList.get(id);
 	}
 	public void removeMiniServer(String ipClient){
+		
 		miniServerList.remove(ipClient);
+		
+		if(ipCreator.containsValue(ipClient)){
+			Set<Integer> keySet = ipCreator.keySet();
+			System.out.println(matchesList.size());
+			for (Integer integer : keySet) {
+				if(ipCreator.get(integer).equals(ipClient)){
+					System.out.println(integer);
+					matchesList.remove(integer);
+					break;
+				}
+			}
+		}
+		System.out.println(matchesList.size());
 	}
 	public void takeLock() {
 		lock.lock();

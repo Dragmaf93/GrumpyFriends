@@ -18,8 +18,8 @@ import character.Team;
 
 public class Client {
 
-	private final static String IP_SERVER = "127.0.0.1";
-//	private final static String IP_SERVER = "192.168.43.57";
+//	private final static String IP_SERVER = "127.0.0.1";
+	private final static String IP_SERVER = "192.168.43.148";
 
 	private Socket socket;
 	private DataOutputStream outToServer;
@@ -85,7 +85,7 @@ public class Client {
 
 		if (resp[0].equals(Message.OP_CONFIRM)) {
 			ipCreator = resp[1];
-//			socket.close();
+			closeConnection();
 			return true;
 		}
 		return false;
@@ -128,9 +128,9 @@ public class Client {
 			String[] resp = response2.split(";");
 			if (resp[0].equals(Message.OP_SEND_PLAYER_FOUND)) {
 				ipChooser = resp[1];
-//				socket.close();
+				closeConnection();
 				return true;
-			}
+			}	
 		}
 		return false;
 	}
