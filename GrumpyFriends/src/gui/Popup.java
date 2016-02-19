@@ -40,7 +40,7 @@ public class Popup extends Group{
 	public Popup(double width, double height,String questionString,String buttonLeftText,String buttonRightText) {
 		
 		windowRectangle = new Rectangle(width, height);
-		windowRectangle.setFill(null);
+		windowRectangle.setFill(new Color(0d / 255d, 0d / 255d, 0d / 255d,0.9));
 		windowRectangle.setArcHeight(20);
 		windowRectangle.setArcWidth(20);
 		windowRectangle.setStroke(STROKE_COLOR);
@@ -56,6 +56,7 @@ public class Popup extends Group{
 				windowRectangle.getLayoutY()+windowRectangle.getHeight()*2/3);
 		vertical.setStroke(STROKE_COLOR);
 		vertical.setStrokeWidth(4);
+		
 		horizontal = new Line(windowRectangle.getLayoutX()+windowRectangle.getWidth()/2,
 				windowRectangle.getLayoutY()+windowRectangle.getHeight()*2/3+0.5,
 				windowRectangle.getLayoutX()+windowRectangle.getWidth()/2,
@@ -66,7 +67,7 @@ public class Popup extends Group{
 		rightButton = new PopupButton(width*0.5-3, height/3-2,buttonRightText);
 		leftButton = new PopupButton(width*0.5-3, height/3-2,buttonLeftText);
 		
-		questionText.setFill(Color.WHITE);
+		questionText.setFill(PageComponent.HEADER_TEXT_COLOR);
 		questionText.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,windowRectangle.getHeight()/6));
 		
 		windowBackGround = new Pane(windowRectangle,rightButton,leftButton,vertical,horizontal,questionText);
@@ -88,6 +89,20 @@ public class Popup extends Group{
 		window.relocate(root.getPrefWidth()/2-windowRectangle.getWidth()/2, root.getPrefHeight()/2-windowRectangle.getHeight()/2);
 		this.getChildren().add(root);
 		
+		if(buttonLeftText==null || buttonLeftText.equals("")){
+			rightButton.setDimension(windowRectangle.getWidth());
+			rightButton.relocate(windowRectangle.getLayoutX(), windowRectangle.getLayoutY()+windowRectangle.getHeight()*2/3+0.5);
+			
+			windowBackGround.getChildren().removeAll(leftButton,horizontal);
+		}
+		if(buttonRightText==null || buttonRightText.equals("")){
+			leftButton.setDimension(windowRectangle.getWidth());
+			leftButton.relocate(windowRectangle.getLayoutX(), windowRectangle.getLayoutY()+windowRectangle.getHeight()*2/3+0.5);
+			
+			windowBackGround.getChildren().removeAll(rightButton,horizontal);
+			
+		}
+		
 	}
 	
 	public Node getLeftButton(){
@@ -101,13 +116,6 @@ public class Popup extends Group{
 	public void changeColorForMissingValue() {
 		windowRectangle.setFill(Color.CADETBLUE);
 		
-		rightButton.setDimension(windowRectangle.getWidth());
-		window.relocate(root.getPrefWidth()/3-windowRectangle.getWidth()/3, 
-				root.getPrefHeight()/3-windowRectangle.getHeight()/2);
-		
-		rightButton.relocate(windowRectangle.getLayoutX(), windowRectangle.getLayoutY()+windowRectangle.getHeight()*2/3+0.5);
-		
-		windowBackGround.getChildren().removeAll(leftButton,horizontal);
 	}
 	
 	public void changeColorForNetwork() {
@@ -121,13 +129,5 @@ public class Popup extends Group{
 		rightButton.relocate(windowRectangle.getLayoutX(), windowRectangle.getLayoutY()+windowRectangle.getHeight()*2/3+0.5);
 		
 		windowBackGround.getChildren().removeAll(leftButton,horizontal);
-	}
-	
-	public void changeColor() {
-		windowRectangle.setFill(Color.CADETBLUE);
-		
-		window.relocate(root.getPrefWidth()/3-windowRectangle.getWidth()/3, 
-				root.getPrefHeight()/3-windowRectangle.getHeight()/2);
-		
 	}
 }

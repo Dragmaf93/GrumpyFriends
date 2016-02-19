@@ -20,6 +20,7 @@ import game.MatchManager;
 import game.MediaPlayerManager;
 import gui.ImageLoader;
 import gui.MatchPane;
+import gui.Popup;
 import gui.UpdatablePane;
 
 public class MenuManager {
@@ -93,10 +94,23 @@ public class MenuManager {
 
 	}
 
+	public void addExceptionPopup(Popup node) {
+		if (!root.getChildren().contains(node))
+			root.getChildren().add(node);
+	}
+
+	public void removeExceptionPopup(Popup node) {
+		root.getChildren().remove(node);
+	}
+
 	public void viewLoadingPane(String string) {
 		waitingPage.setText(string);
 		root.getChildren().remove(lastAddedPane);
 		root.getChildren().add(waitingPage);
+
+	}
+
+	public void removeWaintingPane() {
 
 	}
 
@@ -171,6 +185,11 @@ public class MenuManager {
 				currentUpdatablePane = matchPane;
 				lastAddedPane = matchPane;
 				mediaPlayer.stop();
+			}
+
+			@Override
+			protected void handleException() {
+
 			}
 		};
 		task.startToWork();

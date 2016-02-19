@@ -71,7 +71,7 @@ public class MatchList extends AbstractPageComponent {
 	public void setInfoMatchesList(List<InfoMatch> infoMatches) {
 		this.infoMatches = infoMatches;
 
-		vbox.getChildren().removeAll();
+		vbox.getChildren().clear();
 
 		for (InfoMatch infoMatch : infoMatches) {
 			MatchListElement m = new MatchListElement(infoMatch);
@@ -81,7 +81,9 @@ public class MatchList extends AbstractPageComponent {
 				public void handle(MouseEvent event) {
 					((NetworkPage) menuPage).getDetailMatch().insertInfo(
 							infoMatch);
+					
 					((NetworkPage) menuPage).getDetailMatch().setVisible(true);
+					System.out.println("VEDO");
 				}
 			});
 			vbox.getChildren().add(m);
@@ -107,7 +109,6 @@ public class MatchList extends AbstractPageComponent {
 	public void reset() {
 		if (infoMatches != null)
 			infoMatches.clear();
-		vbox.getChildren().clear();
 	}
 
 	@Override

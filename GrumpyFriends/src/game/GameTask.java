@@ -1,5 +1,7 @@
 package game;
 
+import java.io.IOException;
+
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -11,7 +13,7 @@ public abstract class GameTask{
 	public GameTask() {
 	}
 
-	public void startToWork(){
+	public void startToWork() {
 		task = new Task<Void>() {
 			
 			@Override
@@ -30,8 +32,17 @@ public abstract class GameTask{
 		});
 		
 		new Thread(task).start();
+		
+		task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+			
+			@Override
+			public void handle(WorkerStateEvent arg0) {
+				handleException();
+			}
+		});
 	}
 	
-	abstract protected void work();
+	abstract protected void work() throws IOException;
 	abstract protected void afterWork();
+	abstract protected void handleException();
 }

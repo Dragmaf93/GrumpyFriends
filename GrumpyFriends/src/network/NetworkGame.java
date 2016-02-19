@@ -9,6 +9,8 @@ import com.sun.glass.ui.Menu;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import character.Character;
 import menu.GameBean;
@@ -36,6 +38,9 @@ public class NetworkGame extends AbtractGame {
 	private List<GameBean> gamebeans;
 	private StateNetworkGame state;
 
+	private Popup exceptionServer;
+	private Popup exceptionOpponentConnection;
+
 	public NetworkGame() {
 		client = new Client();
 
@@ -48,6 +53,11 @@ public class NetworkGame extends AbtractGame {
 
 		sequencePages = chooserSequence;
 		state = StateNetworkGame.DISCONNECTED;
+
+		exceptionServer = new Popup(400, 180, "Server not reacheble", null,
+				"Ok");
+		exceptionOpponentConnection = new Popup(400, 180, "Connection refused", null, "OK");
+
 	}
 
 	@Override
@@ -59,9 +69,6 @@ public class NetworkGame extends AbtractGame {
 			if (client.imAChooser()) {
 				multiplayer.joinToMatch();
 				GameBean teamInfo = teamPage.getGameBean();
-				// MenuManager.getInstance().getWaitingPage()
-				// .setText("Creazione partita ...");
-
 				multiplayer.sendOperationMessage(Message.OP_SEND_INFO_TEAM,
 						teamInfo.toJSON());
 				gamebeans = multiplayer.getGameBean();
@@ -111,8 +118,22 @@ public class NetworkGame extends AbtractGame {
 
 			matchManager.startMatch();
 		} catch (IOException e) {
-			// TODO errore di connes...
-			e.printStackTrace();
+			MenuManager.getInstance().addExceptionPopup(exceptionOpponentConnection);
+			exceptionOpponentConnection.getRightButton().setOnMouseReleased(
+				new EventHandler<MouseEvent>() {
+
+					@Override
+					public void handle(MouseEvent event) {
+						if (event.getButton() == MouseButton.PRIMARY) {
+							MenuManager.getInstance().previousPage();
+							MenuManager.getInstance().previousPage();
+							MenuManager.getInstance().previousPage();
+							MenuManager.getInstance()
+									.removeExceptionPopup(
+											exceptionOpponentConnection);
+						}
+					}
+				});
 		}
 	}
 
@@ -152,8 +173,20 @@ public class NetworkGame extends AbtractGame {
 					state = StateNetworkGame.CHOOSED_MATCH;
 				}
 			} catch (IOException e) {
-				// TODO server non ragg
-				e.printStackTrace();
+				MenuManager.getInstance().addExceptionPopup(exceptionServer);
+				exceptionServer.getRightButton().setOnMouseReleased(
+						new EventHandler<MouseEvent>() {
+
+							@Override
+							public void handle(MouseEvent event) {
+								if (event.getButton() == MouseButton.PRIMARY) {
+									MenuManager.getInstance().previousPage();
+									MenuManager.getInstance()
+											.removeExceptionPopup(
+													exceptionServer);
+								}
+							}
+						});
 			}
 
 			if (sequencePages != chooserSequence) {
@@ -176,18 +209,15 @@ public class NetworkGame extends AbtractGame {
 	public MenuPage nextPage() {
 		MenuPage page = sequencePages.currentPage();
 		if (state == StateNetworkGame.DISCONNECTED) {
+
 			GameTask task = new GameTask() {
 				@Override
-				protected void work() {
-					try {
-						client.connectToServer();
-						List<InfoMatch> matches;
-						matches = client.requestMatchList();
-						((NetworkPage) networkPage).setList(matches);
-					} catch (IOException e) {
-						//TODO server non raggiungibile
-						e.printStackTrace();
-					}
+				protected void work() throws IOException {
+
+					client.connectToServer();
+					List<InfoMatch> matches;
+					matches = client.requestMatchList();
+					((NetworkPage) networkPage).setList(matches);
 				}
 
 				@Override
@@ -195,36 +225,73 @@ public class NetworkGame extends AbtractGame {
 					state = StateNetworkGame.CONNECT;
 					MenuManager.getInstance().hideLoadingPane();
 				}
+
+				@Override
+				protected void handleException() {
+					MenuManager.getInstance()
+							.addExceptionPopup(exceptionServer);
+					exceptionServer.getRightButton().setOnMouseReleased(
+							new EventHandler<MouseEvent>() {
+
+								@Override
+								public void handle(MouseEvent event) {
+									if (event.getButton() == MouseButton.PRIMARY) {
+										MenuManager.getInstance()
+												.previousPage();
+										MenuManager.getInstance()
+												.removeExceptionPopup(
+														exceptionServer);
+									}
+								}
+							});
+				}
 			};
+
 			task.startToWork();
-			
 			MenuManager.getInstance().getWaitingPage()
 					.setText("Caricamento...");
 			return MenuManager.getInstance().getWaitingPage();
 		} else if (state == StateNetworkGame.CREATED_MATCH && page == teamPage) {
-			System.out.println("MATCH CREATOO");
 			GameTask task = new GameTask() {
 
 				@Override
-				protected void work() {
-					try {
-						List<MenuPage> menuPages = sequencePages.getMenuPages();
-						InfoMatch match = beanToInfoMatch(menuPages.get(0)
-								.getGameBean());
-						match.setWorldType(menuPages.get(1).getGameBean()
-								.getFirstValue("WorldType"));
-						client.createMatch(match);
-						System.out.println("ciao");
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+				protected void work() throws IOException {
+					List<MenuPage> menuPages = sequencePages.getMenuPages();
+					InfoMatch match = beanToInfoMatch(menuPages.get(0)
+							.getGameBean());
+					match.setWorldType(menuPages.get(1).getGameBean()
+							.getFirstValue("WorldType"));
+					client.createMatch(match);
 				}
 
 				@Override
 				protected void afterWork() {
-					System.out.println("FINE MATCH CREATOO");
 					state = StateNetworkGame.WAITING_OPPONENT;
 					MenuManager.getInstance().hideLoadingPane();
+				}
+
+				@Override
+				protected void handleException() {
+					MenuManager.getInstance()
+							.addExceptionPopup(exceptionServer);
+					exceptionServer.getRightButton().setOnMouseReleased(
+							new EventHandler<MouseEvent>() {
+
+								@Override
+								public void handle(MouseEvent event) {
+									if (event.getButton() == MouseButton.PRIMARY) {
+										MenuManager.getInstance()
+												.previousPage();
+										MenuManager.getInstance()
+												.previousPage();
+										MenuManager.getInstance()
+												.previousPage();
+										MenuManager.getInstance()
+												.removeExceptionPopup(
+														exceptionServer);
+									}
+								}
+							});
 				}
 			};
 
@@ -265,8 +332,19 @@ public class NetworkGame extends AbtractGame {
 			matches = client.requestMatchList();
 			((NetworkPage) networkPage).setList(matches);
 		} catch (IOException e) {
-			//TODO server irr...
-			e.printStackTrace();
+			MenuManager.getInstance().addExceptionPopup(exceptionServer);
+			exceptionServer.getRightButton().setOnMouseReleased(
+					new EventHandler<MouseEvent>() {
+
+						@Override
+						public void handle(MouseEvent event) {
+							if (event.getButton() == MouseButton.PRIMARY) {
+								MenuManager.getInstance().previousPage();
+								MenuManager.getInstance().removeExceptionPopup(
+										exceptionServer);
+							}
+						}
+					});
 		}
 	}
 }

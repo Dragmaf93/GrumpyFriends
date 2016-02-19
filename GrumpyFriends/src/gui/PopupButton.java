@@ -27,11 +27,9 @@ public class PopupButton extends Group{
 		
 		rectangle = new Rectangle(width,height);
 		rectangle.setFill(Color.TRANSPARENT);
-//		rectangle.setArcHeight(20);
-//		rectangle.setArcWidth(20);
 		
 		text = new Text();
-		text.setFill(Color.WHITE);
+		text.setFill(PageComponent.HEADER_TEXT_COLOR);
 		text.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, height/3));
 		text.setText(textString);
 		
@@ -59,11 +57,6 @@ public class PopupButton extends Group{
 			}
 		});
 	}
-	
-//	public void changeColor(Color color) {
-//		text.setFill(color);
-////		STROKE_COLOR = Color.AQUAMARINE;
-//	}
 	
 	public void setDimension(double width) {
 		rectangle.setWidth(width);

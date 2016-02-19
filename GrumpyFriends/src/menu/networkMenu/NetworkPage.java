@@ -49,9 +49,6 @@ public class NetworkPage extends AbstractMenuPage {
 			public void handle(MouseEvent event) {
 				if (event.getButton() == MouseButton.PRIMARY) {
 					MenuManager.getInstance().previousPage();
-					matchList.reset();
-					createMatchPane.reset();
-					userName.reset();
 				}
 			}
 		});
@@ -67,7 +64,7 @@ public class NetworkPage extends AbstractMenuPage {
 				if (event.getButton() == MouseButton.PRIMARY) {
 					if (isAllInsert()) {
 						Game game = MenuManager.getInstance().getCurrentGame();
-						((NetworkGame)game).setClientType(false);
+						((NetworkGame) game).setClientType(false);
 						NetworkPage.this.nextPage();
 					}
 				}
@@ -90,11 +87,30 @@ public class NetworkPage extends AbstractMenuPage {
 	private boolean isAllInsert() {
 
 		if (!createMatchPane.isAllInsert()) {
-			messagePopup = new Popup(300, 200, "Missing Value", "",
-					"Ok");
+			messagePopup = new Popup(300, 200, "Missing Value", "", "Ok");
 			messagePopup.changeColorForNetwork();
 			root.getChildren().add(messagePopup);
 			messagePopup.getRightButton().setOnMouseReleased(
+					new EventHandler<Event>() {
+
+						@Override
+						public void handle(Event event) {
+							root.getChildren().remove(messagePopup);
+						}
+					});
+		} else if (!userName.isInsertUserName()) {
+			insertPopupUsernameMissing();
+		} else {
+			return true;
+		}
+		return false;
+	}
+
+	public void insertPopupUsernameMissing() {
+		messagePopup = new Popup(350, 200, "Missing Username", "", "Ok");
+		messagePopup.changeColorForNetwork();
+		root.getChildren().add(messagePopup);
+		messagePopup.getRightButton().setOnMouseReleased(
 				new EventHandler<Event>() {
 
 					@Override
@@ -102,46 +118,22 @@ public class NetworkPage extends AbstractMenuPage {
 						root.getChildren().remove(messagePopup);
 					}
 				});
-		}
-		else if (!userName.isInsertUserName()) {
-			insertPopupUsernameMissing();
-		}
-		else  {
-			return true;
-		}
-		return false;
-	}
-	
-	public void insertPopupUsernameMissing() {
-		messagePopup = new Popup(350, 200, "Missing Username", "",
-				"Ok");
-		messagePopup.changeColorForNetwork();
-		root.getChildren().add(messagePopup);
-		messagePopup.getRightButton().setOnMouseReleased(
-			new EventHandler<Event>() {
-
-				@Override
-				public void handle(Event event) {
-					root.getChildren().remove(messagePopup);
-				}
-			});
 	}
 
 	public void insertPopupWrongPassword() {
-		messagePopup = new Popup(350, 200, "Wrong Password", "",
-				"Ok");
+		messagePopup = new Popup(350, 200, "Wrong Password", "", "Ok");
 		messagePopup.changeColorForNetwork();
 		root.getChildren().add(messagePopup);
 		messagePopup.getRightButton().setOnMouseReleased(
-			new EventHandler<Event>() {
+				new EventHandler<Event>() {
 
-				@Override
-				public void handle(Event event) {
-					root.getChildren().remove(messagePopup);
-				}
-			});
+					@Override
+					public void handle(Event event) {
+						root.getChildren().remove(messagePopup);
+					}
+				});
 	}
-	
+
 	public boolean isUsernameInsert() {
 		if (!userName.isInsertUserName())
 			return false;
@@ -168,7 +160,13 @@ public class NetworkPage extends AbstractMenuPage {
 
 	@Override
 	public void reset() {
+		matchList.reset();
+		createMatchPane.reset();
+		userName.reset();
+		detailMatch.setVisible(false);
 
+		if (root.getChildren().contains(messagePopup))
+			root.getChildren().remove(messagePopup);
 	}
 
 	@Override
@@ -188,10 +186,9 @@ public class NetworkPage extends AbstractMenuPage {
 
 	}
 
-	
 	public void updateListMatch() {
 		Game game = MenuManager.getInstance().getCurrentGame();
-		((NetworkGame)game).updateListMatch();
+		((NetworkGame) game).updateListMatch();
 	}
-	
+
 }
