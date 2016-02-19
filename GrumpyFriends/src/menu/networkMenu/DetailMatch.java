@@ -55,6 +55,7 @@ public class DetailMatch extends Pane {
 	private Text securityTypeText;
 	private Text securityType;
 	private TextFieldMenu password;
+	private Text pass;
 
 	public DetailMatch(NetworkPage networkPage) {
 
@@ -90,8 +91,10 @@ public class DetailMatch extends Pane {
 		backButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				if (event.getButton() == MouseButton.PRIMARY)
+				if (event.getButton() == MouseButton.PRIMARY) {
 					setVisible(false);
+					label.getChildren().removeAll(pass,password);
+				}
 			}
 		});
 		connectButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
@@ -172,7 +175,7 @@ public class DetailMatch extends Pane {
 		boolean isPrivate = infoMatch.isPrivateMatch();
 		if (isPrivate) {
 			securityType.setText("Private");
-			Text pass = new Text("Password");
+			pass = new Text("Password");
 			setFontAndColor(pass);
 
 			root.setPrefHeight(Screen.getPrimary().getBounds().getHeight()
