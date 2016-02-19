@@ -281,7 +281,7 @@ public abstract class AbstractCharacter implements Character {
 	}
 
 	@Override
-	public void move(int direction) {
+	public synchronized void move(int direction) {
 		if (!grounded)
 			return;
 

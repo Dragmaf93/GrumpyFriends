@@ -18,7 +18,7 @@ import character.Team;
 
 public class Client {
 
-//	private final static String IP_SERVER = "127.0.0.1";
+	// private final static String IP_SERVER = "127.0.0.1";
 	private final static String IP_SERVER = "192.168.43.148";
 
 	private Socket socket;
@@ -31,6 +31,8 @@ public class Client {
 
 	private boolean imAChooser;
 
+	private boolean connected;
+
 	public Client() {
 		mapper = new ObjectMapper();
 	}
@@ -41,11 +43,12 @@ public class Client {
 		outToServer = new DataOutputStream(socket.getOutputStream());
 		inFromServer = new BufferedReader(new InputStreamReader(
 				socket.getInputStream()));
+		connected = true;
 
 	}
 
 	public List<InfoMatch> requestMatchList() throws IOException {
-//		System.out.println("HO RICHIESTO LA LISTA MATCH");
+		// System.out.println("HO RICHIESTO LA LISTA MATCH");
 		outToServer.writeBytes(Message.OP_REQUEST_LIST + '\n');
 
 		List<InfoMatch> listMatch = new ArrayList<InfoMatch>();
@@ -56,6 +59,10 @@ public class Client {
 			listMatch.add(InfoMatch.jsonToInfoMatch(jsonNode));
 
 		return listMatch;
+	}
+
+	public boolean isConnected() {
+		return connected;
 	}
 
 	public InfoMatch requestInfoMatch(InfoMatch matchChoosed)
@@ -95,10 +102,10 @@ public class Client {
 		this.imAChooser = imAChooser;
 	}
 
-//	public void sendInfoTeam(GameBean gameBean) throws IOException {
-//		outToServer.writeBytes(Message.OP_SEND_INFO_TEAM + ";"
-//				+ gameBean.toJSON() + "\n");
-//	}
+	// public void sendInfoTeam(GameBean gameBean) throws IOException {
+	// outToServer.writeBytes(Message.OP_SEND_INFO_TEAM + ";"
+	// + gameBean.toJSON() + "\n");
+	// }
 
 	public GameBean requestInfoTeam() throws IOException {
 		outToServer.writeBytes(Message.OP_REQUEST_INFO_TEAM);
@@ -111,9 +118,12 @@ public class Client {
 	}
 
 	public void closeConnection() throws IOException {
-		outToServer.writeBytes(Message.CLOSE+'\n');
-		if(inFromServer.readLine().equals(Message.CLOSE))
+		outToServer.writeBytes(Message.CLOSE + '\n');
+		if (inFromServer.readLine().equals(Message.CLOSE)) {
 			socket.close();
+			connected = false;
+			System.out.println("CIOA MI CHIDU");
+		}
 	}
 
 	public boolean createMatch(InfoMatch match) throws IOException {
@@ -130,7 +140,7 @@ public class Client {
 				ipChooser = resp[1];
 				closeConnection();
 				return true;
-			}	
+			}
 		}
 		return false;
 	}

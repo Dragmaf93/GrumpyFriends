@@ -190,8 +190,7 @@ public class NetworkGame extends AbtractGame {
 	@Override
 	public MenuPage nextPage() {
 		MenuPage page = sequencePages.currentPage();
-		if (state == StateNetworkGame.DISCONNECTED) {
-
+		if (!client.isConnected() && page==null) {
 			GameTask task = new GameTask() {
 				@Override
 				protected void work() throws IOException {
@@ -231,7 +230,7 @@ public class NetworkGame extends AbtractGame {
 
 			task.startToWork();
 			MenuManager.getInstance().getWaitingPage()
-					.setText("Caricamento...");
+					.setText("Connection...");
 			return MenuManager.getInstance().getWaitingPage();
 		} else if (state == StateNetworkGame.CREATED_MATCH && page == teamPage) {
 			GameTask task = new GameTask() {

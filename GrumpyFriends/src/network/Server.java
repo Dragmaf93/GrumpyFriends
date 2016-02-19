@@ -55,20 +55,16 @@ public class Server {
 	}
 	public void removeMiniServer(String ipClient){
 		
-		miniServerList.remove(ipClient);
-		
 		if(ipCreator.containsValue(ipClient)){
 			Set<Integer> keySet = ipCreator.keySet();
-			System.out.println(matchesList.size());
 			for (Integer integer : keySet) {
-				if(ipCreator.get(integer).equals(ipClient)){
-					System.out.println(integer);
+				if(ipClient.equals(ipCreator.get(integer))){
 					matchesList.remove(integer);
 					break;
 				}
 			}
+			miniServerList.remove(ipClient);
 		}
-		System.out.println(matchesList.size());
 	}
 	public void takeLock() {
 		lock.lock();

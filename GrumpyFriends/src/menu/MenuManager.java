@@ -36,6 +36,8 @@ public class MenuManager {
 	private Menu menu;
 	private MenuBackground menuBackground;
 
+	private Popup exceptionPopup;
+
 	private WaitingPage waitingPage;
 
 	private ImageLoader imageLoader;
@@ -77,7 +79,7 @@ public class MenuManager {
 		lastAddedPane = menu;
 		waitingPage = new WaitingPage();
 		currentUpdatablePane = menu;
-
+		exceptionPopup = new Popup(400, 180, "Error", null, "Ok");
 		root = new Pane(menuBackground, menu);
 	}
 
@@ -171,9 +173,9 @@ public class MenuManager {
 		root.getChildren().add(waitingPage);
 		GameTask task = new GameTask() {
 
+
 			@Override
 			protected void work() throws IOException {
-				currentGame.setUpGame();
 				currentGame.startGame();
 				MatchManager matchManager = currentGame.getMatchManager();
 				matchPane = new MatchPane(matchManager);
@@ -193,23 +195,22 @@ public class MenuManager {
 
 			@Override
 			protected void handleException() {
-				System.out.println("CECE");
-//				MenuManager.getInstance().addExceptionPopup(exceptionOpponentConnection);
-//				exceptionOpponentConnection.getRightButton().setOnMouseReleased(
-//					new EventHandler<MouseEvent>() {
-//
-//						@Override
-//						public void handle(MouseEvent event) {
-//							if (event.getButton() == MouseButton.PRIMARY) {
-//								MenuManager.getInstance().previousPage();
-//								MenuManager.getInstance().previousPage();
-//								MenuManager.getInstance().previousPage();
-//								MenuManager.getInstance()
-//										.removeExceptionPopup(
-//												exceptionOpponentConnection);
-//							}
-//						}
-//					});
+				MenuManager.getInstance().addExceptionPopup(exceptionPopup);
+				exceptionPopup.getRightButton().setOnMouseReleased(
+					new EventHandler<MouseEvent>() {
+
+						@Override
+						public void handle(MouseEvent event) {
+							if (event.getButton() == MouseButton.PRIMARY) {
+								MenuManager.getInstance().previousPage();
+								MenuManager.getInstance().previousPage();
+								MenuManager.getInstance().previousPage();
+								MenuManager.getInstance()
+										.removeExceptionPopup(
+												exceptionPopup);
+							}
+						}
+					});
 			}
 		};
 		task.startToWork();
