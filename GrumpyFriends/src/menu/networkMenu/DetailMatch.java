@@ -102,7 +102,7 @@ public class DetailMatch extends Pane {
 			public void handle(MouseEvent event) {
 				if (event.getButton() == MouseButton.PRIMARY) {
 					if (networkPage.isUsernameInsert()) {
-						if (password.getText().equals(infoMatch.getPassword())) {
+						if (infoMatch.isPrivateMatch() && password.getText().equals(infoMatch.getPassword())) {
 							Game game = MenuManager.getInstance().getCurrentGame();
 							((NetworkGame) game).setClientType(true);
 						}
