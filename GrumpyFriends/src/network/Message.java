@@ -7,7 +7,7 @@ public abstract class Message {
 	public final static String OP_REQUEST_INFO_TEAM = "RT";
 	public final static String OP_REQUEST_INFO_WORLD = "RW";
 	public final static String OP_SELECT_MATCH = "SM";
-	public final static String OP_SEND_INFO_TEAM = "ST";
+	public final static String OP_SEND_INFO_TEAM_TO_CHOOSER = "STCH";
 	public final static String OP_CREATE_MATCH = "CM";
 	
 	public final static String OP_SEND_PLAYER_FOUND = "PF";
@@ -29,5 +29,7 @@ public abstract class Message {
 
 	public final static String SERVER_READY = "SR";
 	public final static String CLOSE ="CL";
+	public static final String OP_SEND_INFO_TEAM_TO_CREATOR = "STCR";
+	public static final String WORLD_STATUS = "WS";
 	
 }

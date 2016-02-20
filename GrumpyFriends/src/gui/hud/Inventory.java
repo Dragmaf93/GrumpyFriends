@@ -177,7 +177,7 @@ public class Inventory extends AbstractHudElement {
 
 	@Override
 	public void draw() {
-		if(matchManager.isTheCurrentTurnEnded() && !hide)
+		if(matchManager.isCurrentTurnEnded() && !hide)
 			hide();
 
 	}

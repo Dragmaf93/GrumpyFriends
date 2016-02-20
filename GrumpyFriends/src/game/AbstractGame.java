@@ -14,7 +14,7 @@ import character.Team;
 import menu.GameBean;
 import menu.SequencePage;
 
-public abstract class AbtractGame implements Game {
+public abstract class AbstractGame implements Game {
 
 	protected SequencePage sequencePages;
 	protected List<Team> teams;
@@ -24,10 +24,12 @@ public abstract class AbtractGame implements Game {
 	
 	protected MatchManager matchManager;
 	protected WorldBuilder worldBuilder;
+	protected List<GameBean> beans;
 	
-	public AbtractGame() {
+	public AbstractGame() {
 		teams = new ArrayList<Team>();
 		characters = new ArrayList<Character>();
+		beans = new ArrayList<>();
 	}
 
 	@Override
@@ -45,10 +47,15 @@ public abstract class AbtractGame implements Game {
 	}
 
 	@Override
+	public void addBean(GameBean bean) {
+		beans.add(bean);
+	}
+	
+	@Override
 	public MatchManager getMatchManager() {
 		return matchManager;
 	}
-
+	
 	protected void extractData(GameBean bean) {
 
 		String beanName = bean.getNameBean();

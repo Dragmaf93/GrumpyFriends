@@ -1,4 +1,4 @@
-package network;
+package network.server;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -7,6 +7,10 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+
+import network.InfoMatch;
+import network.Message;
+import network.StatusMatch;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -65,28 +69,22 @@ public class MiniServer extends Thread {
     }
 
 	private void doOperation(String message) throws IOException {
-		System.out.println("MESSAGE ARRIVA "+message);
 		String [] operation = message.split(";");
 		
 		switch (operation[0]) {
 		case Message.OP_REQUEST_LIST:
-			System.out.println("REQUEST LISTA MATCH");
 			String matches = toJSON(server.getMatchesList());
 			outToClient.writeBytes(matches + '\n');
-			break;
-		case Message.OP_REQUEST_INFO_MATCH:
-			System.out.println("REQUEST INFO MATCH");
 			break;
 		case Message.OP_SELECT_MATCH:
 			try {
 				server.takeLock();
-				System.out.println("SELECT MATCH");
 				InfoMatch match = server.getInfoMatch(Integer.parseInt(operation[1]));
 				if (match.getStatusMatch() == StatusMatch.WAITING) {
-					outToClient.writeBytes(Message.OP_CONFIRM+";"+server.getIpCreator(match.getId())+'\n');
+					int port = server.getMatchServerPort((match.getId()));
+					outToClient.writeBytes(Message.OP_CONFIRM+";"
+							+socket.getLocalAddress().getHostAddress()+";"+port+'\n');
 					match.setStatusMatch(StatusMatch.BUILDING);
-					MiniServer miniServer = server.getMiniServer(server.getIpCreator(match.getId()));
-					miniServer.sendMessagePlayerFound(socket.getInetAddress().getHostAddress());
 				}
 				else
 					outToClient.writeBytes(Message.OP_ERROR+";null\n");
@@ -94,9 +92,6 @@ public class MiniServer extends Thread {
 			finally {
 				server.releaseLock();
 			}
-			break;
-		case Message.OP_SEND_INFO_TEAM:
-			System.out.println("SEND INFO TEAM");
 			break;
 		case Message.OP_CREATE_MATCH:
 			try {
@@ -106,18 +101,13 @@ public class MiniServer extends Thread {
 				JsonNode matchJson = mapper.readTree(operation[1]);
 				InfoMatch match = InfoMatch.jsonToInfoMatch(matchJson);
 				server.addMatch(match,socket.getInetAddress().getHostAddress());
-				
-				outToClient.writeBytes(Message.OP_CONFIRM+'\n');
+				int port = server.addMatchServers(match.getId());
+				outToClient.writeBytes(Message.OP_CONFIRM+";"
+						+socket.getLocalAddress().getHostAddress()+";"+port+'\n');
 			}
 			finally {
 				server.releaseLock();
 			}
-			break;
-		case Message.OP_REQUEST_INFO_TEAM:
-			System.out.println("REQUEST INFO TEAM");
-			break;
-		case Message.OP_REQUEST_INFO_WORLD:
-			System.out.println("REQUEST INFO WORLD");
 			break;
 		case Message.CLOSE:
 			outToClient.writeBytes(Message.CLOSE+'\n');
@@ -126,10 +116,6 @@ public class MiniServer extends Thread {
 		default:
 			break;
 		}
-	}
-	
-	public void sendMessagePlayerFound(String ip) throws IOException{
-		outToClient.writeBytes(Message.OP_SEND_PLAYER_FOUND+";"+ip+'\n');
 	}
 	
 	private String toJSON(Object matches) {

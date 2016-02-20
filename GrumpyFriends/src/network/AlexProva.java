@@ -1,5 +1,15 @@
 package network;
 
+import network.client.Multiplayer;
+import network.client.ClientMatchManager;
+import world.GameWorldBuilder;
+import world.World;
+import world.WorldBuilder;
+import world.WorldDirector;
+import character.BlackStormtrooper;
+import character.Character;
+import character.Team;
+import character.WhiteStormtrooper;
 import gui.MatchPane;
 import gui.event.KeyboardPressedEventHandler;
 import gui.event.KeyboardReleaseEventHandler;
@@ -9,14 +19,6 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import world.GameWorldBuilder;
-import world.World;
-import world.WorldBuilder;
-import world.WorldDirector;
-import character.BlackStormtrooper;
-import character.Character;
-import character.Team;
-import character.WhiteStormtrooper;
 
 public class AlexProva extends Application {
 
@@ -30,7 +32,7 @@ public class AlexProva extends Application {
 		WorldDirector director = new WorldDirector(builder);
 		director.createWorld("worldXML/Map2.xml","Planet");
 		World world = builder.getWorld();
-		NetworkMatchManager matchManager = new NetworkMatchManager(world);
+		ClientMatchManager matchManager = new ClientMatchManager(world);
 		
 		
 		Team teamA = new Team();
@@ -68,8 +70,9 @@ public class AlexProva extends Application {
 		Multiplayer multiplayer = new Multiplayer();
 		matchManager.setMultiplayer(multiplayer);
 		multiplayer.setMatchManager(matchManager);
-		multiplayer.setIps("127.0.0.1", "127.0.0.1");
-		multiplayer.createMatch();
+//		multiplayer.setIps("127.0.0.1", "127.0.0.1");
+//		multiplayer.createMatch();
+		
 
 		
 		primaryStage.setTitle("Grumpy Friends");

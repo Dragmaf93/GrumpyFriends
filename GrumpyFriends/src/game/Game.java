@@ -2,6 +2,7 @@ package game;
 
 import java.io.IOException;
 
+import menu.GameBean;
 import menu.MenuPage;
 import menu.SequencePage;
 
@@ -13,7 +14,7 @@ public interface Game {
 	abstract public void startGame() throws IOException;
 	abstract public void reset();
 	
-	public abstract void setUpGame();
+	abstract public void addBean(GameBean bean);
 	
 	public abstract MatchManager getMatchManager();
 	public abstract MenuPage nextPage();

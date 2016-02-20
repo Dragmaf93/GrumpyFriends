@@ -6,10 +6,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Phaser;
 
-import com.sun.org.apache.bcel.internal.generic.DMUL;
-
 import character.Character;
 import character.Team;
+
+import com.sun.org.apache.bcel.internal.generic.DMUL;
+
 import javafx.scene.paint.Color;
 import physic.PhysicalCharacter;
 import utils.ObjectWithTimer;
@@ -18,8 +19,8 @@ import world.World;
 public abstract class AbstractMatchManager implements MatchManager{
 
 	protected World battlefield;
-	protected Team teamRed;
-	protected Team teamBlue;
+	protected Team teamA;
+	protected Team teamB;
 
 	protected Character currentPlayer;
 	protected Team currentTeam;
@@ -43,8 +44,8 @@ public abstract class AbstractMatchManager implements MatchManager{
 	
 	public AbstractMatchManager() {
 		this.battlefield = null;
-		this.teamRed = null;
-		this.teamBlue = null;
+		this.teamA = null;
+		this.teamB = null;
 		this.currentPlayer = null;
 		this.turn = 0;
 		this.started = false;
@@ -56,8 +57,8 @@ public abstract class AbstractMatchManager implements MatchManager{
 
 	public AbstractMatchManager(World battlefield, Team teamA, Team teamB) {
 		this.battlefield = battlefield;
-		this.teamRed = teamA;
-		this.teamBlue = teamB;
+		this.teamA = teamA;
+		this.teamB = teamB;
 		this.turn = 0;
 		this.currentPlayer = null;
 		this.started = false;
@@ -72,8 +73,8 @@ public abstract class AbstractMatchManager implements MatchManager{
 
 	public AbstractMatchManager(World battlefield) {
 		this.battlefield = battlefield;
-		this.teamRed = null;
-		this.teamBlue = null;
+		this.teamA = null;
+		this.teamB = null;
 		this.turn = 0;
 		this.currentPlayer = null;
 		hitCharacters = battlefield.getHitCharacter();
@@ -86,7 +87,7 @@ public abstract class AbstractMatchManager implements MatchManager{
 	}
 	
 	public boolean startMatch() {
-		if (started || teamRed == null || teamBlue == null
+		if (started || teamA == null || teamB == null
 				|| battlefield == null)
 			return false;
 		
@@ -94,11 +95,11 @@ public abstract class AbstractMatchManager implements MatchManager{
 		
 //		currentTeam = getFirstTeam();
 
-		teamRed.setUpForTheMatch();
-		teamBlue.setUpForTheMatch();
+		teamA.setUpForTheMatch();
+		teamB.setUpForTheMatch();
 
 		
-		currentTeam = teamRed;
+		currentTeam = teamA;
 		
 		currentPlayer = currentTeam.nextPlayer();
 
@@ -148,7 +149,7 @@ public abstract class AbstractMatchManager implements MatchManager{
 	}
 
 	public boolean allCharacterAreSpleeping() {
-		List<Character> characters = teamRed.getCharactersInGame();
+		List<Character> characters = teamA.getCharactersInGame();
 
 		for (Character character : characters) {
 			if (!character.isSleeping()) {
@@ -156,7 +157,7 @@ public abstract class AbstractMatchManager implements MatchManager{
 			}
 		}
 
-		characters = teamBlue.getCharactersInGame();
+		characters = teamB.getCharactersInGame();
 		for (Character character : characters) {
 			if (!character.isSleeping()) {
 				return false;
@@ -168,10 +169,10 @@ public abstract class AbstractMatchManager implements MatchManager{
 
 	public void startNextTurn() {
 		if (started) {
-			if (currentTeam == teamRed)
-				currentTeam = teamBlue;
-			else if (currentTeam == teamBlue)
-				currentTeam = teamRed;
+			if (currentTeam == teamA)
+				currentTeam = teamB;
+			else if (currentTeam == teamB)
+				currentTeam = teamA;
 
 			currentPlayer = currentTeam.nextPlayer();
 			currentPlayer.prepareForTurn();
@@ -198,8 +199,8 @@ public abstract class AbstractMatchManager implements MatchManager{
 
 	public void restartMatch() {
 		
-		teamRed.reset();
-		teamBlue.reset();
+		teamA.reset();
+		teamB.reset();
 		battlefield.reset();
 		
 		currentTeam = getFirstTeam();
@@ -235,32 +236,32 @@ public abstract class AbstractMatchManager implements MatchManager{
 	}
 
 	public Team getTeamA() {
-		return teamRed;
+		return teamA;
 	}
 
 	public void setTeamA(Team teamA) {
-		this.teamRed = teamA;
+		this.teamA = teamA;
 	}
 
 	public Team getTeamB() {
-		return teamBlue;
+		return teamB;
 	}
 
 	public void setTeamB(Team teamB) {
-		this.teamBlue = teamB;
+		this.teamB = teamB;
 	}
 
 	protected Team getFirstTeam() {
 		if (Math.random() <= 0.5)
-			return teamRed;
-		return teamBlue;
+			return teamA;
+		return teamB;
 	}
 
 	public int getTurn() {
 		return turn;
 	}
 
-	public boolean isTheCurrentTurnEnded() {
+	public boolean isCurrentTurnEnded() {
 		return currentTurnPhase != TurnPhaseType.MAIN_PHASE;
 	}
 
@@ -275,8 +276,8 @@ public abstract class AbstractMatchManager implements MatchManager{
 	public void startTest() {
 		// timer.startMatchTimer();
 		// timer.startTurnTimer();
-		currentTeam = teamRed;
-		currentPlayer = teamRed.get(0);
+		currentTeam = teamA;
+		currentPlayer = teamA.get(0);
 
 	}
 
@@ -290,31 +291,31 @@ public abstract class AbstractMatchManager implements MatchManager{
 
 	public boolean isMatchFinished() {
 
-		return teamBlue.isLose() || teamRed.isLose()
+		return teamB.isLose() || teamA.isLose()
 				|| timer.isMatchTimerEnded();
 	}
 
 	public void swapTeam() {
-		if (currentTeam == teamRed)
-			currentTeam = teamBlue;
-		else if (currentTeam == teamBlue)
-			currentTeam = teamRed;
+		if (currentTeam == teamA)
+			currentTeam = teamB;
+		else if (currentTeam == teamB)
+			currentTeam = teamA;
 	}
 
 	public void checkDiedCharacters() {
-		teamBlue.checkDiedCharacter(diedCharactersOfTheCurrentTurn);
-		teamRed.checkDiedCharacter(diedCharactersOfTheCurrentTurn);
+		teamB.checkDiedCharacter(diedCharactersOfTheCurrentTurn);
+		teamA.checkDiedCharacter(diedCharactersOfTheCurrentTurn);
 	}
 
 	public Team getTeamWithMaxLifePoints() {
 
-		int teamRedLF = teamRed.getTeamLifePoint();
-		int teamBlueLF = teamBlue.getTeamLifePoint();
+		int teamRedLF = teamA.getTeamLifePoint();
+		int teamBlueLF = teamB.getTeamLifePoint();
 
 		if (teamRedLF < teamBlueLF)
-			return teamBlue;
+			return teamB;
 		else if (teamRedLF > teamBlueLF)
-			return teamRed;
+			return teamA;
 		//in caso di pareggio null
 		return null;
 
@@ -333,10 +334,10 @@ public abstract class AbstractMatchManager implements MatchManager{
 
 	public Character nextPlayer() {
 		Team team = null;
-		if (currentTeam == teamRed)
-			team = teamBlue;
-		else if (currentTeam == teamBlue)
-			team = teamRed;
+		if (currentTeam == teamA)
+			team = teamB;
+		else if (currentTeam == teamB)
+			team = teamA;
 
 		return team.whoIsNextPlayer();
 	}
@@ -355,23 +356,23 @@ public abstract class AbstractMatchManager implements MatchManager{
 	}
 
 	public Team getWinnerTeam() {
-		if (teamBlue.isLose() && !teamRed.isLose())
-			return teamRed;
-		if (teamRed.isLose() && !teamBlue.isLose())
-			return teamBlue;
+		if (teamB.isLose() && !teamA.isLose())
+			return teamA;
+		if (teamA.isLose() && !teamB.isLose())
+			return teamB;
 		return null;
 	}
 	
 	public Team getLoserTeam() {
-		if (teamBlue.isLose() && !teamRed.isLose())
-			return teamBlue;
-		if (teamRed.isLose() && !teamBlue.isLose())
-			return teamRed;
+		if (teamB.isLose() && !teamA.isLose())
+			return teamB;
+		if (teamA.isLose() && !teamB.isLose())
+			return teamA;
 		return null;
 	}
 
 	public boolean hasWinnerTeam() {
-		return teamBlue.isLose() ^ teamRed.isLose();
+		return teamB.isLose() ^ teamA.isLose();
 	}
 
 	public void checkCharactersOutOfWorld() {

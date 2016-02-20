@@ -1,4 +1,4 @@
-package network;
+package network.client;
 
 import game.MatchManager;
 import gui.Popup;
@@ -20,50 +20,55 @@ import java.util.concurrent.locks.ReentrantLock;
 
 
 
+
+
+
+
+
+
+import network.Message;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import menu.GameBean;
 import menu.MenuManager;
+import character.Character;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.glass.ui.Menu;
 import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
-import character.Character;
-
 public class Multiplayer {
 
 	private Socket socket;
-	private ServerSocket welcomeSocket;
+//	private ServerSocket welcomeSocket;
 
 	private Lock lock = new ReentrantLock();
 	private Condition condition = lock.newCondition();
 
 	private BufferedReader inFromServer;
-	private DataOutputStream outputStream;
+	private DataOutputStream outToServer;
+	
 	private MatchManager matchManager;
 	
 	private Popup exception;
 	
-	private int portNumber = 6789;
+	private int portNumber;
 
-	private String ipChooser;
-	private String ipCreator;
+	private String ipMatchServer;
 
-	private ObjectMapper mapper;
 	private List<GameBean> gameBeans;
+
+	private boolean chooser;
 
 	public Multiplayer(MatchManager matchManager) {
 
 		this.matchManager = matchManager;
-		this.mapper = new ObjectMapper();
 		gameBeans = new ArrayList<GameBean>();
 	}
 
 	public Multiplayer() {
-		this.mapper = new ObjectMapper();
 		gameBeans = new ArrayList<GameBean>();
 		exception = new Popup(400, 180, "Connection refused", null, "OK");
 		exception.getRightButton().setOnMouseReleased(
@@ -83,30 +88,30 @@ public class Multiplayer {
 	public void setMatchManager(MatchManager matchManager) {
 		this.matchManager = matchManager;
 	}
-
-	public void joinToMatch() throws UnknownHostException, IOException {
-		
-			socket = new Socket(ipCreator, portNumber);
-			portNumber++;
+	
+	public boolean isAChooser(){
+		return chooser;
+	}
+	
+	public void joinToMatch(String ipMatchServer, int portNumber) throws UnknownHostException, IOException {
+			
+			socket = new Socket(ipMatchServer,portNumber);
 			inFromServer = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
-			outputStream = new DataOutputStream(socket.getOutputStream());
+			outToServer = new DataOutputStream(socket.getOutputStream());
 
+			chooser=true;
+			
 			new Thread(new Runnable() {
 
 				@Override
 				public void run() {
 					try {
-						welcomeSocket = new ServerSocket(portNumber);
-						Socket connectionSocket = welcomeSocket.accept();
 
-						BufferedReader inFromClient = new BufferedReader(
-								new InputStreamReader(
-										connectionSocket.getInputStream()));
 
 						while (true) {
-							if (inFromClient.ready())
-								doOperation(inFromClient.readLine());
+							if (inFromServer.ready())
+								doOperation(inFromServer.readLine());
 						}
 					} catch (IOException e) {
 						matchManager.pauseMatch();
@@ -115,26 +120,25 @@ public class Multiplayer {
 				}
 			}).start();
 
-			sendOperationMessage(Message.SERVER_READY, null);
 	}
 
-	public void setIps(String chooser, String creator) {
-		ipChooser = chooser;
-		ipCreator = creator;
+	public void setIpPort(String chooser,int port) {
+		ipMatchServer = chooser;
+		portNumber = port;
 	}
 
-	private void connectToChooser() throws UnknownHostException, IOException {
-			socket = new Socket(ipChooser, portNumber);
-			inFromServer = new BufferedReader(new InputStreamReader(
-					socket.getInputStream()));
-			outputStream = new DataOutputStream(socket.getOutputStream());
-			System.out.println(outputStream);
-	}
+//	private void connectToChooser() throws UnknownHostException, IOException {
+//			socket = new Socket(ipMatchServer, portNumber);
+//			inFromServer = new BufferedReader(new InputStreamReader(
+//					socket.getInputStream()));
+//			outToServer = new DataOutputStream(socket.getOutputStream());
+//			System.out.println(outToServer);
+//	}
 
 	public void sendOperationMessage(String ope, String proprieta){
 		
 			try {
-				outputStream.writeBytes(ope + ";" + proprieta + '\n');
+				outToServer.writeBytes(ope + ";" + proprieta + '\n');
 			} catch (IOException e) {
 				matchManager.pauseMatch();
 				MenuManager.getInstance().addExceptionPopup(exception);
@@ -165,43 +169,14 @@ public class Multiplayer {
 		String[] op = operazione.split(";");
 
 		switch (op[0]) {
-		case Message.OP_MOVE_LEFT:
-			System.out.println("SINISTRA");
-			matchManager.getCurrentPlayer().move(Character.LEFT);
+		case Message.WORLD_STATUS:
+			System.out.println("POSITION 1 : "+matchManager.getCurrentPlayer().getX()+"   "+matchManager.getCurrentPlayer().getY());
+			matchManager.getCurrentPlayer().setPosition(Double.parseDouble(op[1]), Double.parseDouble(op[2]));
+			System.out.println("POSITION 2 : "+matchManager.getCurrentPlayer().getX()+"   "+matchManager.getCurrentPlayer().getY());
 			break;
-		case Message.OP_MOVE_RIGHT:
-			System.out.println("DESTRA");
-			matchManager.getCurrentPlayer().move(Character.RIGHT);
-			break;
-		case Message.OP_JUMP:
-			System.out.println("JUMP");
-			matchManager.getCurrentPlayer().jump();
-			break;
-		case Message.OP_STOP_MOVE:
-			System.out.println("STOP_MOVE");
-			matchManager.getCurrentPlayer().stopToMove();
-			break;
-		case Message.OP_EQUIP_WEAPON:
-			System.out.println("EQUIP_WEAPON");
-			matchManager.getCurrentPlayer().equipWeapon(op[1]);
-			break;
-		case Message.OP_ATTACK:
-			System.out.println("ATTACK");
-			matchManager.getCurrentPlayer().attack(Float.parseFloat(op[1]));
-			break;
-		case Message.OP_INCREASE_AIM:
-			System.out.println("INCREASE AIM");
-			matchManager.getCurrentPlayer().changeAim(Character.INCREASE_AIM);
-			break;
-		case Message.OP_DECREASE_AIM:
-			System.out.println("DECREASE AIM");
-			matchManager.getCurrentPlayer().changeAim(Character.DECREASE_AIM);
-			break;
-		case Message.SERVER_READY:
-			connectToChooser();
-			break;
-		case Message.OP_SEND_INFO_TEAM:
+		case Message.OP_SEND_INFO_TEAM_TO_CHOOSER:
 		case Message.OP_SEND_INFO_WORLD:
+		case Message.OP_SEND_INFO_TEAM_TO_CREATOR:
 			addBean(GameBean.jSonToGameBean(op[1]));
 			break;
 		default:
@@ -223,28 +198,38 @@ public class Multiplayer {
 
 	public void closeConnection() throws IOException {
 			socket.close();
-			welcomeSocket.close();
+//			s.close();
 	}
+	
+	
 
-	public void createMatch() throws IOException {
+	public void createMatch(String ipMatchServer, int portNumber) throws IOException {
 
 	
-			welcomeSocket = new ServerSocket(portNumber);
-			portNumber++;
-			Socket connectionSocket = welcomeSocket.accept();
+//			welcomeSocket = new ServerSocket(portNumber);
+//			portNumber++;
+//			Socket connectionSocket = welcomeSocket.accept();
 
-			BufferedReader inFromClient = new BufferedReader(
-					new InputStreamReader(connectionSocket.getInputStream()));
-			doOperation(inFromClient.readLine());
-
+//			BufferedReader inFromClient = new BufferedReader(
+//					new InputStreamReader(connectionSocket.getInputStream()));
+//			doOperation(inFromClient.readLine());
+		
+			socket = new Socket(ipMatchServer, portNumber);
+			inFromServer = new BufferedReader(new InputStreamReader(
+			socket.getInputStream()));
+			outToServer = new DataOutputStream(socket.getOutputStream());
+		
+			chooser=false;
+			
+//			
 			new Thread(new Runnable() {
 
 				@Override
 				public void run() {
 					while (true) {
 						try {
-							if (inFromClient.ready())
-								doOperation(inFromClient.readLine());
+							if (inFromServer.ready())
+								doOperation(inFromServer.readLine());
 						} catch (IOException e) {
 							matchManager.pauseMatch();
 							MenuManager.getInstance().addExceptionPopup(exception);
@@ -253,7 +238,7 @@ public class Multiplayer {
 					}
 				}
 			}).start();
-		
+//		
 
 	}
 }

@@ -2,10 +2,10 @@ package game;
 
 import java.util.List;
 
-import javafx.geometry.Point2D;
 import world.World;
 import character.Character;
 import character.Team;
+import javafx.geometry.Point2D;
 
 public interface MatchManager {
 
@@ -43,7 +43,7 @@ public interface MatchManager {
 
 	abstract public int getTurn();
 
-	abstract public boolean isTheCurrentTurnEnded();
+	abstract public boolean isCurrentTurnEnded();
 
 	abstract public Team getCurrentTeam();
 
@@ -77,6 +77,8 @@ public interface MatchManager {
 
 	abstract boolean isPaused();
 	abstract public boolean hasWinnerTeam();
+	
+	abstract public void update();
 
 	abstract public void checkCharactersOutOfWorld();
 	

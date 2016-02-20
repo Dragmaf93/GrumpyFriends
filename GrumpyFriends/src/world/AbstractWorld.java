@@ -166,16 +166,17 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 		for (Character character : characters) {
 
 			character.update();
-
+//			System.out.println(character.getWidth()
+//					+"  "+character.getHeight());
 			if (character.isOutWorld()
 					&& !charactersAlreadyOutWorld.get(character.getName())) {
 				character.afterDeath();
 				charactersOutOfWorld.add(character);
 				charactersAlreadyOutWorld.put(character.getName(), true);
-				System.out.println("CADUTOOOOOOOOOoooo");
+//				System.out.println("CADUTOOOOOOOOOoooo");
 			}
 		}
-
+		
 		PhysicalObjectManager.getInstance().destroyBodies();
 
 	}

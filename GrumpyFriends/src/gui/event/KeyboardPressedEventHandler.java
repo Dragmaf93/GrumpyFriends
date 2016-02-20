@@ -1,9 +1,9 @@
 package gui.event;
 
+import character.Character;
 import game.AbstractMatchManager;
 import game.MatchManager;
 import gui.MatchPane;
-import character.Character;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -21,22 +21,22 @@ public class KeyboardPressedEventHandler implements EventHandler<KeyEvent> {
 	@Override
 	public void handle(KeyEvent event) {
 		if (event.getCode() == KeyCode.D) {
-			if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
+			if (!pane.isPaused() && !matchManager.isCurrentTurnEnded()
 					&& pane.inventoryIsHide())
 				matchManager.moveCurrentPlayer(Character.RIGHT);
 		}
 		if (event.getCode() == KeyCode.A) {
-			if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
+			if (!pane.isPaused() && !matchManager.isCurrentTurnEnded()
 					&& pane.inventoryIsHide())
 				matchManager.moveCurrentPlayer(Character.LEFT);
 		}
 		if (event.getCode() == KeyCode.SPACE) {
-			if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
+			if (!pane.isPaused() && !matchManager.isCurrentTurnEnded()
 					&& pane.inventoryIsHide())
 				matchManager.jumpCurrentPlayer();
 		}
 		if (event.getCode() == KeyCode.ALT) {
-			if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
+			if (!pane.isPaused() && !matchManager.isCurrentTurnEnded()
 					&& pane.inventoryIsHide()) {
 				pane.launchKeyPressed();
 			}
@@ -48,7 +48,7 @@ public class KeyboardPressedEventHandler implements EventHandler<KeyEvent> {
 				pane.restartFromPause();
 		}
 		if (event.getCode() == KeyCode.I) {
-			if (!pane.isPaused()  && !matchManager.isTheCurrentTurnEnded()) {
+			if (!pane.isPaused()  && !matchManager.isCurrentTurnEnded()) {
 				if (pane.inventoryIsHide())
 					pane.showInventory();
 				else
@@ -56,12 +56,12 @@ public class KeyboardPressedEventHandler implements EventHandler<KeyEvent> {
 			}
 		}
 		if (event.getCode() == KeyCode.W) {
-			if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
+			if (!pane.isPaused() && !matchManager.isCurrentTurnEnded()
 					&& pane.inventoryIsHide())
 				matchManager.changeAimCurrentPlayer(Character.INCREASE_AIM);
 		}
 		if (event.getCode() == KeyCode.S) {
-			if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
+			if (!pane.isPaused() && !matchManager.isCurrentTurnEnded()
 					&& pane.inventoryIsHide())
 				matchManager.changeAimCurrentPlayer(Character.DECREASE_AIM);
 		}

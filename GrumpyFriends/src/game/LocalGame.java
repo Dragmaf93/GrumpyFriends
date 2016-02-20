@@ -4,14 +4,14 @@ package game;
 
 import java.util.List;
 
-import javafx.scene.paint.Color;
 import character.Character;
+import javafx.scene.paint.Color;
 import menu.MenuPage;
 import menu.SequencePage;
 import menu.teamMenu.TeamPage;
 import menu.worldMenu.WorldPage;
 
-public class LocalGame extends AbtractGame{
+public class LocalGame extends AbstractGame{
 	
 	public LocalGame() {
 		sequencePages =  new SequencePage(new TeamPage(),new TeamPage(),
@@ -52,11 +52,6 @@ public class LocalGame extends AbtractGame{
 		battlefield=null;
 		teams.clear();
 		characters.clear();
-	}
-
-	@Override
-	public void setUpGame() {
-		
 	}
 
 	@Override

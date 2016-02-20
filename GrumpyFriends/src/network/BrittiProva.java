@@ -1,13 +1,15 @@
 package network;
 
-import character.BlackStormtrooper;
-import character.Character;
-import character.Team;
-import character.WhiteStormtrooper;
+import network.client.Multiplayer;
+import network.client.ClientMatchManager;
 import world.GameWorldBuilder;
 import world.World;
 import world.WorldBuilder;
 import world.WorldDirector;
+import character.BlackStormtrooper;
+import character.Character;
+import character.Team;
+import character.WhiteStormtrooper;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -31,7 +33,7 @@ public class BrittiProva extends Application {
 		WorldDirector director = new WorldDirector(builder);
 		director.createWorld("worldXML/Map2.xml","Planet");
 		World world = builder.getWorld();
-		NetworkMatchManager matchManager = new NetworkMatchManager(world);
+		ClientMatchManager matchManager = new ClientMatchManager(world);
 		
 		
 		Team teamA = new Team();
@@ -71,8 +73,8 @@ public class BrittiProva extends Application {
 		Multiplayer multiplayer=new Multiplayer();		
 		matchManager.setMultiplayer(multiplayer);
 		multiplayer.setMatchManager(matchManager);
-		multiplayer.setIps("127.0.0.1", "127.0.0.1");
-		multiplayer.joinToMatch();
+//		multiplayer.setIps("127.0.0.1", "127.0.0.1");
+//		multiplayer.joinToMatch();
 
 		MatchPane matchPane = new MatchPane(matchManager);
 		

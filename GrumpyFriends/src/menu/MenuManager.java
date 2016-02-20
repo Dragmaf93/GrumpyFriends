@@ -2,7 +2,7 @@ package menu;
 
 import java.io.IOException;
 
-import network.NetworkGame;
+import network.client.ClientGame;
 import mapEditor.MapEditor;
 import menu.networkMenu.WaitingPage;
 import menu.worldMenu.WorldPage;
@@ -116,7 +116,7 @@ public class MenuManager {
 		menu = new Menu();
 		menuBackground = new MenuBackground();
 		localGame = new LocalGame();
-		networkGame = new NetworkGame();
+		networkGame = new ClientGame();
 		lastAddedPane = menu;
 		waitingPage = new WaitingPage();
 		currentUpdatablePane = menu;

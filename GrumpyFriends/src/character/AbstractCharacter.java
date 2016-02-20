@@ -2,6 +2,7 @@ package character;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
+
 import element.weaponsManager.Launcher;
 import element.weaponsManager.Weapon;
 import element.weaponsManager.WeaponsManager;
@@ -21,6 +22,7 @@ public abstract class AbstractCharacter implements Character {
 	private final static float JUMP = 25f;
 
 	protected String name;
+	
 	protected float height;
 	protected float width;
 
@@ -57,6 +59,10 @@ public abstract class AbstractCharacter implements Character {
 	private float startY;
 	private float startX;
 
+	private double x,y;
+	private Vector speedVector;
+	private boolean falling;
+
 	public AbstractCharacter(String name, float x, float y, float height,
 			float width, Team team, World world) {
 
@@ -76,6 +82,7 @@ public abstract class AbstractCharacter implements Character {
 
 		launcher = new Launcher(this);
 
+		speedVector = new Vector();
 		readyToEquipWeapon = true;
 		currentDirection = RIGHT;
 	}
@@ -95,6 +102,7 @@ public abstract class AbstractCharacter implements Character {
 		lifePoints = 100;
 
 		launcher = new Launcher(this);
+		speedVector = new Vector();
 
 		readyToEquipWeapon = true;
 		currentDirection = RIGHT;
@@ -117,8 +125,10 @@ public abstract class AbstractCharacter implements Character {
 
 		readyToEquipWeapon = true;
 		currentDirection = RIGHT;
+		
+		speedVector = new Vector();
 	}
-
+	
 	@Override
 	public void setWorld(World battlefield) {
 		world = battlefield;
@@ -182,11 +192,10 @@ public abstract class AbstractCharacter implements Character {
 	public boolean isSleeping() {
 		if (!grounded)
 			return false;
-		Vec2 v = physicBody.getBody().getLinearVelocity();
 
-		if (v.x < -0.5 || v.x > 0.5)
+		if (speedVector.x < -0.5 || speedVector.x > 0.5)
 			return false;
-		if (v.y < -0.5 || v.y > 0.5)
+		if (speedVector.y < -0.5 || speedVector.y > 0.5)
 			return false;
 
 		return true;
@@ -356,7 +365,17 @@ public abstract class AbstractCharacter implements Character {
 
 	@Override
 	public void update() {
-		double x = getX(), y = getY();
+		x =	Utils.xFromJbox2dToJavaFx(physicBody.getX());
+		y = Utils.yFromJbox2dToJavaFx(physicBody.getY());
+		
+		
+		if (physicBody.getBody().getLinearVelocity().y < 0 && !isGrounded())
+			falling=true;
+		else
+			falling = false;
+		
+		speedVector.set(physicBody.getBody().getLinearVelocity());
+
 		if (x > world.getWidth() + World.DISTANCE_WORLDS_BORDER
 				|| x < -World.DISTANCE_WORLDS_BORDER
 				|| y > world.getHeight() + World.DISTANCE_WORLDS_BORDER / 3)
@@ -434,12 +453,12 @@ public abstract class AbstractCharacter implements Character {
 
 	@Override
 	public double getY() {
-		return Utils.yFromJbox2dToJavaFx(physicBody.getY());
+		return y;
 	}
 
 	@Override
 	public double getX() {
-		return Utils.xFromJbox2dToJavaFx(physicBody.getX());
+		return x;
 	}
 
 	@Override
@@ -477,6 +496,12 @@ public abstract class AbstractCharacter implements Character {
 	}
 
 	@Override
+	public void setPosition(double x, double y) {
+		this.x=x;
+		this.y=y;
+	}
+	
+	@Override
 	public boolean sufferedDamage() {
 		return suffereDamage;
 	}
@@ -504,8 +529,6 @@ public abstract class AbstractCharacter implements Character {
 
 	@Override
 	public boolean isFalling() {
-		if (physicBody.getBody().getLinearVelocity().y < 0 && !isGrounded())
-			return true;
-		return false;
+		return falling;
 	}
 }

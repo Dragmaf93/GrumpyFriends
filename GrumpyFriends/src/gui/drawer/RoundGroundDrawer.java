@@ -2,8 +2,8 @@ package gui.drawer;
 
 import java.util.List;
 
-import utils.Point;
 import element.ground.RoundGround;
+import utils.Point;
 import gui.ImageLoader;
 import javafx.scene.Group;
 import javafx.scene.Node;

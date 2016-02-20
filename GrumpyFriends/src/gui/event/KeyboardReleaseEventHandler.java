@@ -21,7 +21,7 @@ public class KeyboardReleaseEventHandler implements EventHandler<KeyEvent> {
 	
 	@Override
 	public void handle(KeyEvent event) {
-		if (!pane.isPaused() && !matchManager.isTheCurrentTurnEnded()
+		if (!pane.isPaused() && !matchManager.isCurrentTurnEnded()
 				&& pane.inventoryIsHide()) {
 			if (event.getCode() == KeyCode.D) {
 				matchManager.stopToMoveCurrentPlayer();

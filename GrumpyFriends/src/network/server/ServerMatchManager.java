@@ -1,11 +1,18 @@
-package game;
+package network.server;
 
 import world.World;
+import game.AbstractMatchManager;
 
-public class LocalMatchManager extends AbstractMatchManager {
+public class ServerMatchManager extends AbstractMatchManager{
 
-	public LocalMatchManager(World battlefield) {
+	
+	public ServerMatchManager(World battlefield) {
 		super(battlefield);
+	}
+	
+	@Override
+	public void update() {
+		battlefield.update();
 	}
 
 	@Override
@@ -38,9 +45,5 @@ public class LocalMatchManager extends AbstractMatchManager {
 		currentPlayer.attack(power);
 	}
 
-	@Override
-	public void update() {
-		battlefield.update();
-	}
 
 }

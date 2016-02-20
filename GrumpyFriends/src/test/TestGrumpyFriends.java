@@ -7,8 +7,8 @@ import org.jbox2d.testbed.framework.TestbedSettings;
 import org.jbox2d.testbed.framework.TestbedTest;
 
 import character.Character;
-import character.WhiteStormtrooper;
 import character.Team;
+import character.WhiteStormtrooper;
 import element.weaponsManager.Weapon;
 import game.AbstractMatchManager;
 import game.LocalMatchManager;

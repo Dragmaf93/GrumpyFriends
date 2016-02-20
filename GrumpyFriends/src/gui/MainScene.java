@@ -1,8 +1,8 @@
 package gui;
 
-import menu.MenuManager;
 import character.Character;
 import element.weaponsManager.Launcher;
+import menu.MenuManager;
 import game.AbstractMatchManager;
 import gui.event.KeyboardPressedEventHandler;
 import javafx.animation.AnimationTimer;

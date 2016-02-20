@@ -1,4 +1,4 @@
-package network;
+package network.client;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -10,24 +10,28 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import network.InfoMatch;
+import network.Message;
+import network.StatusMatch;
+import character.Team;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import menu.GameBean;
-import character.Team;
 
 public class Client {
 
-	// private final static String IP_SERVER = "127.0.0.1";
-	private final static String IP_SERVER = "192.168.43.148";
+	private final static String IP_SERVER = "127.0.0.1";
+	// private final static String IP_SERVER = "192.168.43.148";
 
 	private Socket socket;
 	private DataOutputStream outToServer;
 	private BufferedReader inFromServer;
 	private ObjectMapper mapper;
 
-	private String ipCreator;
-	private String ipChooser;
+	private String matchServerIp;
+	private int serverPortNumber;
 
 	private boolean imAChooser;
 
@@ -38,7 +42,7 @@ public class Client {
 	}
 
 	public void connectToServer() throws UnknownHostException, IOException {
-		socket = new Socket(IP_SERVER, 2343);
+		socket = new Socket(IP_SERVER, 2000);
 
 		outToServer = new DataOutputStream(socket.getOutputStream());
 		inFromServer = new BufferedReader(new InputStreamReader(
@@ -71,12 +75,12 @@ public class Client {
 		return null;
 	}
 
-	public String getIpChooser() {
-		return ipChooser;
+	public String getMatchServerIp() {
+		return matchServerIp;
 	}
 
-	public String getIpCreator() {
-		return ipCreator;
+	public int getServerPortNumber() {
+		return serverPortNumber;
 	}
 
 	public boolean imAChooser() {
@@ -91,7 +95,9 @@ public class Client {
 		String[] resp = response.split(";");
 
 		if (resp[0].equals(Message.OP_CONFIRM)) {
-			ipCreator = resp[1];
+			matchServerIp = resp[1];
+			serverPortNumber = Integer.parseInt(resp[2]);
+			System.out.println(Message.OP_CONFIRM+" "+resp[1]+"  "+resp[2]);
 			closeConnection();
 			return true;
 		}
@@ -131,16 +137,15 @@ public class Client {
 		outToServer
 				.writeBytes(Message.OP_CREATE_MATCH + ";" + matchJson + '\n');
 
-		String response1 = inFromServer.readLine();
-		if (response1.equals(Message.OP_CONFIRM)) {
+		String response = inFromServer.readLine();
+		String[] resp = response.split(";");
 
-			String response2 = inFromServer.readLine();
-			String[] resp = response2.split(";");
-			if (resp[0].equals(Message.OP_SEND_PLAYER_FOUND)) {
-				ipChooser = resp[1];
-				closeConnection();
-				return true;
-			}
+		if (resp[0].equals(Message.OP_CONFIRM)) {
+			matchServerIp = resp[1];
+			serverPortNumber = Integer.parseInt(resp[2]);
+			System.out.println(Message.OP_CONFIRM+" "+resp[1]+"  "+resp[2]);
+			closeConnection();
+			return true;
 		}
 		return false;
 	}

@@ -2,9 +2,9 @@ package gui.animation;
 
 import java.util.HashMap;
 
-import javafx.scene.image.Image;
 import character.Character;
 import element.weaponsManager.Weapon;
+import javafx.scene.image.Image;
 
 public class BlackStormtrooperAnimation implements CharacterAnimation {
 

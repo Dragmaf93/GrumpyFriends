@@ -70,6 +70,8 @@ public interface Character extends Element
 
 	public abstract void setDied(boolean bool);
 	
+	public void setPosition(double x, double y);
+	
 	public abstract void update();
 	
 	public boolean isMoving();

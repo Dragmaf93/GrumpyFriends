@@ -1,8 +1,14 @@
-package network;
+package network.client;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.List;
+
+import network.InfoMatch;
+import network.Message;
+import network.StatusMatch;
+import network.server.StateNetworkGame;
+import character.Character;
 
 import com.sun.glass.ui.Menu;
 
@@ -12,7 +18,6 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import character.Character;
 import menu.GameBean;
 import menu.MenuManager;
 import menu.MenuPage;
@@ -21,13 +26,13 @@ import menu.networkMenu.NetworkPage;
 import menu.networkMenu.WaitingPage;
 import menu.teamMenu.TeamPage;
 import menu.worldMenu.WorldPage;
-import game.AbtractGame;
+import game.AbstractGame;
 import game.GameTask;
 import game.LocalMatchManager;
 import game.MatchManager;
 import gui.Popup;
 
-public class NetworkGame extends AbtractGame {
+public class ClientGame extends AbstractGame {
 
 	private final class ConnectionTask extends GameTask {
 		@Override
@@ -120,7 +125,7 @@ public class NetworkGame extends AbtractGame {
 	private Popup exceptionServer;
 	private Popup exceptionOpponentConnection;
 
-	public NetworkGame() {
+	public ClientGame() {
 		client = new Client();
 
 		teamPage = new TeamPage();
@@ -142,17 +147,15 @@ public class NetworkGame extends AbtractGame {
 	@Override
 	public void startGame() throws IOException {
 			Multiplayer multiplayer = new Multiplayer();
-			multiplayer.setIps(client.getIpChooser(), client.getIpCreator());
-
 			if (client.imAChooser()) {
-				multiplayer.joinToMatch();
+				multiplayer.joinToMatch(client.getMatchServerIp(),client.getServerPortNumber());
 				GameBean teamInfo = teamPage.getGameBean();
-				multiplayer.sendOperationMessage(Message.OP_SEND_INFO_TEAM,
+				multiplayer.sendOperationMessage(Message.OP_SEND_INFO_TEAM_TO_CREATOR,
 						teamInfo.toJSON());
 				gamebeans = multiplayer.getGameBean();
 				gamebeans.add(teamInfo);
 			} else {
-				multiplayer.createMatch();
+				multiplayer.createMatch(client.getMatchServerIp(),client.getServerPortNumber());
 
 				GameBean worldInfo = creatorSequence.getMenuPages().get(1)
 						.getGameBean();
@@ -161,7 +164,7 @@ public class NetworkGame extends AbtractGame {
 
 				GameBean teamInfo = teamPage.getGameBean();
 				System.out.println("CREATOR " + teamInfo.toJSON());
-				multiplayer.sendOperationMessage(Message.OP_SEND_INFO_TEAM,
+				multiplayer.sendOperationMessage(Message.OP_SEND_INFO_TEAM_TO_CHOOSER,
 						teamInfo.toJSON());
 
 				gamebeans = multiplayer.getGameBean();
@@ -175,10 +178,10 @@ public class NetworkGame extends AbtractGame {
 				extractData(gamebeans.get(i));
 			}
 
-			matchManager = new NetworkMatchManager(battlefield);
+			matchManager = new ClientMatchManager(battlefield);
 
 			multiplayer.setMatchManager(matchManager);
-			((NetworkMatchManager) matchManager).setMultiplayer(multiplayer);
+			((ClientMatchManager) matchManager).setMultiplayer(multiplayer);
 			teams.get(0).setMatchManager(matchManager);
 			teams.get(0).setColorTeam(Color.CRIMSON);
 			teams.get(1).setMatchManager(matchManager);
@@ -200,10 +203,6 @@ public class NetworkGame extends AbtractGame {
 
 	@Override
 	public void reset() {
-	}
-
-	@Override
-	public void setUpGame() {
 	}
 
 	private InfoMatch beanToInfoMatch(GameBean bean) {

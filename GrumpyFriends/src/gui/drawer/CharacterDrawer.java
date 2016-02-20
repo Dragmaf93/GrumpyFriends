@@ -121,7 +121,7 @@ public class CharacterDrawer {
 		root.getChildren().add(lifePointsPane);
 		root.getChildren().add(damageLifePointsPane);
 		pane.getChildren().add(root);
-		turn = character.getTeam().getMatchManager().getTurn();
+		turn = matchManager.getTurn();
 
 	}
 
@@ -157,8 +157,8 @@ public class CharacterDrawer {
 
 	public void draw() {
 		if (root != null) {
-			if (turn < character.getTeam().getMatchManager().getTurn()) {
-				turn = character.getTeam().getMatchManager().getTurn();
+			if (turn < matchManager.getTurn()) {
+				turn = matchManager.getTurn();
 				canStart = true;
 			}
 			if (character == matchManager.getCurrentPlayer()) {

@@ -2,10 +2,14 @@ package gui;
 
 import java.util.ArrayList;
 
+import world.GameWorldBuilder;
+import world.World;
+import world.WorldBuilder;
+import world.WorldDirector;
 import character.BlackStormtrooper;
 import character.Character;
-import character.WhiteStormtrooper;
 import character.Team;
+import character.WhiteStormtrooper;
 import game.AbstractMatchManager;
 import game.LocalMatchManager;
 import game.MatchManager;
@@ -17,10 +21,6 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import world.GameWorldBuilder;
-import world.World;
-import world.WorldBuilder;
-import world.WorldDirector;
 
 public class MainApplication extends Application{
 

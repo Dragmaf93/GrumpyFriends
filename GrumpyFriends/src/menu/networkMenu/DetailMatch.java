@@ -2,7 +2,7 @@ package menu.networkMenu;
 
 import game.Game;
 import network.InfoMatch;
-import network.NetworkGame;
+import network.client.ClientGame;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.input.MouseButton;
@@ -105,14 +105,14 @@ public class DetailMatch extends Pane {
 						if (infoMatch.isPrivateMatch()) {
 							if (password.getText().equals(infoMatch.getPassword())) {
 								Game game = MenuManager.getInstance().getCurrentGame();
-								((NetworkGame) game).setClientType(true);
+								((ClientGame) game).setClientType(true);
 							}
 							else
 								networkPage.insertPopupWrongPassword();
 						}
 						else {
 							Game game = MenuManager.getInstance().getCurrentGame();
-							((NetworkGame) game).setClientType(true);
+							((ClientGame) game).setClientType(true);
 						}
 						
 					} else {

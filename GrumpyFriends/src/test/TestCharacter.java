@@ -17,9 +17,10 @@ import org.jbox2d.dynamics.joints.RevoluteJointDef;
 import org.jbox2d.dynamics.joints.WheelJoint;
 import org.jbox2d.dynamics.joints.WheelJointDef;
 
+import character.Character;
+
 import com.sun.org.apache.bcel.internal.generic.LUSHR;
 
-import character.Character;
 import element.weaponsManager.Weapon;
 import physic.PhysicalObject;
 

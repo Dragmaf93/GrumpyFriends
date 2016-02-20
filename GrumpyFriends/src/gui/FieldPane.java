@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import world.World;
 import character.Character;
 import game.AbstractMatchManager;
 import game.MatchManager;
@@ -17,7 +18,6 @@ import gui.drawer.WorldDrawer;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import world.World;
 
 public class FieldPane extends Pane {
 
@@ -130,7 +130,7 @@ public class FieldPane extends Pane {
 				&& !(matchManager.isMatchFinished() && matchManager
 						.getCurrentTurnPhase() == TurnPhaseType.END_PHASE)) {
 
-			world.update();
+			matchManager.update();
 
 			matchManager.checkCharactersOutOfWorld();
 

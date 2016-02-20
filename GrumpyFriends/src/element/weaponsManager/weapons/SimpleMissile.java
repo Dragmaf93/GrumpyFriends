@@ -1,12 +1,11 @@
 package element.weaponsManager.weapons;
 
 import element.weaponsManager.AbstractWeapon;
-
+import element.weaponsManager.ExplosiveObject;
 import physic.PhysicalObjectManager;
 import physic.weapon.PhysicalMissile;
 import utils.Utils;
 import utils.Vector;
-import element.weaponsManager.ExplosiveObject;
 import physic.DragForceThread;
 
 public class SimpleMissile extends AbstractWeapon {
