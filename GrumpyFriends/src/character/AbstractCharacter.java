@@ -542,4 +542,38 @@ public abstract class AbstractCharacter implements Character {
 	public boolean isFalling() {
 		return falling;
 	}
+	
+	@Override
+	public boolean isActiveLauncher() {
+		return activeLauncher;
+	}
+	
+	@Override
+	public void setMoving(boolean moving) {
+		this.moving = moving;
+	}
+	
+	@Override
+	public void setJumping(boolean jumping) {
+		this.jumping = jumping;
+	}
+	
+	@Override
+	public void setFalling(boolean falling) {
+		this.falling = falling;
+	}
+
+	@Override
+	public void setOutWorld(boolean out) {
+		this.isOutWorld = out;
+	}
+	
+	public void setEndTurn(boolean endTurn) {
+		this.endTurn = endTurn;
+	};
+
+	@Override
+	public void setActiveLauncher(boolean activeLauncher) {
+		this.activeLauncher = activeLauncher;
+	}
 }

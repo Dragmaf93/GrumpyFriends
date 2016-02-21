@@ -43,6 +43,19 @@ public class GameStatusSync {
 				jNode.with("Character").put("Nome", character.getName());
 				jNode.with("Character").put("x", character.getX());
 				jNode.with("Character").put("y", character.getY());
+				
+				jNode.with("Character").put("moving", character.isMoving());
+				jNode.with("Character").put("jumping", character.isJumping());
+				jNode.with("Character").put("falling", character.isFalling());
+				jNode.with("Character").put("grounded", character.isGrounded());
+				jNode.with("Character").put("died", character.isDead());
+				jNode.with("Character").put("outWorld", character.isOutWorld());
+				jNode.with("Character").put("endTurn", character.finishedTurn());
+				
+				jNode.with("Character").put("activeLauncher", character.isActiveLauncher());
+				
+				
+				
 				nodes.add(jNode);
 				
 			}
@@ -62,8 +75,18 @@ public class GameStatusSync {
 			for (JsonNode jsonNode : jsonNodeArray) {
 				JsonNode jsonCharacter = jsonNode.get("Character");
 				Character c = characters.get(jsonCharacter.get("Nome").asText());
-				System.out.println("Charadsa      "+ jsonCharacter.get("Nome").asText());
+
 				c.setPosition(jsonCharacter.get("x").asDouble(), jsonCharacter.get("y").asDouble());
+				c.setMoving(jsonCharacter.get("moving").asBoolean());
+				c.setJumping(jsonCharacter.get("jumping").asBoolean());
+				c.setGrounded(jsonCharacter.get("grounded").asBoolean());
+				c.setDied(jsonCharacter.get("died").asBoolean());
+				c.setOutWorld(jsonCharacter.get("outWorld").asBoolean());
+				c.setEndTurn(jsonCharacter.get("endTurn").asBoolean());
+				
+				c.setActiveLauncher(jsonCharacter.get("activeLauncher").asBoolean());
+
+				
 			}			
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();

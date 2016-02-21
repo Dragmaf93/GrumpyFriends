@@ -50,7 +50,7 @@ public interface Character extends Element
 	
 	public abstract boolean sufferedDamage();
 	public abstract void endTurn();
-	abstract public PhysicalObject getPhysicalObject();
+	public abstract PhysicalObject getPhysicalObject();
 
 	public abstract Weapon getEquipWeapon();
 
@@ -70,13 +70,22 @@ public interface Character extends Element
 
 	public abstract void setDied(boolean bool);
 	
-	public void setPosition(double x, double y);
+	public abstract void setPosition(double x, double y);
 	
 	public abstract void update();
 	
-	public boolean isMoving();
-	public boolean isJumping();
-	public boolean isFalling();
+	public abstract boolean isActiveLauncher();
+	public abstract boolean isMoving();
+	public abstract boolean isJumping();
+	public abstract boolean isFalling();
 	public abstract void setWorld(World battlefield);
 	public abstract void reset();
+	
+	
+	public abstract void setMoving(boolean moving);
+	public abstract void setJumping(boolean jumping);
+	public abstract void setFalling(boolean falling);
+	public abstract void setOutWorld(boolean out);
+	public abstract void setEndTurn(boolean endTurn);
+	public abstract void setActiveLauncher(boolean activeLauncher);
 }

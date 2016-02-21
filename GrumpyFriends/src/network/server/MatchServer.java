@@ -110,7 +110,6 @@ public class MatchServer extends Thread {
 					matchManager.update();
 					try {
 						sendStatusWorld();
-						System.out.println("Cio");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
