@@ -169,7 +169,7 @@ public class Multiplayer {
 			while (gameBeans.size() < 3) {
 				condition.await();
 			}
-
+			
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
@@ -182,15 +182,16 @@ public class Multiplayer {
 
 		switch (op[0]) {
 		case Message.WORLD_STATUS:
-			System.out.println("POSITION 1 : "+matchManager.getCurrentPlayer().getX()+"   "+matchManager.getCurrentPlayer().getY());
 			gameStatusSync.setCharactersStatus(characters, op[1]);
-			System.out.println("POSITION 2 : "+matchManager.getCurrentPlayer().getX()+"   "+matchManager.getCurrentPlayer().getY());
 			break;
 		case Message.OP_SEND_INFO_TEAM_TO_CHOOSER:
 		case Message.OP_SEND_INFO_WORLD:
 		case Message.OP_SEND_INFO_TEAM_TO_CREATOR:
+			System.out.println(op[1]);
 			addBean(GameBean.jSonToGameBean(op[1]));
 			break;
+		case Message.SERVER_READY:
+			
 		default:
 			break;
 
