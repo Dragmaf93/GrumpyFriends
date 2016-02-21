@@ -32,4 +32,8 @@ public abstract class Message {
 	public static final String OP_SEND_INFO_TEAM_TO_CREATOR = "STCR";
 	public static final String WORLD_STATUS = "WS";
 	
+	public final static String OP_SEND_CURRENT_TEAM="CT";
+	
+	
+	
 }

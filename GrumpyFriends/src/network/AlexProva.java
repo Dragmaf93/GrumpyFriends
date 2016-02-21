@@ -101,8 +101,13 @@ public class AlexProva extends Application {
 		teams.get(1).setMatchManager(matchManager);
 		teams.get(1).setColorTeam(Color.STEELBLUE);
 
-		matchManager.setTeamA(teams.get(0));
-		matchManager.setTeamB(teams.get(1));
+		if(teams.get(0).getName().equals("Alex")){
+			matchManager.setTeamA(teams.get(0));
+			matchManager.setTeamB(teams.get(1));
+		}else{
+			matchManager.setTeamA(teams.get(1));
+			matchManager.setTeamB(teams.get(0));
+		}
 
 
 		positionCharacter();

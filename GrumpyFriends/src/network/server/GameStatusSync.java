@@ -52,7 +52,7 @@ public class GameStatusSync {
 				jNode.with("Character").put("outWorld", character.isOutWorld());
 				jNode.with("Character").put("endTurn", character.finishedTurn());
 				
-				jNode.with("Character").put("activeLauncher", character.isActiveLauncher());
+//				jNode.with("Character").put("activeLauncher", character.isActiveLauncher());
 				
 				jNode.with("Character").put("sufferedDamage", character.sufferedDamage());
 				jNode.with("Character").put("lifePoints", character.getLifePoints());
@@ -62,7 +62,7 @@ public class GameStatusSync {
 				jNode.with("Character").put("speedVectorY", character.getSpeedVector().y);
 				
 				jNode.with("Character").put("lastDamagePoints", character.getLastDamagePoints());
-				jNode.with("Character").put("lastEquippedWeaponName", character.getLastEquippedWeapon());
+//				jNode.with("Character").put("lastEquippedWeaponName", character.getLastEquippedWeapon());
 				
 				
 				nodes.add(jNode);
@@ -93,7 +93,7 @@ public class GameStatusSync {
 				c.setOutWorld(jsonCharacter.get("outWorld").asBoolean());
 				c.setEndTurn(jsonCharacter.get("endTurn").asBoolean());
 				
-				c.setActiveLauncher(jsonCharacter.get("activeLauncher").asBoolean());
+//				c.setActiveLauncher(jsonCharacter.get("activeLauncher").asBoolean());
 
 				c.setSufferedDamage(jsonCharacter.get("sufferedDamage").asBoolean());
 				c.setLifePoints(jsonCharacter.get("lifePoints").asInt());
@@ -104,7 +104,7 @@ public class GameStatusSync {
 						(float)jsonCharacter.get("speedVectorY").asDouble());
 				
 				c.setDamagePoints(jsonCharacter.get("lastDamagePoints").asInt());
-				c.setLastEquippedWeaponName(jsonCharacter.get("lastEquippedWeaponName").asText());
+//				c.setLastEquippedWeaponName(jsonCharacter.get("lastEquippedWeaponName").asText());
 				
 				
 			}			

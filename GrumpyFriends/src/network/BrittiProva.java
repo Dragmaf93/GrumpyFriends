@@ -57,7 +57,7 @@ public class BrittiProva extends Application {
 		client.chooseMatch(infoMatch);
 
 		Multiplayer multiplayer = new Multiplayer();
-		multiplayer.createMatch(client.getMatchServerIp(),
+		multiplayer.joinToMatch(client.getMatchServerIp(),
 				client.getServerPortNumber());
 		
 		GameBean beanTeam = new GameBean("Team");
@@ -90,8 +90,13 @@ public class BrittiProva extends Application {
 		teams.get(1).setMatchManager(matchManager);
 		teams.get(1).setColorTeam(Color.STEELBLUE);
 
-		matchManager.setTeamA(teams.get(0));
-		matchManager.setTeamB(teams.get(1));
+		if(teams.get(0).getName().equals("Alex")){
+			matchManager.setTeamA(teams.get(0));
+			matchManager.setTeamB(teams.get(1));
+		}else{
+			matchManager.setTeamA(teams.get(1));
+			matchManager.setTeamB(teams.get(0));
+		}
 
 
 		positionCharacter();

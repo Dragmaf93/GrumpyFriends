@@ -25,6 +25,7 @@ public class ClientMatchManager extends AbstractMatchManager {
 	public void moveCurrentPlayer(int direction) {
 		// currentPlayer.move(direction);
 		if (isMyTurn()) {
+			System.out.println("muovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovi");
 			if (direction == Character.LEFT)
 				multiplayer.sendOperationMessage(Message.OP_MOVE_LEFT, null);
 			else
@@ -84,6 +85,7 @@ public class ClientMatchManager extends AbstractMatchManager {
 	}
 
 	private boolean isMyTurn() {
+		System.out.println("Current team   "+ currentTeam.getName() +"  teamB "+ teamB.getName()+" teamA "+teamA.getName());
 		if (multiplayer.isAChooser() && currentTeam == teamB)
 			return true;
 		else if (!multiplayer.isAChooser() && currentTeam == teamA)
