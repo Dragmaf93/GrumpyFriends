@@ -54,6 +54,15 @@ public class GameStatusSync {
 				
 				jNode.with("Character").put("activeLauncher", character.isActiveLauncher());
 				
+				jNode.with("Character").put("sufferedDamage", character.sufferedDamage());
+				jNode.with("Character").put("lifePoints", character.getLifePoints());
+				jNode.with("Character").put("currentDirection", character.getCurrentDirection());
+				
+				jNode.with("Character").put("speedVectorX", character.getSpeedVector().x);
+				jNode.with("Character").put("speedVectorY", character.getSpeedVector().y);
+				
+				jNode.with("Character").put("lastDamagePoints", character.getLastDamagePoints());
+				jNode.with("Character").put("lastEquippedWeaponName", character.getLastEquippedWeapon());
 				
 				
 				nodes.add(jNode);
@@ -86,6 +95,17 @@ public class GameStatusSync {
 				
 				c.setActiveLauncher(jsonCharacter.get("activeLauncher").asBoolean());
 
+				c.setSufferedDamage(jsonCharacter.get("sufferedDamage").asBoolean());
+				c.setLifePoints(jsonCharacter.get("lifePoints").asInt());
+				
+				c.setCurrentDirection(jsonCharacter.get("currentDirection").asInt());
+
+				c.setSpeedVector((float)jsonCharacter.get("speedVectorX").asDouble(), 
+						(float)jsonCharacter.get("speedVectorY").asDouble());
+				
+				c.setDamagePoints(jsonCharacter.get("lastDamagePoints").asInt());
+				c.setLastEquippedWeaponName(jsonCharacter.get("lastEquippedWeaponName").asText());
+				
 				
 			}			
 		} catch (JsonProcessingException e) {

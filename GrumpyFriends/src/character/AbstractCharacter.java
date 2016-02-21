@@ -52,7 +52,7 @@ public abstract class AbstractCharacter implements Character {
 
 	protected boolean readyToEquipWeapon;
 	protected boolean attacked;
-	private boolean suffereDamage;
+	private boolean sufferedDamage;
 	private boolean endTurn;
 	private int lastDamagePoints;
 	private boolean jumping;
@@ -141,7 +141,7 @@ public abstract class AbstractCharacter implements Character {
 		equippedWeapon = null;
 		lastEquippedWeaponName = null;
 		grounded = true;
-		attacked = activeLauncher = died = jumping = suffereDamage = moving = isOutWorld = endTurn = false;
+		attacked = activeLauncher = died = jumping = sufferedDamage = moving = isOutWorld = endTurn = false;
 		lifePoints = 100;
 
 		launcher = new Launcher(this);
@@ -454,7 +454,7 @@ public abstract class AbstractCharacter implements Character {
 	@Override
 	public double getHeight() {
 		return Utils.heightFromJbox2dToJavaFx(height);
-		
+
 	}
 
 	@Override
@@ -486,7 +486,7 @@ public abstract class AbstractCharacter implements Character {
 	public void prepareForTurn() {
 		readyToEquipWeapon = true;
 		attacked = false;
-		suffereDamage = false;
+		sufferedDamage = false;
 		endTurn = false;
 		launcher.restartLauncher();
 
@@ -498,12 +498,17 @@ public abstract class AbstractCharacter implements Character {
 	}
 
 	@Override
+	public float getPowerJump() {
+		return powerJump;
+	}
+
+	@Override
 	public void decreaseLifePoints(int points) {
 		lastDamagePoints = points;
 		lifePoints -= points;
 		if (lifePoints < 0)
 			lifePoints = 0;
-		suffereDamage = true;
+		sufferedDamage = true;
 	}
 
 	@Override
@@ -514,7 +519,7 @@ public abstract class AbstractCharacter implements Character {
 
 	@Override
 	public boolean sufferedDamage() {
-		return suffereDamage;
+		return sufferedDamage;
 	}
 
 	@Override
@@ -542,22 +547,22 @@ public abstract class AbstractCharacter implements Character {
 	public boolean isFalling() {
 		return falling;
 	}
-	
+
 	@Override
 	public boolean isActiveLauncher() {
 		return activeLauncher;
 	}
-	
+
 	@Override
 	public void setMoving(boolean moving) {
 		this.moving = moving;
 	}
-	
+
 	@Override
 	public void setJumping(boolean jumping) {
 		this.jumping = jumping;
 	}
-	
+
 	@Override
 	public void setFalling(boolean falling) {
 		this.falling = falling;
@@ -567,7 +572,7 @@ public abstract class AbstractCharacter implements Character {
 	public void setOutWorld(boolean out) {
 		this.isOutWorld = out;
 	}
-	
+
 	public void setEndTurn(boolean endTurn) {
 		this.endTurn = endTurn;
 	};
@@ -575,5 +580,40 @@ public abstract class AbstractCharacter implements Character {
 	@Override
 	public void setActiveLauncher(boolean activeLauncher) {
 		this.activeLauncher = activeLauncher;
+	}
+
+	@Override
+	public Vector getSpeedVector() {
+		return speedVector;
+	}
+
+	@Override
+	public void setSufferedDamage(boolean sufferedDamage) {
+		this.sufferedDamage = sufferedDamage;
+	}
+
+	@Override
+	public void setLifePoints(int lifePoints) {
+		this.lifePoints = lifePoints;
+	}
+
+	@Override
+	public void setCurrentDirection(int direction) {
+		this.currentDirection = direction;
+	}
+
+	@Override
+	public void setSpeedVector(float x, float y) {
+		speedVector.set(x, y);
+	}
+	
+	@Override
+	public void setDamagePoints(int damagePoint) {
+		this.lastDamagePoints = damagePoint;
+	}
+	
+	@Override
+	public void setLastEquippedWeaponName(String equippedWeapon) {
+		this.lastEquippedWeaponName = equippedWeapon;
 	}
 }

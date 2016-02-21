@@ -2,6 +2,8 @@ package character;
 
 
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import element.Element;
 import element.weaponsManager.Launcher;
 import element.weaponsManager.Weapon;
@@ -81,6 +83,8 @@ public interface Character extends Element
 	public abstract void setWorld(World battlefield);
 	public abstract void reset();
 	
+	public abstract float getPowerJump();
+	public abstract Vector getSpeedVector();
 	
 	public abstract void setMoving(boolean moving);
 	public abstract void setJumping(boolean jumping);
@@ -88,4 +92,11 @@ public interface Character extends Element
 	public abstract void setOutWorld(boolean out);
 	public abstract void setEndTurn(boolean endTurn);
 	public abstract void setActiveLauncher(boolean activeLauncher);
+	public abstract void setSufferedDamage(boolean asBoolean);
+	public abstract void setLifePoints(int asInt);
+	public abstract void setCurrentDirection(int asInt);
+	public abstract void setSpeedVector(float asDouble, float asDouble2);
+	public abstract void setDamagePoints(int asInt);
+	public abstract void setLastEquippedWeaponName(String asText);
+	
 }
