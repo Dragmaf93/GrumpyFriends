@@ -99,6 +99,9 @@ public class MatchServer extends Thread {
 				characters.put(character.getName(), character);
 			}
 			
+			System.out.println(inFromChooser.readLine());
+			System.out.println(inFromCreator.readLine());
+			
 			matchManager.startMatch();
 			
 			new Thread(new Runnable() {

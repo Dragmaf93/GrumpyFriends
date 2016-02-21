@@ -179,7 +179,7 @@ public class ClientGame extends AbstractGame {
 			}
 
 			matchManager = new ClientMatchManager(battlefield);
-
+			
 			for (Character character : characters) {
 				character.setWorld(battlefield);
 				battlefield.addCharacter(character);

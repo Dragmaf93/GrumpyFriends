@@ -1,5 +1,13 @@
 package network;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+
+import menu.GameBean;
+import menu.SequencePage;
+import network.client.Client;
 import network.client.Multiplayer;
 import network.client.ClientMatchManager;
 import world.GameWorldBuilder;
@@ -10,6 +18,7 @@ import character.BlackStormtrooper;
 import character.Character;
 import character.Team;
 import character.WhiteStormtrooper;
+import game.MatchManager;
 import gui.MatchPane;
 import gui.event.KeyboardPressedEventHandler;
 import gui.event.KeyboardReleaseEventHandler;
@@ -21,82 +30,183 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class AlexProva extends Application {
+	static final String PATH_PACKAGE="character.";
 
+	protected List<Team> teams;
+	
+	protected List<Character> characters;
+	protected World battlefield;
+	
+	protected MatchManager matchManager;
+	protected WorldBuilder worldBuilder;
+	protected List<GameBean> beans;
 	public static void main(String[] args) {
 		launch(args);
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		WorldBuilder builder = new GameWorldBuilder();
-		WorldDirector director = new WorldDirector(builder);
-		director.createWorld("worldXML/Map2.xml","Planet");
-		World world = builder.getWorld();
-		ClientMatchManager matchManager = new ClientMatchManager(world);
+		teams = new ArrayList<Team>();
+		characters = new ArrayList<Character>();
+		beans = new ArrayList<>();
 		
-		
-		Team teamA = new Team();
-		Team teamB = new Team();
-		
-//		teamA = new Team(nameTeamA, 4, matchManager,1);
-//		teamB = new Team(nameTeamB, 4, matchManager,2);
-		
-		
-		teamA.setColorTeam(Color.CRIMSON);
-		teamB.setColorTeam(Color.STEELBLUE);
-		Character playerA = new WhiteStormtrooper("PlayerA",teamA);
-		Character playerB = new BlackStormtrooper("PlayerB",teamB);
+		Client client = new Client();
+		client.connectToServer();
+		client.setImAChooser(false);
+		InfoMatch infoMatch = new InfoMatch("Ciao", "CIAE", 1, false, "Planet");
+		infoMatch.setStatusMatch(StatusMatch.WAITING);
+		client.createMatch(infoMatch);
 
-		playerA.setWorld(world);
-		playerB.setWorld(world);
-		
-		matchManager.setTeamA(teamA);
-		matchManager.setTeamB(teamB);
-		
-		teamA.setMatchManager(matchManager);
-		teamB.setMatchManager(matchManager);
-		
-		teamA.addCharacter(playerA);
-		teamB.addCharacter(playerB);
-		
-		world.addCharacter(playerA);
-		world.addCharacter(playerB);
-
-		
-		builder.lastSettings();
-		playerA.setStartedPosition(100,100);
-		playerB.setStartedPosition(110,100);
-		// ui
 		Multiplayer multiplayer = new Multiplayer();
-		matchManager.setMultiplayer(multiplayer);
-		multiplayer.setMatchManager(matchManager);
-//		multiplayer.setIps("127.0.0.1", "127.0.0.1");
-//		multiplayer.createMatch();
+		multiplayer.createMatch(client.getMatchServerIp(),
+				client.getServerPortNumber());
+
+		GameBean beanWorld = new GameBean("World");
+
+		beanWorld.addData("WorldType", "Planet");
+		beanWorld.addData("WorldMap", "Map2");
 		
+		multiplayer.sendOperationMessage(Message.OP_SEND_INFO_WORLD,
+				beanWorld.toJSON());
+		GameBean beanTeam = new GameBean("Team");
+
 
 		
-		primaryStage.setTitle("Grumpy Friends");
+		beanTeam.addData("TeamName", "Alex");
+		beanTeam.addData("PlayerName" + 0, "Alex");
+		beanTeam.addData("TypeTeam", "WhiteStormtrooper");
+		multiplayer.sendOperationMessage(Message.OP_SEND_INFO_TEAM_TO_CHOOSER,
+				beanTeam.toJSON());
+
+		List<GameBean> gamebeans = multiplayer.getGameBean();
+		gamebeans.add(beanWorld);
+		gamebeans.add(beanTeam);
 		
-//		
+		multiplayer.readyToStart();
+
+		for (int i = 0; i < gamebeans.size(); i++) {
+			extractData(gamebeans.get(i));
+		}
+
+		matchManager = new ClientMatchManager(battlefield);
+		for (Character character : characters) {
+			character.setWorld(battlefield);
+			battlefield.addCharacter(character);
+		}
+		multiplayer.setMatchManager(matchManager);
+		
+		((ClientMatchManager) matchManager).setMultiplayer(multiplayer);
+		teams.get(0).setMatchManager(matchManager);
+		teams.get(0).setColorTeam(Color.CRIMSON);
+		teams.get(1).setMatchManager(matchManager);
+		teams.get(1).setColorTeam(Color.STEELBLUE);
+
+		matchManager.setTeamA(teams.get(0));
+		matchManager.setTeamB(teams.get(1));
+
+
+		positionCharacter();
+		
+		multiplayer.sendOperationMessage(Message.SERVER_READY, null);
+		matchManager.startMatch();
+		// multiplayer.setIps("127.0.0.1", "127.0.0.1");
+		// multiplayer.createMatch();
+
+		primaryStage.setTitle("Alex Creator");
+
+		//
 		MatchPane matchPane = new MatchPane(matchManager);
-		
-		Scene scene = new Scene(matchPane,Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight());
+
+		Scene scene = new Scene(matchPane, Screen.getPrimary().getBounds()
+				.getWidth(), Screen.getPrimary().getBounds().getHeight());
 		primaryStage.setScene(scene);
-		scene.setOnKeyPressed(new KeyboardPressedEventHandler(matchPane, matchManager));
-		scene.setOnKeyReleased(new KeyboardReleaseEventHandler(matchPane, matchManager));
-		
+		scene.setOnKeyPressed(new KeyboardPressedEventHandler(matchPane,
+				matchManager));
+		scene.setOnKeyReleased(new KeyboardReleaseEventHandler(matchPane,
+				matchManager));
+
 		primaryStage.show();
-		
+
 		new AnimationTimer() {
-			
+
 			@Override
 			public void handle(long arg0) {
 				matchPane.update();
 			}
 		}.start();
-		
-		
-//		p1.start();
-		
+
+		// p1.start();
+
+	}
+	
+	protected void extractData(GameBean bean) {
+
+		String beanName = bean.getNameBean();
+		switch (beanName) {
+		case "Team":
+			Team team = new Team();
+			teams.add(team);
+
+			team.setName(bean.getFirstValue("TeamName"));
+			String typePlayer = bean.getFirstValue("TypeTeam");
+			
+			while (bean.hasNext()) {
+				if (bean.getNextNameData().contains("PlayerName")) {
+					Character character = createCharacter(bean.getNextValue(),
+							typePlayer, team);
+					team.addCharacter(character);
+					characters.add(character);
+				}
+			}
+			break;
+		case "World":
+			battlefield = createWorld(bean.getFirstValue("WorldType"),
+					bean.getFirstValue("WorldMap"));
+			break;
+		default:
+			break;
+		}
+	}
+	protected void positionCharacter() {
+		int x = 10;
+		for (Character character : characters) {
+			x += 10;
+			character.setStartedPosition(x, 100);
+		}
+		worldBuilder.lastSettings();
+	}
+	
+	final protected Character createCharacter(String namePlayer, String type,
+			Team team) {
+		System.out.println(type);
+		String name = PATH_PACKAGE + type;
+		try {
+			Class<?> classDefinition = Class.forName(name);
+			Constructor constructor = classDefinition.getConstructor(String.class,Team.class);
+			return  (Character) constructor.newInstance(namePlayer,team);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	final protected World createWorld(String typeWorld, String worldMap) {
+		worldBuilder = new GameWorldBuilder();
+		WorldDirector director = new WorldDirector(worldBuilder);
+		director.createWorld("worldXML/" + worldMap + ".xml", typeWorld);
+		World world = worldBuilder.getWorld();
+		return world;
 	}
 }
