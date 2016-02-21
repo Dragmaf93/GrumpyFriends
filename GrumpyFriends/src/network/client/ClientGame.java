@@ -180,6 +180,10 @@ public class ClientGame extends AbstractGame {
 
 			matchManager = new ClientMatchManager(battlefield);
 
+			for (Character character : characters) {
+				character.setWorld(battlefield);
+				battlefield.addCharacter(character);
+			}
 			multiplayer.setMatchManager(matchManager);
 			((ClientMatchManager) matchManager).setMultiplayer(multiplayer);
 			teams.get(0).setMatchManager(matchManager);
@@ -190,10 +194,6 @@ public class ClientGame extends AbstractGame {
 			matchManager.setTeamA(teams.get(0));
 			matchManager.setTeamB(teams.get(1));
 
-			for (Character character : characters) {
-				character.setWorld(battlefield);
-				battlefield.addCharacter(character);
-			}
 
 			positionCharacter();
 
@@ -307,6 +307,16 @@ public class ClientGame extends AbstractGame {
 
 	public void disconnetToServer() throws IOException {
 		client.closeConnection();
+	}
+	
+	@Override
+	protected void positionCharacter() {
+		int x = 10;
+		for (Character character : characters) {
+			x += 10;
+			character.setStartedPosition(x, 100);
+		}
+		worldBuilder.lastSettings();
 	}
 
 	public void updateListMatch() {

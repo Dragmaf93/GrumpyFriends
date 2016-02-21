@@ -10,6 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import network.InfoMatch;
@@ -43,12 +44,17 @@ public class MatchServer extends Thread {
 	private ServerGame game;
 
 	private MatchManager matchManager;
+	private GameStatusSync gameStatusSync;
+	
+	private HashMap<String, Character> characters;
 	
 	public MatchServer(int port,InfoMatch match) {
 		this.port = port;
 		this.match=match;
 		listeningSocket=true;
 		game = new ServerGame();
+		gameStatusSync = new GameStatusSync();
+		characters = new HashMap<String, Character>();
 	}
 	
 	public int getPort() {
@@ -87,6 +93,11 @@ public class MatchServer extends Thread {
 			outToCurrentClient = outToCreator;
 			
 			matchManager = game.getMatchManager();
+			
+			List<Character> list=matchManager.getBattlefield().getAllCharacters();
+			for (Character character : list) {
+				characters.put(character.getName(), character);
+			}
 			
 			matchManager.startMatch();
 			
@@ -133,12 +144,9 @@ public class MatchServer extends Thread {
 	
 	private void sendStatusWorld() throws IOException{
 		
-		outToCreator.writeBytes(Message.WORLD_STATUS+";"+
-				matchManager.getCurrentPlayer().getX()+";"+
-				matchManager.getCurrentPlayer().getY()+'\n');
-		outToChooser.writeBytes(Message.WORLD_STATUS+";"+
-				matchManager.getCurrentPlayer().getX()+";"+
-				matchManager.getCurrentPlayer().getY()+'\n');
+		String json = gameStatusSync.characterStatusToJson(characters);
+		outToCreator.writeBytes(Message.WORLD_STATUS+";"+json+'\n');
+		outToChooser.writeBytes(Message.WORLD_STATUS+";"+json+'\n');
 		
 	}
 	

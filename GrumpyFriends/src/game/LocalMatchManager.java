@@ -40,7 +40,9 @@ public class LocalMatchManager extends AbstractMatchManager {
 
 	@Override
 	public void update() {
+		battlefield.step();
 		battlefield.update();
+		battlefield.removeDestroyedElement();
 	}
 
 }

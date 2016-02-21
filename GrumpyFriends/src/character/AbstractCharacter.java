@@ -22,7 +22,7 @@ public abstract class AbstractCharacter implements Character {
 	private final static float JUMP = 25f;
 
 	protected String name;
-	
+
 	protected float height;
 	protected float width;
 
@@ -59,7 +59,7 @@ public abstract class AbstractCharacter implements Character {
 	private float startY;
 	private float startX;
 
-	private double x,y;
+	private double x, y;
 	private Vector speedVector;
 	private boolean falling;
 
@@ -125,10 +125,10 @@ public abstract class AbstractCharacter implements Character {
 
 		readyToEquipWeapon = true;
 		currentDirection = RIGHT;
-		
+
 		speedVector = new Vector();
 	}
-	
+
 	@Override
 	public void setWorld(World battlefield) {
 		world = battlefield;
@@ -139,29 +139,30 @@ public abstract class AbstractCharacter implements Character {
 		weaponsManager = new WeaponsManager();
 
 		equippedWeapon = null;
-		lastEquippedWeaponName=null;
+		lastEquippedWeaponName = null;
 		grounded = true;
-		attacked=activeLauncher=died=
-		jumping=suffereDamage=moving=isOutWorld=endTurn=false;
+		attacked = activeLauncher = died = jumping = suffereDamage = moving = isOutWorld = endTurn = false;
 		lifePoints = 100;
 
 		launcher = new Launcher(this);
 
 		readyToEquipWeapon = true;
 		currentDirection = RIGHT;
-		
-		PhysicalObjectManager.getInstance().removePhysicalObject((RemovablePhysicalObject) physicBody);
-		
-		physicBody = new PhysicalCharacter(startX, startY, width, height, name);
-		PhysicalObjectManager.getInstance().buildPhysicObject(physicBody);
+
+		if (physicBody != null) {
+			PhysicalObjectManager.getInstance().removePhysicalObject(
+					(RemovablePhysicalObject) physicBody);
+
+			physicBody = new PhysicalCharacter(startX, startY, width, height,
+					name);
+			PhysicalObjectManager.getInstance().buildPhysicObject(physicBody);
+		}
 	}
 
 	@Override
 	public void setStartedPosition(float x, float y) {
-		startX=x;
-		startY=y;
-		physicBody = new PhysicalCharacter(x, y, width, height, name);
-		PhysicalObjectManager.getInstance().buildPhysicObject(physicBody);
+		startX = x;
+		startY = y;
 	}
 
 	@Override
@@ -184,7 +185,8 @@ public abstract class AbstractCharacter implements Character {
 	public void setGrounded(boolean b) {
 		this.grounded = b;
 		jumping = false;
-		((PhysicalCharacter) physicBody).blockWheelJoint();
+		if (physicBody != null)
+			((PhysicalCharacter) physicBody).blockWheelJoint();
 
 	}
 
@@ -234,8 +236,9 @@ public abstract class AbstractCharacter implements Character {
 
 	@Override
 	public void afterDeath() {
-		PhysicalObjectManager.getInstance().removePhysicalObject(
-				(RemovablePhysicalObject) physicBody);
+		if (physicBody != null)
+			PhysicalObjectManager.getInstance().removePhysicalObject(
+					(RemovablePhysicalObject) physicBody);
 	}
 
 	@Override
@@ -290,7 +293,7 @@ public abstract class AbstractCharacter implements Character {
 	}
 
 	@Override
-	public  void move(int direction) {
+	public void move(int direction) {
 		if (!grounded)
 			return;
 
@@ -364,17 +367,23 @@ public abstract class AbstractCharacter implements Character {
 	}
 
 	@Override
+	public void createPhysicObject() {
+		physicBody = new PhysicalCharacter(startX, startY, width, height, name);
+		PhysicalObjectManager.getInstance().buildPhysicObject(physicBody);
+	}
+
+	@Override
 	public void update() {
-		x =	Utils.xFromJbox2dToJavaFx(physicBody.getX());
-		y = Utils.yFromJbox2dToJavaFx(physicBody.getY());
-		
-		
-		if (physicBody.getBody().getLinearVelocity().y < 0 && !isGrounded())
-			falling=true;
+		if (physicBody != null) {
+			x = Utils.xFromJbox2dToJavaFx(physicBody.getX());
+			y = Utils.yFromJbox2dToJavaFx(physicBody.getY());
+			speedVector.set(physicBody.getBody().getLinearVelocity());
+		}
+
+		if (speedVector.y < 0 && !isGrounded())
+			falling = true;
 		else
 			falling = false;
-		
-		speedVector.set(physicBody.getBody().getLinearVelocity());
 
 		if (x > world.getWidth() + World.DISTANCE_WORLDS_BORDER
 				|| x < -World.DISTANCE_WORLDS_BORDER
@@ -407,7 +416,8 @@ public abstract class AbstractCharacter implements Character {
 	public void endTurn() {
 		endTurn = true;
 		launcher.disable();
-		((PhysicalCharacter) physicBody).blockWheelJoint();
+		if (physicBody != null)
+			((PhysicalCharacter) physicBody).blockWheelJoint();
 
 	}
 
@@ -443,12 +453,13 @@ public abstract class AbstractCharacter implements Character {
 
 	@Override
 	public double getHeight() {
-		return Utils.heightFromJbox2dToJavaFx(physicBody.getHeight());
+		return Utils.heightFromJbox2dToJavaFx(height);
+		
 	}
 
 	@Override
 	public double getWidth() {
-		return Utils.widthFromJbox2dToJavaFx(physicBody.getWidth());
+		return Utils.widthFromJbox2dToJavaFx(width);
 	}
 
 	@Override
@@ -497,10 +508,10 @@ public abstract class AbstractCharacter implements Character {
 
 	@Override
 	public void setPosition(double x, double y) {
-		this.x=x;
-		this.y=y;
+		this.x = x;
+		this.y = y;
 	}
-	
+
 	@Override
 	public boolean sufferedDamage() {
 		return suffereDamage;

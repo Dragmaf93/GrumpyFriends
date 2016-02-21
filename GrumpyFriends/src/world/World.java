@@ -37,6 +37,8 @@ public interface World {
 	abstract public  org.jbox2d.dynamics.World getPhysicWorld();
 	public abstract List<Character> getAllCharacters();
 	
+	public abstract void step();
+	public abstract void removeDestroyedElement();
 	public abstract void update();
 	public abstract void reset();
 	

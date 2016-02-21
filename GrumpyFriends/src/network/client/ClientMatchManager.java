@@ -80,7 +80,7 @@ public class ClientMatchManager extends AbstractMatchManager {
 
 	@Override
 	public void update() {
-//		battlefield.update();
+		battlefield.update();
 	}
 
 	private boolean isMyTurn() {

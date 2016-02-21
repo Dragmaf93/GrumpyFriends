@@ -63,14 +63,14 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 
 	@Override
 	public void reset() {
-		
+
 		charactersOutOfWorld.clear();
-		
+
 		for (Character character : characters) {
 			charactersAlreadyOutWorld.put(character.getName(), false);
 			character.reset();
 		}
-		
+
 		PhysicalObjectManager.getInstance().destroyBodies();
 
 	}
@@ -160,25 +160,32 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	}
 
 	@Override
-	public void update() {
+	public void removeDestroyedElement() {
+		PhysicalObjectManager.getInstance().destroyBodies();
+
+	}
+	
+	@Override
+	public void step() {
 		super.step(1.0f / 30, 6, 3);
+	}
+	
+	@Override
+	public void update() {
 
 		for (Character character : characters) {
 
 			character.update();
-//			System.out.println(character.getWidth()
-//					+"  "+character.getHeight());
+			// System.out.println(character.getWidth()
+			// +"  "+character.getHeight());
 			if (character.isOutWorld()
 					&& !charactersAlreadyOutWorld.get(character.getName())) {
 				character.afterDeath();
 				charactersOutOfWorld.add(character);
 				charactersAlreadyOutWorld.put(character.getName(), true);
-//				System.out.println("CADUTOOOOOOOOOoooo");
+				// System.out.println("CADUTOOOOOOOOOoooo");
 			}
 		}
-		
-		PhysicalObjectManager.getInstance().destroyBodies();
-
 	}
 
 	public void setContactListener() {

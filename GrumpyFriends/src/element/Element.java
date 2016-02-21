@@ -11,5 +11,6 @@ public interface Element
 	public abstract double getHeight();
 	public abstract double getWidth();
 	
+	public void createPhysicObject();
 	public PhysicalObject getPhysicObject();
 }

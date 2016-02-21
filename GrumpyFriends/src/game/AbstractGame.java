@@ -5,6 +5,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.xml.internal.messaging.saaj.util.CharReader;
+
 import world.GameWorldBuilder;
 import world.World;
 import world.WorldBuilder;
@@ -42,6 +44,7 @@ public abstract class AbstractGame implements Game {
 		for (Character character : characters) {
 			x += 10;
 			character.setStartedPosition(x, 100);
+			character.createPhysicObject();
 		}
 		worldBuilder.lastSettings();
 	}

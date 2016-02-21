@@ -36,6 +36,18 @@ public class TestWorld implements world.World {
 	}
 
 	@Override
+	public void step() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void removeDestroyedElement() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
 	public void addLinearGround(float x, float y, float width, float height) {
 		new LinearGround(x, y, width, height);
 	}

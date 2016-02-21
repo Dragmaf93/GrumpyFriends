@@ -35,7 +35,7 @@ public class RoundGround extends AbstractGround {
 		}
 		
 		physicalObject = new PhysicalCurveObject(points);
-		PhysicalObjectManager.getInstance().buildPhysicObject(physicalObject);
+//		PhysicalObjectManager.getInstance().buildPhysicObject(physicalObject);
 	}
 
 	public boolean isABezierCurve(){

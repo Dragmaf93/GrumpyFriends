@@ -11,6 +11,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -26,7 +27,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 
 
+
+
 import network.Message;
+import network.server.GameStatusSync;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -61,15 +65,19 @@ public class Multiplayer {
 	private List<GameBean> gameBeans;
 
 	private boolean chooser;
+	private GameStatusSync gameStatusSync;
 
+	private HashMap<String, Character> characters;
 	public Multiplayer(MatchManager matchManager) {
-
+		gameStatusSync = new GameStatusSync();
 		this.matchManager = matchManager;
 		gameBeans = new ArrayList<GameBean>();
 	}
 
 	public Multiplayer() {
+		characters = new HashMap<String, Character>();
 		gameBeans = new ArrayList<GameBean>();
+		gameStatusSync = new GameStatusSync();
 		exception = new Popup(400, 180, "Connection refused", null, "OK");
 		exception.getRightButton().setOnMouseReleased(
 				new EventHandler<MouseEvent>() {
@@ -87,6 +95,10 @@ public class Multiplayer {
 
 	public void setMatchManager(MatchManager matchManager) {
 		this.matchManager = matchManager;
+		List<Character> list=matchManager.getBattlefield().getAllCharacters();
+		for (Character character : list) {
+			characters.put(character.getName(), character);
+		}
 	}
 	
 	public boolean isAChooser(){
@@ -171,7 +183,7 @@ public class Multiplayer {
 		switch (op[0]) {
 		case Message.WORLD_STATUS:
 			System.out.println("POSITION 1 : "+matchManager.getCurrentPlayer().getX()+"   "+matchManager.getCurrentPlayer().getY());
-			matchManager.getCurrentPlayer().setPosition(Double.parseDouble(op[1]), Double.parseDouble(op[2]));
+			gameStatusSync.setCharactersStatus(characters, op[1]);
 			System.out.println("POSITION 2 : "+matchManager.getCurrentPlayer().getX()+"   "+matchManager.getCurrentPlayer().getY());
 			break;
 		case Message.OP_SEND_INFO_TEAM_TO_CHOOSER:

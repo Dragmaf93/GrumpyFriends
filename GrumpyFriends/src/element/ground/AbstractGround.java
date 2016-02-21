@@ -4,6 +4,7 @@ import java.util.List;
 
 import element.Ground;
 import physic.PhysicalObject;
+import physic.PhysicalObjectManager;
 import utils.Point;
 
 public abstract class AbstractGround implements Ground{
@@ -45,7 +46,10 @@ public abstract class AbstractGround implements Ground{
 	public double getY() {
 		return positionY;
 	}
-	
+	@Override
+	public void createPhysicObject() {
+		PhysicalObjectManager.getInstance().buildPhysicObject(physicalObject);
+	}
 	@Override
 	public PhysicalObject getPhysicObject() {
 		return physicalObject;

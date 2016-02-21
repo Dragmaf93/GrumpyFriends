@@ -12,7 +12,9 @@ public class ServerMatchManager extends AbstractMatchManager{
 	
 	@Override
 	public void update() {
+		battlefield.step();
 		battlefield.update();
+		battlefield.removeDestroyedElement();
 	}
 
 	@Override

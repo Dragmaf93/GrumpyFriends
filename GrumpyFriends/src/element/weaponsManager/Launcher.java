@@ -110,6 +110,7 @@ import character.Character;
 import physic.PhysicalCharacter;
 import physic.PhysicalLauncher;
 import physic.PhysicalObjectManager;
+import sun.rmi.transport.proxy.CGIHandler;
 import utils.Utils;
 import utils.Vector;
 
@@ -129,6 +130,8 @@ public class Launcher {
 	private float angle;
 	private Vector position;
 	private Vector speedVector;
+	private double y;
+	private double x;
 
 	public Launcher(Character character) {
 		// this.character = character;
@@ -231,14 +234,21 @@ public class Launcher {
 
 	public double getX() {
 		// return physicalLauncher.getX();
-		return Utils.xFromJbox2dToJavaFx(character.getPhysicalObject().getBody().getPosition().x);
+//		return Utils.xFromJbox2dToJavaFx(character.getPhysicalObject().getBody().getPosition().x);
+		return character.getX();
 	}
 
 	public double getY() {
 		// return physicalLauncher.getY();
-		return Utils.yFromJbox2dToJavaFx(character.getPhysicalObject().getBody().getPosition().y );
+//		return Utils.yFromJbox2dToJavaFx(character.getPhysicalObject().getBody().getPosition().y );
+		return character.getY();
 	}
 
+	public void setPosition(double x, double y){
+		this.x=x;
+		this.y=y;
+	}
+	
 	public void disable() {
 		// physicalLauncher.rotate(0);
 		activated = false;
