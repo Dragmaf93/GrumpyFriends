@@ -1,5 +1,7 @@
 package game;
 
+import gui.drawer.CharacterDrawer;
+import character.Character;
 import world.World;
 
 public class LocalMatchManager extends AbstractMatchManager {
@@ -40,9 +42,78 @@ public class LocalMatchManager extends AbstractMatchManager {
 
 	@Override
 	public void update() {
-		battlefield.step();
-		battlefield.update();
-		battlefield.removeDestroyedElement();
+		if (!isPaused()
+				&& !(isMatchFinished() && getCurrentTurnPhase() == TurnPhaseType.END_PHASE)) {
+
+			battlefield.step();
+			battlefield.update();
+			battlefield.removeDestroyedElement();
+
+			checkCharactersOutOfWorld();
+
+			if (currentPlayer.isOutWorld()) {
+				timer.stopTurnTimer();
+				setTurnPhase(TurnPhaseType.STARTER_PHASE);
+			}
+
+			if (getCurrentTurnPhase() == TurnPhaseType.STARTER_PHASE) {
+				if (isMatchFinished())
+					setTurnPhase(TurnPhaseType.END_PHASE);
+				else if (allCharacterAreSpleeping() && canStartNextTurn())
+					startNextTurn();
+			}
+
+			if (getCurrentTurnPhase() == TurnPhaseType.MAIN_PHASE) {
+
+				if (getMatchTimer().isTurnTimerEnded()) {
+					getCurrentPlayer().endTurn();
+					getMatchTimer().stopTurnTimer();
+					setTurnPhase(TurnPhaseType.STARTER_PHASE);
+				} else if (getCurrentPlayer().attacked()
+						&& !getMatchTimer().isTurnTimerStopped()) {
+					// System.out.println("MAIN PHASE");
+					getMatchTimer().startAttackTimer();
+					getMatchTimer().stopTurnTimer();
+
+				} else if (getMatchTimer().isTurnTimerStopped()
+						&& getMatchTimer().isAttackTimerEnded()) {
+					getCurrentPlayer().endTurn();
+					setTurnPhase(TurnPhaseType.DAMAGE_PHASE);
+				}
+			}
+			if (getCurrentTurnPhase() == TurnPhaseType.DEATH_PHASE) {
+
+				checkDiedCharacters();
+
+				if (allCharacterAreSpleeping()) {
+
+					if (!diedCharactersOfTheCurrentTurn.isEmpty()
+							&& canRemoveDeathCharacter()) {
+						for (Character character : diedCharactersOfTheCurrentTurn) {
+							character.afterDeath();
+						}
+					}
+					setTurnPhase(TurnPhaseType.STARTER_PHASE);
+				}
+			}
+			if (getCurrentTurnPhase() == TurnPhaseType.DAMAGE_PHASE) {
+
+				applyDamageToHitCharacter();
+				if (isAppliedDamage() && allCharacterAreSpleeping()) {
+
+					if (!getDamagedCharacters().isEmpty()) {
+						if (canClearDamageCharacter()) {
+							damagedCharacters.clear();
+							setCanClearDamageCharacter(false);
+							setTurnPhase(TurnPhaseType.DEATH_PHASE);
+						}
+					} else {
+						setTurnPhase(TurnPhaseType.DEATH_PHASE);
+					}
+				}
+			}
+		}
+
 	}
 
 }

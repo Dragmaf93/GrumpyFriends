@@ -1,5 +1,6 @@
 package gui;
 
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -31,15 +32,18 @@ public class FieldPane extends Pane {
 
 	private FieldScene scene;
 	private Node worldNode;
-	
-	private Group field;
 
+	private Group field;
+	private boolean focusPlayer;
+	
 	private List<Character> damagedCharacters;
 
 	private List<Character> diedCharacters;
 	private CharacterDrawer currentDiedCD;
 	private int currentTurn;
 	private ImageLoader imageLoader;
+
+	private int contdeathAnimation;
 
 	public FieldPane(MatchManager matchManager) {
 		this.matchManager = matchManager;
@@ -103,7 +107,7 @@ public class FieldPane extends Pane {
 
 	private void createWorld() {
 
-		field.getChildren().add(worldNode=worldDrawer.createWorld());
+		field.getChildren().add(worldNode = worldDrawer.createWorld());
 		// List<Ground> grounds = world.getGrounds();
 		//
 		// for (Ground ground : grounds) {
@@ -111,70 +115,69 @@ public class FieldPane extends Pane {
 		// // new PolygonGroundDrawer(field, imageLoader).draw(ground);
 		// }
 	}
-	
-	public void reset(){
-		
+
+	public void reset() {
+
 		Collection<CharacterDrawer> collection = characterDrawers.values();
-		
+
 		field.getChildren().remove(worldNode);
-		
+
 		for (CharacterDrawer characterDrawer : collection) {
 			characterDrawer.reset();
 		}
-		
+
 		field.getChildren().add(worldNode);
 	}
-	
+
 	public void update() {
-		if (!matchManager.isPaused()
-				&& !(matchManager.isMatchFinished() && matchManager
-						.getCurrentTurnPhase() == TurnPhaseType.END_PHASE)) {
 
 			matchManager.update();
-
-			matchManager.checkCharactersOutOfWorld();
 
 			Collection<CharacterDrawer> collection = characterDrawers.values();
 
 			for (CharacterDrawer characterDrawer : collection) {
 				characterDrawer.draw();
 			}
-
-			if (matchManager.getCurrentPlayer().isOutWorld()) {
-				matchManager.getMatchTimer().stopTurnTimer();
-				matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
-			}
+			//
+			// if (matchManager.getCurrentPlayer().isOutWorld()) {
+			// matchManager.getMatchTimer().stopTurnTimer();
+			// matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
+			// }
 
 			if (matchManager.getCurrentTurnPhase() == TurnPhaseType.STARTER_PHASE) {
 
-				if (matchManager.isMatchFinished())
-					matchManager.setTurnPhase(TurnPhaseType.END_PHASE);
-
-				else if (matchManager.allCharacterAreSpleeping())
+				if (!matchManager.isMatchFinished()
+						&& matchManager.allCharacterAreSpleeping() && !focusPlayer){
 					scene.focusNextPlayer();
-			}
-			if (matchManager.getCurrentTurnPhase() == TurnPhaseType.MAIN_PHASE) {
-
-				if (matchManager.getMatchTimer().isTurnTimerEnded()) {
-					matchManager.getCurrentPlayer().endTurn();
-					matchManager.getMatchTimer().stopTurnTimer();
-					matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
-				} else if (matchManager.getCurrentPlayer().attacked()
-						&& !matchManager.getMatchTimer().isTurnTimerStopped()) {
-					// System.out.println("MAIN PHASE");
-					matchManager.getMatchTimer().startAttackTimer();
-					matchManager.getMatchTimer().stopTurnTimer();
-
-				} else if (matchManager.getMatchTimer().isTurnTimerStopped()
-						&& matchManager.getMatchTimer().isAttackTimerEnded()) {
-					matchManager.getCurrentPlayer().endTurn();
-					matchManager.setTurnPhase(TurnPhaseType.DAMAGE_PHASE);
+					focusPlayer=true;
 				}
+			}else{
+				focusPlayer=false;
 			}
+
+			// if (matchManager.getCurrentTurnPhase() ==
+			// TurnPhaseType.MAIN_PHASE) {
+			//
+			// if (matchManager.getMatchTimer().isTurnTimerEnded()) {
+			// matchManager.getCurrentPlayer().endTurn();
+			// matchManager.getMatchTimer().stopTurnTimer();
+			// matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
+			// } else if (matchManager.getCurrentPlayer().attacked()
+			// && !matchManager.getMatchTimer().isTurnTimerStopped()) {
+			// // System.out.println("MAIN PHASE");
+			// matchManager.getMatchTimer().startAttackTimer();
+			// matchManager.getMatchTimer().stopTurnTimer();
+			//
+			// } else if (matchManager.getMatchTimer().isTurnTimerStopped()
+			// && matchManager.getMatchTimer().isAttackTimerEnded()) {
+			// matchManager.getCurrentPlayer().endTurn();
+			// matchManager.setTurnPhase(TurnPhaseType.DAMAGE_PHASE);
+			// }
+			// }
 
 			if (matchManager.getCurrentTurnPhase() == TurnPhaseType.DEATH_PHASE) {
 
-				matchManager.checkDiedCharacters();
+				// matchManager.checkDiedCharacters();
 
 				if (matchManager.allCharacterAreSpleeping()) {
 
@@ -188,19 +191,24 @@ public class FieldPane extends Pane {
 						currentDiedCD.startDeathAnimation();
 
 						if (currentDiedCD.isDeathAnimationFinished()) {
-							diedCharacters.remove(0).afterDeath();
 							currentDiedCD = null;
+							contdeathAnimation++;
 						}
 
-					} else {
-						matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
+						if (contdeathAnimation == diedCharacters.size()) {
+							matchManager.setCanRemoveDeathCharacter(true);
+							contdeathAnimation = 0;
+						}
 					}
+					// else {
+					// matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
+					// }
 				}
 			}
 
 			if (matchManager.getCurrentTurnPhase() == TurnPhaseType.DAMAGE_PHASE) {
 
-				matchManager.applyDamageToHitCharacter();
+				// matchManager.applyDamageToHitCharacter();
 				if (matchManager.isAppliedDamage()
 						&& matchManager.allCharacterAreSpleeping()) {
 
@@ -222,147 +230,18 @@ public class FieldPane extends Pane {
 							}
 						}
 						if (cont == damagedCharacters.size()) {
-							damagedCharacters.clear();
+							matchManager.setCanClearDamageCharacter(true);
 						}
-						/*
-						 * if (!addedCamerasMovement) { damagedCharacters =
-						 * matchManager.getDamagedCharacters();
-						 * currentDamagedCharacter = 0; for (Character character
-						 * : damagedCharacters) {
-						 * 
-						 * if (character.sufferedDamage()) {
-						 * scene.addMovemetoToCamera(character.getX(),
-						 * character.getY()); } } addedCamerasMovement = true;
-						 * scene.startCamerasMovements();
-						 * 
-						 * } else { if (scene.cameraFocusAddedPoint()) {
-						 * Character dmgCharacter =
-						 * damagedCharacters.get(currentDamagedCharacter);
-						 * CharacterDrawer cd =
-						 * characterDrawers.get(dmgCharacter.getName());
-						 * 
-						 * if (!updateStarted) { cd.startLifePointsUpdate();
-						 * updateStarted=true;
-						 * 
-						 * } else if (cd.finishedLifePointUpdate()) {
-						 * System.out.println("UPDATE FINITO");
-						 * updateStarted=false; if (currentDamagedCharacter + 1
-						 * < damagedCharacters.size()) {
-						 * currentDamagedCharacter++; scene.nextCameraMovement()
-						 * } else { damagedCharacters.clear(); }
-						 * 
-						 * } } }
-						 */
-					} else {
-						matchManager.setTurnPhase(TurnPhaseType.DEATH_PHASE);
-
 					}
+					// else {
+					// matchManager.setTurnPhase(TurnPhaseType.DEATH_PHASE);
+					//
+					// }
 				}
 			}
 
-		}
 
 	}
-
-	// public void update() {
-	//
-	// world.update();
-	//
-	// Collection<CharacterDrawer> collection = characterDrawers.values();
-	//
-	// for (CharacterDrawer characterDrawer : collection) {
-	// characterDrawer.draw();
-	// }
-	//
-	// if (matchManager.getCurrentTurnPhase() == TurnPhaseType.MAIN_PHASE &&
-	// matchManager.allCharacterAreSpleeping()
-	// && matchManager.isTheCurrentTurnEnded()) {
-	// scene.focusNextPlayer();
-	// }
-	//
-	// if (matchManager.getCurrentTurnPhase() == TurnPhaseType.DEATH_PHASE
-	// && matchManager.allCharacterAreSpleeping()) {
-	//
-	// if (!diedCharacters.isEmpty()) {
-	//
-	// if (currentDiedCD == null) {
-	// currentDiedCD = characterDrawers.get(diedCharacters.get(0).getName());
-	// }
-	//
-	// currentDiedCD.startDeathAnimation();
-	//
-	// if (currentDiedCD.isDeathAnimationFinished()) {
-	// System.out.println("ciao");
-	// diedCharacters.remove(0).afterDeath();
-	// currentDiedCD = null;
-	// }
-	//
-	// } else {
-	//
-	// if (matchManager.isMatchFinished()) {
-	// matchManager.setTurnPhase(TurnPhaseType.END_PHASE);
-	// } else
-	// scene.focusNextPlayer();
-	// }
-	// }
-	//
-	// if (matchManager.getCurrentTurnPhase() == TurnPhaseType.DAMAGE_PHASE &&
-	// matchManager.isAppliedDamage()
-	// && matchManager.allCharacterAreSpleeping()) {
-	//
-	// if (!matchManager.getDamagedCharacters().isEmpty()) {
-	//
-	// int cont = 0;
-	// damagedCharacters = matchManager.getDamagedCharacters();
-	// for (Character c : damagedCharacters) {
-	// CharacterDrawer cd = characterDrawers.get(c.getName());
-	//
-	// if (cd.canStartUpdate()) {
-	// cd.startLifePointsUpdate();
-	// }
-	//
-	// if (!cd.finishedLifePointUpdate()) {
-	// cont++;
-	// }
-	// }
-	// if (cont == damagedCharacters.size()) {
-	// damagedCharacters.clear();
-	// }
-	// /*
-	// * if (!addedCamerasMovement) { damagedCharacters =
-	// * matchManager.getDamagedCharacters(); currentDamagedCharacter
-	// * = 0; for (Character character : damagedCharacters) {
-	// *
-	// * if (character.sufferedDamage()) {
-	// * scene.addMovemetoToCamera(character.getX(),
-	// * character.getY()); } } addedCamerasMovement = true;
-	// * scene.startCamerasMovements();
-	// *
-	// * } else { if (scene.cameraFocusAddedPoint()) { Character
-	// * dmgCharacter =
-	// * damagedCharacters.get(currentDamagedCharacter);
-	// * CharacterDrawer cd =
-	// * characterDrawers.get(dmgCharacter.getName());
-	// *
-	// * if (!updateStarted) { cd.startLifePointsUpdate();
-	// * updateStarted=true;
-	// *
-	// * } else if (cd.finishedLifePointUpdate()) {
-	// * System.out.println("UPDATE FINITO"); updateStarted=false; if
-	// * (currentDamagedCharacter + 1 < damagedCharacters.size()) {
-	// * currentDamagedCharacter++; scene.nextCameraMovement() } else
-	// * { damagedCharacters.clear(); }
-	// *
-	// * } } }
-	// */
-	// } else {
-	// System.out.println("cia");
-	// matchManager.setTurnPhase(TurnPhaseType.DEATH_PHASE);
-	//
-	// }
-	// }
-	//
-	// }
 
 	public World getWorld() {
 		return world;

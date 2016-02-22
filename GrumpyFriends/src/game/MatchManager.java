@@ -90,6 +90,15 @@ public interface MatchManager {
 	abstract public void attackCurrentPlayer(float power);
 
 	public abstract Character nextPlayer();
-
+	public abstract boolean canStartNextTurn();
+	public abstract void setCanStartNextTurn(boolean b);
+	
+	public abstract boolean canRemoveDeathCharacter();
+	public abstract void setCanRemoveDeathCharacter(boolean b);
+	
+	
 	public abstract void restartPausedMatch();
+
+	public abstract void setCanClearDamageCharacter(boolean b);
+	public abstract boolean canClearDamageCharacter();
 }

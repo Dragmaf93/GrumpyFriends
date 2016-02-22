@@ -176,7 +176,7 @@ public class FieldScene extends SubScene {
 			focusPoint = true;
 			cameraMoving = false;
 			if (movementNextPlayer)
-				matchManager.startNextTurn();
+				matchManager.setCanStartNextTurn(true);
 			movementNextPlayer = false;
 
 		}
