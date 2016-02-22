@@ -165,6 +165,7 @@ public class Launcher {
 		float y = (float) (Math.sin(angle) * speed);
 		float x = (float) (Math.cos(angle) * speed);
 		speedVector.set(x, y);
+		
 		loadedWeapon.attack(position, speedVector, angle);
 		attacked = true;
 		loadedWeapon = null;
@@ -266,4 +267,17 @@ public class Launcher {
 	public boolean attacked() {
 		return attacked;
 	}
+	
+	public Weapon getWeapon() {
+		return loadedWeapon;
+	}
+	
+	public Vector getSpeedVector() {
+		return speedVector;
+	}
+	
+	public void setSpeedvector(float x, float y) {
+		speedVector.set(x, y);
+	}
+	
 }

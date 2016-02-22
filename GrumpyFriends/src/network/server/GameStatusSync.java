@@ -51,6 +51,7 @@ public class GameStatusSync {
 				jNode.with("Character").put("died", character.isDead());
 				jNode.with("Character").put("outWorld", character.isOutWorld());
 				jNode.with("Character").put("endTurn", character.finishedTurn());
+				jNode.with("Character").put("attacked", character.attacked());
 				
 //				jNode.with("Character").put("activeLauncher", character.isActiveLauncher());
 				
@@ -62,7 +63,6 @@ public class GameStatusSync {
 				jNode.with("Character").put("speedVectorY", character.getSpeedVector().y);
 				
 				jNode.with("Character").put("lastDamagePoints", character.getLastDamagePoints());
-//				jNode.with("Character").put("lastEquippedWeaponName", character.getLastEquippedWeapon());
 				
 				
 				nodes.add(jNode);
@@ -92,6 +92,7 @@ public class GameStatusSync {
 				c.setDied(jsonCharacter.get("died").asBoolean());
 				c.setOutWorld(jsonCharacter.get("outWorld").asBoolean());
 				c.setEndTurn(jsonCharacter.get("endTurn").asBoolean());
+				c.setAttacked(jsonCharacter.get("attacked").asBoolean());
 				
 //				c.setActiveLauncher(jsonCharacter.get("activeLauncher").asBoolean());
 
@@ -99,11 +100,21 @@ public class GameStatusSync {
 				c.setLifePoints(jsonCharacter.get("lifePoints").asInt());
 				
 				c.setCurrentDirection(jsonCharacter.get("currentDirection").asInt());
-
 				c.setSpeedVector((float)jsonCharacter.get("speedVectorX").asDouble(), 
 						(float)jsonCharacter.get("speedVectorY").asDouble());
 				
 				c.setDamagePoints(jsonCharacter.get("lastDamagePoints").asInt());
+
+				c.unequipWeapon();
+				
+				if (jsonCharacter.get("weapon") != null) {
+					c.equipWeapon(jsonCharacter.get("weapon").asText());
+					c.changeAim((float)jsonCharacter.get("aimDirection").asDouble());
+					if ((float)jsonCharacter.get("powerAttack").asDouble() > 0) {
+						
+					}
+					
+				}
 //				c.setLastEquippedWeaponName(jsonCharacter.get("lastEquippedWeaponName").asText());
 				
 				

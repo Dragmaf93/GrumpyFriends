@@ -240,7 +240,7 @@ public class MatchServer extends Thread {
 								inFromCurrentClient = inFromChooser;
 								outToCurrentClient = outToChooser;
 							}
-							System.out.println(inFromCurrentClient);
+//							System.out.println(inFromCurrentClient);
 							sendStatusWorld();
 						} catch (IOException e) {
 							// TODO Auto-generated catch block

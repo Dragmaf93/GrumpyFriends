@@ -99,4 +99,11 @@ public interface Character extends Element
 	public abstract void setDamagePoints(int asInt);
 	public abstract void setLastEquippedWeaponName(String asText);
 	
+	public abstract void setAttacked(boolean attacked);
+	
+	public abstract float getAimDirection();
+	public abstract float getPowerAttack();
+	public abstract void setPowerAttack(float power);
+
+	public abstract void setSpeedLauncher(float x, float y);
 }

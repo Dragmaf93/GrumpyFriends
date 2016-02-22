@@ -62,6 +62,9 @@ public abstract class AbstractCharacter implements Character {
 	private double x, y;
 	private Vector speedVector;
 	private boolean falling;
+	
+	private float aimDirection;
+	private float powerAttack;
 
 	public AbstractCharacter(String name, float x, float y, float height,
 			float width, Team team, World world) {
@@ -85,6 +88,8 @@ public abstract class AbstractCharacter implements Character {
 		speedVector = new Vector();
 		readyToEquipWeapon = true;
 		currentDirection = RIGHT;
+		
+		powerAttack = 0;
 	}
 
 	public AbstractCharacter(String name, float height, float width, Team team,
@@ -106,6 +111,8 @@ public abstract class AbstractCharacter implements Character {
 
 		readyToEquipWeapon = true;
 		currentDirection = RIGHT;
+		
+		powerAttack = 0;
 	}
 
 	public AbstractCharacter(String name, float height, float width, Team team) {
@@ -127,6 +134,8 @@ public abstract class AbstractCharacter implements Character {
 		currentDirection = RIGHT;
 
 		speedVector = new Vector();
+		
+		powerAttack = 0;
 	}
 
 	@Override
@@ -253,6 +262,7 @@ public abstract class AbstractCharacter implements Character {
 
 	@Override
 	public void attack(float power) {
+		this.powerAttack = power;
 		if (launcher == null || equippedWeapon == null || !grounded || moving)
 			return;
 
@@ -265,6 +275,16 @@ public abstract class AbstractCharacter implements Character {
 			attacked = true;
 		}
 	}
+	
+	@Override
+	public void setPowerAttack(float power) {
+		this.powerAttack = power;
+	}
+	
+	@Override
+	public float getPowerAttack() {
+		return powerAttack;
+	}
 
 	@Override
 	public Weapon getEquipWeapon() {
@@ -273,6 +293,7 @@ public abstract class AbstractCharacter implements Character {
 
 	@Override
 	public void changeAim(float direction) {
+		this.aimDirection = direction;
 		if (launcher == null || !launcher.isActivated())
 			return;
 
@@ -280,6 +301,10 @@ public abstract class AbstractCharacter implements Character {
 		launcher.changeAngle(angle * direction);
 	}
 
+	public float getAimDirection() {
+		return aimDirection;
+	}
+	
 	@Override
 	public Vector getAim() {
 		return launcher.getPositionAim();
@@ -616,4 +641,16 @@ public abstract class AbstractCharacter implements Character {
 	public void setLastEquippedWeaponName(String equippedWeapon) {
 		this.lastEquippedWeaponName = equippedWeapon;
 	}
+	
+	@Override
+	public void setAttacked(boolean attacked) {
+		this.attacked = attacked;
+	}
+	
+	@Override
+	public void setSpeedLauncher(float x, float y) {
+		launcher.setSpeedvector(x, y);
+	}
+	
 }
+
