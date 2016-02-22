@@ -69,6 +69,8 @@ public class ClientMatchManager extends AbstractMatchManager {
 				multiplayer.sendOperationMessage(Message.OP_INCREASE_AIM, null);
 			else if (direction == Character.DECREASE_AIM)
 				multiplayer.sendOperationMessage(Message.OP_DECREASE_AIM, null);
+			else
+				multiplayer.sendOperationMessage(Message.OP_STOP_AIM, null);
 		}
 	}
 

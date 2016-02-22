@@ -198,6 +198,10 @@ public class MatchServer extends Thread {
 			System.out.println("DECREASE AIM");
 			matchManager.getCurrentPlayer().changeAim(Character.DECREASE_AIM);
 			break;
+		case Message.OP_STOP_AIM:
+			System.out.println("STOP AIM");
+			matchManager.getCurrentPlayer().changeAim(Character.STOP);
+			break;
 		case Message.OP_SEND_INFO_TEAM_TO_CHOOSER:
 			outToChooser.writeBytes(Message.OP_SEND_INFO_TEAM_TO_CHOOSER + ";"
 					+ op[1] + '\n');

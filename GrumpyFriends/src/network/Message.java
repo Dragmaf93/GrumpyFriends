@@ -25,6 +25,7 @@ public abstract class Message {
 	public final static String OP_EQUIP_WEAPON = "E";
 	public final static String OP_INCREASE_AIM = "IA";
 	public final static String OP_DECREASE_AIM = "DA";
+	public final static String OP_STOP_AIM = "SA";
 	public final static String OP_ATTACK = "A";
 
 	public final static String SERVER_READY = "SR";
