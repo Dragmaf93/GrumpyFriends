@@ -3,6 +3,7 @@ package network.server;
 import game.MatchManager;
 import game.TurnPhaseType;
 import gui.drawer.CharacterDrawer;
+import gui.drawer.WeaponDrawer;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+
+import javafx.scene.Group;
 
 import com.sun.xml.internal.ws.api.pipe.NextAction;
 
@@ -60,12 +63,14 @@ public class MatchServer extends Thread {
 		game = new ServerGame();
 		gameStatusSync = new GameStatusSync();
 		characters = new HashMap<String, Character>();
+		
 	}
 
 	public int getPort() {
 		return port;
 	}
 
+	
 	@Override
 	public void run() {
 
