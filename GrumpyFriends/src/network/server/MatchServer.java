@@ -126,7 +126,7 @@ public class MatchServer extends Thread {
 						try {
 							sendStatusWorld();
 						} catch (IOException e) {
-							e.printStackTrace();
+//							e.printStackTrace();
 						}
 					}
 
@@ -142,14 +142,14 @@ public class MatchServer extends Thread {
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 
 	}
 
 	private void sendStatusWorld() throws IOException {
 
-		String json = gameStatusSync.characterStatusToJson(characters);
+		String json = gameStatusSync.characterStatusToJson(characters,matchManager.getCurrentPlayer(),matchManager);
 		outToCreator.writeBytes(Message.WORLD_STATUS + ";" + json + '\n');
 		outToChooser.writeBytes(Message.WORLD_STATUS + ";" + json + '\n');
 
@@ -217,7 +217,7 @@ public class MatchServer extends Thread {
 					+ '\n');
 			game.addBean(GameBean.jSonToGameBean(op[1]));
 			break;
-		case Message.START_NEXT_TURN:
+		case Message.SET_STATER_PHASE:
 
 			contStartNextTurn++;
 			System.out.println("CONT " + contStartNextTurn);
@@ -235,6 +235,13 @@ public class MatchServer extends Thread {
 				inFromCurrentClient = inFromChooser;
 				outToCurrentClient = outToChooser;
 			}
+			break;
+		case Message.SET_DAMAGE_PHASE:
+		    matchManager.setCanClearDamageCharacter(true);
+		    break;
+		case Message.SET_DEATH_PHASE:
+		    matchManager.setCanRemoveDeathCharacter(true);
+		    break;
 		default:
 			break;
 

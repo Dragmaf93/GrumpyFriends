@@ -18,18 +18,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-
-
-
-
-
-
-
-
-
-
-
-
+import org.jbox2d.testbed.tests.DamBreak;
 
 import network.Message;
 import network.server.GameStatusSync;
@@ -47,217 +36,238 @@ import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 public class Multiplayer {
 
-	private Socket socket;
-//	private ServerSocket welcomeSocket;
+    private Socket socket;
+    // private ServerSocket welcomeSocket;
 
-	private Lock lock = new ReentrantLock();
-	private Condition condition = lock.newCondition();
+    private Lock lock = new ReentrantLock();
+    private Condition condition = lock.newCondition();
 
-	private BufferedReader inFromServer;
-	private DataOutputStream outToServer;
-	
-	private MatchManager matchManager;
-	
-	private Popup exception;
-	
-	private int portNumber;
+    private BufferedReader inFromServer;
+    private DataOutputStream outToServer;
 
-	private String ipMatchServer;
+    private MatchManager matchManager;
 
-	private List<GameBean> gameBeans;
+    private Popup exception;
 
-	private boolean chooser;
-	private GameStatusSync gameStatusSync;
+    private int portNumber;
 
-	private HashMap<String, Character> characters;
-	public Multiplayer(MatchManager matchManager) {
-		gameStatusSync = new GameStatusSync();
-		this.matchManager = matchManager;
-		gameBeans = new ArrayList<GameBean>();
-	}
+    private String ipMatchServer;
 
-	public Multiplayer() {
-		characters = new HashMap<String, Character>();
-		gameBeans = new ArrayList<GameBean>();
-		gameStatusSync = new GameStatusSync();
-		exception = new Popup(400, 180, "Connection refused", null, "OK");
-		exception.getRightButton().setOnMouseReleased(
-				new EventHandler<MouseEvent>() {
+    private List<GameBean> gameBeans;
 
-					@Override
-					public void handle(MouseEvent event) {
-						if (event.getButton() == MouseButton.PRIMARY) {
-							MenuManager.getInstance().goToMainMenu();
-							MenuManager.getInstance().removeExceptionPopup(
-									exception);
-						}
-					}
-				});
-	}
+    private boolean chooser;
+    private GameStatusSync gameStatusSync;
 
-	public void setMatchManager(MatchManager matchManager) {
-		this.matchManager = matchManager;
-		List<Character> list=matchManager.getBattlefield().getAllCharacters();
-		for (Character character : list) {
-			characters.put(character.getName(), character);
-		}
-	}
-	
-	public boolean isAChooser(){
-		return chooser;
-	}
-	
-	public void joinToMatch(String ipMatchServer, int portNumber) throws UnknownHostException, IOException {
-			
-			socket = new Socket(ipMatchServer,portNumber);
-			inFromServer = new BufferedReader(new InputStreamReader(
-					socket.getInputStream()));
-			outToServer = new DataOutputStream(socket.getOutputStream());
+    private HashMap<String, Character> characters;
 
-			chooser=true;
-			
-			new Thread(new Runnable() {
+    public Multiplayer(MatchManager matchManager) {
+	gameStatusSync = new GameStatusSync();
+	this.matchManager = matchManager;
+	gameBeans = new ArrayList<GameBean>();
+    }
 
-				@Override
-				public void run() {
-					try {
+    public Multiplayer() {
+	characters = new HashMap<String, Character>();
+	gameBeans = new ArrayList<GameBean>();
+	gameStatusSync = new GameStatusSync();
+	exception = new Popup(400, 180, "Connection refused", null, "OK");
+	exception.getRightButton().setOnMouseReleased(
+		new EventHandler<MouseEvent>() {
 
-
-						while (true) {
-							if (inFromServer.ready())
-								doOperation(inFromServer.readLine());
-						}
-					} catch (IOException e) {
-						matchManager.pauseMatch();
-						MenuManager.getInstance().addExceptionPopup(exception);
-					}
-				}
-			}).start();
-
-	}
-
-	public void setIpPort(String chooser,int port) {
-		ipMatchServer = chooser;
-		portNumber = port;
-	}
-
-//	private void connectToChooser() throws UnknownHostException, IOException {
-//			socket = new Socket(ipMatchServer, portNumber);
-//			inFromServer = new BufferedReader(new InputStreamReader(
-//					socket.getInputStream()));
-//			outToServer = new DataOutputStream(socket.getOutputStream());
-//			System.out.println(outToServer);
-//	}
-
-	public void sendOperationMessage(String ope, String proprieta){
-		
-			try {
-				outToServer.writeBytes(ope + ";" + proprieta + '\n');
-			} catch (IOException e) {
-				matchManager.pauseMatch();
-				MenuManager.getInstance().addExceptionPopup(exception);
+		    @Override
+		    public void handle(MouseEvent event) {
+			if (event.getButton() == MouseButton.PRIMARY) {
+			    MenuManager.getInstance().goToMainMenu();
+			    MenuManager.getInstance().removeExceptionPopup(
+				    exception);
 			}
+		    }
+		});
+    }
 
+    public void setMatchManager(MatchManager matchManager) {
+	this.matchManager = matchManager;
+	List<Character> list = matchManager.getBattlefield().getAllCharacters();
+	for (Character character : list) {
+	    characters.put(character.getName(), character);
 	}
+    }
 
-	public List<GameBean> getGameBean() {
-		return gameBeans;
-	}
+    public boolean isAChooser() {
+	return chooser;
+    }
 
-	public void readyToStart() {
+    public void joinToMatch(String ipMatchServer, int portNumber)
+	    throws UnknownHostException, IOException {
+
+	socket = new Socket(ipMatchServer, portNumber);
+	inFromServer = new BufferedReader(new InputStreamReader(
+		socket.getInputStream()));
+	outToServer = new DataOutputStream(socket.getOutputStream());
+
+	chooser = true;
+
+	new Thread(new Runnable() {
+
+	    @Override
+	    public void run() {
 		try {
-			lock.lock();
 
-			while (gameBeans.size() < 3) {
-				condition.await();
-			}
-			
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} finally {
-			lock.unlock();
+		    while (true) {
+			if (inFromServer.ready())
+			    doOperation(inFromServer.readLine());
+		    }
+		} catch (IOException e) {
+		    matchManager.pauseMatch();
+		    MenuManager.getInstance().addExceptionPopup(exception);
 		}
+	    }
+	}).start();
+
+    }
+
+    public void setIpPort(String chooser, int port) {
+	ipMatchServer = chooser;
+	portNumber = port;
+    }
+
+    // private void connectToChooser() throws UnknownHostException, IOException
+    // {
+    // socket = new Socket(ipMatchServer, portNumber);
+    // inFromServer = new BufferedReader(new InputStreamReader(
+    // socket.getInputStream()));
+    // outToServer = new DataOutputStream(socket.getOutputStream());
+    // System.out.println(outToServer);
+    // }
+
+    public void sendOperationMessage(String ope, String proprieta) {
+
+	try {
+	    outToServer.writeBytes(ope + ";" + proprieta + '\n');
+	} catch (IOException e) {
+	    matchManager.pauseMatch();
+	    MenuManager.getInstance().addExceptionPopup(exception);
 	}
 
-	private void doOperation(String operazione) throws UnknownHostException, IOException {
-		String[] op = operazione.split(";");
+    }
 
-		switch (op[0]) {
-		case Message.WORLD_STATUS:
-			gameStatusSync.setCharactersStatus(characters, op[1]);
-			break;
-		case Message.START_NEXT_TURN:
-			System.out.println("START NEXT TURN");
-			matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
-			break;
-		case Message.OP_SEND_INFO_TEAM_TO_CHOOSER:
-		case Message.OP_SEND_INFO_WORLD:
-		case Message.OP_SEND_INFO_TEAM_TO_CREATOR:
-			System.out.println(op[1]);
-			addBean(GameBean.jSonToGameBean(op[1]));
-			break;
-		case Message.SERVER_READY:
-			break;
-		default:
-			break;
+    public List<GameBean> getGameBean() {
+	return gameBeans;
+    }
+
+    public void readyToStart() {
+	try {
+	    lock.lock();
+
+	    while (gameBeans.size() < 3) {
+		condition.await();
+	    }
+
+	} catch (InterruptedException e) {
+	    e.printStackTrace();
+	} finally {
+	    lock.unlock();
+	}
+    }
+
+    private void doOperation(String operazione) throws UnknownHostException,
+	    IOException {
+	String[] op = operazione.split(";");
+
+	switch (op[0]) {
+	case Message.WORLD_STATUS:
+	    gameStatusSync.setCharactersStatus(characters,
+		    matchManager.getCurrentPlayer(),matchManager, op[1]);
+	    break;
+	case Message.SET_STATER_PHASE:
+	    System.out.println("START NEXT TURN");
+	    matchManager.getCurrentPlayer().endTurn();
+	    matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
+	    break;
+	case Message.OP_SEND_INFO_TEAM_TO_CHOOSER:
+	case Message.OP_SEND_INFO_WORLD:
+	case Message.OP_SEND_INFO_TEAM_TO_CREATOR:
+	    System.out.println(op[1]);
+	    addBean(GameBean.jSonToGameBean(op[1]));
+	    break;
+	case Message.SET_DAMAGE_PHASE:
+	    matchManager.setTurnPhase(TurnPhaseType.DAMAGE_PHASE);
+	    break;
+	case Message.SERVER_READY:
+	    break;
+	case Message.DAMAGE_CHARACTER:
+	    matchManager.getCurrentPlayer().endTurn();
+	    String[] hitCharacter = op[1].split(",");
+	    for (String string : hitCharacter) {
+		String[] split = string.split(":");
+		System.out.println("NOME CHARACTER : " + split[0] + " POINTS :"
+			+ split[1]);
+		Character c = (matchManager.getBattlefield().getCharacter(split[0]));
+		c.decreaseLifePoints(Integer.parseInt(split[1]));
+		matchManager.getDamagedCharacters().add(c);
+	    }
+	    break;
+	case Message.SET_DEATH_PHASE:
+	    matchManager.setTurnPhase(TurnPhaseType.DEATH_PHASE);
+	    break;
+	default:
+	    break;
+
+	}
+    }
+
+    private void addBean(GameBean bean) {
+	lock.lock();
+	try {
+	    gameBeans.add(bean);
+	    if (gameBeans.size() >= 3)
+		condition.signal();
+	} finally {
+	    lock.unlock();
+	}
+    }
+
+    public void closeConnection() throws IOException {
+	socket.close();
+	// s.close();
+    }
+
+    public void createMatch(String ipMatchServer, int portNumber)
+	    throws IOException {
+
+	// welcomeSocket = new ServerSocket(portNumber);
+	// portNumber++;
+	// Socket connectionSocket = welcomeSocket.accept();
+
+	// BufferedReader inFromClient = new BufferedReader(
+	// new InputStreamReader(connectionSocket.getInputStream()));
+	// doOperation(inFromClient.readLine());
+
+	socket = new Socket(ipMatchServer, portNumber);
+	inFromServer = new BufferedReader(new InputStreamReader(
+		socket.getInputStream()));
+	outToServer = new DataOutputStream(socket.getOutputStream());
+
+	chooser = false;
+
+	//
+	new Thread(new Runnable() {
+
+	    @Override
+	    public void run() {
+		while (true) {
+		    try {
+			if (inFromServer.ready())
+			    doOperation(inFromServer.readLine());
+		    } catch (IOException e) {
+			matchManager.pauseMatch();
+			MenuManager.getInstance().addExceptionPopup(exception);
+		    }
 
 		}
-	}
+	    }
+	}).start();
+	//
 
-	private void addBean(GameBean bean) {
-		lock.lock();
-		try {
-			gameBeans.add(bean);
-			if (gameBeans.size() >= 3)
-				condition.signal();
-		} finally {
-			lock.unlock();
-		}
-	}
-
-	public void closeConnection() throws IOException {
-			socket.close();
-//			s.close();
-	}
-	
-	
-
-	public void createMatch(String ipMatchServer, int portNumber) throws IOException {
-
-	
-//			welcomeSocket = new ServerSocket(portNumber);
-//			portNumber++;
-//			Socket connectionSocket = welcomeSocket.accept();
-
-//			BufferedReader inFromClient = new BufferedReader(
-//					new InputStreamReader(connectionSocket.getInputStream()));
-//			doOperation(inFromClient.readLine());
-		
-			socket = new Socket(ipMatchServer, portNumber);
-			inFromServer = new BufferedReader(new InputStreamReader(
-			socket.getInputStream()));
-			outToServer = new DataOutputStream(socket.getOutputStream());
-		
-			chooser=false;
-			
-//			
-			new Thread(new Runnable() {
-
-				@Override
-				public void run() {
-					while (true) {
-						try {
-							if (inFromServer.ready())
-								doOperation(inFromServer.readLine());
-						} catch (IOException e) {
-							matchManager.pauseMatch();
-							MenuManager.getInstance().addExceptionPopup(exception);
-						}
-
-					}
-				}
-			}).start();
-//		
-
-	}
+    }
 }

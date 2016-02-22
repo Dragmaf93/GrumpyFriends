@@ -101,4 +101,9 @@ public interface MatchManager {
 
 	public abstract void setCanClearDamageCharacter(boolean b);
 	public abstract boolean canClearDamageCharacter();
+
+	public abstract String turnTimerLeft();
+	public abstract String matchTimerLeft();
+	public abstract void setTurnTimerLeft(String s);
+	public abstract void setMatchTimerLeft(String s);
 }

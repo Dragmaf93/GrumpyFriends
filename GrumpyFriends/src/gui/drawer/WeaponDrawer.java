@@ -80,14 +80,14 @@ public class WeaponDrawer {
 	}
 
 	public void updateBullet() {
-		System.out.println("WWWWWWWWWWWWWWWWWWWW "+currentWeaponGui);
+//		System.out.println("WWWWWWWWWWWWWWWWWWWW "+currentWeaponGui);
 		if (currentWeaponGui == null)
 			return;
 		currentWeaponGui.updateBullet();
 	}
 
 	public boolean bulletLaunched() {
-		System.out.println("CCCC "+currentWeapon);
+//		System.out.println("CCCC "+currentWeapon);
 		if (currentWeapon == null)
 			return false;
 		return currentWeapon.attacked();

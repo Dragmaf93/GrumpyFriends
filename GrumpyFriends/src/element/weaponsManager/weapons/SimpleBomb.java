@@ -21,32 +21,23 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer {
 	private static final float BLAST_RADIUS = 10f;
 	private static final float MAX_DAMAGE = 60f;
 
-	private boolean exploded;
-
 	public SimpleBomb() {
-		physicalWeapon = new PhysicalBomb(RADIUS, BLAST_RADIUS, MAX_DAMAGE);
-		PhysicalObjectManager.getInstance().buildPhysicWeapon(physicalWeapon);
 		hit = NUMBER_OF_HIT;
 		attacked = false;
 	}
 
 	@Override
 	public void attack(Vector position, Vector speed, float angle) {
-
-		hit--;
+	    	createPhysicWeapon();
+//	    	hit--;
 		physicalWeapon.addToPhisicalWorld();
 		physicalWeapon.setActive(true);
 		physicalWeapon.setAngularVelocity(0f);
 		physicalWeapon.setTransform(position.toVec2(), angle);
 		physicalWeapon.setLinearVelocity(speed.toVec2());
-		attacked = true;
+//		attacked = true;
 		MatchTimer.startTimer(this);
 
-	}
-
-	@Override
-	public boolean finishHit() {
-		return hit == 0;
 	}
 
 	@Override
@@ -71,31 +62,19 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer {
 
 	@Override
 	public void afterAttack() {
-		PhysicalObjectManager.getInstance().removePhysicalWeapon((RemovablePhysicalObject)physicalWeapon);
-	}
-
-	public boolean isExploded() {
-		return exploded;
-	}
-
-	@Override
-	public double getX() {
-		return Utils.xFromJbox2dToJavaFx(physicalWeapon.getX());
-	}
-
-	@Override
-	public double getY() {
-		return Utils.yFromJbox2dToJavaFx(physicalWeapon.getY());
+		if (physicalWeapon != null)
+			PhysicalObjectManager.getInstance().removePhysicalWeapon(
+					(RemovablePhysicalObject) physicalWeapon);
 	}
 
 	@Override
 	public double getHeight() {
-		return Utils.heightFromJbox2dToJavaFx(physicalWeapon.getHeight());
+		return Utils.heightFromJbox2dToJavaFx(RADIUS);
 	}
 
 	@Override
 	public double getWidth() {
-		return Utils.heightFromJbox2dToJavaFx(physicalWeapon.getWidth());
+		return Utils.heightFromJbox2dToJavaFx(RADIUS);
 	}
 
 	@Override
@@ -103,22 +82,42 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer {
 		attacked = false;
 		exploded = false;
 		hit = NUMBER_OF_HIT;
-		PhysicalObjectManager.getInstance().buildPhysicWeapon(physicalWeapon);
+		if (physicalWeapon != null)
+			PhysicalObjectManager.getInstance().buildPhysicWeapon(
+					physicalWeapon);
 
 	}
 
 	@Override
 	public void update() {
-		physicalWeapon.update();
-		if (MatchTimer.endObjectTimerIn() <= 0 && !exploded) {
-			exploded = true;
-			((ExplosiveObject) physicalWeapon).explode();
+		if (physicalWeapon != null) {
+			physicalWeapon.update();
+
+			x=Utils.xFromJbox2dToJavaFx(physicalWeapon.getX());
+			y=Utils.yFromJbox2dToJavaFx(physicalWeapon.getY());
+			System.out.println(x+"        "+y);
+			angle=physicalWeapon.getBody().getAngle();
+			
+			if (MatchTimer.endObjectTimerIn() <= 0 && !exploded) {
+				exploded = true;
+				System.out.println("BOOoooooooooooooooooooooooooooooooooooooooooooooooooooOOOOOOOOOOOOMMMMMMMMMMM");
+				((ExplosiveObject) physicalWeapon).explode();
+			}
 		}
 	}
 
 	@Override
 	public double getDistanceFromLauncher() {
 		return 1.0;
+	}
+
+	@Override
+	public void createPhysicWeapon() {
+	    if(physicalWeapon==null){
+		physicalWeapon = new PhysicalBomb(RADIUS, BLAST_RADIUS, MAX_DAMAGE);
+		PhysicalObjectManager.getInstance().buildPhysicWeapon(physicalWeapon);
+	    }
+
 	}
 
 }

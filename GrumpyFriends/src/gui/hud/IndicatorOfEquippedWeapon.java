@@ -135,7 +135,7 @@ public class IndicatorOfEquippedWeapon extends AbstractHudElement {
 		if (matchManager.getCurrentPlayer().getLastEquippedWeapon() != null) {
 //			if (!matchManager.getCurrentPlayer().getLastEquippedWeapon().equals(nameWeapon)) {
 				
-				nameText.setText(nameWeapon = matchManager.getCurrentPlayer().getLastEquippedWeapon());
+				nameText.setText(nameWeapon = matchManager.getCurrentPlayer().getLastEquippedWeapon().getName());
 //			}
 //			if (lastAmmunition != matchManager.getCurrentPlayer().getInventoryManager()
 //					.getNumberOfAmmunition(nameWeapon))

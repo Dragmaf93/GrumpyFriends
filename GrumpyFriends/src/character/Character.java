@@ -40,7 +40,7 @@ public interface Character extends Element
 	public abstract void changeAim(float direction);
 	public abstract Vector getAim();
 	
-	public abstract String getLastEquippedWeapon();
+	public abstract Weapon getLastEquippedWeapon();
 	
 	public abstract void setGrounded(boolean b);
 	public abstract boolean isGrounded();
@@ -97,7 +97,6 @@ public interface Character extends Element
 	public abstract void setCurrentDirection(int asInt);
 	public abstract void setSpeedVector(float asDouble, float asDouble2);
 	public abstract void setDamagePoints(int asInt);
-	public abstract void setLastEquippedWeaponName(String asText);
 	
 	public abstract void setAttacked(boolean attacked);
 	

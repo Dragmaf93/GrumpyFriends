@@ -34,10 +34,11 @@ public abstract class Message {
 	public static final String WORLD_STATUS = "WS";
 	
 	public final static String OP_SEND_CURRENT_TEAM="CT";
-	public static final String START_NEXT_TURN = "SNT";
+	public static final String SET_STATER_PHASE = "SNT";
 	public static final String CHANGE_TURN = "CNT";
-	public static final String END_TURN ="ET";
+	public static final String SET_DAMAGE_PHASE ="DAP";
 	public static final String DAMAGE_CHARACTER = "DC";
+	public static final String SET_DEATH_PHASE = "DEP";
 	
 	
 	

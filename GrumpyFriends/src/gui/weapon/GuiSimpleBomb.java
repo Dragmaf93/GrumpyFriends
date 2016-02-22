@@ -114,11 +114,11 @@ public class GuiSimpleBomb extends AbstractGuiWeapon {
 	@Override
 	public void updateBullet() {
 
-		System.out.println("WWW: "+weapon.getX()+ " "+ weapon.getY());
 		bullet.relocate(weapon.getX(), weapon.getY());
 		weapon.update();
-
-		if (((SimpleBomb) weapon).isExploded()) {
+		
+		if (weapon.isExploded()) {
+		System.out.println("WWW: "+weapon.getX()+ " "+ weapon.getY());
 			explosion.playExplosionAnimation();
 		}
 	}

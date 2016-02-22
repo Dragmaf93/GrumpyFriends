@@ -15,7 +15,7 @@ import javafx.scene.text.Text;
 
 public class IndicatorOfTime extends AbstractHudElement{
 
-	private MatchTimer timer;
+//	private MatchTimer timer;
 	
 	private final static String FONT_PATH = "font/clockFont.ttf";
 	private Font fontTurnTimer;
@@ -35,7 +35,7 @@ public class IndicatorOfTime extends AbstractHudElement{
 	public IndicatorOfTime(MatchPane matchPane,MatchManager matchManager) {
 		super(matchPane,matchManager);
 		
-		timer = matchManager.getMatchTimer();
+//		timer = matchManager.getMatchTimer();
 		
 		clock = new Circle(68, BACKGROUND_COLOR);
 		clock.setStroke(Color.BLACK);
@@ -67,14 +67,14 @@ public class IndicatorOfTime extends AbstractHudElement{
 	
 	@Override
 	public void draw() {
-		if(!timer.isTurnTimerStopped()){
-			turnTimer.setText(timer.turnTimerStringFormat());
-			
-		}
-		else turnTimer.setText(timer.attackTimerStringFormat());
-		
+//		if(!timer.isTurnTimerStopped()){
+//			turnTimer.setText(timer.turnTimerStringFormat());
+//			
+//		}
+//		else turnTimer.setText(timer.attackTimerStringFormat());
+	    turnTimer.setText(matchManager.turnTimerLeft());	
 		turnTimer.relocate(clock.getCenterX()-clock.getRadius()*0.9,clock.getCenterY()-turnTimer.getFont().getSize());
-		matchTimer.setText(timer.matchTimerStringFormat());
+		matchTimer.setText(matchManager.matchTimerLeft());
 		matchTimer.relocate(clock.getCenterX()-clock.getRadius()/2,clock.getCenterY()+matchTimer.getFont().getSize()/2);
 		
 	}

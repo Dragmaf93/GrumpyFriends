@@ -112,7 +112,7 @@ public class GuiSimpleMissile extends AbstractGuiWeapon {
 	@Override
 	public void updateBullet() {
 		weapon.update();
-		if (!((SimpleMissile) weapon).isExplosed()) {
+		if (!((SimpleMissile) weapon).isExploded()) {
 			bulletRotate.setPivotX(launcherImage.getX());
 			bulletRotate.setPivotY(launcherImage.getY());
 			bulletRotate.setAngle(Math.toDegrees(-((SimpleMissile) weapon)

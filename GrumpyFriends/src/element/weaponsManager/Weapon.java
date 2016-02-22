@@ -15,6 +15,8 @@ public interface Weapon
 	
 	public abstract String getName();
 	
+	public abstract void createPhysicWeapon();
+	
 	public abstract double getDistanceFromLauncher();
 	public abstract boolean finishHit();
 	public abstract double getX();
@@ -25,4 +27,13 @@ public interface Weapon
 	
 	public abstract void update();
 	public abstract void reset();
+	
+	public abstract double getAngle();
+	public abstract void setAttack(boolean b);
+	public abstract void decreaseHit();
+	public abstract void setX(double x);
+	public abstract void setY(double y);
+	public abstract void setAngle(double angle);
+	public abstract boolean isExploded();
+	public abstract void setExploded(boolean bool);
 }
