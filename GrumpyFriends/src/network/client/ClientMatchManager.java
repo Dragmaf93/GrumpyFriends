@@ -4,10 +4,12 @@ import network.Message;
 import world.World;
 import character.Character;
 import game.AbstractMatchManager;
+import game.TurnPhaseType;
 
 public class ClientMatchManager extends AbstractMatchManager {
 
 	private Multiplayer multiplayer;
+	private boolean sendMex;
 
 	public ClientMatchManager(World battlefield) {
 		super(battlefield);
@@ -25,11 +27,11 @@ public class ClientMatchManager extends AbstractMatchManager {
 	public void moveCurrentPlayer(int direction) {
 		// currentPlayer.move(direction);
 		if (isMyTurn()) {
-			System.out.println("muovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovi");
+			System.out
+					.println("muovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovimuovi");
 			if (direction == Character.LEFT)
 				multiplayer.sendOperationMessage(Message.OP_MOVE_LEFT, null);
 			else
-
 				multiplayer.sendOperationMessage(Message.OP_MOVE_RIGHT, null);
 		}
 	}
@@ -81,11 +83,61 @@ public class ClientMatchManager extends AbstractMatchManager {
 
 	@Override
 	public void update() {
-		battlefield.update();
+
+		if (!isPaused()
+				&& !(isMatchFinished() && getCurrentTurnPhase() == TurnPhaseType.END_PHASE)) {
+
+			battlefield.update();
+
+			checkCharactersOutOfWorld();
+
+			if (currentPlayer.isOutWorld()) {
+				timer.stopTurnTimer();
+				setTurnPhase(TurnPhaseType.STARTER_PHASE);
+			}
+
+			if (currentTurnPhase == TurnPhaseType.STARTER_PHASE) {
+				System.out.println("STARTER "+ canStartNextTurn +" sleep "+allCharacterAreSpleeping()
+						+" mex "+sendMex);
+//				if (isMatchFinished())
+//					currentTurnPhase = TurnPhaseType.END_PHASE;
+//				else 
+					if (allCharacterAreSpleeping() && canStartNextTurn()
+						) {
+					multiplayer.sendOperationMessage(Message.START_NEXT_TURN,
+							null);
+					if(isMyTurn())
+						multiplayer.sendOperationMessage(Message.CHANGE_TURN, null);
+					System.out.println("ciao");
+					startNextTurn();
+				}
+			}
+
+			// if (getCurrentTurnPhase() == TurnPhaseType.MAIN_PHASE) {
+			//
+			// if (getMatchTimer().isTurnTimerEnded()) {
+			// getCurrentPlayer().endTurn();
+			// getMatchTimer().stopTurnTimer();
+			// setTurnPhase(TurnPhaseType.STARTER_PHASE);
+			// } else if (getCurrentPlayer().attacked()
+			// && !getMatchTimer().isTurnTimerStopped()) {
+			// // System.out.println("MAIN PHASE");
+			// getMatchTimer().startAttackTimer();
+			// getMatchTimer().stopTurnTimer();
+			//
+			// } else if (getMatchTimer().isTurnTimerStopped()
+			// && getMatchTimer().isAttackTimerEnded()) {
+			// getCurrentPlayer().endTurn();
+			// setTurnPhase(TurnPhaseType.DAMAGE_PHASE);
+			// }
+			// }
+		}
+
 	}
 
 	private boolean isMyTurn() {
-		System.out.println("Current team   "+ currentTeam.getName() +"  teamB "+ teamB.getName()+" teamA "+teamA.getName());
+		System.out.println("Current team   " + currentTeam.getName()
+				+ "  teamB " + teamB.getName() + " teamA " + teamA.getName());
 		if (multiplayer.isAChooser() && currentTeam == teamB)
 			return true;
 		else if (!multiplayer.isAChooser() && currentTeam == teamA)

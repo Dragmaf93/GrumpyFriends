@@ -1,6 +1,7 @@
 package network.client;
 
 import game.MatchManager;
+import game.TurnPhaseType;
 import gui.Popup;
 
 import java.io.BufferedReader;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
 
 
 
@@ -184,6 +186,10 @@ public class Multiplayer {
 		case Message.WORLD_STATUS:
 			gameStatusSync.setCharactersStatus(characters, op[1]);
 			break;
+		case Message.START_NEXT_TURN:
+			System.out.println("START NEXT TURN");
+			matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
+			break;
 		case Message.OP_SEND_INFO_TEAM_TO_CHOOSER:
 		case Message.OP_SEND_INFO_WORLD:
 		case Message.OP_SEND_INFO_TEAM_TO_CREATOR:
@@ -191,7 +197,7 @@ public class Multiplayer {
 			addBean(GameBean.jSonToGameBean(op[1]));
 			break;
 		case Message.SERVER_READY:
-			
+			break;
 		default:
 			break;
 

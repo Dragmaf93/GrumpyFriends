@@ -3,7 +3,6 @@ package network.server;
 import game.MatchManager;
 import game.TurnPhaseType;
 import gui.drawer.CharacterDrawer;
-import gui.drawer.WeaponDrawer;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -16,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-
-import javafx.scene.Group;
 
 import com.sun.xml.internal.ws.api.pipe.NextAction;
 
@@ -56,6 +53,8 @@ public class MatchServer extends Thread {
 
 	private HashMap<String, Character> characters;
 
+	private int contStartNextTurn;
+
 	public MatchServer(int port, InfoMatch match) {
 		this.port = port;
 		this.match = match;
@@ -63,14 +62,12 @@ public class MatchServer extends Thread {
 		game = new ServerGame();
 		gameStatusSync = new GameStatusSync();
 		characters = new HashMap<String, Character>();
-		
 	}
 
 	public int getPort() {
 		return port;
 	}
 
-	
 	@Override
 	public void run() {
 
@@ -105,15 +102,15 @@ public class MatchServer extends Thread {
 			outToCurrentClient = outToCreator;
 
 			matchManager = game.getMatchManager();
-
+			((ServerMatchManager) matchManager).setMatchServer(this);
 			List<Character> list = matchManager.getBattlefield()
 					.getAllCharacters();
 			for (Character character : list) {
 				characters.put(character.getName(), character);
 			}
 
-			System.out.println(inFromChooser.readLine());
-			System.out.println(inFromCreator.readLine());
+//			System.out.println(inFromChooser.readLine());
+//			System.out.println(inFromCreator.readLine());
 
 			matchManager.startMatch();
 
@@ -121,129 +118,14 @@ public class MatchServer extends Thread {
 
 				@Override
 				public void run() {
-					while (!matchManager.isMatchFinished()) {
-						if (!matchManager.isPaused()
-								&& !(matchManager.isMatchFinished() && matchManager
-										.getCurrentTurnPhase() == TurnPhaseType.END_PHASE)) {
-
-							matchManager.update();
-
-							matchManager.checkCharactersOutOfWorld();
-
-							if (matchManager.getCurrentPlayer().isOutWorld()) {
-								matchManager.getMatchTimer().stopTurnTimer();
-								matchManager
-										.setTurnPhase(TurnPhaseType.STARTER_PHASE);
-							}
-
-							if (matchManager.getCurrentTurnPhase() == TurnPhaseType.STARTER_PHASE) {
-
-								if (matchManager.isMatchFinished())
-									matchManager
-											.setTurnPhase(TurnPhaseType.END_PHASE);
-
-								else if (matchManager
-										.allCharacterAreSpleeping())
-//									scene.focusNextPlayer();
-									matchManager.startNextTurn();
-							}
-							if (matchManager.getCurrentTurnPhase() == TurnPhaseType.MAIN_PHASE) {
-
-								if (matchManager.getMatchTimer()
-										.isTurnTimerEnded()) {
-									matchManager.getCurrentPlayer().endTurn();
-									matchManager.getMatchTimer()
-											.stopTurnTimer();
-									matchManager
-											.setTurnPhase(TurnPhaseType.STARTER_PHASE);
-								} else if (matchManager.getCurrentPlayer()
-										.attacked()
-										&& !matchManager.getMatchTimer()
-												.isTurnTimerStopped()) {
-									// System.out.println("MAIN PHASE");
-									matchManager.getMatchTimer()
-											.startAttackTimer();
-									matchManager.getMatchTimer()
-											.stopTurnTimer();
-
-								} else if (matchManager.getMatchTimer()
-										.isTurnTimerStopped()
-										&& matchManager.getMatchTimer()
-												.isAttackTimerEnded()) {
-									matchManager.getCurrentPlayer().endTurn();
-									matchManager
-											.setTurnPhase(TurnPhaseType.DAMAGE_PHASE);
-								}
-							}
-
-							if (matchManager.getCurrentTurnPhase() == TurnPhaseType.DEATH_PHASE) {
-
-								matchManager.checkDiedCharacters();
-								List<Character> diedCharacters = matchManager
-										.getDiedCharacters();
-
-								if (matchManager.allCharacterAreSpleeping()) {
-
-									if (!diedCharacters.isEmpty()) {
-
-									} else {
-										matchManager
-												.setTurnPhase(TurnPhaseType.STARTER_PHASE);
-									}
-								}
-							}
-
-							if (matchManager.getCurrentTurnPhase() == TurnPhaseType.DAMAGE_PHASE) {
-
-								matchManager.applyDamageToHitCharacter();
-								if (matchManager.isAppliedDamage()
-										&& matchManager
-												.allCharacterAreSpleeping()) {
-
-									if (!matchManager.getDamagedCharacters()
-											.isEmpty()) {
-
-										// int cont = 0;
-										// List<Character> damagedCharacters =
-										// matchManager.getDamagedCharacters();
-										//
-										// if (cont == damagedCharacters.size())
-										// {
-										// damagedCharacters.clear();
-										// }
-
-									} else {
-										matchManager
-												.setTurnPhase(TurnPhaseType.DEATH_PHASE);
-
-									}
-								}
-							}
-
-						}
+					boolean exit = false;
+					while (!exit) {
 
 						matchManager.update();
+
 						try {
-							System.out.println("Current team   "
-									+ matchManager.getCurrentTeam().getName()
-									+ "  teamB "
-									+ matchManager.getTeamB().getName()
-									+ " teamA "
-									+ matchManager.getTeamA().getName());
-							if (matchManager.getCurrentTeam() == matchManager
-									.getTeamA()) {
-								inFromCurrentClient = inFromCreator;
-								outToCurrentClient = outToCreator;
-								// TODO notificare turno
-							} else if (matchManager.getCurrentTeam() == matchManager
-									.getTeamB()) {
-								inFromCurrentClient = inFromChooser;
-								outToCurrentClient = outToChooser;
-							}
-//							System.out.println(inFromCurrentClient);
 							sendStatusWorld();
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
@@ -252,10 +134,11 @@ public class MatchServer extends Thread {
 			}).start();
 
 			while (listeningSocket) {
-				System.out.println(matchManager.getCurrentTeam().getName());
 
-				doOperation(inFromCurrentClient.readLine());
-
+//				System.out.println("PRIMA DI CAMBIARE "+inFromCurrentClient);
+				String mex = inFromCurrentClient.readLine();
+				doOperation(mex);
+//				System.out.println("DOPO DI CAMBIARE "+inFromCurrentClient);
 			}
 
 		} catch (IOException e) {
@@ -275,7 +158,7 @@ public class MatchServer extends Thread {
 	private void doOperation(String operazione) throws UnknownHostException,
 			IOException {
 		String[] op = operazione.split(";");
-		System.out.println(op[0]);
+//		 System.out.println(op[0]);
 		switch (op[0]) {
 		case Message.OP_MOVE_LEFT:
 			System.out.println("SINISTRA");
@@ -330,10 +213,37 @@ public class MatchServer extends Thread {
 					+ '\n');
 			game.addBean(GameBean.jSonToGameBean(op[1]));
 			break;
+		case Message.START_NEXT_TURN:
 
+			contStartNextTurn++;
+			System.out.println("CONT " + contStartNextTurn);
+			if (contStartNextTurn >= 2) {
+				contStartNextTurn = 0;
+				matchManager.setCanStartNextTurn(true);
+			}
+			break;
+		case Message.CHANGE_TURN:
+			System.out.println("CHANGE_TURN");
+			if (inFromCurrentClient == inFromChooser) {
+				inFromCurrentClient = inFromCreator;
+				outToCurrentClient = outToCreator;
+			} else {
+				inFromCurrentClient = inFromChooser;
+				outToCurrentClient = outToChooser;
+			}
 		default:
 			break;
 
+		}
+	}
+
+	public void sendMessage(String message, String parameter) {
+		try {
+			outToCreator.writeBytes(message + ";" + parameter + '\n');
+			outToChooser.writeBytes(message + ";" + parameter + '\n');
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

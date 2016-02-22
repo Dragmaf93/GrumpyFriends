@@ -30,10 +30,13 @@ public abstract class AbstractMatchManager implements MatchManager{
 	boolean started;
 	boolean pause;
 
-	boolean appliedDamage;
+	protected boolean appliedDamage;
 	protected MatchTimer timer;
 
 	protected boolean endTurn;
+	
+	protected boolean canStartNextTurn;
+	
 	protected HashMap<String, Float> hitCharacters;
 	protected List<Character> damagedCharacters;
 
@@ -41,6 +44,8 @@ public abstract class AbstractMatchManager implements MatchManager{
 
 	protected TurnPhaseType currentTurnPhase;
 	protected boolean characterSufferedDamage;
+	protected boolean canRemoveCharacter;
+	protected boolean canClearDamageCharacter;
 	
 	public AbstractMatchManager() {
 		this.battlefield = null;
@@ -166,14 +171,31 @@ public abstract class AbstractMatchManager implements MatchManager{
 
 		return true;
 	}
-
+	@Override
+	public void setCanStartNextTurn(boolean b) {
+		canStartNextTurn=b;
+	}
+	@Override
+	public boolean canStartNextTurn() {
+		return canStartNextTurn;
+	}
+	
+	@Override
+	public boolean canRemoveDeathCharacter() {
+		return canRemoveCharacter;
+	}
+	
+	@Override
+	public void setCanRemoveDeathCharacter(boolean can) {
+		canRemoveCharacter = can;
+	}
 	public void startNextTurn() {
 		if (started) {
 			if (currentTeam == teamA)
 				currentTeam = teamB;
 			else if (currentTeam == teamB)
 				currentTeam = teamA;
-
+			canStartNextTurn=false;
 			currentPlayer = currentTeam.nextPlayer();
 			currentPlayer.prepareForTurn();
 			diedCharactersOfTheCurrentTurn.clear();
@@ -380,12 +402,18 @@ public abstract class AbstractMatchManager implements MatchManager{
 		
 		for (Character character : charactersOutOfWorld) {
 			character.getTeam().removeCharacterInGame(character);
-//			if(character.getTeam()==teamBlue)
-//				teamBlue.removeCharacterInGame(character);
-//			else if(character.getTeam()==teamRed)
-//				teamRed.removeCharacterInGame(character);
 		}
 		charactersOutOfWorld.clear();
+	}
+	
+	@Override
+	public boolean canClearDamageCharacter() {
+		return canClearDamageCharacter;
+	}
+	
+	@Override
+	public void setCanClearDamageCharacter(boolean b) {
+		canClearDamageCharacter=b;
 	}
 
 }

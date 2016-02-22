@@ -32,9 +32,7 @@ public class GameStatusSync {
 	
 	
 	public String characterStatusToJson(HashMap<String,Character> characters){
-		
-		
-		
+	
 		ArrayNode nodes = new ArrayNode(factory);
 		try {
 			List<Character> characterList = new ArrayList<Character>(characters.values());
