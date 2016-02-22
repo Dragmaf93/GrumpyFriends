@@ -62,7 +62,11 @@ public class GameStatusSync {
 				
 				jNode.with("Character").put("lastDamagePoints", character.getLastDamagePoints());
 				
-				
+				if (character.getEquipWeapon() != null) {
+					jNode.with("Character").put("weapon", character.getEquipWeapon().getName());
+					jNode.with("Character").put("aimDirection", character.getAimDirection());
+//					jNode.with("Character").put("powerAttack", character.getPowerAttack());
+				}
 				nodes.add(jNode);
 				
 			}
@@ -108,9 +112,9 @@ public class GameStatusSync {
 				if (jsonCharacter.get("weapon") != null) {
 					c.equipWeapon(jsonCharacter.get("weapon").asText());
 					c.changeAim((float)jsonCharacter.get("aimDirection").asDouble());
-					if ((float)jsonCharacter.get("powerAttack").asDouble() > 0) {
-						
-					}
+//					if ((float)jsonCharacter.get("powerAttack").asDouble() > 0) {
+//						
+//					}
 					
 				}
 //				c.setLastEquippedWeaponName(jsonCharacter.get("lastEquippedWeaponName").asText());
