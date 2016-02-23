@@ -10,20 +10,28 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.QuadCurve;
 
+
 public class Curve extends QuadCurve implements SquarePolygon {
 
+	
 	private double width;
+	
 	private double height;
 
+	
 	private double x;
+	
 	private double y;
 	private DropShadow borderGlow;
 	
+	
 	private MapEditor mapEditor;
+	
 	private String nameObject;
 	private Point2D start;
 	private Point2D end;
 	private List<Point2D> distancePoints;
+	
 	private List<Point2D> points;
 	private int xMagg;
 	private static int id = 0;
@@ -154,18 +162,22 @@ public class Curve extends QuadCurve implements SquarePolygon {
 				+ getEndX() + ", getEndY()=" + getEndY() + "]";
 	}
 
+	
 	public void setX(double d) {
 		x = d;
 	}
 
+	
 	public void setY(double d) {
 		y = d;
 	}
 
+	
 	public double getY() {
 		return y;
 	}
 
+	
 	public double getX() {
 		return x;
 	}
@@ -202,6 +214,7 @@ public class Curve extends QuadCurve implements SquarePolygon {
 		return curve;
 	}
 
+	
 	public ObservableList<Double> getPoints() {
 		ObservableList<Double> arrayReturn = FXCollections.observableArrayList();
 		
@@ -235,10 +248,12 @@ public class Curve extends QuadCurve implements SquarePolygon {
 		setEndY(points.get(1).getY());
 	}
 
+	
 	public double getWidth() {
 		return width;
 	}
 
+	
 	public double getHeight() {
 		return height;
 	}
@@ -278,6 +293,7 @@ public class Curve extends QuadCurve implements SquarePolygon {
 //		return false;
 //	}
 
+	
 	@Override
 	public String getNameObject() {
 		return "Curve";
@@ -319,11 +335,13 @@ public class Curve extends QuadCurve implements SquarePolygon {
 		
 	}
 
+	
 	@Override
 	public void setWidth(double width) {
 		
 	}
 
+	
 	@Override
 	public void setHeight(double height) {
 		

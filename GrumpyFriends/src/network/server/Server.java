@@ -19,12 +19,14 @@ import world.GameWorldBuilder;
 import world.World;
 import world.WorldDirector;
 
+
 public class Server {
 
     private static final int MIN_PORT_NUMBER = 2000;
     private static final int MAX_PORT_NUMBER = 65000;
     private static int contId = 0;
     private int lastPort;
+    
     private Map<Integer, InfoMatch> matchesList;
     private Map<String, MiniServer> miniServerList;
     private Map<Integer, MatchServer> matchServers;
@@ -78,6 +80,7 @@ public class Server {
 	return matchServers.get(i).getPort();
     }
 
+    
     public List<InfoMatch> getMatchesList() {
 	return new ArrayList<InfoMatch>(matchesList.values());
     }

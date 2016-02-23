@@ -18,11 +18,13 @@ import physic.PhysicalContactListener;
 import utils.Point;
 import utils.Vector;
 
+
 public class TestWorld implements world.World {
 
 	public final static Vec2 GRAVITY = new Vec2(0, -20f);
 
 	private World world;
+	
 	private List<Character> characters;
 
 	public TestWorld() {
@@ -79,6 +81,7 @@ public class TestWorld implements world.World {
 		return 0;
 	}
 
+	
 	public List<Character> getCharacters() {
 		return characters;
 	}

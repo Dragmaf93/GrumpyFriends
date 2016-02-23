@@ -25,7 +25,9 @@ import utils.Vector;
 public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 		world.World {
 
-	protected float height, width;
+	protected float height;
+
+	protected float width;
 
 	private int numberName;
 	

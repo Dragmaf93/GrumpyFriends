@@ -7,6 +7,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
+
 public class TriangleButton extends Group{
 
 	
@@ -17,7 +18,11 @@ public class TriangleButton extends Group{
 	private Polygon polygon;
 	private Orientation orientation;
 
-	private double width,height;
+	
+	private double width;
+
+	
+	private double height;
 	
 	public TriangleButton(double width, double height ,Orientation orientation) {
 		this.orientation=orientation;
@@ -64,9 +69,11 @@ public class TriangleButton extends Group{
 			}
 		});
 	}
+	
 	public double getHeight() {
 		return height;
 	}
+	
 	public double getWidth() {
 		return width;
 	}

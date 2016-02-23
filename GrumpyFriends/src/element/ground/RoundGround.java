@@ -7,10 +7,14 @@ import physic.PhysicalObjectManager;
 import utils.Point;
 import utils.Utils;
 
+
 public class RoundGround extends AbstractGround {
 
+	
 	private Point start;
+	
 	private Point end;
+	
 	private Point control;
 	
 	private boolean bezierCurve;
@@ -42,12 +46,15 @@ public class RoundGround extends AbstractGround {
 		return bezierCurve;
 	}
 	
+	
 	public Point getEnd() {
 		return end;
 	}
+	
 	public Point getStart() {
 		return start;
 	}
+	
 	public Point getControl() {
 		return control;
 	}

@@ -34,20 +34,15 @@ public abstract class AbstractCharacter implements Character {
 
     protected boolean died;
     protected boolean isOutWorld;
-
     protected Weapon equippedWeapon;
+
     protected Weapon lastEquippedWeapon;
-
     protected WeaponsManager weaponsManager;
-
     protected boolean grounded;
     protected boolean moving;
     protected boolean activeLauncher;
-
     protected int currentDirection;
-
     protected PhysicalObject physicBody;
-
     protected Launcher launcher;
 
     protected boolean readyToEquipWeapon;
@@ -59,10 +54,10 @@ public abstract class AbstractCharacter implements Character {
     private float startY;
     private float startX;
 
-    private double x, y;
+    private double x;
+    private double y;
     private Vector speedVector;
     private boolean falling;
-
     private float aimDirection;
     private float powerAttack;
 
@@ -137,7 +132,6 @@ public abstract class AbstractCharacter implements Character {
 
 	powerAttack = 0;
     }
-
     @Override
     public void setWorld(World battlefield) {
 	world = battlefield;
@@ -267,14 +261,14 @@ public abstract class AbstractCharacter implements Character {
 
 	if (physicBody != null)
 	    launcher.startWeaponAttack(power);
-	
+
 	launcher.getLoadedWeapon().setAttack(true);
 	launcher.getLoadedWeapon().decreaseHit();
 	launcher.setAttacked(true);
 	launcher.loadWeapon(null);
-	
+
 	readyToEquipWeapon = false;
-	
+
 	if (equippedWeapon.finishHit()) {
 	    weaponsManager.removeOneAmmunition(equippedWeapon.getName());
 	    equippedWeapon = null;
@@ -303,7 +297,6 @@ public abstract class AbstractCharacter implements Character {
 	if (launcher == null || !launcher.isActivated())
 	    return;
 
-	
 	float angle = (float) Math.toRadians(2.0);
 	launcher.changeAngle(angle * direction);
     }
@@ -447,7 +440,7 @@ public abstract class AbstractCharacter implements Character {
     @Override
     public void endTurn() {
 	endTurn = true;
-	lastEquippedWeapon=null;
+	lastEquippedWeapon = null;
 	launcher.disable();
 	if (physicBody != null)
 	    ((PhysicalCharacter) physicBody).blockWheelJoint();
@@ -468,7 +461,6 @@ public abstract class AbstractCharacter implements Character {
 
 	return world;
     }
-
     @Override
     public Team getTeam() {
 	return team;
@@ -524,7 +516,6 @@ public abstract class AbstractCharacter implements Character {
 	launcher.restartLauncher();
 
     }
-
     @Override
     public int getLastDamagePoints() {
 	return lastDamagePoints;
@@ -560,7 +551,6 @@ public abstract class AbstractCharacter implements Character {
 	isOutWorld = bool;
 	lifePoints = 0;
     }
-
     @Override
     public boolean isOutWorld() {
 	return isOutWorld;
@@ -590,7 +580,6 @@ public abstract class AbstractCharacter implements Character {
     public void setMoving(boolean moving) {
 	this.moving = moving;
     }
-
     @Override
     public void setJumping(boolean jumping) {
 	this.jumping = jumping;
@@ -654,9 +643,10 @@ public abstract class AbstractCharacter implements Character {
     public void setSpeedLauncher(float x, float y) {
 	launcher.setSpeedvector(x, y);
     }
+
     @Override
     public void setName(String name) {
-	this.name=name;
+	this.name = name;
     }
-    
+
 }

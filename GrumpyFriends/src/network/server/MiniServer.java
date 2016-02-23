@@ -16,6 +16,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
 public class MiniServer extends Thread {
 
     private Socket socket = null;
@@ -23,6 +24,7 @@ public class MiniServer extends Thread {
     private DataOutputStream outToClient;
     private String message;
 
+    
     private Server server;
     private String ipClient;
 

@@ -10,6 +10,7 @@ import utils.ObjectWithTimer;
 import utils.Utils;
 import utils.Vector;
 
+
 public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer {
 
 	private static final float RADIUS = 0.7f;
@@ -18,7 +19,9 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer {
 	private static final long MILLIS_TO_EXPLODE = 3000;
 
 	private static final float BLAST_POWER = 10000f;
+	
 	private static final float BLAST_RADIUS = 10f;
+	
 	private static final float MAX_DAMAGE = 60f;
 
 	public SimpleBomb() {
@@ -46,11 +49,13 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer {
 		return "SimpleBomb";
 	}
 
+	
 	@Override
 	public float getMaxDamage() {
 		return MAX_DAMAGE;
 	}
 
+	
 	@Override
 	public double getBlastRadius() {
 		return Utils.widthFromJbox2dToJavaFx(BLAST_RADIUS);

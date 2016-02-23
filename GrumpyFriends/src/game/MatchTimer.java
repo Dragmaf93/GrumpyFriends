@@ -2,6 +2,7 @@ package game;
 
 import utils.ObjectWithTimer;
 
+
 public class MatchTimer {
 
 	private final static long MATCH_DURATION_MILLIS = 1200000;
@@ -27,6 +28,7 @@ public class MatchTimer {
 	private boolean pause;
 	private static long initialObjectTimer;
 	private static long pauseObjectTime;
+	
 	
 	private static ObjectWithTimer currentObjectWithTimer;
 	

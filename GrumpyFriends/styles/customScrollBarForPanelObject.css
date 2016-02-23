@@ -1,11 +1,11 @@
-/* @CHARSET "ISO-8859-1"; */
+
 
 .root{
      SB_scrollbar-track: derive(-fx-color, 27.5%);
     SB_scrollbar-thumb: derive(-fx-color, -26.3%);
     SB_scrollbar-corner-border: derive(SB_scrollbar-track, -10%);
 }
-/* ============ SCROLL BARS ================================================= */
+
 .scroll-pane {
     -fx-background: #92a498; 
     -fx-background-color: null;
@@ -13,7 +13,7 @@
 
 .scroll-bar {
     -fx-background-color: #92a498;
-/*     -fx-background-color: -fx-outer-border, SB_scrollbar-track; */ 
+ 
     -fx-background-insets: 0,1;
 }
 .scroll-bar .track {
@@ -37,11 +37,11 @@
     -fx-padding: 0;
 }
 .corner {
-/*     -fx-background-color:   SB_scrollbar-corner-border,   SB_scrollbar-track; */
+
     -fx-background-insets: 0,1 0 0 1;
 }*/
 
-/* Scrolbars in ScrollPane */
+
 .scroll-pane > * > .scroll-bar:horizontal {
     -fx-background-insets: 0,1 0 0 0;
     -fx-padding: 0;

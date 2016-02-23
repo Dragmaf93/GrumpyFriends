@@ -76,9 +76,13 @@ public interface Character extends Element
 	
 	public abstract void update();
 	
+	
 	public abstract boolean isActiveLauncher();
+	
 	public abstract boolean isMoving();
+	
 	public abstract boolean isJumping();
+	
 	public abstract boolean isFalling();
 	public abstract void setWorld(World battlefield);
 	public abstract void reset();
@@ -86,22 +90,32 @@ public interface Character extends Element
 	public abstract float getPowerJump();
 	public abstract Vector getSpeedVector();
 	
+	
 	public abstract void setMoving(boolean moving);
+	
 	public abstract void setJumping(boolean jumping);
+	
 	public abstract void setFalling(boolean falling);
+	
 	public abstract void setOutWorld(boolean out);
 	public abstract void setEndTurn(boolean endTurn);
+	
 	public abstract void setActiveLauncher(boolean activeLauncher);
 	public abstract void setSufferedDamage(boolean asBoolean);
+	
 	public abstract void setLifePoints(int asInt);
+	
 	public abstract void setCurrentDirection(int asInt);
 	public abstract void setSpeedVector(float asDouble, float asDouble2);
 	public abstract void setDamagePoints(int asInt);
+	
 	public abstract void setName(String name);
 	public abstract void setAttacked(boolean attacked);
 	
 	public abstract float getAimDirection();
+	
 	public abstract float getPowerAttack();
+	
 	public abstract void setPowerAttack(float power);
 
 	public abstract void setSpeedLauncher(float x, float y);

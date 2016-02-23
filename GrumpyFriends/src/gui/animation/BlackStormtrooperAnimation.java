@@ -7,6 +7,7 @@ import character.Character;
 import element.weaponsManager.Weapon;
 import javafx.scene.image.Image;
 
+
 public class BlackStormtrooperAnimation implements CharacterAnimation {
 
 	private final static String PATH_FRAME = "file:image/Character/BlackStormtrooper";
@@ -53,10 +54,15 @@ public class BlackStormtrooperAnimation implements CharacterAnimation {
 	private final static Map<String, Image> WEAPON_LAUNCHER_CONTAINER = new HashMap<String, Image>();
 	private final static Map<String, Image> CHARACTER_BODY_WITH_WEAPON = new HashMap<String, Image>();
 	
+	
 	private SpriteAnimation moveAnimation;
+	
 	private SpriteAnimation idleAnimation;
+	
 	private SpriteAnimation startJumpAnimation;
+	
 	private SpriteAnimation endJumpAnimation;
+	
 	private Character character;
 
 	private StatusOfAnimation currentStatus;

@@ -16,17 +16,22 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
+
 public class WeaponDrawer {
 
 	private final static String packageP = "gui.weapon.";
 
+	
 	private Character currentCharacter;
+	
 	private Weapon currentWeapon;
 
+	
 	private WeaponGui currentWeaponGui;
 
 	private Map<String, WeaponGui> inventoryItemsGui;
 
+	
 	private Popup exception;
 
 	public WeaponDrawer() {

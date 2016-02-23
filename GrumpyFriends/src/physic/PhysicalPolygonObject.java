@@ -13,9 +13,11 @@ import org.jbox2d.dynamics.World;
 import utils.Point;
 import utils.Utils;
 
+
 public class PhysicalPolygonObject implements PhysicalObject {
 
 	private Vec2[] vertices;
+	
 	
 	private Body body;
 	private BodyDef bodyDef;
@@ -57,6 +59,7 @@ public class PhysicalPolygonObject implements PhysicalObject {
 		shape.set(vertices[0], vertices[vertices.length-1]);
 		body.createFixture(shape, 1.0f).setFriction(1);
 	}
+	
 	
 	@Override
 	public Body getBody() {

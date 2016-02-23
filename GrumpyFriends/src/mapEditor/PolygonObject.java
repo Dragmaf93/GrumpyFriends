@@ -8,13 +8,19 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
+
 public abstract class PolygonObject extends Polygon implements SquarePolygon {
 
+	
 	protected String nameObject;
+	
 	protected MapEditor mapEditor;
 	
+	
 	protected double width;
+	
 	protected double height;
+	
 	protected double angleRotation;
 	
 	protected DropShadow borderGlow;
@@ -22,6 +28,7 @@ public abstract class PolygonObject extends Polygon implements SquarePolygon {
 	private double yTmp;
 	
 	protected List<Point2D> points;
+	
 	protected List<Point2D> distancePoints;
 	private int xMagg;
 	
@@ -59,17 +66,21 @@ public abstract class PolygonObject extends Polygon implements SquarePolygon {
 		return newObject;
 	}
 	
+	
 	public String getNameObject() {
 		return nameObject;
 	}
+	
 	
 	public double getWidth() {
 		return width;
 	}
 	
+	
 	public double getHeight() {
 		return height;
 	}
+	
 	
 	public String getAngleRotation() {
 		return Double.toString((double) angleRotation);
@@ -96,9 +107,11 @@ public abstract class PolygonObject extends Polygon implements SquarePolygon {
 			getPoints().addAll(new Double[]{point.getX(),point.getY()});
 	}
 
+	
 	public void setWidth(double width) {
 		this.width = width;
 	}
+	
 	
 	public void setHeight(double height) {
 		this.height = height;
@@ -197,6 +210,7 @@ public abstract class PolygonObject extends Polygon implements SquarePolygon {
 				this.modifyPositionWithVertex(points.get(i), newPoint);
 		}
 	}
+	
 	
 	List<Point2D> getDistancePoints() {
 		return distancePoints;

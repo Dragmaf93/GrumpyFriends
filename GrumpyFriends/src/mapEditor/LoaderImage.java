@@ -5,9 +5,13 @@ import java.util.Map;
 
 import javafx.geometry.Point2D;
 
+
 public class LoaderImage {
+	
 	Map<String, SquarePolygon> images;
+	
 	Curve quadCurve;
+	
 	MapEditor mapEditor;
 	int index = 0;
 
@@ -17,6 +21,7 @@ public class LoaderImage {
 		this.mapEditor = mapEditor;
 	}
 
+	
 	public Map<String, SquarePolygon> getImages() {
 		return images;
 	}
@@ -45,6 +50,7 @@ public class LoaderImage {
 		return imageCopy;
 	}
 
+	
 	public Curve getQuadCurve() {
 		return quadCurve;
 	}

@@ -24,8 +24,6 @@ public class ServerGame extends AbstractGame{
 		teams.get(1).setMatchManager(matchManager);
 		teams.get(1).setColorTeam(Color.STEELBLUE);
 	
-		System.out.println(teams.get(0).getName());
-		System.out.println(teams.get(1).getName());
 		matchManager.setTeamA(teams.get(0));
 		matchManager.setTeamB(teams.get(1));
 		

@@ -11,10 +11,13 @@ import org.jbox2d.dynamics.World;
 import element.weaponsManager.ExplosiveObject;
 import physic.PhysicalObjectManager;
 
+
 public class PhysicalBomb extends AbstractPhysicalWeapon  implements ExplosiveObject{
 
 	private float radius;
+	
 	private float blastPower;
+	
 	private float blastRadius;
 	private boolean exploded;
 	
@@ -55,6 +58,7 @@ public class PhysicalBomb extends AbstractPhysicalWeapon  implements ExplosiveOb
 		
 		return body.getWorldCenter();
 	}
+	
 	@Override
 	public float getBlastPower() {
 		return blastPower;
@@ -69,6 +73,7 @@ public class PhysicalBomb extends AbstractPhysicalWeapon  implements ExplosiveOb
 		PhysicalObjectManager.getInstance().makeAnExplosion(this);
 		exploded=true;
 	}
+	
 	@Override
 	public float getBlastRadius() {
 		return blastRadius;

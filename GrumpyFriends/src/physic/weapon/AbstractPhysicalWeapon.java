@@ -8,7 +8,9 @@ import org.jbox2d.dynamics.FixtureDef;
 
 import utils.Vector;
 
+
 public abstract class AbstractPhysicalWeapon implements PhysicalWeapon{
+	
 	
 	protected Body body;
 	
@@ -17,6 +19,7 @@ public abstract class AbstractPhysicalWeapon implements PhysicalWeapon{
 	protected BodyDef bodyDef;
 	protected Fixture fixture;
 	protected FixtureDef fixtureDef;
+	
 	
 	protected float maxDamage;
 	
@@ -43,6 +46,7 @@ public abstract class AbstractPhysicalWeapon implements PhysicalWeapon{
 		if(body==null) return;
 		body.setLinearVelocity(speed);
 	}
+	
 	@Override
 	public Body getBody() {
 		return body;
@@ -64,6 +68,7 @@ public abstract class AbstractPhysicalWeapon implements PhysicalWeapon{
 	public void setSize(float width, float height) {
 		if(body==null) return;
 	}
+	
 	
 	@Override
 	public float getMaxDamage() {

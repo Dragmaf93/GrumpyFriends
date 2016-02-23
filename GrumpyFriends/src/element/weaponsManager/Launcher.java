@@ -113,23 +113,32 @@ import sun.rmi.transport.proxy.CGIHandler;
 import utils.Utils;
 import utils.Vector;
 
+
 public class Launcher {
 
 	public final static float MAX_LAUNCH_POWER = 80f;
+	
 	private Character character;
 	// private PhysicalLauncher physicalLauncher;
 
+	
 	private boolean activated;
+	
 	private Weapon loadedWeapon;
 
 	private boolean attacked;
 
 	private int currentDirection;
 
+	
 	private float angle;
+	
 	private Vector position;
+	
 	private Vector speedVector;
+	
 	private double y;
+	
 	private double x;
 
 	public Launcher(Character character) {
@@ -174,12 +183,14 @@ public class Launcher {
 		// }
 	}
 
+	
 	public boolean isActivated() {
 		if (loadedWeapon == null)
 			return false;
 		return activated;
 	}
 
+	
 	public double getAngle() {
 		// return (double) physicalLauncher.getAngle();
 		return angle;
@@ -234,6 +245,7 @@ public class Launcher {
 			angle -= val;
 	}
 
+	
 	public double getX() {
 		// return physicalLauncher.getX();
 		// return
@@ -241,6 +253,7 @@ public class Launcher {
 		return character.getX();
 	}
 
+	
 	public double getY() {
 		// return physicalLauncher.getY();
 		// return
@@ -271,6 +284,7 @@ public class Launcher {
 
 	}
 
+	
 	public void setAttacked(boolean b) {
 		attacked = b;
 	}
@@ -279,10 +293,12 @@ public class Launcher {
 		return attacked;
 	}
 
+	
 	public Weapon getLoadedWeapon() {
 		return loadedWeapon;
 	}
 
+	
 	public Vector getSpeedVector() {
 		return speedVector;
 	}

@@ -11,10 +11,12 @@ import org.jbox2d.dynamics.World;
 import utils.Point;
 import utils.Utils;
 
+
 public class PhysicalCurveObject implements PhysicalObject {
 
 	private Vec2[] points;
 
+	
 	private Body body;
 	private BodyDef bodyDef;
 
@@ -45,6 +47,7 @@ public class PhysicalCurveObject implements PhysicalObject {
 	}
 	//
 
+	
 	@Override
 	public Body getBody() {
 		return body;

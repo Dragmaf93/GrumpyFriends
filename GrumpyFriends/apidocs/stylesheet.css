@@ -1,7 +1,5 @@
-/* Javadoc style sheet */
-/*
-Overall document style
-*/
+
+
 body {
     background-color:#ffffff;
     color:#353833;
@@ -65,9 +63,7 @@ table tr td dt code {
 sup {
     font-size:.6em;
 }
-/*
-Document title and Copyright styles
-*/
+
 .clear {
     clear:both;
     height:0px;
@@ -100,15 +96,13 @@ Document title and Copyright styles
     width:5em;
     font-weight:bold;
 }
-/*
-Navigation bar styles
-*/
+
 .bar {
     background-image:url(resources/background.gif);
     background-repeat:repeat-x;
     color:#FFFFFF;
     padding:.8em .5em .4em .8em;
-    height:auto;/*height:1.8em;*/
+    height:auto;
     font-size:1em;
     margin:0;
 }
@@ -179,9 +173,7 @@ ul.subNavList li{
     margin: auto 5px;
     border:1px solid #c9aa44;
 }
-/*
-Page header and footer styles
-*/
+
 .header, .footer {
     clear:both;
     margin:0 20px;
@@ -212,9 +204,7 @@ Page header and footer styles
     list-style:none;
     font-size:1.2em;
 }
-/*
-Heading styles
-*/
+
 div.details ul.blockList ul.blockList ul.blockList li.blockList h4, div.details ul.blockList ul.blockList ul.blockListLast li.blockList h4 {
     background-color:#dee3e9;
     border-top:1px solid #9eadc0;
@@ -236,9 +226,7 @@ ul.blockList ul.blockList li.blockList h3 {
 ul.blockList li.blockList h2 {
     padding:0px 0 20px 0;
 }
-/*
-Page layout container styles
-*/
+
 .contentContainer, .sourceContainer, .classUseContainer, .serializedFormContainer, .constantValuesContainer {
     clear:both;
     padding:10px 20px;
@@ -280,9 +268,7 @@ Page layout container styles
     font-size:1.1em;
     display:inline;
 }
-/*
-List styles
-*/
+
 ul.horizontal li {
     display:inline;
     font-size:0.9em;
@@ -335,9 +321,7 @@ table tr td dl, table tr td dl dt, table tr td dl dd {
     margin-top:0;
     margin-bottom:1px;
 }
-/*
-Table styles
-*/
+
 .contentContainer table, .classUseContainer table, .constantValuesContainer table {
     border-bottom:1px solid #9eadc0;
     width:100%;
@@ -440,9 +424,7 @@ table.packageSummary td.colFirst, table.overviewSummary th.colFirst {
     width:25%;
     vertical-align:middle;
 }
-/*
-Content styles
-*/
+
 .description pre {
     margin-top:0;
 }
@@ -453,9 +435,7 @@ Content styles
 .docSummary {
     padding:0;
 }
-/*
-Formatting effect styles
-*/
+
 .sourceLineNo {
     color:green;
     padding:0 30px 0 0;

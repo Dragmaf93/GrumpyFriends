@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import menu.GameBean;
 
+
 public class Client {
 
 	private final static String IP_SERVER = ReaderFileProperties.getPropClientValues("server_ip");
@@ -32,11 +33,14 @@ public class Client {
 	private BufferedReader inFromServer;
 	private ObjectMapper mapper;
 
+	
 	private String matchServerIp;
+	
 	private int serverPortNumber;
 
 	private boolean imAChooser;
 
+	
 	private boolean connected;
 
 	public Client() {
@@ -54,7 +58,6 @@ public class Client {
 	}
 
 	public List<InfoMatch> requestMatchList() throws IOException {
-		// System.out.println("HO RICHIESTO LA LISTA MATCH");
 		outToServer.writeBytes(Message.OP_REQUEST_LIST + '\n');
 
 		List<InfoMatch> listMatch = new ArrayList<InfoMatch>();
@@ -67,6 +70,7 @@ public class Client {
 		return listMatch;
 	}
 
+	
 	public boolean isConnected() {
 		return connected;
 	}
@@ -77,10 +81,12 @@ public class Client {
 		return null;
 	}
 
+	
 	public String getMatchServerIp() {
 		return matchServerIp;
 	}
 
+	
 	public int getServerPortNumber() {
 		return serverPortNumber;
 	}
@@ -105,6 +111,7 @@ public class Client {
 		return false;
 	}
 
+	
 	public void setImAChooser(boolean imAChooser) {
 		this.imAChooser = imAChooser;
 	}

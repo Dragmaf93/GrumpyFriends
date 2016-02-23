@@ -9,9 +9,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 
+
 public class KeyboardReleaseEventHandler implements EventHandler<KeyEvent> {
 
+	
 	private MatchPane pane;
+	
 	private MatchManager matchManager;
 	
 	public KeyboardReleaseEventHandler(MatchPane matchPane,MatchManager matchManager) {

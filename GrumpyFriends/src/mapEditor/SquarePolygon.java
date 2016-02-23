@@ -6,11 +6,14 @@ import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 
+
 public interface SquarePolygon {
 
 	public String getNameObject();
 	
+	
 	public double getWidth();
+	
 	public double getHeight();
 	
 	public String getAngleRotation();
@@ -23,13 +26,19 @@ public interface SquarePolygon {
 	
 	public void clearAndAddPoints();
 
+	
 	public void setWidth(double width);
+	
 	public void setHeight(double height);
 	
+	
 	public void setX(double d);
+	
 	public void setY(double d);
 
+	
 	public double getX();
+	
 	public double getY();
 	
 	public List<Point2D> getPointsVertex();
@@ -46,18 +55,24 @@ public interface SquarePolygon {
 	
 	public boolean vertexEquals(SquarePolygon polygon);
 	
+	
 	public void setIdObject(int id);
+	
 	
 	public int getIdObject();
 
 	public SquarePolygon clone();
 
+	
 	public void setLayoutX(double d);
 
+	
 	public void setLayoutY(double lastItemInserted);
 
+	
 	public double getLayoutX();
 
+	
 	public double getLayoutY();
 
 	public ObservableList<Double> getPoints();

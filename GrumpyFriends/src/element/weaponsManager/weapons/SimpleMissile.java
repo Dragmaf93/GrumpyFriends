@@ -8,16 +8,21 @@ import utils.Utils;
 import utils.Vector;
 import physic.DragForceThread;
 
+
 public class SimpleMissile extends AbstractWeapon {
 
+    
     private static final float WIDTH = 2.5f;
+    
     private static final float HEIGHT = 1.0f;
     public static final int NUMBER_OF_AMMUNITION = 100;
     private static final int NUMBER_OF_HIT = 1;
 
     // private static final long SEC_TO_EXPLODE=4;
     private static final float BLAST_POWER = 10000f;
+    
     private static final float BLAST_RADIUS = 10f;
+    
     private static final float MAX_DAMAGE = 70f;
 
     public SimpleMissile() {
@@ -34,6 +39,7 @@ public class SimpleMissile extends AbstractWeapon {
 	}
     }
 
+    
     @Override
     public float getMaxDamage() {
 	return MAX_DAMAGE;
@@ -50,6 +56,7 @@ public class SimpleMissile extends AbstractWeapon {
 
     }
 
+    
     @Override
     public double getBlastRadius() {
 	return Utils.widthFromJbox2dToJavaFx(BLAST_RADIUS);
@@ -83,11 +90,13 @@ public class SimpleMissile extends AbstractWeapon {
 	return "SimpleMissile";
     }
 
+    
     @Override
     public double getHeight() {
 	return Utils.heightFromJbox2dToJavaFx(HEIGHT);
     }
 
+    
     @Override
     public double getWidth() {
 	return Utils.heightFromJbox2dToJavaFx(WIDTH);

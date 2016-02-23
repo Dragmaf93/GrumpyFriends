@@ -10,9 +10,12 @@ import game.AbstractMatchManager;
 import game.MatchManager;
 import javafx.scene.paint.Color;
 
+
 public class Team {
 	
+	
 	private String name;
+	
 	private String type;
 	
 	private Color color;
@@ -20,10 +23,12 @@ public class Team {
 	private int numberOfCharacter;
 
 	private List<Character> characters;
+	
 	private List<Character> charactersInGame;
 
 	private int currentPlayer;
 
+	
 	private MatchManager matchManager;
 	private int maxTeamLifePoints;
 	
@@ -116,22 +121,27 @@ public class Team {
 		return charactersInGame.size() == 0;
 	}
 
+	
 	public String getName() {
 		return name;
 	}
 
+	
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	
 	public MatchManager getMatchManager() {
 		return matchManager;
 	}
+	
 	
 	public void setMatchManager(MatchManager matchManager) {
 		this.matchManager = matchManager;
 	}
 
+	
 	public List<Character> getCharactersInGame() {
 		return charactersInGame;
 	}
@@ -166,6 +176,7 @@ public class Team {
 		currentPlayer = 0;
 	}
 
+	
 	public String getType() {
 		
 		return type;

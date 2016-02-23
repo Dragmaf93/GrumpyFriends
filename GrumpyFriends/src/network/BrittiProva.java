@@ -177,7 +177,6 @@ public class BrittiProva extends Application {
 	
 	final protected Character createCharacter(String namePlayer, String type,
 			Team team) {
-		System.out.println(type);
 		String name = PATH_PACKAGE + type;
 		try {
 			Class<?> classDefinition = Class.forName(name);

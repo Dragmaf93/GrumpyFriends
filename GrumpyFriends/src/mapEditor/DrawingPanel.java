@@ -17,7 +17,9 @@ class DrawingPanel extends Pane {
 	MapEditor mapEditor;
 	
 	private boolean isChange = false;
-	private double dragDeltaX, dragDeltaY;
+	private double dragDeltaX;
+
+	private double dragDeltaY;
 	
 	public DrawingPanel( final SquarePolygon poly, MapEditor mapEditor )
 	{

@@ -15,6 +15,7 @@ import physic.weapon.PhysicalWeapon;
 import sun.font.CreatedFontTracker;
 import utils.Vector;
 
+
 public class PhysicalLauncher extends PhysicalDinamicObject {
 
 	private final static float HEIGHT=0.2f;
@@ -23,7 +24,9 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 	private static final Vec2 ORIGIN_JOINT_POINT = new Vec2(-WIDTH,0);
 	
 	
+	
 	private RevoluteJoint joint;
+	
 	private PhysicalCharacter physicalCharacter;
 	
 	private Fixture fixture;
@@ -104,6 +107,7 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 		Vec2 v=body.getWorldPoint(DISTANCE_TO_LAUNCHER);
 		return new Vector(v.x, v.y);
 	}
+	
 	public RevoluteJoint getJoint() {
 		return joint;
 	}

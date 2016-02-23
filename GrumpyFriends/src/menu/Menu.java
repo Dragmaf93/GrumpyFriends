@@ -44,7 +44,8 @@ public class Menu extends Pane implements UpdatablePane {
 	private MenuButton mapEditorButton;
 	private MenuButton exitButton;
 
-	private double screenHeight, screenWidth;
+	private double screenHeight;
+	private double screenWidth;
 
 	private ImageView leftCantinaBand;
 	private ImageView rightCantinaBand;

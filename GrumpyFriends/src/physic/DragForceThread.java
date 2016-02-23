@@ -7,8 +7,10 @@ import element.weaponsManager.Weapon;
 import element.weaponsManager.weapons.SimpleMissile;
 import physic.weapon.PhysicalWeapon;
 
+
 public class DragForceThread extends Thread {
 
+	
 	private Weapon bullet;
 	public DragForceThread(Weapon simpleMissile) {
 		bullet=simpleMissile;

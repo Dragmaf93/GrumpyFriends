@@ -21,6 +21,7 @@ import element.weaponsManager.ExplosiveObject;
 import physic.weapon.PhysicalBomb;
 import physic.weapon.PhysicalWeapon;
 
+
 public class PhysicalObjectManager {
 	
 	private World world;
@@ -28,10 +29,12 @@ public class PhysicalObjectManager {
 	private static final int NUM_RAYS=360;
 	private static final int MAX_BLAST_RAYS =64;
 	
+	
 	private static PhysicalObjectManager instance;
 	
 	private List<Body> toRemove;
 
+	
 	private Map<String, Float> hitCharacters;
 	
 	
@@ -40,9 +43,11 @@ public class PhysicalObjectManager {
 		toRemove = new ArrayList<Body>();
 		hitCharacters = new HashMap<>();
 	}
+	
 	public void setWorld(world.World world){
 		this.world=world.getPhysicWorld();
 	}
+	
 	
 	public static PhysicalObjectManager getInstance(){
 		if(instance==null){
@@ -144,6 +149,7 @@ public class PhysicalObjectManager {
 			}
 		}
 	}
+	
 	
 	public Map<String, Float> getHitCharacters(){
 		return hitCharacters;

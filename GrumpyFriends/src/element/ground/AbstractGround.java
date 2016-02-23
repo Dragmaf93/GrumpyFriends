@@ -7,10 +7,13 @@ import physic.PhysicalObject;
 import physic.PhysicalObjectManager;
 import utils.Point;
 
+
 public abstract class AbstractGround implements Ground{
 	
+	
 	protected List<Point> points;
-	protected double positionX,positionY;
+	protected double positionX;
+	protected double positionY;
 	
 	
 	public AbstractGround() {
@@ -23,9 +26,14 @@ public abstract class AbstractGround implements Ground{
 		setSize();
 	}
 	
-	protected double width,height;
+	
+	protected double width;
+	
+	protected double height;
+	
 	
 	protected PhysicalObject physicalObject;
+	
 	
 	@Override
 	public double getHeight() {
@@ -37,6 +45,7 @@ public abstract class AbstractGround implements Ground{
 		return positionX;
 	}
 
+	
 	@Override
 	public double getWidth() {
 		return width;
@@ -54,6 +63,7 @@ public abstract class AbstractGround implements Ground{
 	public PhysicalObject getPhysicObject() {
 		return physicalObject;
 	}
+	
 	
 	@Override
 	public List<Point> getPoints() {

@@ -22,14 +22,20 @@ import physic.PhysicalObjectManager;
 import world.WorldBuilder;
 import world.WorldDirector;
 
+
 public class TestGrumpyFriends extends TestbedTest {
 
+	
 	private static TestbedTest instance;
+	
 	private MatchManager matchManager;
 //	private Character currentPlayer;
+	
 	private Weapon weapon;
 	private float speed=10f;
+	
 	private world.World world;
+	
 	public static TestbedTest getInstance(){
 		if(instance==null)
 			instance = new TestGrumpyFriends();

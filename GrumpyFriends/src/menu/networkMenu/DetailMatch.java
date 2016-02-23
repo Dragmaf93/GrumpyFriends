@@ -22,6 +22,7 @@ import menu.MenuManager;
 import menu.PageComponent;
 import menu.TextFieldMenu;
 
+
 public class DetailMatch extends Pane {
 
 	protected final static double PADDING_HEIGHT = 100;
@@ -37,10 +38,14 @@ public class DetailMatch extends Pane {
 	protected Rectangle rectangleBackground;
 	private VBox realValue;
 	private VBox label;
+	
 	private MenuButton backButton;
+	
 	private MenuButton connectButton;
+	
 	private InfoMatch infoMatch;
 
+	
 	private NetworkPage networkPage;
 	private Text name;
 	private Text nameMatch;
@@ -54,6 +59,7 @@ public class DetailMatch extends Pane {
 	private Text status;
 	private Text securityTypeText;
 	private Text securityType;
+	
 	private TextFieldMenu password;
 	private Text pass;
 
@@ -211,6 +217,7 @@ public class DetailMatch extends Pane {
 		text.setFill(PageComponent.HEADER_TEXT_COLOR);
 	}
 
+	
 	public InfoMatch getInfoMatch() {
 		return infoMatch;
 	}

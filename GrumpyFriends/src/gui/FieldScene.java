@@ -44,7 +44,9 @@ public class FieldScene extends SubScene {
 	List<Point> movementOfCamera;
 
 	public boolean focusPoint;
-	private double time, vX, vY;
+	private double time;
+	private double vX;
+	private double vY;
 	private double incrTime;
 
 	private Point position0;

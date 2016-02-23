@@ -35,14 +35,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.glass.ui.Menu;
 import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
+
 public class Multiplayer {
 
+    private boolean close;
     private final class MultiplayerRunnable implements Runnable {
+
 	@Override
 	public void run() {
 	try {
 
-	    while (true) {
+	    while (!socket.isClosed()) {
 		doOperation(inFromServer.readLine());
 	    }
 	} catch (IOException e) {
@@ -59,13 +62,16 @@ public class Multiplayer {
     private BufferedReader inFromServer;
     private DataOutputStream outToServer;
 
+    
     private MatchManager matchManager;
 
+    
     private Popup exception;
 
     private List<GameBean> gameBeans;
 
     private boolean chooser;
+    
     private GameStatusSync gameStatusSync;
 
     private Map<String, Character> characters;
@@ -95,6 +101,7 @@ public class Multiplayer {
 		});
     }
 
+    
     public void setMatchManager(MatchManager matchManager) {
 	this.matchManager = matchManager;
 	List<Character> list = matchManager.getBattlefield().getAllCharacters();

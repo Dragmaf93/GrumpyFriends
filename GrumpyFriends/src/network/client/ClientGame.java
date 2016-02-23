@@ -159,7 +159,6 @@ public class ClientGame extends AbstractGame {
 		    worldInfo.toJSON());
 
 	    GameBean teamInfo = teamPage.getGameBean();
-	    System.out.println("CREATOR " + teamInfo.toJSON());
 	    multiplayer.sendOperationMessage(
 		    Message.OP_SEND_INFO_TEAM_TO_CHOOSER, teamInfo.toJSON());
 

@@ -6,8 +6,10 @@ import character.Character;
 import game.AbstractMatchManager;
 import game.TurnPhaseType;
 
+
 public class ClientMatchManager extends AbstractMatchManager {
 
+    
     private Multiplayer multiplayer;
     private boolean sendMex;
 
@@ -15,10 +17,12 @@ public class ClientMatchManager extends AbstractMatchManager {
 	super(battlefield);
     }
 
+    
     public Multiplayer getMultiplayer() {
 	return multiplayer;
     }
 
+    
     public void setMultiplayer(Multiplayer multiplayer) {
 	this.multiplayer = multiplayer;
     }
@@ -107,14 +111,12 @@ public class ClientMatchManager extends AbstractMatchManager {
         		    multiplayer.sendOperationMessage(Message.SET_STATER_PHASE,null);
         		    if (isMyTurn())
         			multiplayer.sendOperationMessage(Message.CHANGE_TURN,null);
-        		    // System.out.println("ciao");
         		    startNextTurn();
 		}
 	    }
 
 	    if (currentTurnPhase == TurnPhaseType.DAMAGE_PHASE) {
 		// if (isAppliedDamage() && allCharacterAreSpleeping()) {
-		System.out.println("DAMAGE PHASE");
 		if (!getDamagedCharacters().isEmpty()) {
 		    if (canClearDamageCharacter()) {
 			damagedCharacters.clear();
@@ -130,7 +132,6 @@ public class ClientMatchManager extends AbstractMatchManager {
 	    }
 
 	    if (currentTurnPhase == TurnPhaseType.DEATH_PHASE) {
-		System.out.println("DEATH PHASE");
 		checkDiedCharacters();
 
 		if (allCharacterAreSpleeping()) {
@@ -158,7 +159,6 @@ public class ClientMatchManager extends AbstractMatchManager {
 	    // setTurnPhase(TurnPhaseType.STARTER_PHASE);
 	    // } else if (getCurrentPlayer().attacked()
 	    // && !getMatchTimer().isTurnTimerStopped()) {
-	    // // System.out.println("MAIN PHASE");
 	    // getMatchTimer().startAttackTimer();
 	    // getMatchTimer().stopTurnTimer();
 	    //
@@ -182,8 +182,6 @@ public class ClientMatchManager extends AbstractMatchManager {
     }
     
     private boolean isMyTurn() {
-	// System.out.println("Current team   " + currentTeam.getName()
-	// + "  teamB " + teamB.getName() + " teamA " + teamA.getName());
 	if (multiplayer.isAChooser() && currentTeam == teamB)
 	    return true;
 	else if (!multiplayer.isAChooser() && currentTeam == teamA)

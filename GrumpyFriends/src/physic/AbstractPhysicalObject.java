@@ -3,8 +3,10 @@ package physic;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 
+
 public abstract class AbstractPhysicalObject implements PhysicalObject {
 
+	
 	protected Body body;
 	protected BodyDef bodyDef;
 
@@ -42,6 +44,7 @@ public abstract class AbstractPhysicalObject implements PhysicalObject {
 		return body.getPosition().y;
 	}
 
+	
 	@Override
 	public Body getBody() {
 		return body;

@@ -7,6 +7,7 @@ import character.Character;
 import character.Team;
 import javafx.geometry.Point2D;
 
+
 public interface MatchManager {
 
 	abstract public boolean startMatch();
@@ -25,20 +26,28 @@ public interface MatchManager {
 
 	abstract public void restartMatch();
 
+	
 	abstract public Character getCurrentPlayer();
 
+	
 	abstract public void setCurrentPlayer(Character currentPlayer);
 
+	
 	abstract public World getBattlefield();
 
+	
 	abstract public void setBattlefield(World battlefield);
 
+	
 	abstract public Team getTeamA();
 
+	
 	abstract public void setTeamA(Team teamA);
 
+	
 	abstract public Team getTeamB();
 
+	
 	abstract public void setTeamB(Team teamB);
 
 	abstract public int getTurn();

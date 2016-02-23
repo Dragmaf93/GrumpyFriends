@@ -22,13 +22,16 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 
+
 public class CharacterDrawer {
 
 	private final static String PATH_PACKAGE = "gui.animation.";
 
 	private Group pane;
 
+	
 	private Character character;
+	
 	private WeaponDrawer weaponDrawer;
 
 	private Group root;
@@ -36,6 +39,7 @@ public class CharacterDrawer {
 	private Rectangle characterBody;
 	private ImageView characterImage;
 
+	
 	private Weapon equipedWeapon;
 	private Node currentLauncherWeapon;
 	private Node currentBulletWeapon;
@@ -53,6 +57,7 @@ public class CharacterDrawer {
 	private boolean finishedLifePointsUpdate;
 	private int pointCounter;
 
+	
 	private MatchManager matchManager;
 
 	private boolean canStart = true;
@@ -63,12 +68,14 @@ public class CharacterDrawer {
 
 	private boolean deathAnimationEnd;
 
+	
 	private CharacterAnimation characterAnimation;
 
 	private Rotate rotateImage;
 
 	private int lastDirection;
 
+	
 	private Popup exceptionCharacter;
 
 	public CharacterDrawer(Group pane, Character character,

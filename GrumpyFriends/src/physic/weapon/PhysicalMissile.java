@@ -12,12 +12,17 @@ import element.weaponsManager.ExplosiveObject;
 import physic.PhysicalObjectManager;
 import utils.Vector;
 
+
 public class PhysicalMissile extends AbstractPhysicalWeapon implements
 		ExplosiveObject {
 
+	
 	private float blastPower;
+	
 	private float blastRadius;
+	
 	private float width;
+	
 	private float height;
 
 	private boolean exploded;
@@ -70,6 +75,7 @@ public class PhysicalMissile extends AbstractPhysicalWeapon implements
 		return body.getWorldCenter();
 	}
 
+	
 	@Override
 	public float getBlastPower() {
 
@@ -87,6 +93,7 @@ public class PhysicalMissile extends AbstractPhysicalWeapon implements
 		exploded = true;
 	}
 
+	
 	@Override
 	public float getBlastRadius() {
 		return blastRadius;
@@ -102,11 +109,13 @@ public class PhysicalMissile extends AbstractPhysicalWeapon implements
 		return body.getPosition().y + height * 0.5f;
 	}
 
+	
 	@Override
 	public float getHeight() {
 		return height;
 	}
 
+	
 	@Override
 	public float getWidth() {
 		return width;

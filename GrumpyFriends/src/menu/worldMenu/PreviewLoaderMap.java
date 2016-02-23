@@ -34,7 +34,9 @@ public class PreviewLoaderMap {
 
 	private final static String PATH_FILE = "worldXML/";
 
-	private double widthPreview, heightPreview;
+	private double widthPreview;
+
+	private double heightPreview;
 
 	public PreviewLoaderMap(double width, double height) {
 		this.widthPreview = width;

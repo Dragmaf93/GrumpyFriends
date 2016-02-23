@@ -10,8 +10,10 @@ import utils.Vector;
 import world.World;
 import world.WorldBuilder;
 
+
 public class TestWorldBuilder implements WorldBuilder {
 
+	
 	private World world; 
 	
 	@Override
@@ -41,6 +43,7 @@ public class TestWorldBuilder implements WorldBuilder {
 		world.addCharacter(new WhiteStormtrooper(name, x, y,null,world));
 	}
 
+	
 	@Override
 	public World getWorld(){
 		return world;

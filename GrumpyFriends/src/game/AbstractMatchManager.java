@@ -17,21 +17,30 @@ import physic.PhysicalCharacter;
 import utils.ObjectWithTimer;
 import world.World;
 
+
 public abstract class AbstractMatchManager implements MatchManager {
 
+    
     protected World battlefield;
+    
     protected Team teamA;
+    
     protected Team teamB;
 
+    
     protected Character currentPlayer;
+    
     protected Team currentTeam;
 
+    
     protected int turn;
 
     boolean started;
     boolean pause;
 
+    
     protected boolean appliedDamage;
+    
     protected MatchTimer timer;
 
     protected boolean endTurn;
@@ -39,6 +48,7 @@ public abstract class AbstractMatchManager implements MatchManager {
     protected boolean canStartNextTurn;
 
     protected Map<String, Float> hitCharacters;
+    
     protected List<Character> damagedCharacters;
 
     protected List<Character> diedCharactersOfTheCurrentTurn;
@@ -171,6 +181,7 @@ public abstract class AbstractMatchManager implements MatchManager {
 	turnTimerString=s;
     }
 
+    
     public List<Character> getDamagedCharacters() {
 	return damagedCharacters;
     }
@@ -194,6 +205,7 @@ public abstract class AbstractMatchManager implements MatchManager {
 	return true;
     }
 
+    
     @Override
     public void setCanStartNextTurn(boolean b) {
 	canStartNextTurn = b;
@@ -266,34 +278,42 @@ public abstract class AbstractMatchManager implements MatchManager {
 	currentTurnPhase = TurnPhaseType.MAIN_PHASE;
     }
 
+    
     public Character getCurrentPlayer() {
 	return currentPlayer;
     }
 
+    
     public void setCurrentPlayer(Character currentPlayer) {
 	this.currentPlayer = currentPlayer;
     }
 
+    
     public World getBattlefield() {
 	return battlefield;
     }
 
+    
     public void setBattlefield(World battlefield) {
 	this.battlefield = battlefield;
     }
 
+    
     public Team getTeamA() {
 	return teamA;
     }
 
+    
     public void setTeamA(Team teamA) {
 	this.teamA = teamA;
     }
 
+    
     public Team getTeamB() {
 	return teamB;
     }
 
+    
     public void setTeamB(Team teamB) {
 	this.teamB = teamB;
     }
@@ -304,6 +324,7 @@ public abstract class AbstractMatchManager implements MatchManager {
 	return teamB;
     }
 
+    
     public int getTurn() {
 	return turn;
     }
@@ -312,6 +333,7 @@ public abstract class AbstractMatchManager implements MatchManager {
 	return currentTurnPhase != TurnPhaseType.MAIN_PHASE;
     }
 
+    
     public Team getCurrentTeam() {
 	return currentTeam;
     }
@@ -374,6 +396,7 @@ public abstract class AbstractMatchManager implements MatchManager {
     protected void endMatch() {
     }
 
+    
     public boolean isAppliedDamage() {
 	return appliedDamage;
     }
@@ -435,6 +458,7 @@ public abstract class AbstractMatchManager implements MatchManager {
 	return canClearDamageCharacter;
     }
 
+    
     @Override
     public void setCanClearDamageCharacter(boolean b) {
 	canClearDamageCharacter = b;

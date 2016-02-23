@@ -92,8 +92,8 @@ public class PanelForMap extends ScrollPane {
 	        @Override
 	        public void handle(MouseEvent event) { 
 	        	if (event.getButton().equals(MouseButton.SECONDARY)) {
-	        		PanelForMap.this.mapEditor.getDragged().addVertex(new Point2D(event.getX(), event.getY()));
 //	        		PanelForMap.this.mapEditor.setDragged(PanelForMap.this.mapEditor.getDragged());
+	        		PanelForMap.this.mapEditor.getDragged().addVertex(new Point2D(event.getX(), event.getY()));
 	        		dragged = PanelForMap.this.mapEditor.getDragged();
 	        		removePanelInsert();
 	        		

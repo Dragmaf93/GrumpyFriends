@@ -10,8 +10,10 @@ import world.World;
 import game.AbstractMatchManager;
 import game.TurnPhaseType;
 
+
 public class ServerMatchManager extends AbstractMatchManager {
 
+    
     private MatchServer matchServer;
     private String damagedCharactersJson;
 
@@ -42,8 +44,6 @@ public class ServerMatchManager extends AbstractMatchManager {
 		else if (allCharacterAreSpleeping() && canStartNextTurn()) {
 		    startNextTurn();
 
-		    System.out.println("START NEW TURN "
-			    + currentTeam.getName());
 		}
 	    }
 	    if (getCurrentTurnPhase() == TurnPhaseType.MAIN_PHASE) {
@@ -55,7 +55,6 @@ public class ServerMatchManager extends AbstractMatchManager {
 		    matchServer.sendMessage(Message.SET_STATER_PHASE, null);
 		} else if (getCurrentPlayer().attacked()
 			&& !getMatchTimer().isTurnTimerStopped()) {
-		    System.out.println("MAIN PHASE");
 		    getMatchTimer().startAttackTimer();
 		    getMatchTimer().stopTurnTimer();
 
@@ -68,7 +67,6 @@ public class ServerMatchManager extends AbstractMatchManager {
 	    }
 
 	    if (getCurrentTurnPhase() == TurnPhaseType.DAMAGE_PHASE) {
-		System.out.println("DAMAGE PHASE");
 		applyDamageToHitCharacter();
 
 		if (isAppliedDamage() && allCharacterAreSpleeping()) {
@@ -87,7 +85,6 @@ public class ServerMatchManager extends AbstractMatchManager {
 			// }
 			// } else {
 			//
-			// System.out.println("VUOTOOOOOOOOOOOOOOO");
 			// matchServer.sendMessage(Message.SET_DEATH_PHASE,
 			// null);
 			// setTurnPhase(TurnPhaseType.DEATH_PHASE);
@@ -95,7 +92,6 @@ public class ServerMatchManager extends AbstractMatchManager {
 		    }
 		}
 		if (getCurrentTurnPhase() == TurnPhaseType.DEATH_PHASE) {
-		    System.out.println("DEATH PHASE");
 		    checkDiedCharacters();
 
 		    if (allCharacterAreSpleeping()) {
@@ -139,8 +135,6 @@ public class ServerMatchManager extends AbstractMatchManager {
 			damagedCharacters.add(c);
 		    }
 		}
-		System.out
-			.println("DAMAGE JSON       " + damagedCharactersJson);
 		hitCharacters.clear();
 		appliedDamage = true;
 		characterSufferedDamage = true;
@@ -150,6 +144,7 @@ public class ServerMatchManager extends AbstractMatchManager {
 	}
     }
 
+    
     public void setMatchServer(MatchServer matchServer) {
 	this.matchServer = matchServer;
     }

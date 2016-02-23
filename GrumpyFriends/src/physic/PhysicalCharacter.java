@@ -13,6 +13,7 @@ import org.jbox2d.dynamics.joints.Joint;
 import org.jbox2d.dynamics.joints.WheelJoint;
 import org.jbox2d.dynamics.joints.WheelJointDef;
 
+
 public class PhysicalCharacter extends AbstractPhysicalObject implements RemovablePhysicalObject{
 	
 	private final static float FEET_FRICTION=100.0f;
@@ -23,6 +24,7 @@ public class PhysicalCharacter extends AbstractPhysicalObject implements Removab
 	private Fixture bodyFixture;
 	private Fixture feetFixture;
 	private WheelJoint joint;
+	
 	
 	private Body[] bodiesToRemove;
 
@@ -109,6 +111,7 @@ public class PhysicalCharacter extends AbstractPhysicalObject implements Removab
 		return !body.isAwake();
 	}
 
+	
 	@Override
 	public Body[] getBodiesToRemove() {
 		return bodiesToRemove;

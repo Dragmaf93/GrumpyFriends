@@ -6,16 +6,26 @@ import java.util.List;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
 
+
 public class ObjectForUndoRedo {
 
+	
 	private MapEditor mapEditor;
 	
 	private List<SquarePolygon> objectInMap;
 	private List<Pair<Point2D, SquarePolygon>> objectToCancelled;
 	private List<Pair<Point2D, SquarePolygon>> objectMoveInMapForUndo;
 	
-	boolean objectFoundPolygon = false, objectFoundRedoPolygon = false;
-	boolean objectFoundCurve = false, objectFoundRedoCurve = false;
+	
+	boolean objectFoundPolygon = false;
+
+	
+	boolean objectFoundRedoPolygon = false;
+	
+	boolean objectFoundCurve = false;
+
+	
+	boolean objectFoundRedoCurve = false;
 	
 	public ObjectForUndoRedo(MapEditor mapEditor, List<Pair<Point2D, SquarePolygon>> objectMoveInMapForUndo2,
 			List<SquarePolygon> objectInMap2, List<Pair<Point2D, SquarePolygon>> objectToCancelled2) {
@@ -98,15 +108,19 @@ public class ObjectForUndoRedo {
 				mapEditor.addObject(mapEditor.getDragged());
 	}
 	
+	
 	public boolean getObjectFoundPolygon() {
 		return objectFoundPolygon;
 	}
+	
 	public boolean getObjectFoundRedoPolygon() {
 		return objectFoundRedoPolygon;
 	}
+	
 	public boolean getObjectFoundCurve() {
 		return objectFoundCurve;
 	}
+	
 	public boolean getObjectFoundRedoCurve() {
 		return objectFoundRedoCurve;
 	}
