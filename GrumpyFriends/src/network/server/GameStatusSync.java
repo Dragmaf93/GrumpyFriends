@@ -109,9 +109,8 @@ public class GameStatusSync {
 		return null;
 	}
 
-	public void setCharactersStatus(HashMap<String, Character> characters, Character currentCharacter,MatchManager matchManager, String json) {
+	public void setCharactersStatus(HashMap<String, Character> characters, Character currentCharacter,MatchManager matchManager, String json) throws JsonProcessingException, IOException {
 
-		try {
 			JsonNode jsonRoot = mapper.readTree(json);
 			JsonNode jsonCurrentCharacter = jsonRoot.get(0).get("CurrentCharacter");
 			JsonNode jsonNodeArray = jsonRoot.get(1);
@@ -175,11 +174,6 @@ public class GameStatusSync {
 				// c.setLastEquippedWeaponName(jsonCharacter.get("lastEquippedWeaponName").asText());
 
 			}
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
 	}
 }

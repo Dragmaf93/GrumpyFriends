@@ -36,9 +36,22 @@ import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 public class Multiplayer {
 
-    private Socket socket;
-    // private ServerSocket welcomeSocket;
+    private final class MultiplayerRunnable implements Runnable {
+	@Override
+	public void run() {
+	try {
 
+	    while (true) {
+		doOperation(inFromServer.readLine());
+	    }
+	} catch (IOException e) {
+	    matchManager.pauseMatch();
+	    MenuManager.getInstance().addExceptionPopup(exception);
+	}
+	}
+    }
+
+    private Socket socket;
     private Lock lock = new ReentrantLock();
     private Condition condition = lock.newCondition();
 
@@ -48,10 +61,6 @@ public class Multiplayer {
     private MatchManager matchManager;
 
     private Popup exception;
-
-    private int portNumber;
-
-    private String ipMatchServer;
 
     private List<GameBean> gameBeans;
 
@@ -70,7 +79,7 @@ public class Multiplayer {
 	characters = new HashMap<String, Character>();
 	gameBeans = new ArrayList<GameBean>();
 	gameStatusSync = new GameStatusSync();
-	exception = new Popup(400, 180, "Connection refused", null, "OK");
+	exception = new Popup(400, 180, "Lost connection", null, "OK");
 	exception.getRightButton().setOnMouseReleased(
 		new EventHandler<MouseEvent>() {
 
@@ -107,37 +116,9 @@ public class Multiplayer {
 
 	chooser = true;
 
-	new Thread(new Runnable() {
-
-	    @Override
-	    public void run() {
-		try {
-
-		    while (true) {
-			if (inFromServer.ready())
-			    doOperation(inFromServer.readLine());
-		    }
-		} catch (IOException e) {
-		    matchManager.pauseMatch();
-		    MenuManager.getInstance().addExceptionPopup(exception);
-		}
-	    }
-	}).start();
+	new Thread(new MultiplayerRunnable()).start();
 
     }
-
-    public void setIpPort(String chooser, int port) {
-	ipMatchServer = chooser;
-	portNumber = port;
-    }
-
-    // private void connectToChooser() throws UnknownHostException, IOException
-    // {
-    // socket = new Socket(ipMatchServer, portNumber);
-    // inFromServer = new BufferedReader(new InputStreamReader(
-    // socket.getInputStream()));
-    // outToServer = new DataOutputStream(socket.getOutputStream());
-    // }
 
     public void sendOperationMessage(String ope, String proprieta) {
 
@@ -163,7 +144,6 @@ public class Multiplayer {
 	    }
 
 	} catch (InterruptedException e) {
-	    e.printStackTrace();
 	} finally {
 	    lock.unlock();
 	}
@@ -171,43 +151,45 @@ public class Multiplayer {
 
     private void doOperation(String operazione) throws UnknownHostException,
 	    IOException {
-	String[] op = operazione.split(";");
+	if (operazione != null) {
+	    String[] op = operazione.split(";");
 
-	switch (op[0]) {
-	case Message.WORLD_STATUS:
-	    gameStatusSync.setCharactersStatus(characters,
-		    matchManager.getCurrentPlayer(),matchManager, op[1]);
-	    break;
-	case Message.SET_STATER_PHASE:
-	    matchManager.getCurrentPlayer().endTurn();
-	    matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
-	    break;
-	case Message.OP_SEND_INFO_TEAM_TO_CHOOSER:
-	case Message.OP_SEND_INFO_WORLD:
-	case Message.OP_SEND_INFO_TEAM_TO_CREATOR:
-	    addBean(GameBean.jSonToGameBean(op[1]));
-	    break;
-	case Message.SET_DAMAGE_PHASE:
-	    matchManager.setTurnPhase(TurnPhaseType.DAMAGE_PHASE);
-	    break;
-	case Message.SERVER_READY:
-	    break;
-	case Message.DAMAGE_CHARACTER:
-	    matchManager.getCurrentPlayer().endTurn();
-	    String[] hitCharacter = op[1].split(",");
-	    for (String string : hitCharacter) {
-		String[] split = string.split(":");
-		Character c = (matchManager.getBattlefield().getCharacter(split[0]));
-		c.decreaseLifePoints(Integer.parseInt(split[1]));
-		matchManager.getDamagedCharacters().add(c);
+	    switch (op[0]) {
+	    case Message.WORLD_STATUS:
+		gameStatusSync.setCharactersStatus(characters,
+			matchManager.getCurrentPlayer(), matchManager, op[1]);
+		break;
+	    case Message.SET_STATER_PHASE:
+		matchManager.getCurrentPlayer().endTurn();
+		matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
+		break;
+	    case Message.OP_SEND_INFO_TEAM_TO_CHOOSER:
+	    case Message.OP_SEND_INFO_WORLD:
+	    case Message.OP_SEND_INFO_TEAM_TO_CREATOR:
+		addBean(GameBean.jSonToGameBean(op[1]));
+		break;
+	    case Message.SET_DAMAGE_PHASE:
+		matchManager.setTurnPhase(TurnPhaseType.DAMAGE_PHASE);
+		break;
+	    case Message.SERVER_READY:
+		break;
+	    case Message.DAMAGE_CHARACTER:
+		matchManager.getCurrentPlayer().endTurn();
+		String[] hitCharacter = op[1].split(",");
+		for (String string : hitCharacter) {
+		    String[] split = string.split(":");
+		    Character c = (matchManager.getBattlefield()
+			    .getCharacter(split[0]));
+		    c.decreaseLifePoints(Integer.parseInt(split[1]));
+		    matchManager.getDamagedCharacters().add(c);
+		}
+		break;
+	    case Message.SET_DEATH_PHASE:
+		matchManager.setTurnPhase(TurnPhaseType.DEATH_PHASE);
+		break;
+	    default:
+		break;
 	    }
-	    break;
-	case Message.SET_DEATH_PHASE:
-	    matchManager.setTurnPhase(TurnPhaseType.DEATH_PHASE);
-	    break;
-	default:
-	    break;
-
 	}
     }
 
@@ -224,19 +206,10 @@ public class Multiplayer {
 
     public void closeConnection() throws IOException {
 	socket.close();
-	// s.close();
     }
 
     public void createMatch(String ipMatchServer, int portNumber)
 	    throws IOException {
-
-	// welcomeSocket = new ServerSocket(portNumber);
-	// portNumber++;
-	// Socket connectionSocket = welcomeSocket.accept();
-
-	// BufferedReader inFromClient = new BufferedReader(
-	// new InputStreamReader(connectionSocket.getInputStream()));
-	// doOperation(inFromClient.readLine());
 
 	socket = new Socket(ipMatchServer, portNumber);
 	inFromServer = new BufferedReader(new InputStreamReader(
@@ -245,24 +218,7 @@ public class Multiplayer {
 
 	chooser = false;
 
-	//
-	new Thread(new Runnable() {
-
-	    @Override
-	    public void run() {
-		while (true) {
-		    try {
-			if (inFromServer.ready())
-			    doOperation(inFromServer.readLine());
-		    } catch (IOException e) {
-			matchManager.pauseMatch();
-			MenuManager.getInstance().addExceptionPopup(exception);
-		    }
-
-		}
-	    }
-	}).start();
-	//
+	new Thread(new MultiplayerRunnable()).start();
 
     }
 }

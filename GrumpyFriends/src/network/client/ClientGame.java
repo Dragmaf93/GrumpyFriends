@@ -196,7 +196,7 @@ public class ClientGame extends AbstractGame {
 
 
 			positionCharacter();
-
+			multiplayer.sendOperationMessage(Message.SERVER_READY, null);
 			matchManager.startMatch();
 			
 	}
