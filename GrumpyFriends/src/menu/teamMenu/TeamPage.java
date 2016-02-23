@@ -157,4 +157,8 @@ public class TeamPage extends AbstractMenuPage {
 		teamTypeSelector.update();
 	}
 
+	public void visibleButtonBack(boolean b) {
+	    backButton.setVisible(b);
+	}
+
 }

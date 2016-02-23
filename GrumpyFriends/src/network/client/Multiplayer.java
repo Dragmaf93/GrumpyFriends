@@ -190,6 +190,8 @@ public class Multiplayer {
 		matchManager.setTurnPhase(TurnPhaseType.DEATH_PHASE);
 		matchManager.checkDiedCharacters();
 		break;
+	    case Message.CLOSE:
+		break;
 	    default:
 		break;
 	    }
