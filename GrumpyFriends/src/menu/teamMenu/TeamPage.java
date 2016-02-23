@@ -112,21 +112,21 @@ public class TeamPage extends AbstractMenuPage {
 //				}
 //			});
 //		}
-		if (!isAllInsert())
-		{
-			messagePopup = new Popup(300, 200, "Missing Value", "", "Ok");
-			messagePopup.relocate(root.getWidth()/2 - messagePopup.getLayoutBounds().getWidth()/2, 
-					root.getHeight()/2 - messagePopup.getLayoutBounds().getHeight()/2);
-			root.getChildren().add(messagePopup);
-			messagePopup.getRightButton().setOnMouseReleased(new EventHandler<Event>() {
-
-				@Override
-				public void handle(Event event) {
-					root.getChildren().remove(messagePopup);
-				}
-			});
-		}
-		else
+//		if (!isAllInsert())
+//		{
+//			messagePopup = new Popup(300, 200, "Missing Value", "", "Ok");
+//			messagePopup.relocate(root.getWidth()/2 - messagePopup.getLayoutBounds().getWidth()/2, 
+//					root.getHeight()/2 - messagePopup.getLayoutBounds().getHeight()/2);
+//			root.getChildren().add(messagePopup);
+//			messagePopup.getRightButton().setOnMouseReleased(new EventHandler<Event>() {
+//
+//				@Override
+//				public void handle(Event event) {
+//					root.getChildren().remove(messagePopup);
+//				}
+//			});
+//		}
+//		else
 			MenuManager.getInstance().nextPage();
 		
 	}
