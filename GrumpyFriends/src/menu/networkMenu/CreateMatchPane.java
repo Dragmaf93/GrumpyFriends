@@ -1,5 +1,7 @@
 package menu.networkMenu;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -39,7 +41,7 @@ public class CreateMatchPane extends AbstractPageComponent {
 	private final static double PADDING_WIDHT = 5;
 	private final static double PADDING_HEIGHT = 15;
 	private static final double TEXT_HEIGHT = 45;
-	
+
 	private final static String initValueComboBox = "1";
 
 	private Font font = Font.font("Comic Sans MS", FontWeight.BOLD,
@@ -70,7 +72,7 @@ public class CreateMatchPane extends AbstractPageComponent {
 		choiseNumberPlayer = new ComboBox<String>(
 				FXCollections.observableArrayList("1", "2", "3", "4", "5"));
 		choiseNumberPlayer.setPrefWidth(width * 0.3);
-		 choiseNumberPlayer.setValue(initValueComboBox);
+		choiseNumberPlayer.setValue(initValueComboBox);
 		// choiseNumberPlayer.setStyle("-fx-background-color: null");
 		choiseNumberPlayer.setPrefHeight(numberPlayer.getLayoutBounds()
 				.getHeight());
@@ -88,40 +90,56 @@ public class CreateMatchPane extends AbstractPageComponent {
 		privateCheck.setFont(font);
 		privateCheck.setFill(PageComponent.HEADER_TEXT_COLOR);
 
+		
 		check = new CheckBox();
-
+		
 		HBox checkPrivate = new HBox(360, privateCheck, check);
-
+		
+		VBox rootBox = new VBox(25, matchNamePane, numberPlayerPane,
+				checkPrivate);
+		
 		Text passwordText = new Text("Password");
 		passwordText.setFont(font);
 		passwordText.setFill(PageComponent.HEADER_TEXT_COLOR);
 		password = new TextFieldMenu(width, height);
-
 		VBox pass = new VBox(1, passwordText, password);
+		
+		
+		check.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			public void changed(ObservableValue<? extends Boolean> ov,
+					Boolean old_val, Boolean new_val) {
+				
+				if (new_val == true)
+					rootBox.getChildren().add(pass);
+				else 
+					rootBox.getChildren().remove(pass);
+			}
+		});
 
-//		MenuButton createMatch = new MenuButton(this.getWidthComponent() / 3,
-//				50, "Create Match");
-//		createMatch.relocate(this.getWidthComponent()
-//				- createMatch.getLayoutBounds().getWidth(), 0);
 
-		VBox rootBox = new VBox(25, matchNamePane, numberPlayerPane,
-				checkPrivate, pass);
+
+		// MenuButton createMatch = new MenuButton(this.getWidthComponent() / 3,
+		// 50, "Create Match");
+		// createMatch.relocate(this.getWidthComponent()
+		// - createMatch.getLayoutBounds().getWidth(), 0);
+
+		
 		rootBox.relocate(this.getWidthComponent() / 2 - width / 2,
 				PADDING_HEIGHT);
 
 		root.getChildren().addAll(rootBox);
 
-//		createMatch.setOnMouseReleased(new EventHandler<MouseEvent>() {
-//
-//			@Override
-//			public void handle(MouseEvent event) {
-//				if (event.getButton() == MouseButton.PRIMARY) {
-//					MenuManager.getInstance().setClientType(false);
-//					networkPage.nextPage();
-//				}
-//			}
-//
-//		});
+		// createMatch.setOnMouseReleased(new EventHandler<MouseEvent>() {
+		//
+		// @Override
+		// public void handle(MouseEvent event) {
+		// if (event.getButton() == MouseButton.PRIMARY) {
+		// MenuManager.getInstance().setClientType(false);
+		// networkPage.nextPage();
+		// }
+		// }
+		//
+		// });
 	}
 
 	@Override
@@ -144,7 +162,8 @@ public class CreateMatchPane extends AbstractPageComponent {
 		matchNameTextField.resetTextField();
 		choiseNumberPlayer.setValue(initValueComboBox);
 		check.setSelected(false);
-		password.resetTextField();
+		if (password != null)
+			password.resetTextField();
 	}
 
 	@Override
@@ -158,14 +177,13 @@ public class CreateMatchPane extends AbstractPageComponent {
 		return values;
 	}
 
-	
 	public boolean isAllInsert() {
-		
+
 		String[] value = getValues();
-		
+
 		if (!value[0].equals("") || value[0] == null) {
 			if (value[2].equals("false"))
-					return true;
+				return true;
 			else if (value[2].equals("true"))
 				if (!value[3].equals(""))
 					return true;
@@ -173,6 +191,5 @@ public class CreateMatchPane extends AbstractPageComponent {
 		}
 		return false;
 	}
-	
-	
+
 }

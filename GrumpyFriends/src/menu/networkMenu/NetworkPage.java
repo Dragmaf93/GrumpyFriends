@@ -19,6 +19,9 @@ import menu.MenuManager;
 
 public class NetworkPage extends AbstractMenuPage {
 
+	private final static double BUTTON_HEIGHT = 60;
+	private final static double BUTTON_WIDTH = 200;
+	
 	private UserName userName;
 	private MatchList matchList;
 	private CreateMatchPane createMatchPane;
@@ -39,7 +42,7 @@ public class NetworkPage extends AbstractMenuPage {
 		matchList.relocate(matchList.getLayoutX(), root.getPrefHeight()
 				- matchList.getHeightComponent());
 
-		MenuButton backButton = new MenuButton(root.getPrefWidth() / 5, 50,
+		MenuButton backButton = new MenuButton(BUTTON_WIDTH, BUTTON_HEIGHT,
 				"Back");
 		// backButton.relocate(root.getPrefWidth()-backButton.getLayoutBounds().getWidth(),
 		// root.getPrefHeight()-backButton.getLayoutBounds().getHeight());
@@ -53,7 +56,7 @@ public class NetworkPage extends AbstractMenuPage {
 			}
 		});
 
-		MenuButton createMatch = new MenuButton(root.getPrefWidth() / 5, 50,
+		MenuButton createMatch = new MenuButton(root.getPrefWidth() / 5, BUTTON_HEIGHT,
 				"Create Match");
 		// createMatch.relocate(createMatchPane.getLayoutX(),
 		// backButton.getLayoutY());
@@ -72,9 +75,9 @@ public class NetworkPage extends AbstractMenuPage {
 
 		});
 
-		HBox button = new HBox(10, createMatch, backButton);
+		HBox button = new HBox(30, createMatch, backButton);
 		button.relocate(root.getPrefWidth()
-				- (backButton.getLayoutBounds().getWidth() + createMatch
+				- (createMatch.getLayoutBounds().getWidth() + createMatch
 						.getLayoutBounds().getWidth()), root.getPrefHeight()
 				- backButton.getLayoutBounds().getHeight());
 
