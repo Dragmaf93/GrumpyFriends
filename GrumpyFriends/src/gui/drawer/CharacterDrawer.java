@@ -177,6 +177,8 @@ public class CharacterDrawer {
 			if (turn < matchManager.getTurn()) {
 				turn = matchManager.getTurn();
 				canStart = true;
+				lifePointsText.setText(Integer.toString(character
+						.getLifePoints()));
 			}
 			if (character == matchManager.getCurrentPlayer()) {
 				lifePointsRectangle.setStroke(Color.GOLD);
