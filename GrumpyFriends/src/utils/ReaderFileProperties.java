@@ -11,12 +11,12 @@ public class ReaderFileProperties {
 	public ReaderFileProperties() {
 	}
  
-	public static String getPropValues(String parameterRequest){
+	public static String getPropServerValues(String parameterRequest){
 		result = "";
  
 		try {
 			Properties prop = new Properties();
-			String propFileName = "/resources/port.properties";
+			String propFileName = "/resources/server.properties";
  
 	        String dir = System.getProperty("user.dir");
 	        InputStream in = new FileInputStream(dir + propFileName);
@@ -32,9 +32,25 @@ public class ReaderFileProperties {
 		return result;
 	}
 	
-	public static void main(String[] args) {
-		ReaderFileProperties r = new ReaderFileProperties();
-		System.out.println(r.getPropValues("server_port"));
+	public static String getPropClientValues(String parameterRequest){
+		result = "";
+ 
+		try {
+			Properties prop = new Properties();
+			String propFileName = "/resources/client.properties";
+ 
+	        String dir = System.getProperty("user.dir");
+	        InputStream in = new FileInputStream(dir + propFileName);
+	        prop.load(in);
+	        in.close();
+
+	        result = prop.getProperty(parameterRequest);
+			
+		} catch (Exception e) {
+			System.out.println("Exception: " + e);
+		}
+		
+		return result;
 	}
 	
 }

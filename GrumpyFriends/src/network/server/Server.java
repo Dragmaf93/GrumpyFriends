@@ -114,7 +114,7 @@ public class Server {
 	boolean listeningSocket = true;
 
 	try {
-	    serverSocket = new ServerSocket(Integer.parseInt(ReaderFileProperties.getPropValues("client_port")));
+	    serverSocket = new ServerSocket(Integer.parseInt(ReaderFileProperties.getPropServerValues("server_port")));
 
 	} catch (IOException e) {
 	    System.err.println("Could not listen on port: 2343");

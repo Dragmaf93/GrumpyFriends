@@ -23,8 +23,8 @@ import menu.GameBean;
 
 public class Client {
 
-	private final static String IP_SERVER = ReaderFileProperties.getPropValues("server_ip");
-	private final static int PORT = Integer.parseInt(ReaderFileProperties.getPropValues("client_port"));
+	private final static String IP_SERVER = ReaderFileProperties.getPropClientValues("server_ip");
+	private final static int PORT = Integer.parseInt(ReaderFileProperties.getPropClientValues("client_port"));
 	// private final static String IP_SERVER = "192.168.43.148";
 
 	private Socket socket;
