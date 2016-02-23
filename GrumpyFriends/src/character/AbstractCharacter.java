@@ -654,5 +654,9 @@ public abstract class AbstractCharacter implements Character {
     public void setSpeedLauncher(float x, float y) {
 	launcher.setSpeedvector(x, y);
     }
-
+    @Override
+    public void setName(String name) {
+	this.name=name;
+    }
+    
 }

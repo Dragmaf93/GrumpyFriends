@@ -97,7 +97,7 @@ public interface Character extends Element
 	public abstract void setCurrentDirection(int asInt);
 	public abstract void setSpeedVector(float asDouble, float asDouble2);
 	public abstract void setDamagePoints(int asInt);
-	
+	public abstract void setName(String name);
 	public abstract void setAttacked(boolean attacked);
 	
 	public abstract float getAimDirection();

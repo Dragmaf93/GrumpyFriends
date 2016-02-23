@@ -27,6 +27,8 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 
 	protected float height, width;
 
+	private int numberName;
+	
 	protected Map<String, Character> characterContainer;
 
 	protected List<Ground> grounds;
@@ -123,6 +125,10 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 
 	@Override
 	public void addCharacter(Character character) {
+	    	if(characterContainer.containsKey(character.getName())){
+	    	   character.setName(character.getName()+numberName);
+	    	   numberName++;
+	    	}
 		characterContainer.put(character.getName(), character);
 		characters.add(character);
 		charactersAlreadyOutWorld.put(character.getName(), false);
