@@ -191,7 +191,6 @@ public class TestCharacter {
 	// bomb.destroyFixture(bombFixture);
 	//
 	// bombFixture = bomb.createFixture(bombFixtureDef);
-	// System.out.println(bomb.getMass()+" "+bombFixture.getDensity());
 	// bomb.setActive(true);
 	// // bomb.setGravityScale(1);
 	// bomb.setAngularVelocity(0);

@@ -312,7 +312,6 @@ public class Curve extends QuadCurve implements SquarePolygon {
 		points.add(1,end);
 		points.add(2,new Point2D(point.getX()+width/2, point.getY()));
 		
-//		System.out.println(points);
 	}
 
 	@Override

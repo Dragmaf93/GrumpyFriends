@@ -1,5 +1,6 @@
 package menu.teamMenu;
 
+import gui.Popup;
 import menu.AbstractMenuPage;
 import menu.GameBean;
 import menu.MenuButton;
@@ -23,6 +24,8 @@ public class TeamPage extends AbstractMenuPage {
 	private MenuButton continueButton;
 	private MenuButton backButton;
 	private PlayerName playerName;
+
+	private Popup messagePopup;
 
 	
 	public TeamPage() {
@@ -109,21 +112,23 @@ public class TeamPage extends AbstractMenuPage {
 //				}
 //			});
 //		}
-//		else
-//		{
-//			messagePopup = new Popup(300, 200, "Missing Value", "", "Ok");
-//			messagePopup.changeColorForMissingValue();
-//			root.getChildren().add(messagePopup);
-//			messagePopup.getRightButton().setOnMouseReleased(new EventHandler<Event>() {
-//
-//				@Override
-//				public void handle(Event event) {
-//					root.getChildren().remove(messagePopup);
-//				}
-//			});
-//		}
+		if (!isAllInsert())
+		{
+			messagePopup = new Popup(300, 200, "Missing Value", "", "Ok");
+			messagePopup.relocate(root.getWidth()/2 - messagePopup.getLayoutBounds().getWidth()/2, 
+					root.getHeight()/2 - messagePopup.getLayoutBounds().getHeight()/2);
+			root.getChildren().add(messagePopup);
+			messagePopup.getRightButton().setOnMouseReleased(new EventHandler<Event>() {
+
+				@Override
+				public void handle(Event event) {
+					root.getChildren().remove(messagePopup);
+				}
+			});
+		}
+		else
+			MenuManager.getInstance().nextPage();
 		
-		MenuManager.getInstance().nextPage();
 	}
 
 	@Override
@@ -144,7 +149,6 @@ public class TeamPage extends AbstractMenuPage {
 		}
 		
 		bean.addData("TypeTeam", teamTypeSelector.getValues()[0]);
-		System.out.println("TEAM PAGE "+bean.toJSON());
 		return bean;
 	}
 

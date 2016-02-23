@@ -83,7 +83,6 @@ public class PhysicalMissile extends AbstractPhysicalWeapon implements
 
 	@Override
 	public void explode() {
-		// System.out.println("IL MISSILE é ESPLOSO");
 		PhysicalObjectManager.getInstance().makeAnExplosion(this);
 		exploded = true;
 	}

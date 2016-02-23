@@ -398,7 +398,6 @@ public abstract class AbstractMatchManager implements MatchManager {
 
     public void setTurnPhase(TurnPhaseType phase) {
 	currentTurnPhase = phase;
-	// System.out.println(currentTurnPhase);
     }
 
     public Team getWinnerTeam() {

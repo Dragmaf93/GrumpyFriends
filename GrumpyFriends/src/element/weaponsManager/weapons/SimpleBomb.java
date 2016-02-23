@@ -96,7 +96,6 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer {
 
 			x=Utils.xFromJbox2dToJavaFx(physicalWeapon.getX());
 			y=Utils.yFromJbox2dToJavaFx(physicalWeapon.getY());
-//			System.out.println(x+"        "+y);
 			angle=physicalWeapon.getBody().getAngle();
 			
 			if (MatchTimer.endObjectTimerIn() <= 0 && !exploded) {

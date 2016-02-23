@@ -115,7 +115,6 @@ public class PhysicalContactListener implements ContactListener {
 //					if ((fixture = getBodyFixture(contact.getFixtureA(),
 //							contact.getFixtureB(), currentCharacter.getName(),
 //							character.getName())) != null) {
-//						System.out.println("Fixture " + fixture.getUserData());
 //					}
 //
 //				}
@@ -154,7 +153,6 @@ public class PhysicalContactListener implements ContactListener {
 //					if ((fixture = getBodyFixture(contact.getFixtureA(),
 //							contact.getFixtureB(), currentCharacter.getName(),
 //							character.getName())) != null) {
-//						System.out.println(contactImpulse.normalImpulses);
 //					}
 //
 //				}

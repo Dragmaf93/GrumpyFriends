@@ -122,11 +122,9 @@ public class TestGrumpyFriends extends TestbedTest {
 			break;
 		case 'a':
 			matchManager.getCurrentPlayer().move(Character.LEFT);
-			System.out.println(matchManager.getCurrentPlayer().getPhysicalObject().getX());
 			break;
 		case 'd':
 			matchManager.getCurrentPlayer().move(Character.RIGHT);
-			System.out.println(matchManager.getCurrentPlayer().getPhysicalObject().getX());
 			break;
 		case 'm':
 			matchManager.getCurrentPlayer().equipWeapon("SimpleMissile");

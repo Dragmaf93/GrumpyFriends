@@ -83,7 +83,6 @@ public class MatchList extends AbstractPageComponent {
 							infoMatch);
 					
 					((NetworkPage) menuPage).getDetailMatch().setVisible(true);
-					System.out.println("VEDO");
 				}
 			});
 			vbox.getChildren().add(m);

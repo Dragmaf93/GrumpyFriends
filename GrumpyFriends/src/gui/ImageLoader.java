@@ -27,7 +27,6 @@ public class ImageLoader {
 		String[] typeWorlds = dir.list();
 
 		for (String typeWorld : typeWorlds) {
-//			System.out.println(typeWorld);
 				previews.put(typeWorld, new Image(PATH_IMAGE+typeWorld+"/preview.png"));
 				previewsGround.put(typeWorld, new Image(PATH_IMAGE+typeWorld+"/groundPreview.png"));
 		}

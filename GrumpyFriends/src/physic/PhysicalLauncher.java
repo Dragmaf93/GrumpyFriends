@@ -88,7 +88,6 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 	
 	public void hide(){
 		joint.setMotorSpeed(0);
-//		System.out.println(joint.getMotorSpeed());
 //		if(fixture!=null)
 //			body.destroyFixture(fixture);
 //		fixture=null;
@@ -123,7 +122,6 @@ public class PhysicalLauncher extends PhysicalDinamicObject {
 			joint.setMotorSpeed(speed);
 		else if(currentDirection==Character.LEFT)
 			joint.setMotorSpeed(-speed);
-//		System.out.println(joint.getMotorSpeed());
 	}
 
 }

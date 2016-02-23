@@ -165,7 +165,6 @@ public class FieldPane extends Pane {
 			// matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
 			// } else if (matchManager.getCurrentPlayer().attacked()
 			// && !matchManager.getMatchTimer().isTurnTimerStopped()) {
-			// // System.out.println("MAIN PHASE");
 			// matchManager.getMatchTimer().startAttackTimer();
 			// matchManager.getMatchTimer().stopTurnTimer();
 			//

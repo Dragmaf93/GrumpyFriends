@@ -167,7 +167,7 @@ public class WinnerPane extends AbstractHudElement {
 	public void draw() {
 
 		if (matchManager.hasWinnerTeam()) {
-			textGameWinner.setText("Il vincitore è : "
+			textGameWinner.setText("Il vincitore: "
 					+ matchManager.getWinnerTeam().getName());
 			teamWinner.setImage(new Image(PATH_IMAGES
 					+ matchManager.getWinnerTeam().getType() + PATH_LOSER));

@@ -82,7 +82,6 @@ public class FXApplication extends Application
 //					LinearGround g = world.getGround(j, i);
 //		
 //					Rectangle rectangle = new Rectangle(g.getHeight(),g.getWidth());
-//					System.out.println(g.getX());
 //					rectangle.setLayoutX(g.getX());
 //					rectangle.setLayoutY(g.getY());
 //										
@@ -101,8 +100,6 @@ public class FXApplication extends Application
 ////		rectangle.setStroke(Color.BLACK);
 ////		
 ////		pane.getChildren().add(rectangle);
-////        System.out.println(g.getX());
-////        System.out.println(g.getY());
 //        Image image = new Image("file:images.png",0, character.getHeight(),true,true);
 //
 //        view = new ImageView();

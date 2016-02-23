@@ -64,14 +64,12 @@ public class LocalMatchManager extends AbstractMatchManager {
 			}
 
 			if (getCurrentTurnPhase() == TurnPhaseType.MAIN_PHASE) {
-			    System.out.println(getCurrentPlayer().attacked() + " " + getMatchTimer().isTurnTimerStopped());
 				if (getMatchTimer().isTurnTimerEnded()) {
 					getCurrentPlayer().endTurn();
 					getMatchTimer().stopTurnTimer();
 					setTurnPhase(TurnPhaseType.STARTER_PHASE);
 				} else if (getCurrentPlayer().attacked()
 						&& !getMatchTimer().isTurnTimerStopped()) {
-					// System.out.println("MAIN PHASE");
 					getMatchTimer().startAttackTimer();
 					getMatchTimer().stopTurnTimer();
 

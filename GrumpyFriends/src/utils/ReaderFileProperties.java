@@ -46,7 +46,6 @@ public class ReaderFileProperties {
 	        result = prop.getProperty(parameterRequest);
 			
 		} catch (Exception e) {
-			System.out.println("Exception: " + e);
 		}
 		
 		return result;

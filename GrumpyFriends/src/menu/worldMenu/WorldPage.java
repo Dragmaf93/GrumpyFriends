@@ -63,8 +63,10 @@ public class WorldPage extends AbstractMenuPage implements MenuPage {
 	public WorldPage() {
 
 		mapList = new MapSelector(this);
-		worldTypeSelector = new WorldTypeSelector(this, MenuManager.getInstance().getImageLoader());
-		previewWorldViewer = new PreviewWorldViewer(this, MenuManager.getInstance().getImageLoader());
+		worldTypeSelector = new WorldTypeSelector(this, MenuManager
+				.getInstance().getImageLoader());
+		previewWorldViewer = new PreviewWorldViewer(this, MenuManager
+				.getInstance().getImageLoader());
 
 		showPreviewButton = new MenuButton(BUTTON_WIDTH, BUTTON_HEIGHT,
 				"PREVIEW");
@@ -156,22 +158,22 @@ public class WorldPage extends AbstractMenuPage implements MenuPage {
 		// }
 		// });
 		// }
-		// else
-		// {
-		// messagePopup = new Popup(300, 200, "Choose Map", "", "Ok");
-		// messagePopup.changeColorForMissingValue();
-		// root.getChildren().add(messagePopup);
-		// messagePopup.getRightButton().setOnMouseReleased(new
-		// EventHandler<Event>() {
-		//
-		// @Override
-		// public void handle(Event event) {
-		// root.getChildren().remove(messagePopup);
-		// }
-		// });
-		// }
-		//
-		MenuManager.getInstance().nextPage();
+		if (mapList.getMapSelected() == null) {
+			messagePopup = new Popup(300, 200, "Choose Map", "", "Ok");
+			messagePopup.relocate(root.getWidth()/2 - messagePopup.getLayoutBounds().getWidth()/2, 
+					root.getHeight()/2 - messagePopup.getLayoutBounds().getHeight()/2);
+			root.getChildren().add(messagePopup);
+			messagePopup.getRightButton().setOnMouseReleased(
+					new EventHandler<Event>() {
+
+						@Override
+						public void handle(Event event) {
+							root.getChildren().remove(messagePopup);
+						}
+					});
+		}
+		else 
+			MenuManager.getInstance().nextPage();
 	}
 
 	@Override
@@ -182,16 +184,16 @@ public class WorldPage extends AbstractMenuPage implements MenuPage {
 	@Override
 	public GameBean getGameBean() {
 		GameBean bean = new GameBean("World");
-		
+
 		bean.addData("WorldType", worldTypeSelector.getValues()[0]);
 		bean.addData("WorldMap", mapList.getValues()[0]);
-		
+
 		return bean;
 	}
 
 	@Override
 	public void update() {
-		
+
 	}
 
 }

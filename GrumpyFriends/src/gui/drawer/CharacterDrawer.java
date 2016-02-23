@@ -227,7 +227,6 @@ public class CharacterDrawer {
 					equipedWeapon = character.getEquipWeapon();
 					currentLauncherWeapon = weaponDrawer.getLauncherWeapon(
 							equipedWeapon, character, characterAnimation);
-					// System.out.println("EQUIP WEAPON: "+equipedWeapon);
 					root.getChildren().add(currentLauncherWeapon);
 					characterImage.setImage(characterAnimation
 							.getCharacterBodyWithWeapon(equipedWeapon));
@@ -244,7 +243,6 @@ public class CharacterDrawer {
 					weaponDrawer.updateLauncherAim();
 				}
 
-				// System.out.println("WEEEE "+equipedWeapon+"         "+weaponDrawer.bulletLaunched()+" "+weaponDrawer.attackEnded());
 				if (weaponDrawer.bulletLaunched()
 						&& !weaponDrawer.attackEnded()) {
 
@@ -333,7 +331,6 @@ public class CharacterDrawer {
 			if (character.finishedTurn())
 				lifePointsRectangle.setStroke(Color.BLACK);
 		}
-		// System.out.println("CIAOOOOOOOOOOOOoooo");
 	}
 
 	public void startLifePointsUpdate() {

@@ -168,10 +168,6 @@ public class FieldScene extends SubScene {
 		time += incrTime;
 		camera.setTranslateX(position0.x + time * vX);
 		camera.setTranslateY((position0.y + time * vY )-140);
-		// System.out.println(position0);
-		// System.out.println(nextPosition);
-		// System.out.println(time + "  "+ (position0.x + time * vX)+
-		// "   "+(position0.y + time * vY));
 		if (time >= MAX_TIME) {
 			focusPoint = true;
 			cameraMoving = false;

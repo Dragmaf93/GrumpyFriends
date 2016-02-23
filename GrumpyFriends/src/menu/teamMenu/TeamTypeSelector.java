@@ -104,7 +104,6 @@ public class TeamTypeSelector extends AbstractPageComponent {
 
 		for (int i = 0; i < typeTeam.length; i++) {
 			String fileString = "file:" + TEAM_TYPE + typeTeam[i] + "/Idle";
-			System.out.println(fileString);
 
 			Image[] frames = { new Image(fileString + "/frame1.png"),
 					new Image(fileString + "/frame2.png"),

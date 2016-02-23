@@ -118,7 +118,6 @@ public class GuiSimpleBomb extends AbstractGuiWeapon {
 		weapon.update();
 		
 		if (weapon.isExploded()) {
-		System.out.println("WWW: "+weapon.getX()+ " "+ weapon.getY());
 			explosion.playExplosionAnimation();
 		}
 	}

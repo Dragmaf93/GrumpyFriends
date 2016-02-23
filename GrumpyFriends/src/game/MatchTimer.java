@@ -58,7 +58,6 @@ public class MatchTimer {
 	
 	public void startAttackTimer(){
 		initialAttackTimer=System.currentTimeMillis();
-		System.out.println(initialAttackTimer);
 		attackPauseTime=0;
 	}
 	

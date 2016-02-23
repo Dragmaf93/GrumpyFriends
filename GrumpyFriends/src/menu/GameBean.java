@@ -107,7 +107,6 @@ public class GameBean {
 		gameBean.addData("CIA", "CAIO");
 //		GameBean game = GameBean.jSonToGameBean(gameBean.toJSON());
 
-//		System.out.println(game.toJSON());
 
 	}
 }

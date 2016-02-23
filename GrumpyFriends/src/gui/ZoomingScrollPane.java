@@ -42,7 +42,6 @@ public class ZoomingScrollPane extends ScrollPane {
 				}else if(event.getDeltaY()>0){
 					scaleValue+=ZOOM_FACTOR;
 				}
-				System.out.println(scaleValue);
 				scaleTransform.setX(scaleValue);
 				scaleTransform.setY(scaleValue);
 				event.consume();

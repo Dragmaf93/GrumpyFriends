@@ -42,7 +42,6 @@
 //		Vector position = physicalLauncher.getPositionAim();
 //		Vector speedVector = physicalLauncher.getVectorSpeed(speed);
 //		float angle = physicalLauncher.getAngle();
-//		System.out.println(position+ "  "+ speedVector);
 //		loadedWeapon.attack(position, speedVector, angle);
 //		attacked=true;
 ////		 if(loadedWeapon.finishHit()){ 

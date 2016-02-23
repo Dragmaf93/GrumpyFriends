@@ -98,7 +98,6 @@ public class PhysicalObjectManager {
 //			Vec2 center = explosiveObject.getCenter();
 //			for(int i = 0; i < NUM_RAYS; i++ ){
 //				float angle = (i/(float)NUM_RAYS)* 360 *MathUtils.DEG2RAD;
-//				System.out.println(Math.toDegrees(angle));
 //				Vec2 rayDir = new Vec2(MathUtils.sin(angle),MathUtils.cos(angle));
 //				bd.type=BodyType.DYNAMIC;
 //				bd.fixedRotation=true;
