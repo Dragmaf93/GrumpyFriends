@@ -1,9 +1,14 @@
 package network;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import menu.GameBean;
 import menu.SequencePage;
@@ -210,7 +215,18 @@ public class AlexProva extends Application {
 	final protected World createWorld(String typeWorld, String worldMap) {
 		worldBuilder = new GameWorldBuilder();
 		WorldDirector director = new WorldDirector(worldBuilder);
-		director.createWorld("worldXML/" + worldMap + ".xml", typeWorld);
+		try {
+			director.createWorld("worldXML/" + worldMap + ".xml", typeWorld);
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		World world = worldBuilder.getWorld();
 		return world;
 	}

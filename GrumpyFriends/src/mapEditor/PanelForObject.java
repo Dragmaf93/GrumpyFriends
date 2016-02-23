@@ -1,5 +1,7 @@
 package mapEditor;
 
+import gui.Popup;
+
 import java.util.Optional;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -50,6 +52,7 @@ public class PanelForObject extends Pane {
 	Font font = Font.font("Comic Sans MS", FontWeight.BOLD, 15);
 	Insets insets = new Insets(5, 20, 5, 20);
 //	private MenuManager menuManager;
+	private Popup exceptionSave;
 	
 	public PanelForObject(MapEditor mapEditor) {
 //		this.menuManager = MenuManager.getIstance();
@@ -59,6 +62,8 @@ public class PanelForObject extends Pane {
 
         this.mapEditor = mapEditor;
         addComponent();
+        
+        exceptionSave = new Popup(500, 180, "Saving failed", null, "Ok");
         
 	}
 	
@@ -317,10 +322,19 @@ public class PanelForObject extends Pane {
 			if (result.isPresent()){
 					mapEditor.saveMap(result.get());
 			}
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (TransformerException e) {
-			e.printStackTrace();
+		} catch (ParserConfigurationException | TransformerException e) {
+			
+			MenuManager.getInstance().addExceptionPopup(exceptionSave);
+			exceptionSave.getRightButton().setOnMouseReleased(
+					new EventHandler<MouseEvent>() {
+
+						@Override
+						public void handle(MouseEvent event) {
+							if (event.getButton() == MouseButton.PRIMARY)
+								System.exit(-1);
+						}
+					});
+			
 		}
 	}
 }

@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 
 public class MessageNextPlayer extends Pane {
@@ -35,13 +36,10 @@ public class MessageNextPlayer extends Pane {
 		pane.setLayoutY(Screen.getPrimary().getBounds().getHeight()/3);
 		
 		Label nameCharacterNextTurn = new Label(text);
-		try {
-			fontTurnNext= Font.loadFont(new FileInputStream(FONT_PATH),40);
-			nameCharacterNextTurn.setFont(fontTurnNext);
-			nameCharacterNextTurn.setTextFill(Color.web(color));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+		
+		fontTurnNext= Font.font("Comic Sans MS", FontWeight.BOLD, 40);
+		nameCharacterNextTurn.setFont(fontTurnNext);
+		nameCharacterNextTurn.setTextFill(Color.web(color));
 		
 		nameCharacterNextTurn.setLayoutX(pane.getPrefWidth()/2 - 100);
 		nameCharacterNextTurn.setLayoutY(pane.getPrefHeight()/3);

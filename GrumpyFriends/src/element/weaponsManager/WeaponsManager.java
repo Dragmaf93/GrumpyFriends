@@ -35,16 +35,9 @@ public class WeaponsManager {
 				Field field = factoryClass.getField(staticField);
 				inventary.put(className, field.getInt(null));
 
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (NoSuchFieldException e) {
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
+			} catch (ClassNotFoundException | NoSuchFieldException | SecurityException | IllegalArgumentException | 
+					IllegalAccessException e) {
+				System.exit(-1);
 			}
 		}
 	}
@@ -61,12 +54,8 @@ public class WeaponsManager {
 				Weapon weapon = (Weapon) classDefinition.newInstance();
 				instantiatedWeapons.put(weaponName, weapon);
 				return weapon;
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+				System.exit(-1);
 			}
 		}
 		return null;

@@ -4,12 +4,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import menu.MenuManager;
 import character.Character;
 import element.weaponsManager.Weapon;
+import gui.Popup;
 import gui.animation.CharacterAnimation;
 import gui.hud.InventoryItem;
 import gui.weapon.WeaponGui;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 public class WeaponDrawer {
 
@@ -22,14 +27,17 @@ public class WeaponDrawer {
 
 	private Map<String, WeaponGui> inventoryItemsGui;
 
+	private Popup exception;
+
 	public WeaponDrawer() {
 		this.inventoryItemsGui = new HashMap<>();
+		
+		exception = new Popup(400, 180, "Error", null, "Ok");
 	}
 	
 	public Node getLauncherWeapon(Weapon weapon,Character character,CharacterAnimation characterAnimation) {
 		
 		if (inventoryItemsGui.containsKey(weapon.getName())) {
-			System.out.println("DENTRO PRIMO IF");
 			currentWeaponGui =inventoryItemsGui.get(weapon.getName());
 			currentWeapon = weapon;
 			currentCharacter = character;
@@ -39,7 +47,6 @@ public class WeaponDrawer {
 		} else {
 
 			try {
-				System.out.println("DENTRO ELSE ");
 				currentWeapon = weapon;
 				String weaponName = weapon.getName();
 				String guiWeaponName = "Gui" + weaponName;
@@ -50,18 +57,20 @@ public class WeaponDrawer {
 				inventoryItemsGui.put(weaponName, currentWeaponGui);
 				currentWeaponGui.setCurrentCharacter(currentCharacter,characterAnimation);
 				return currentWeaponGui.getWeaponLauncher();
-			} catch (InstantiationException | IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException |
+					SecurityException | IllegalArgumentException | InvocationTargetException e) {
+				
+				MenuManager.getInstance().addExceptionPopup(exception);
+				exception.getRightButton().setOnMouseReleased(
+						new EventHandler<MouseEvent>() {
+
+							@Override
+							public void handle(MouseEvent event) {
+								if (event.getButton() == MouseButton.PRIMARY)
+									System.exit(-1);
+							}
+						});
+				
 			}
 		}
 		return null;
@@ -81,14 +90,12 @@ public class WeaponDrawer {
 	}
 
 	public void updateBullet() {
-//		System.out.println("WWWWWWWWWWWWWWWWWWWW "+currentWeaponGui);
 		if (currentWeaponGui == null)
 			return;
 		currentWeaponGui.updateBullet();
 	}
 
 	public boolean bulletLaunched() {
-//		System.out.println("CCCC "+currentWeapon);
 		if (currentWeapon == null)
 			return false;
 		return currentWeapon.attacked();

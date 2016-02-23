@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class IndicatorOfTime extends AbstractHudElement{
@@ -43,12 +44,8 @@ public class IndicatorOfTime extends AbstractHudElement{
 		turnTimer = new Text();
 		matchTimer = new Text();
 		
-		try {
-			fontTurnTimer= Font.loadFont(new FileInputStream(FONT_PATH),120);
-			fontMatchTimer= Font.loadFont(new FileInputStream(FONT_PATH),30);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+		fontTurnTimer= Font.font("Comic Sans MS", FontWeight.BOLD, 120);
+		fontMatchTimer= Font.font("Comic Sans MS", FontWeight.BOLD, 30);
 		
 		turnTimer.setFill(Color.RED);
 		turnTimer.setStroke(Color.BLACK);

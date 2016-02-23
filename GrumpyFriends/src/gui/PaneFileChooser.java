@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class PaneFileChooser extends Pane {
 	
@@ -47,12 +48,9 @@ public class PaneFileChooser extends Pane {
 	        	
 	        	String[] splitLine = children[i].split("\\.");
 	        	Button button = new Button(splitLine[0]);
-	        	try {
-					fontTurnNext= Font.loadFont(new FileInputStream(FONT_PATH),20);
-					button.setFont(fontTurnNext);
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}
+				
+	        	fontTurnNext= Font.font("Comic Sans MS", FontWeight.BOLD, 20);
+				button.setFont(fontTurnNext);
 	        	button.setPrefHeight(fontTurnNext.getSize()*2);
 	        	
 	        	if (i > 0)

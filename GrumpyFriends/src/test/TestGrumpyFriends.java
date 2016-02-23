@@ -1,10 +1,15 @@
 package test;
 
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
 import javafx.scene.paint.Color;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.testbed.framework.TestbedSettings;
 import org.jbox2d.testbed.framework.TestbedTest;
+import org.xml.sax.SAXException;
 
 import character.Character;
 import character.Team;
@@ -45,7 +50,18 @@ public class TestGrumpyFriends extends TestbedTest {
 
 		WorldBuilder builder = new TestWorldBuilder();
 		WorldDirector director = new WorldDirector(builder);
-		director.createWorld("worldXML/Map.xml","Planet");
+		try {
+			director.createWorld("worldXML/Map.xml","Planet");
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		world = builder.getWorld();
 		
 		

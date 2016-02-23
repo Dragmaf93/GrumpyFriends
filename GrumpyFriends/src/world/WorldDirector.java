@@ -29,9 +29,8 @@ public class WorldDirector {
 		PhysicalObjectManager.getInstance();
 	}
 
-	public void createWorld(String pathXMLFile,String type) {
+	public void createWorld(String pathXMLFile,String type) throws SAXException, IOException, ParserConfigurationException {
 
-		try {
 			Document document = loadDocument(pathXMLFile);
 			Element documentElement = document.getDocumentElement();
 
@@ -151,13 +150,6 @@ public class WorldDirector {
 				}
 			}
 			builder.lastSettings();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		}
 
 	}
 

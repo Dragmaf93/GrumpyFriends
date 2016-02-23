@@ -60,7 +60,7 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 				AbstractWorld son = constructorSon.newInstance();
 				instanceSon = (World) son;
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.exit(-1);
 			}
 	}
 

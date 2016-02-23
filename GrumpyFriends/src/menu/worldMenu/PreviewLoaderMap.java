@@ -1,5 +1,6 @@
 package menu.worldMenu;
 
+import gui.Popup;
 import gui.drawer.PolygonGroundDrawer;
 
 import java.io.IOException;
@@ -7,9 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
+
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+import menu.MenuManager;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -26,15 +35,15 @@ public class PreviewLoaderMap {
 	private final static String PATH_FILE = "worldXML/";
 
 	private double widthPreview, heightPreview;
-	
+
 	public PreviewLoaderMap(double width, double height) {
 		this.widthPreview = width;
 		this.heightPreview = height;
+		
 	}
 
-	public List<List<Point>> getPolygonPoints(String map) {
+	public List<List<Point>> getPolygonPoints(String map) throws ParserConfigurationException, SAXException, IOException {
 		List<List<Point>> polygons = null;
-		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document document = builder.parse(PATH_FILE+map+".xml");
@@ -87,9 +96,6 @@ public class PreviewLoaderMap {
 				}
 			}
 
-		} catch (SAXException | IOException | ParserConfigurationException e) {
-			e.printStackTrace();
-		}
 
 		return polygons;
 	}

@@ -114,11 +114,12 @@ public class Server {
 
 	boolean listeningSocket = true;
 
+	int port = Integer.parseInt(ReaderFileProperties.getPropServerValues("server_port"));
 	try {
-	    serverSocket = new ServerSocket(Integer.parseInt(ReaderFileProperties.getPropServerValues("server_port")));
+	    serverSocket = new ServerSocket(port);
 
 	} catch (IOException e) {
-	    System.err.println("Could not listen on port: 2343");
+	    System.err.println("Could not listen on port: "+port);
 	}
 
 	while (listeningSocket) {
@@ -151,7 +152,6 @@ public class Server {
 		try {
 		    ss.close();
 		} catch (IOException e) {
-		    /* should not be thrown */
 		}
 	    }
 	}
