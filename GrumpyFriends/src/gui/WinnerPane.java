@@ -1,5 +1,6 @@
 package gui;
 
+import network.client.ClientMatchManager;
 import character.Team;
 import game.AbstractMatchManager;
 import game.MatchManager;
@@ -145,6 +146,10 @@ public class WinnerPane extends AbstractHudElement {
 						}
 					}
 				});
+		
+		
+		if (matchManager instanceof ClientMatchManager)
+			restartButton.setVisible(false);
 
 	}
 
