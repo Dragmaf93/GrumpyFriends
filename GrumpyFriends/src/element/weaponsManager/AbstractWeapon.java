@@ -22,56 +22,56 @@ public abstract class AbstractWeapon implements Weapon {
     }
 
     @Override
-    public boolean attacked() {
+    public  synchronized boolean attacked() {
 	return attacked;
     }
 
     @Override
-    public double getX() {
+    public  synchronized double getX() {
 	return x;
     }
 
     @Override
-    public double getY() {
+    public  synchronized double getY() {
 	return y;
     }
 
     @Override
-    public boolean isExploded() {
+    public  synchronized boolean isExploded() {
 	return exploded;
     }
 
-    public double getAngle() {
+    public  synchronized double getAngle() {
 	return angle;
     }
 
     @Override
-    public void setAttack(boolean b) {
+    public  synchronized void setAttack(boolean b) {
 	attacked = b;
     }
 
     @Override
-    public void setAngle(double angle) {
+    public  synchronized void setAngle(double angle) {
 	this.angle = angle;
     }
 
     @Override
-    public void setX(double x) {
+    public  synchronized void setX(double x) {
 	this.x = x;
     }
 
     @Override
-    public void decreaseHit() {
+    public  synchronized void decreaseHit() {
 	hit--;
     }
     
     @Override
-    public void setY(double y) {
+    public  synchronized void setY(double y) {
 	this.y = y;
     }
 
     @Override
-    public void setExploded(boolean exploded) {
+    public  synchronized void setExploded(boolean exploded) {
 	this.exploded = exploded;
     }
 }

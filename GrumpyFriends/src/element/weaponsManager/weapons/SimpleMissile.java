@@ -40,7 +40,7 @@ public class SimpleMissile extends AbstractWeapon {
     }
 
     @Override
-    public void reset() {
+    public synchronized void reset() {
 	hit = NUMBER_OF_HIT;
 	attacked = false;
 	exploded = false;
@@ -56,9 +56,10 @@ public class SimpleMissile extends AbstractWeapon {
     }
 
     @Override
-    public void attack(Vector position, Vector speed, float angle) {
+    public  synchronized void attack(Vector position, Vector speed, float angle) {
     	createPhysicWeapon();
 //	attacked = true;
+    	exploded=false;
 	physicalWeapon.addToPhisicalWorld();
 	physicalWeapon.setActive(true);
 	physicalWeapon.setAngularVelocity(0f);
@@ -93,7 +94,7 @@ public class SimpleMissile extends AbstractWeapon {
     }
 
     @Override
-    public void update() {
+    public synchronized void update() {
 	if (physicalWeapon != null) {
 	    physicalWeapon.update();
 	    x = Utils.xFromJbox2dToJavaFx(physicalWeapon.getX());
@@ -101,7 +102,6 @@ public class SimpleMissile extends AbstractWeapon {
 	    angle = physicalWeapon.getBody().getAngle();
 
 	    if (((ExplosiveObject) physicalWeapon).isExplosed()) {
-		System.out.println("BOOoooooooooooooooooooooooooooooooooooooooooooooooooooOOOOOOOOOOOOMMMMMMMMMMM");
 		exploded = true;
 	    }
 	}

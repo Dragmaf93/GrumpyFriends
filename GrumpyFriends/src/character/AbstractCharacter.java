@@ -273,7 +273,6 @@ public abstract class AbstractCharacter implements Character {
 	launcher.setAttacked(true);
 	launcher.loadWeapon(null);
 	
-	// TODO da gestire per la rete
 	readyToEquipWeapon = false;
 	
 	if (equippedWeapon.finishHit()) {
@@ -448,6 +447,7 @@ public abstract class AbstractCharacter implements Character {
     @Override
     public void endTurn() {
 	endTurn = true;
+	lastEquippedWeapon=null;
 	launcher.disable();
 	if (physicBody != null)
 	    ((PhysicalCharacter) physicBody).blockWheelJoint();

@@ -68,21 +68,13 @@ public class GameStatusSync {
 				launcher.isActivated());
 		nodeCharacter.with("CurrentCharacter").put("currentDirection",
 				currentCharacter.getCurrentDirection());
-		// jNode.with("Character").put("sufferedDamage",
-		// character.sufferedDamage());
-		// jNode.with("Character").put("lifePoints",
-		// character.getLifePoints());
-		// jNode.with("Character").put("lastDamagePoints",
-		// character.getLastDamagePoints());
 
 		if (currentCharacter.getLauncher().isActivated()) {
 			nodeCharacter.with("CurrentCharacter").put("weapon",
 					currentCharacter.getLauncher().getLoadedWeapon().getName());
 			nodeCharacter.with("CurrentCharacter").put("aimDirection",
 					currentCharacter.getAimDirection());
-			// nodeCharacter.with("CurrentCharacter").put("attacked",
-			// currentCharacter.);
-
+	
 		} else if (currentCharacter.getLastEquippedWeapon() != null
 				&& currentCharacter.getLastEquippedWeapon().attacked()) {
 
@@ -139,7 +131,7 @@ public class GameStatusSync {
 		// else if(jsonCurrentCharacter.get("attacked") != null &&
 		// jsonCurrentCharacter.get("attacked").asBoolean()){
 		// currentCharacter.setAttacked(true);
-		if (jsonCurrentCharacter.has("weaponAttack")
+		if (currentCharacter.getLastEquippedWeapon()!=null && jsonCurrentCharacter.has("weaponAttack")
 				&& jsonCurrentCharacter.get("weaponAttack").asBoolean()) {
 			currentCharacter.getLastEquippedWeapon().setX(
 					jsonCurrentCharacter.get("weaponX").asDouble());
@@ -162,9 +154,6 @@ public class GameStatusSync {
 			c.setMoving(jsonCharacter.get("moving").asBoolean());
 			c.setJumping(jsonCharacter.get("jumping").asBoolean());
 			c.setGrounded(jsonCharacter.get("grounded").asBoolean());
-			// c.setDied(jsonCharacter.get("died").asBoolean());
-			// c.setOutWorld(jsonCharacter.get("outWorld").asBoolean());
-			// c.setEndTurn(jsonCharacter.get("endTurn").asBoolean());
 			c.setCurrentDirection(jsonCharacter.get("currentDirection").asInt());
 			c.setSpeedVector((float) jsonCharacter.get("speedVectorX")
 					.asDouble(), (float) jsonCharacter.get("speedVectorY")

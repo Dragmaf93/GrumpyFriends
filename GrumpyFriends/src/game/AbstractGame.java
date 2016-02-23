@@ -48,8 +48,8 @@ public abstract class AbstractGame implements Game {
 		characters = new ArrayList<Character>();
 		beans = new ArrayList<>();
 
-		exceptionMap = new Popup(500, 180, "File map not Supported", null, "Ok");
-		exceptionCharacter = new Popup(400, 180, "Error", null, "Ok");
+//				exceptionMap = new Popup(500, 180, "File map not Supported", null, "Ok");
+//				exceptionCharacter = new Popup(400, 180, "Error", null, "Ok");
 	}
 
 	@Override

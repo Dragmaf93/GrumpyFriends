@@ -27,9 +27,10 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer {
 	}
 
 	@Override
-	public void attack(Vector position, Vector speed, float angle) {
+	public synchronized void attack(Vector position, Vector speed, float angle) {
 	    	createPhysicWeapon();
 //	    	hit--;
+	    	exploded=false;
 		physicalWeapon.addToPhisicalWorld();
 		physicalWeapon.setActive(true);
 		physicalWeapon.setAngularVelocity(0f);
@@ -78,7 +79,7 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer {
 	}
 
 	@Override
-	public void reset() {
+	public synchronized void reset() {
 		attacked = false;
 		exploded = false;
 		hit = NUMBER_OF_HIT;
@@ -89,18 +90,17 @@ public class SimpleBomb extends AbstractWeapon implements ObjectWithTimer {
 	}
 
 	@Override
-	public void update() {
+	public  synchronized  void update() {
 		if (physicalWeapon != null) {
 			physicalWeapon.update();
 
 			x=Utils.xFromJbox2dToJavaFx(physicalWeapon.getX());
 			y=Utils.yFromJbox2dToJavaFx(physicalWeapon.getY());
-			System.out.println(x+"        "+y);
+//			System.out.println(x+"        "+y);
 			angle=physicalWeapon.getBody().getAngle();
 			
 			if (MatchTimer.endObjectTimerIn() <= 0 && !exploded) {
 				exploded = true;
-				System.out.println("BOOoooooooooooooooooooooooooooooooooooooooooooooooooooOOOOOOOOOOOOMMMMMMMMMMM");
 				((ExplosiveObject) physicalWeapon).explode();
 			}
 		}
