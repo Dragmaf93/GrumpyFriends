@@ -14,6 +14,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -67,7 +68,7 @@ public class Multiplayer {
     private boolean chooser;
     private GameStatusSync gameStatusSync;
 
-    private HashMap<String, Character> characters;
+    private Map<String, Character> characters;
 
     public Multiplayer(MatchManager matchManager) {
 	gameStatusSync = new GameStatusSync();

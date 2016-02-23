@@ -1,6 +1,7 @@
 package gui.animation;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import character.Character;
 import element.weaponsManager.Weapon;
@@ -49,8 +50,8 @@ public class BlackStormtrooperAnimation implements CharacterAnimation {
 	};
 
 	
-	private final static HashMap<String, Image> WEAPON_LAUNCHER_CONTAINER = new HashMap<String, Image>();
-	private final static HashMap<String, Image> CHARACTER_BODY_WITH_WEAPON = new HashMap<String, Image>();
+	private final static Map<String, Image> WEAPON_LAUNCHER_CONTAINER = new HashMap<String, Image>();
+	private final static Map<String, Image> CHARACTER_BODY_WITH_WEAPON = new HashMap<String, Image>();
 	
 	private SpriteAnimation moveAnimation;
 	private SpriteAnimation idleAnimation;

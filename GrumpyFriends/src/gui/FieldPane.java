@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import world.World;
 import character.Character;
@@ -25,8 +26,8 @@ public class FieldPane extends Pane {
 	private World world;
 	private MatchManager matchManager;
 
-	private HashMap<String, DrawerObject> drawers;
-	private HashMap<String, CharacterDrawer> characterDrawers;
+	private Map<String, DrawerObject> drawers;
+	private Map<String, CharacterDrawer> characterDrawers;
 	private WeaponDrawer weaponDrawer;
 	private WorldDrawer worldDrawer;
 

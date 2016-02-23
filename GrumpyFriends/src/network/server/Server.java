@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -24,9 +25,9 @@ public class Server {
     private static final int MAX_PORT_NUMBER = 65000;
     private static int contId = 0;
     private int lastPort;
-    private HashMap<Integer, InfoMatch> matchesList;
-    private HashMap<String, MiniServer> miniServerList;
-    private HashMap<Integer, MatchServer> matchServers;
+    private Map<Integer, InfoMatch> matchesList;
+    private Map<String, MiniServer> miniServerList;
+    private Map<Integer, MatchServer> matchServers;
 
     private Lock lock = new ReentrantLock();
 

@@ -3,6 +3,7 @@ package mapEditor;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -39,11 +40,11 @@ public class MapEditor extends Pane {
 	private boolean objectToMove;
 	private boolean isInTheMap;
 	
-	private ArrayList<SquarePolygon> objectInMap;
-	private ArrayList<SquarePolygon> objectToSelect;
-	private ArrayList<Pair<Point2D, SquarePolygon>> objectMoveInMapForUndo;
-//	private ArrayList<Pair<Point2D, Shape>> objectMoveInMapForRedo;
-	private ArrayList<Pair<Point2D, SquarePolygon>> objectToCancelled;
+	private List<SquarePolygon> objectInMap;
+	private List<SquarePolygon> objectToSelect;
+	private List<Pair<Point2D, SquarePolygon>> objectMoveInMapForUndo;
+//	private List<Pair<Point2D, Shape>> objectMoveInMapForRedo;
+	private List<Pair<Point2D, SquarePolygon>> objectToCancelled;
 	private DropShadow borderGlow;
 	
 	private double mouseX;
@@ -211,7 +212,7 @@ public class MapEditor extends Pane {
 		return heightScreen;
 	}
 	
-	public ArrayList<SquarePolygon> getObjectInMap() {
+	public List<SquarePolygon> getObjectInMap() {
 		return objectInMap;
 	}
 	

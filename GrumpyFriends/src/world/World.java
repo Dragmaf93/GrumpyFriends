@@ -3,6 +3,7 @@ package world;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import character.Character;
 import element.Ground;
@@ -32,7 +33,7 @@ public interface World {
 	abstract public Character getCharacter(String name);
 	abstract public List<Ground> getGrounds();
 	
-	abstract public HashMap<String, Float> getHitCharacter();
+	abstract public Map<String, Float> getHitCharacter();
 	
 	abstract public  org.jbox2d.dynamics.World getPhysicWorld();
 	public abstract List<Character> getAllCharacters();

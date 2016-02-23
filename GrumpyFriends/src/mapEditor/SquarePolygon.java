@@ -1,6 +1,7 @@
 package mapEditor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
@@ -31,7 +32,7 @@ public interface SquarePolygon {
 	public double getX();
 	public double getY();
 	
-	public ArrayList<Point2D> getPointsVertex();
+	public List<Point2D> getPointsVertex();
 
 	public void modifyPositionWithVertex(Point2D oldPoint, Point2D newPoint);
 	

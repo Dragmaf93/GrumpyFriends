@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.math3.filter.KalmanFilter;
 
@@ -34,7 +35,7 @@ public class GameStatusSync {
 		factory = JsonNodeFactory.instance;
 	}
 
-	public String characterStatusToJson(HashMap<String, Character> characters,
+	public String characterStatusToJson(Map<String, Character> characters,
 			Character currentCharacter, MatchManager matchManager) {
 	    	ArrayNode root = new ArrayNode(factory);
 		ArrayNode nodes = new ArrayNode(factory);
@@ -109,7 +110,7 @@ public class GameStatusSync {
 		return null;
 	}
 
-	public void setCharactersStatus(HashMap<String, Character> characters, Character currentCharacter,MatchManager matchManager, String json) throws JsonProcessingException, IOException {
+	public void setCharactersStatus(Map<String, Character> characters, Character currentCharacter,MatchManager matchManager, String json) throws JsonProcessingException, IOException {
 
 			JsonNode jsonRoot = mapper.readTree(json);
 			JsonNode jsonCurrentCharacter = jsonRoot.get(0).get("CurrentCharacter");

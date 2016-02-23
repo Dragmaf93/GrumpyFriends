@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ public class GameBean {
 
 	private static final ObjectMapper MAPPER= new ObjectMapper();
 
-	private HashMap<String, String> data;
+	private Map<String, String> data;
 	private String beanName;
 	
 	private List<String> names;
@@ -80,7 +81,7 @@ public class GameBean {
 		return jSon;
 	}
 
-	public HashMap<String, String> getData() {
+	public Map<String, String> getData() {
 		return data;
 	}
 	

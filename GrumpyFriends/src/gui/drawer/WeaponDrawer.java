@@ -2,6 +2,7 @@ package gui.drawer;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.Map;
 
 import character.Character;
 import element.weaponsManager.Weapon;
@@ -19,7 +20,7 @@ public class WeaponDrawer {
 
 	private WeaponGui currentWeaponGui;
 
-	private HashMap<String, WeaponGui> inventoryItemsGui;
+	private Map<String, WeaponGui> inventoryItemsGui;
 
 	public WeaponDrawer() {
 		this.inventoryItemsGui = new HashMap<>();

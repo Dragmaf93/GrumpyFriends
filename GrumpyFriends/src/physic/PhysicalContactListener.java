@@ -2,6 +2,7 @@ package physic;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.text.DefaultEditorKit.CutAction;
@@ -23,7 +24,7 @@ import physic.weapon.PhysicalWeapon;
 
 public class PhysicalContactListener implements ContactListener {
 
-	private HashMap<Character, Integer> characterContact;
+	private Map<Character, Integer> characterContact;
 	private List<Character> charactersList;
 
 	public PhysicalContactListener(List<Character> characters) {

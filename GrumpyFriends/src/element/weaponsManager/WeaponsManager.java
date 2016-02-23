@@ -3,6 +3,7 @@ package element.weaponsManager;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Map;
 
 public class WeaponsManager {
 
@@ -11,10 +12,10 @@ public class WeaponsManager {
 	private final static String packageP = "element.weaponsManager.weapons.";
 	private final static String staticField = "NUMBER_OF_AMMUNITION";
 
-	private HashMap<String, Integer> inventary;
+	private Map<String, Integer> inventary;
 	private static String[] classList;
 
-	private static HashMap<String, Weapon> instantiatedWeapons;
+	private static Map<String, Weapon> instantiatedWeapons;
 
 	public WeaponsManager() {
 

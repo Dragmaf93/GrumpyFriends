@@ -1,6 +1,7 @@
 package mapEditor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,8 +23,8 @@ public class Curve extends QuadCurve implements SquarePolygon {
 	private String nameObject;
 	private Point2D start;
 	private Point2D end;
-	private ArrayList<Point2D> distancePoints;
-	private ArrayList<Point2D> points;
+	private List<Point2D> distancePoints;
+	private List<Point2D> points;
 	private int xMagg;
 	private static int id = 0;
 	private int realId;
@@ -211,7 +212,7 @@ public class Curve extends QuadCurve implements SquarePolygon {
 		return arrayReturn;
 	}
 	
-	public ArrayList<Point2D> getRealPoints() {
+	public List<Point2D> getRealPoints() {
 		return points;
 	}
 	
@@ -330,7 +331,7 @@ public class Curve extends QuadCurve implements SquarePolygon {
 	}
 
 	@Override
-	public ArrayList<Point2D> getPointsVertex() {
+	public List<Point2D> getPointsVertex() {
 		return points;
 	}
 

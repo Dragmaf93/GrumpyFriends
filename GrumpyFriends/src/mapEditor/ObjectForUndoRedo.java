@@ -1,6 +1,7 @@
 package mapEditor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
@@ -9,20 +10,20 @@ public class ObjectForUndoRedo {
 
 	private MapEditor mapEditor;
 	
-	private ArrayList<SquarePolygon> objectInMap;
-	private ArrayList<Pair<Point2D, SquarePolygon>> objectToCancelled;
-	private ArrayList<Pair<Point2D, SquarePolygon>> objectMoveInMapForUndo;
+	private List<SquarePolygon> objectInMap;
+	private List<Pair<Point2D, SquarePolygon>> objectToCancelled;
+	private List<Pair<Point2D, SquarePolygon>> objectMoveInMapForUndo;
 	
 	boolean objectFoundPolygon = false, objectFoundRedoPolygon = false;
 	boolean objectFoundCurve = false, objectFoundRedoCurve = false;
 	
-	public ObjectForUndoRedo(MapEditor mapEditor, ArrayList<Pair<Point2D, SquarePolygon>> objectMoveInMapForUndo,
-			ArrayList<SquarePolygon> objectInMap, ArrayList<Pair<Point2D, SquarePolygon>> objectToCancelled) {
+	public ObjectForUndoRedo(MapEditor mapEditor, List<Pair<Point2D, SquarePolygon>> objectMoveInMapForUndo2,
+			List<SquarePolygon> objectInMap2, List<Pair<Point2D, SquarePolygon>> objectToCancelled2) {
 		this.mapEditor = mapEditor;
-		this.objectMoveInMapForUndo = objectMoveInMapForUndo;
-		this.objectToCancelled = objectToCancelled;
+		this.objectMoveInMapForUndo = objectMoveInMapForUndo2;
+		this.objectToCancelled = objectToCancelled2;
 		
-		this.objectInMap = objectInMap;
+		this.objectInMap = objectInMap2;
 	}
 	
 	public SquarePolygon undoPolygonObject(SquarePolygon imageTmp, Point2D point) {
@@ -38,7 +39,7 @@ public class ObjectForUndoRedo {
 		return dragged;
 	}
 	
-	public void checkBooleanForRepaintObjectCancelled(SquarePolygon imageTmp, ArrayList<Pair<Point2D, SquarePolygon>> objectToCancelled) {
+	public void checkBooleanForRepaintObjectCancelled(SquarePolygon imageTmp, List<Pair<Point2D, SquarePolygon>> objectToCancelled) {
 		for (Pair<Point2D, SquarePolygon> object : objectToCancelled) {
 			if ((object.getValue()).vertexEquals(imageTmp)){
 				objectFoundPolygon = true;
@@ -47,13 +48,13 @@ public class ObjectForUndoRedo {
 	}
 	
 	
-	public void actionForUndoRedo(Point2D point, SquarePolygon imageTmp, ArrayList<Pair<Point2D, SquarePolygon>> listForTake, 
+	public void actionForUndoRedo(Point2D point, SquarePolygon imageTmp, List<Pair<Point2D, SquarePolygon>> objectMoveInMapForUndo2, 
 			boolean undo, boolean insert, boolean redo)
 	{
 //		deleteObjectForUndo(imageTmp, listForTake, undo);
 		mapEditor.removeObject(mapEditor.getDragged());
-		point = listForTake.get(listForTake.size()-1).getKey();
-		imageTmp = listForTake.get(listForTake.size()-1).getValue();
+		point = objectMoveInMapForUndo2.get(objectMoveInMapForUndo2.size()-1).getKey();
+		imageTmp = objectMoveInMapForUndo2.get(objectMoveInMapForUndo2.size()-1).getValue();
 		
 		boolean isPresent = false;
 		mapEditor.setDragged(imageTmp);
@@ -75,7 +76,7 @@ public class ObjectForUndoRedo {
 	}
 	
 
-	public void deleteObjectForUndo(SquarePolygon imageTmp, ArrayList<Pair<Point2D,SquarePolygon>> listForTake, 
+	public void deleteObjectForUndo(SquarePolygon imageTmp, List<Pair<Point2D,SquarePolygon>> listForTake, 
 			boolean undo) {
 		SquarePolygon object = null;
 		for (int i = 0; i < objectInMap.size(); i++) {

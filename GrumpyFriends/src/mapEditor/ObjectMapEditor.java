@@ -1,6 +1,7 @@
 package mapEditor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -15,18 +16,18 @@ public class ObjectMapEditor {
 	private Pane panelForObject;
 	private ScrollPane panelForMap;
 	
-	private ArrayList<SquarePolygon> objectInMap;
+	private List<SquarePolygon> objectInMap;
 	
 	public ObjectMapEditor(MapEditor mapEditor, Pane panelForObject2, ScrollPane panelForMap2,
-			ArrayList<SquarePolygon> objectInMap) {
+			List<SquarePolygon> objectInMap2) {
 		this.mapEditor = mapEditor;
 		this.panelForObject = panelForObject2;
 		this.panelForMap = panelForMap2;
 		
-		this.objectInMap = objectInMap;
+		this.objectInMap = objectInMap2;
 	}
 	
-	public boolean selectObject(ArrayList<SquarePolygon> objectToSelect, double x, double y, 
+	public boolean selectObject(List<SquarePolygon> objectToSelect, double x, double y, 
 			Effect borderGlow) {
 		for (SquarePolygon image : objectToSelect) {
 			if (image.containsPoint(new Point2D(x, y)))
@@ -91,7 +92,7 @@ public class ObjectMapEditor {
 	}
 	
 	public void addPolygonObjectReleased(SquarePolygon dragged, boolean isInTheMap, 
-			boolean objectToMove, ArrayList<Pair<Point2D, SquarePolygon>> objectMoveInMapForUndo) {
+			boolean objectToMove, List<Pair<Point2D, SquarePolygon>> objectMoveInMapForUndo) {
 		int id = dragged.getIdObject();
 		Point2D point = new Point2D(dragged.getPointsVertex().get(0).getX(), dragged.getPointsVertex().get(0).getY());
 		
@@ -117,8 +118,8 @@ public class ObjectMapEditor {
 	}
 	
 	public void removePolygon(PanelForMap panelForMap, 
-			ArrayList<Pair<Point2D, SquarePolygon>> objectToCancelled, 
-			ArrayList<Pair<Point2D, SquarePolygon>> objectMoveInMapForUndo) {
+			List<Pair<Point2D, SquarePolygon>> objectToCancelled, 
+			List<Pair<Point2D, SquarePolygon>> objectMoveInMapForUndo) {
 		
 		Point2D point = new Point2D(mapEditor.getDragged().getPointsVertex().get(0).getX(), 
 				mapEditor.getDragged().getPointsVertex().get(0).getY());

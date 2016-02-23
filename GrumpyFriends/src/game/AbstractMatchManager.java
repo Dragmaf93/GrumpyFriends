@@ -3,6 +3,7 @@ package game;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Phaser;
 
@@ -37,7 +38,7 @@ public abstract class AbstractMatchManager implements MatchManager {
 
     protected boolean canStartNextTurn;
 
-    protected HashMap<String, Float> hitCharacters;
+    protected Map<String, Float> hitCharacters;
     protected List<Character> damagedCharacters;
 
     protected List<Character> diedCharactersOfTheCurrentTurn;

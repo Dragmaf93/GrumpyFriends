@@ -4,6 +4,7 @@ package physic;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.common.MathUtils;
@@ -31,7 +32,7 @@ public class PhysicalObjectManager {
 	
 	private List<Body> toRemove;
 
-	private HashMap<String, Float> hitCharacters;
+	private Map<String, Float> hitCharacters;
 	
 	
 	
@@ -145,7 +146,7 @@ public class PhysicalObjectManager {
 		}
 	}
 	
-	public HashMap<String, Float> getHitCharacters(){
+	public Map<String, Float> getHitCharacters(){
 		return hitCharacters;
 	}
 	

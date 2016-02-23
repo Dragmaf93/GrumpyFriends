@@ -1,6 +1,7 @@
 package mapEditor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.geometry.Point2D;
 import javafx.scene.effect.DropShadow;
@@ -20,8 +21,8 @@ public abstract class PolygonObject extends Polygon implements SquarePolygon {
 	private double xTmp;
 	private double yTmp;
 	
-	protected ArrayList<Point2D> points;
-	protected ArrayList<Point2D> distancePoints;
+	protected List<Point2D> points;
+	protected List<Point2D> distancePoints;
 	private int xMagg;
 	
 	private static int id = 0;
@@ -124,7 +125,7 @@ public abstract class PolygonObject extends Polygon implements SquarePolygon {
 		return yTmp;
 	}
 	
-	public ArrayList<Point2D> getPointsVertex() {
+	public List<Point2D> getPointsVertex() {
 		return points;
 	}
 
@@ -197,7 +198,7 @@ public abstract class PolygonObject extends Polygon implements SquarePolygon {
 		}
 	}
 	
-	ArrayList<Point2D> getDistancePoints() {
+	List<Point2D> getDistancePoints() {
 		return distancePoints;
 	}
 	

@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
@@ -26,7 +27,7 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 
 	protected float height, width;
 
-	protected HashMap<String, Character> characterContainer;
+	protected Map<String, Character> characterContainer;
 
 	protected List<Ground> grounds;
 
@@ -35,7 +36,7 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	protected static World instanceSon;
 
 	protected List<Character> charactersOutOfWorld;
-	protected HashMap<String, Boolean> charactersAlreadyOutWorld;
+	protected Map<String, Boolean> charactersAlreadyOutWorld;
 
 	public AbstractWorld(Vec2 gravity, boolean doSleep) {
 		super(gravity);
@@ -91,7 +92,7 @@ public abstract class AbstractWorld extends org.jbox2d.dynamics.World implements
 	}
 
 	@Override
-	public HashMap<String, Float> getHitCharacter() {
+	public Map<String, Float> getHitCharacter() {
 		return PhysicalObjectManager.getInstance().getHitCharacters();
 	}
 

@@ -4,6 +4,7 @@ import gui.ImageLoader;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import menu.AbstractPageComponent;
 import utils.Point;
@@ -22,8 +23,8 @@ public class PreviewWorldViewer extends AbstractPageComponent {
 	
 	private PreviewLoaderMap loaderMap;
 
-	private HashMap<String, HashMap<String,Pane> > previewContainer;
-	private HashMap<String, ImageView> previewBackground;
+	private Map<String, Map<String,Pane> > previewContainer;
+	private Map<String, ImageView> previewBackground;
 	private ImageView imageBackground;
 	private Pane lastWorld;
 	
@@ -35,7 +36,7 @@ public class PreviewWorldViewer extends AbstractPageComponent {
 				rectangleBackground.getHeight()-20);
 		previewPane = new StackPane();
 		
-		previewContainer = new HashMap<String, HashMap<String,Pane>>();
+		previewContainer = new HashMap<String, Map<String,Pane>>();
 		previewBackground = new HashMap<String, ImageView>();
 		
 		imageBackground = new ImageView();

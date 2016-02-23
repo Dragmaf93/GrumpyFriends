@@ -3,6 +3,8 @@ package menu.teamMenu;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,7 +24,7 @@ public class PlayerName extends AbstractPageComponent {
 	private static final int NUMBER_PLAYER = 5;
 	private final static Color STROKE_COLOR = PageComponent.STROKE_COLOR;
 
-	private static HashMap<String, Image> heads;
+	private static Map<String, Image> heads;
 
 	private final static String PATH_IMAGE_HEAD = "file:image/Character/";
 

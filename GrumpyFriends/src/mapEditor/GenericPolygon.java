@@ -1,6 +1,7 @@
 package mapEditor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Line;
@@ -55,7 +56,7 @@ public class GenericPolygon extends PolygonObject {
 	@Override
 	public void addVertex(Point2D newVertex) {
 		Line line;
-		ArrayList<Point2D> listTmp = new ArrayList<Point2D>();
+		List<Point2D> listTmp = new ArrayList<Point2D>();
 		for (int i = 0; i < points.size(); i++)
 		{
 			if (i < points.size()-1)

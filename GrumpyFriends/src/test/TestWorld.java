@@ -3,6 +3,7 @@ package test;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
@@ -113,7 +114,7 @@ public class TestWorld implements world.World {
 	}
 
 	@Override
-	public HashMap<String, Float> getHitCharacter() {
+	public Map<String, Float> getHitCharacter() {
 		return null;
 	}
 

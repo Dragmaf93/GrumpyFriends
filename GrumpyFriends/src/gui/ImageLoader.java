@@ -2,16 +2,17 @@ package gui;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 import javafx.scene.image.Image;
 
 public class ImageLoader {
 	
-	private HashMap<String, Image> grounds;
-	private HashMap<String, Image> backgrounds;
+	private Map<String, Image> grounds;
+	private Map<String, Image> backgrounds;
 	
-	private HashMap<String, Image> previews;
-	private HashMap<String, Image> previewsGround;
+	private Map<String, Image> previews;
+	private Map<String, Image> previewsGround;
 	
 	private final static String PATH_IMAGE="file:image/World/";
 	private String lastTypeWorld;

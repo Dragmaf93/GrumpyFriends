@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.sun.xml.internal.ws.api.pipe.NextAction;
 
@@ -52,7 +53,7 @@ public class MatchServer extends Thread {
     private MatchManager matchManager;
     private GameStatusSync gameStatusSync;
 
-    private HashMap<String, Character> characters;
+    private Map<String, Character> characters;
 
     private int contStartNextTurn;
     boolean closeMatchUpdate = false;
