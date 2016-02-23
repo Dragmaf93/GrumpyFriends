@@ -76,40 +76,47 @@ public class ServerMatchManager extends AbstractMatchManager {
 			matchServer.sendMessage(Message.DAMAGE_CHARACTER,
 				damagedCharactersJson);
 			damagedCharacters.clear();
-			if (canClearDamageCharacter()) {
-			    setCanClearDamageCharacter(false);
-			    matchServer.sendMessage(Message.SET_DEATH_PHASE,
+			checkDiedCharacters();
+			setTurnPhase(TurnPhaseType.STARTER_PHASE);
+			matchServer.sendMessage(Message.SET_STATER_PHASE, null);
+			// if (canClearDamageCharacter()) {
+			// setCanClearDamageCharacter(false);
+			// matchServer.sendMessage(Message.SET_DEATH_PHASE,
+			// null);
+			// setTurnPhase(TurnPhaseType.DEATH_PHASE);
+			// }
+			// } else {
+			//
+			// System.out.println("VUOTOOOOOOOOOOOOOOO");
+			// matchServer.sendMessage(Message.SET_DEATH_PHASE,
+			// null);
+			// setTurnPhase(TurnPhaseType.DEATH_PHASE);
+			// }
+		    }
+		}
+		if (getCurrentTurnPhase() == TurnPhaseType.DEATH_PHASE) {
+		    System.out.println("DEATH PHASE");
+		    checkDiedCharacters();
+
+		    if (allCharacterAreSpleeping()) {
+
+			if (!diedCharactersOfTheCurrentTurn.isEmpty()
+				&& canRemoveDeathCharacter()) {
+			    for (Character character : diedCharactersOfTheCurrentTurn) {
+				character.afterDeath();
+			    }
+			    setTurnPhase(TurnPhaseType.STARTER_PHASE);
+			    matchServer.sendMessage(Message.SET_STATER_PHASE,
 				    null);
-			    setTurnPhase(TurnPhaseType.DEATH_PHASE);
+
+			} else {
+			    setTurnPhase(TurnPhaseType.STARTER_PHASE);
+			    matchServer.sendMessage(Message.SET_STATER_PHASE,
+				    null);
 			}
-		    } else {
-
-			System.out.println("VUOTOOOOOOOOOOOOOOO");
-			matchServer.sendMessage(Message.SET_DEATH_PHASE, null);
-			setTurnPhase(TurnPhaseType.DEATH_PHASE);
 		    }
+
 		}
-	    }
-	    if (getCurrentTurnPhase() == TurnPhaseType.DEATH_PHASE) {
-		System.out.println("DEATH PHASE");
-		checkDiedCharacters();
-
-		if (allCharacterAreSpleeping()) {
-
-		    if (!diedCharactersOfTheCurrentTurn.isEmpty()
-			    && canRemoveDeathCharacter()) {
-			for (Character character : diedCharactersOfTheCurrentTurn) {
-			    character.afterDeath();
-			}
-			setTurnPhase(TurnPhaseType.STARTER_PHASE);
-			matchServer.sendMessage(Message.SET_STATER_PHASE, null);
-
-		    } else {
-			setTurnPhase(TurnPhaseType.STARTER_PHASE);
-			matchServer.sendMessage(Message.SET_STATER_PHASE, null);
-		    }
-		}
-
 	    }
 	}
 

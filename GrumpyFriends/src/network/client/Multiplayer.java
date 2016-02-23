@@ -184,9 +184,11 @@ public class Multiplayer {
 		    c.decreaseLifePoints(Integer.parseInt(split[1]));
 		    matchManager.getDamagedCharacters().add(c);
 		}
+		matchManager.checkDiedCharacters();
 		break;
 	    case Message.SET_DEATH_PHASE:
 		matchManager.setTurnPhase(TurnPhaseType.DEATH_PHASE);
+		matchManager.checkDiedCharacters();
 		break;
 	    default:
 		break;
