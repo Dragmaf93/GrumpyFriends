@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import utils.ReaderFileProperties;
 import network.InfoMatch;
 import network.Message;
 import network.StatusMatch;
@@ -22,7 +23,8 @@ import menu.GameBean;
 
 public class Client {
 
-	private final static String IP_SERVER = "127.0.0.1";
+	private final static String IP_SERVER = ReaderFileProperties.getPropValues("server_ip");
+	private final static int PORT = Integer.parseInt(ReaderFileProperties.getPropValues("client_port"));
 	// private final static String IP_SERVER = "192.168.43.148";
 
 	private Socket socket;
@@ -42,7 +44,7 @@ public class Client {
 	}
 
 	public void connectToServer() throws UnknownHostException, IOException {
-		socket = new Socket(IP_SERVER, 2000);
+		socket = new Socket(IP_SERVER, PORT);
 
 		outToServer = new DataOutputStream(socket.getOutputStream());
 		inFromServer = new BufferedReader(new InputStreamReader(

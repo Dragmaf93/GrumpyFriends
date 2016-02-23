@@ -13,6 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import network.InfoMatch;
 import network.StatusMatch;
+import utils.ReaderFileProperties;
 import world.GameWorldBuilder;
 import world.World;
 import world.WorldDirector;
@@ -113,7 +114,7 @@ public class Server {
 	boolean listeningSocket = true;
 
 	try {
-	    serverSocket = new ServerSocket(2000);
+	    serverSocket = new ServerSocket(Integer.parseInt(ReaderFileProperties.getPropValues("client_port")));
 
 	} catch (IOException e) {
 	    System.err.println("Could not listen on port: 2343");
