@@ -274,6 +274,9 @@ public class CharacterDrawer {
 					currentBulletWeapon = null;
 					equipedWeapon = null;
 					currentLauncherWeapon = null;
+					
+					lifePointsText.setText(Integer.toString(character
+							.getLifePoints()));
 				}
 			}
 
