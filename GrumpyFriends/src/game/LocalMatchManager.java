@@ -64,7 +64,7 @@ public class LocalMatchManager extends AbstractMatchManager {
 			}
 
 			if (getCurrentTurnPhase() == TurnPhaseType.MAIN_PHASE) {
-
+			    System.out.println(getCurrentPlayer().attacked() + " " + getMatchTimer().isTurnTimerStopped());
 				if (getMatchTimer().isTurnTimerEnded()) {
 					getCurrentPlayer().endTurn();
 					getMatchTimer().stopTurnTimer();
@@ -92,8 +92,11 @@ public class LocalMatchManager extends AbstractMatchManager {
 						for (Character character : diedCharactersOfTheCurrentTurn) {
 							character.afterDeath();
 						}
+						setTurnPhase(TurnPhaseType.STARTER_PHASE);
 					}
-					setTurnPhase(TurnPhaseType.STARTER_PHASE);
+						else
+					    setTurnPhase(TurnPhaseType.STARTER_PHASE);
+//					    
 				}
 			}
 			if (getCurrentTurnPhase() == TurnPhaseType.DAMAGE_PHASE) {

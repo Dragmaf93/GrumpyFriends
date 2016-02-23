@@ -40,7 +40,7 @@ public abstract class AbstractGame implements Game {
 	}
 
 	protected void positionCharacter() {
-		int x = 100;
+		int x = 10;
 		for (Character character : characters) {
 			x += 10;
 			character.setStartedPosition(x, 100);

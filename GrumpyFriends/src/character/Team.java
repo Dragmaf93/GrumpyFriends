@@ -32,8 +32,7 @@ public class Team {
 		this.characters = new LinkedList<>();
 		this.charactersInGame = new LinkedList<>();
 		this.currentPlayer = 0;
-		numberOfCharacter=1;
-
+		this.numberOfCharacter=5;
 	}
 	
 	public Team(String name, int numberOfCharacter, MatchManager matchManager) {

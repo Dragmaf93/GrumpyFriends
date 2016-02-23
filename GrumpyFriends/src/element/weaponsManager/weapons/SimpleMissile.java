@@ -58,14 +58,14 @@ public class SimpleMissile extends AbstractWeapon {
     @Override
     public void attack(Vector position, Vector speed, float angle) {
     	createPhysicWeapon();
-	attacked = true;
+//	attacked = true;
 	physicalWeapon.addToPhisicalWorld();
 	physicalWeapon.setActive(true);
 	physicalWeapon.setAngularVelocity(0f);
 	physicalWeapon.setTransform(position.toVec2(), angle);
 	physicalWeapon.setLinearVelocity(speed.toVec2());
 	// new DragForceThread(this).start();
-	hit--;
+//	hit--;
     }
 
     @Override
