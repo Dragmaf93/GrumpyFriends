@@ -32,7 +32,6 @@ public class WeaponsManager {
 				Class<?> factoryClass = Class.forName(packageP + className);
 
 				Field field = factoryClass.getField(staticField);
-//				System.out.println(field.getInt(null));
 				inventary.put(className, field.getInt(null));
 
 			} catch (ClassNotFoundException e) {
@@ -95,10 +94,5 @@ public class WeaponsManager {
 	public static String[] getWeaponList() {
 		return classList;
 	}
-
-	// public static void main(String[] args) {
-	// WeaponsManager w = new WeaponsManager();
-	// System.out.println(w.getWeapon("SimpleBomb"));
-	// }
 
 }

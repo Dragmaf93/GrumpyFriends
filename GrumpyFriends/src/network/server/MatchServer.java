@@ -109,8 +109,8 @@ public class MatchServer extends Thread {
 				characters.put(character.getName(), character);
 			}
 
-//			System.out.println(inFromChooser.readLine());
-//			System.out.println(inFromCreator.readLine());
+			inFromChooser.readLine();
+			inFromCreator.readLine();
 
 			matchManager.startMatch();
 
@@ -135,10 +135,8 @@ public class MatchServer extends Thread {
 
 			while (listeningSocket) {
 
-//				System.out.println("PRIMA DI CAMBIARE "+inFromCurrentClient);
 				String mex = inFromCurrentClient.readLine();
 				doOperation(mex);
-//				System.out.println("DOPO DI CAMBIARE "+inFromCurrentClient);
 			}
 
 		} catch (IOException e) {
@@ -158,7 +156,6 @@ public class MatchServer extends Thread {
 	private void doOperation(String operazione) throws UnknownHostException,
 			IOException {
 		String[] op = operazione.split(";");
-//		 System.out.println(op[0]);
 		switch (op[0]) {
 		case Message.OP_MOVE_LEFT:
 			System.out.println("SINISTRA");
@@ -253,7 +250,6 @@ public class MatchServer extends Thread {
 			outToCreator.writeBytes(message + ";" + parameter + '\n');
 			outToChooser.writeBytes(message + ";" + parameter + '\n');
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

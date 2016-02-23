@@ -116,184 +116,180 @@ import utils.Vector;
 
 public class Launcher {
 
-    public final static float MAX_LAUNCH_POWER = 80f;
-    private Character character;
-    // private PhysicalLauncher physicalLauncher;
+	public final static float MAX_LAUNCH_POWER = 80f;
+	private Character character;
+	// private PhysicalLauncher physicalLauncher;
 
-    private boolean activated;
-    private Weapon loadedWeapon;
+	private boolean activated;
+	private Weapon loadedWeapon;
 
-    private boolean attacked;
+	private boolean attacked;
 
-    private int currentDirection;
+	private int currentDirection;
 
-    private float angle;
-    private Vector position;
-    private Vector speedVector;
-    private double y;
-    private double x;
+	private float angle;
+	private Vector position;
+	private Vector speedVector;
+	private double y;
+	private double x;
 
-    public Launcher(Character character) {
-	// this.character = character;
-	//
-	// physicalLauncher = new PhysicalLauncher((PhysicalCharacter)
-	// character.getPhysicalObject());
-	// PhysicalObjectManager.getInstance().buildPhysicObject(physicalLauncher);
-	activated = false;
-	attacked = false;
-	loadedWeapon = null;
-	angle = 0;
-	position = new Vector();
-	speedVector = new Vector();
-	this.character = character;
-	currentDirection = Character.RIGHT;
-    }
-
-    public void startWeaponAttack(float speed) {
-	if (loadedWeapon == null || !isActivated())
-	    return;
-
-	// Vector position = physicalLauncher.getPositionAim();
-	// Vector speedVector = physicalLauncher.getVectorSpeed(speed);
-	// float angle = physicalLauncher.getAngle();
-	position.set(
-		(float) (character.getPhysicalObject().getBody().getPosition().x + currentDirection
-			* loadedWeapon.getDistanceFromLauncher()), character
-			.getPhysicalObject().getBody().getPosition().y
-			+ character.getPhysicalObject().getHeight() / 2);
-	// speedVector.set((float)(position.x +Math.cos(angle)*speed) ,(float)
-	// (position.y+Math.sin(angle)));
-	float y = (float) (Math.sin(angle) * speed);
-	float x = (float) (Math.cos(angle) * speed);
-	speedVector.set(x, y);
-	System.out.println(x+"            "+y+"           "+ speed);
-	loadedWeapon.attack(position, speedVector, angle);
-//	attacked = true;
-//	loadedWeapon = null;
-	// if(loadedWeapon.finishHit()){
-	// loadedWeapon = null;
-	// disable();
-	// }
-    }
-
-    public boolean isActivated() {
-	if (loadedWeapon == null)
-	    return false;
-	return activated;
-    }
-
-    public double getAngle() {
-	// return (double) physicalLauncher.getAngle();
-	return angle;
-    }
-
-    public Vector getPositionAim() {
-	// Vector jboxPosition = physicalLauncher.getPositionAim();
-
-	return Utils.vectorToFx(position);
-    }
-
-    public void restartLauncher() {
-	attacked = false;
-    }
-
-    public void activate() {
-	if (loadedWeapon == null)
-	    return;
-	activated = true;
-	// attacked = false;
-
-	// physicalLauncher.expose();
-    }
-
-    public void setDirection(int direction) {
-	if (currentDirection != direction && direction == Character.LEFT) {
-	    angle = (float) Math.toRadians(180);
-	    currentDirection = direction;
-	} else if (currentDirection != direction
-		&& direction == Character.RIGHT) {
-	    angle = 0;
-	    currentDirection = direction;
+	public Launcher(Character character) {
+		// this.character = character;
+		//
+		// physicalLauncher = new PhysicalLauncher((PhysicalCharacter)
+		// character.getPhysicalObject());
+		// PhysicalObjectManager.getInstance().buildPhysicObject(physicalLauncher);
+		activated = false;
+		attacked = false;
+		loadedWeapon = null;
+		angle = 0;
+		position = new Vector();
+		speedVector = new Vector();
+		this.character = character;
+		currentDirection = Character.RIGHT;
 	}
-	// physicalLauncher.setLimitAngle(direction);
-    }
 
-    public void changeAngle(float val) {
+	public void startWeaponAttack(float speed) {
+		if (loadedWeapon == null || !isActivated())
+			return;
 
-	// physicalLauncher.rotate(val);
-	if (currentDirection == Character.RIGHT && val > 0
-		&& Math.toDegrees(angle + val) < 90)
-	    angle += val;
-	else if (currentDirection == Character.RIGHT && val < 0
-		&& Math.toDegrees(angle + val) > -90)
-	    // System.out.println(angle);
-	    angle += val;
-	else if (currentDirection == Character.LEFT && val > 0
-		&& Math.toDegrees(angle - val) > 90)
-	    angle -= val;
+		// Vector position = physicalLauncher.getPositionAim();
+		// Vector speedVector = physicalLauncher.getVectorSpeed(speed);
+		// float angle = physicalLauncher.getAngle();
+		position.set(
+				(float) (character.getPhysicalObject().getBody().getPosition().x + currentDirection
+						* loadedWeapon.getDistanceFromLauncher()), character
+						.getPhysicalObject().getBody().getPosition().y
+						+ character.getPhysicalObject().getHeight() / 2);
+		// speedVector.set((float)(position.x +Math.cos(angle)*speed) ,(float)
+		// (position.y+Math.sin(angle)));
+		float y = (float) (Math.sin(angle) * speed);
+		float x = (float) (Math.cos(angle) * speed);
+		speedVector.set(x, y);
+		loadedWeapon.attack(position, speedVector, angle);
+		// attacked = true;
+		// loadedWeapon = null;
+		// if(loadedWeapon.finishHit()){
+		// loadedWeapon = null;
+		// disable();
+		// }
+	}
 
-	else if (currentDirection == Character.LEFT && val < 0
-		&& Math.toDegrees(angle - val) < 270)
-	    angle -= val;
-	System.out.println();
-	// System.out.println(Math.toDegrees(angle));
-    }
+	public boolean isActivated() {
+		if (loadedWeapon == null)
+			return false;
+		return activated;
+	}
 
-    public double getX() {
-	// return physicalLauncher.getX();
-	// return
-	// Utils.xFromJbox2dToJavaFx(character.getPhysicalObject().getBody().getPosition().x);
-	return character.getX();
-    }
+	public double getAngle() {
+		// return (double) physicalLauncher.getAngle();
+		return angle;
+	}
 
-    public double getY() {
-	// return physicalLauncher.getY();
-	// return
-	// Utils.yFromJbox2dToJavaFx(character.getPhysicalObject().getBody().getPosition().y
-	// );
-	return character.getY();
-    }
+	public Vector getPositionAim() {
+		// Vector jboxPosition = physicalLauncher.getPositionAim();
 
-    public void setPosition(double x, double y) {
-	this.x = x;
-	this.y = y;
-    }
+		return Utils.vectorToFx(position);
+	}
 
-    public void disable() {
-	// physicalLauncher.rotate(0);
-	activated = false;
-	// physicalLauncher.hide();
-    }
+	public void restartLauncher() {
+		attacked = false;
+	}
 
-    public void loadWeapon(Weapon weapon) {
-	if (weapon != null) {
-	    if (!isActivated()) {
-		loadedWeapon = weapon;
-		activate();
-	    }
-	}else
-	    loadedWeapon=null;
+	public void activate() {
+		if (loadedWeapon == null)
+			return;
+		activated = true;
+		// attacked = false;
 
-    }
+		// physicalLauncher.expose();
+	}
 
-    public void setAttacked(boolean b) {
-	attacked = b;
-    }
+	public void setDirection(int direction) {
+		if (currentDirection != direction && direction == Character.LEFT) {
+			angle = (float) Math.toRadians(180);
+			currentDirection = direction;
+		} else if (currentDirection != direction
+				&& direction == Character.RIGHT) {
+			angle = 0;
+			currentDirection = direction;
+		}
+		// physicalLauncher.setLimitAngle(direction);
+	}
 
-    public boolean attacked() {
-	return attacked;
-    }
+	public void changeAngle(float val) {
 
-    public Weapon getLoadedWeapon() {
-	return loadedWeapon;
-    }
+		// physicalLauncher.rotate(val);
+		if (currentDirection == Character.RIGHT && val > 0
+				&& Math.toDegrees(angle + val) < 90)
+			angle += val;
+		else if (currentDirection == Character.RIGHT && val < 0
+				&& Math.toDegrees(angle + val) > -90)
+			angle += val;
+		else if (currentDirection == Character.LEFT && val > 0
+				&& Math.toDegrees(angle - val) > 90)
+			angle -= val;
 
-    public Vector getSpeedVector() {
-	return speedVector;
-    }
+		else if (currentDirection == Character.LEFT && val < 0
+				&& Math.toDegrees(angle - val) < 270)
+			angle -= val;
+	}
 
-    public void setSpeedvector(float x, float y) {
-	speedVector.set(x, y);
-    }
+	public double getX() {
+		// return physicalLauncher.getX();
+		// return
+		// Utils.xFromJbox2dToJavaFx(character.getPhysicalObject().getBody().getPosition().x);
+		return character.getX();
+	}
+
+	public double getY() {
+		// return physicalLauncher.getY();
+		// return
+		// Utils.yFromJbox2dToJavaFx(character.getPhysicalObject().getBody().getPosition().y
+		// );
+		return character.getY();
+	}
+
+	public void setPosition(double x, double y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	public void disable() {
+		// physicalLauncher.rotate(0);
+		activated = false;
+		// physicalLauncher.hide();
+	}
+
+	public void loadWeapon(Weapon weapon) {
+		if (weapon != null) {
+			if (!isActivated()) {
+				loadedWeapon = weapon;
+				activate();
+			}
+		} else
+			loadedWeapon = null;
+
+	}
+
+	public void setAttacked(boolean b) {
+		attacked = b;
+	}
+
+	public boolean attacked() {
+		return attacked;
+	}
+
+	public Weapon getLoadedWeapon() {
+		return loadedWeapon;
+	}
+
+	public Vector getSpeedVector() {
+		return speedVector;
+	}
+
+	public void setSpeedvector(float x, float y) {
+		speedVector.set(x, y);
+	}
 
 }

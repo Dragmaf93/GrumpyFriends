@@ -137,7 +137,6 @@ public class Multiplayer {
     // inFromServer = new BufferedReader(new InputStreamReader(
     // socket.getInputStream()));
     // outToServer = new DataOutputStream(socket.getOutputStream());
-    // System.out.println(outToServer);
     // }
 
     public void sendOperationMessage(String ope, String proprieta) {
@@ -180,14 +179,12 @@ public class Multiplayer {
 		    matchManager.getCurrentPlayer(),matchManager, op[1]);
 	    break;
 	case Message.SET_STATER_PHASE:
-	    System.out.println("START NEXT TURN");
 	    matchManager.getCurrentPlayer().endTurn();
 	    matchManager.setTurnPhase(TurnPhaseType.STARTER_PHASE);
 	    break;
 	case Message.OP_SEND_INFO_TEAM_TO_CHOOSER:
 	case Message.OP_SEND_INFO_WORLD:
 	case Message.OP_SEND_INFO_TEAM_TO_CREATOR:
-	    System.out.println(op[1]);
 	    addBean(GameBean.jSonToGameBean(op[1]));
 	    break;
 	case Message.SET_DAMAGE_PHASE:
@@ -200,8 +197,6 @@ public class Multiplayer {
 	    String[] hitCharacter = op[1].split(",");
 	    for (String string : hitCharacter) {
 		String[] split = string.split(":");
-		System.out.println("NOME CHARACTER : " + split[0] + " POINTS :"
-			+ split[1]);
 		Character c = (matchManager.getBattlefield().getCharacter(split[0]));
 		c.decreaseLifePoints(Integer.parseInt(split[1]));
 		matchManager.getDamagedCharacters().add(c);

@@ -108,12 +108,6 @@ public class ConverterMapToXml {
 	            String filename = children[i];
 	            if (filename.equals(nameFile+".xml"))
 	            {
-//	            	Alert alert = new Alert(AlertType.WARNING);
-//	        		alert.setTitle("Information Submit");
-//	        		alert.setHeaderText(null);
-//	        		alert.setContentText("Existing name");
-//	        		alert.showAndWait();
-//	        		mapEditor.getPanelForObject().setAlert();
 	            	Alert alert = new Alert(AlertType.CONFIRMATION);
 	            	alert.setTitle("Confirmation Dialog");
 	            	alert.setHeaderText("Existing name");
@@ -148,7 +142,6 @@ public class ConverterMapToXml {
 		{
 			for (Point2D point : ((PolygonObject) object).getPointsVertex()) {
 	    		Element elementPoint = doc.createElement("point");
-//	    		System.out.println((Utils.javaFxHeight()+"  - "+point.getY()*SCALE_VALUE + "  =  "+(Utils.javaFxHeight()-point.getY()*SCALE_VALUE)));
 		    	elementPoint.setAttribute("x", Double.toString(new BigDecimal(Utils.xFromJavaFxToJbox2d(point.getX()*SCALE_VALUE)).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
 			    elementPoint.setAttribute("y", Double.toString(new BigDecimal(Utils.getJboxHeight()-Utils.yFromJavaFxToJbox2d(Utils.javaFxHeight()-point.getY()*SCALE_VALUE)).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
 			    elementGround.appendChild(elementPoint);
@@ -170,11 +163,6 @@ public class ConverterMapToXml {
 		    elementPointControl.setAttribute("x", Double.toString(new BigDecimal(Utils.xFromJavaFxToJbox2d(((Curve) object).getRealPoints().get(2).getX()*SCALE_VALUE)).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
 		    elementPointControl.setAttribute("y", Double.toString(new BigDecimal(Utils.getJboxHeight()-Utils.yFromJavaFxToJbox2d(Utils.javaFxHeight()-((Curve) object).getRealPoints().get(2).getY()*SCALE_VALUE)).setScale(2 , BigDecimal.ROUND_UP).doubleValue()));
 		    elementGround.appendChild(elementPointControl);
-		    
-//		    System.out.println("Start: "+elementPointStart.getAttribute("y"));
-//		    System.out.println("End: "+elementPointEnd.getAttribute("y"));
-//		    System.out.println("Control: "+elementPointControl.getAttribute("y"));
-		    
 		}
 	}
 	

@@ -97,7 +97,6 @@ public class Client {
 		if (resp[0].equals(Message.OP_CONFIRM)) {
 			matchServerIp = resp[1];
 			serverPortNumber = Integer.parseInt(resp[2]);
-			System.out.println(Message.OP_CONFIRM+" "+resp[1]+"  "+resp[2]);
 			closeConnection();
 			return true;
 		}
@@ -128,7 +127,6 @@ public class Client {
 		if (inFromServer.readLine().equals(Message.CLOSE)) {
 			socket.close();
 			connected = false;
-			System.out.println("CIOA MI CHIDU");
 		}
 	}
 
@@ -143,26 +141,23 @@ public class Client {
 		if (resp[0].equals(Message.OP_CONFIRM)) {
 			matchServerIp = resp[1];
 			serverPortNumber = Integer.parseInt(resp[2]);
-			System.out.println(Message.OP_CONFIRM+" "+resp[1]+"  "+resp[2]);
 			closeConnection();
 			return true;
 		}
 		return false;
 	}
 
-	public static void main(String[] args) throws IOException {
-		Client client = new Client();
-
-		InfoMatch match = new InfoMatch("d", "D", 2, true, "d");
-		match.setStatusMatch(StatusMatch.WAITING);
-		System.out.println(client.createMatch(match));
-
-		List<InfoMatch> list = client.requestMatchList();
-		for (InfoMatch infoMatch : list) {
-			System.out.println(infoMatch.getMatchName());
-
-		}
-
-	}
+//	public static void main(String[] args) throws IOException {
+//		Client client = new Client();
+//
+//		InfoMatch match = new InfoMatch("d", "D", 2, true, "d");
+//		match.setStatusMatch(StatusMatch.WAITING);
+//
+//		List<InfoMatch> list = client.requestMatchList();
+//		for (InfoMatch infoMatch : list) {
+//
+//		}
+//
+//	}
 
 }

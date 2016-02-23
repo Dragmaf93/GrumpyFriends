@@ -89,7 +89,6 @@ public class GameStatusSync {
 			    nodeCharacter.with("CurrentCharacter").put("weaponAttack", true);
 			    nodeCharacter.with("CurrentCharacter").put("weaponX",currentCharacter.getLastEquippedWeapon().getX());
 			    nodeCharacter.with("CurrentCharacter").put("weaponY",currentCharacter.getLastEquippedWeapon().getY());
-//			    System.out.println(currentCharacter.getLastEquippedWeapon().getX()+"    "+currentCharacter.getLastEquippedWeapon().getY());
 			    nodeCharacter.with("CurrentCharacter").put("weaponAngle",currentCharacter.getLastEquippedWeapon().getAngle());
 			    nodeCharacter.with("CurrentCharacter").put("exploded",currentCharacter.getLastEquippedWeapon().isExploded());
 			    
@@ -136,8 +135,6 @@ public class GameStatusSync {
 			    currentCharacter.equipWeapon(jsonCurrentCharacter.get("weapon").asText());
 			    currentCharacter.changeAim((float) jsonCurrentCharacter.get("aimDirection")
 				    .asDouble());
-//			    System.out.println((float) jsonCurrentCharacter.get("aimDirection")
-//				    .asDouble());
 			} 
 //			else if(jsonCurrentCharacter.get("attacked") != null && jsonCurrentCharacter.get("attacked").asBoolean()){
 //			    currentCharacter.setAttacked(true);
@@ -147,9 +144,6 @@ public class GameStatusSync {
 				currentCharacter.getLastEquippedWeapon().setY(jsonCurrentCharacter.get("weaponY").asDouble());
 				currentCharacter.getLastEquippedWeapon().setAngle(jsonCurrentCharacter.get("weaponAngle").asDouble());
 				currentCharacter.getLastEquippedWeapon().setExploded(jsonCurrentCharacter.get("exploded").asBoolean());
-				
-//				System.out.println(currentCharacter.getLastEquippedWeapon()+"    "+currentCharacter.getLastEquippedWeapon().getX()
-//					+"  "+currentCharacter.getLastEquippedWeapon().getY());
 				
 			    }
 //			}

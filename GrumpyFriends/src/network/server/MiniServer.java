@@ -63,7 +63,6 @@ public class MiniServer extends Thread {
 			} catch (IOException e) {
 			}
         } 
-        System.out.println("CHIUDI MINI SERVER");
         server.removeMiniServer(ipClient);
     	
     }
@@ -96,8 +95,6 @@ public class MiniServer extends Thread {
 		case Message.OP_CREATE_MATCH:
 			try {
 				server.takeLock();
-				System.out.println("CREATE MATCH");
-				System.out.println(operation[1]);
 				JsonNode matchJson = mapper.readTree(operation[1]);
 				InfoMatch match = InfoMatch.jsonToInfoMatch(matchJson);
 				server.addMatch(match,socket.getInetAddress().getHostAddress());
